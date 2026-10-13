@@ -85,6 +85,26 @@ python scripts/check_site.py         # verify everything still resolves
 
 Prices were sourced from official provider pricing docs on 2026-10-13 (OpenAI, Anthropic, Google, DeepSeek, xAI, Z.AI, Moonshot, MiniMax, Xiaomi, Mistral). Providers change rates often — re-verify before publishing.
 
+## Adding a new tool
+
+The hub grid and the "On the roadmap" section are generated from `scripts/tools.json` — never hand-edit them in `index.html` (they sit between `<!-- TOOLS-GRID:START -->` markers).
+
+1. Build the page: `tools/<id>.html`, copying the header/footer, SEO meta, explanation section and FAQ pattern from an existing tool page (see `tools/json-formatter.html` for a minimal template).
+2. Add an entry to `scripts/tools.json`:
+   ```json
+   { "id": "<id>", "name": "...", "url": "/tools/<id>.html", "icon": "x",
+     "desc": "One sentence on the card.", "tags": ["..."], "category": "dev", "status": "live" }
+   ```
+3. Regenerate the hub and sitemap, then test and commit (the post-commit hook pushes automatically):
+   ```bash
+   python scripts/generate_hub.py
+   python scripts/check_site.py
+   node scripts/test_interactive.mjs
+   git add -A && git commit -m "Add <tool>"
+   ```
+
+Backlog lives in the same file with `"status": "planned"` plus `priority` (1 = next) and `effort` (S/M/L). Planned entries render publicly in the "On the roadmap" grid, so the roadmap on the site is always the file — edit priorities there to reorder what ships next.
+
 ## Design notes
 
 - Light theme, system font stack, zero JS framework; every page is one HTML file with one inline script

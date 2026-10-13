@@ -140,8 +140,17 @@ img { max-width: 100%; }
 }
 .tool-card-item:hover {
   border-color: var(--accent);
-  box-shadow: 0 1px 4px rgba(37, 99, 235, 0.08);
+  box-shadow: 0 1px 4px rgba(74, 144, 226, 0.08);
   text-decoration: none;
+}
+.tool-card-item.planned {
+  border-style: dashed;
+  background: transparent;
+  cursor: default;
+}
+.tool-card-item.planned:hover {
+  border-color: var(--border-strong);
+  box-shadow: none;
 }
 .tool-card-item h3 {
   margin: 0 0 6px;

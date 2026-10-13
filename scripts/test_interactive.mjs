@@ -1,9 +1,14 @@
 // Interactive DOM tests for tools.ezaiops.com using jsdom.
 // Run: node scripts/test_interactive.mjs   (with the local http server on :8901)
 import { createRequire } from "module";
+import { readFileSync } from "fs";
 
 const require = createRequire("C:/Users/june_/.workbuddy-ai/binaries/node/workspace/");
 const { JSDOM, VirtualConsole } = require("jsdom");
+
+const manifest = JSON.parse(readFileSync(new URL("./tools.json", import.meta.url), "utf8"));
+const liveN = manifest.tools.filter((t) => (t.status || "live") === "live").length;
+const plannedN = manifest.tools.filter((t) => t.status === "planned").length;
 
 const BASE = "http://127.0.0.1:8901";
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -76,7 +81,11 @@ console.log("\n== index.html ==");
 {
   const { doc, errors } = await load("index.html");
   check("title set", /ezaiops tools/.test(doc.title), doc.title);
-  check("8 tool cards", $$(doc, 'a.tool-card-item[href^="/tools/"]').length === 8);
+  check("hub renders every live tool", $$(doc, '.tool-grid a.tool-card-item[href^="/tools/"]').length === liveN,
+    $$(doc, '.tool-grid a.tool-card-item[href^="/tools/"]').length + " vs " + liveN);
+  check("roadmap cards", $$(doc, "#roadmap .tool-card-item").length === plannedN,
+    $$(doc, "#roadmap .tool-card-item").length + " vs " + plannedN);
+  check("planned cards are not links", $$(doc, "#roadmap a.tool-card-item").length === 0);
   check("model hub linked", $$(doc, 'a[href="/models/index.html"]').length >= 2);
   check("footer year rendered", /\d{4}/.test($(doc, "[data-year]").textContent));
   check("main site banner", $$(doc, "a.main-site-banner, .main-site-banner a").length >= 1);

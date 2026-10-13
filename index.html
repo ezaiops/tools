@@ -46,51 +46,38 @@
     <p class="main-site-banner">Part of <a href="https://ezaiops.com">ezaiops.com</a> — field notes on AI agent observability, LLMOps and production AI ops, written in Chinese.</p>
   </section>
 
-  <h2 class="section-title">Developer utilities</h2>
+    <h2 class="section-title">All tools</h2>
   <div class="tool-grid">
-    <a class="tool-card-item" href="/tools/token-counter.html">
-      <h3><span class="icon">$</span>LLM token &amp; cost calculator</h3>
-      <p>Count tokens and estimate cost per request, per day and per month across 29 models: GPT-6, Claude Fable 5.1, Gemini 3.8 Flash, DeepSeek V4.1 Flash, Grok 4.7. Batch + cache discounts included.</p>
-      <div class="tags"><span class="badge blue">featured</span><span class="badge">AI</span></div>
-    </a>
-    <a class="tool-card-item" href="/tools/json-formatter.html">
-      <h3><span class="icon">{}</span>JSON formatter &amp; validator</h3>
-      <p>Format, minify and validate JSON with precise error positions. See size, key count and depth at a glance.</p>
-      <div class="tags"><span class="badge">JSON</span></div>
-    </a>
-    <a class="tool-card-item" href="/tools/regex-tester.html">
-      <h3><span class="icon">.*</span>Regex tester</h3>
-      <p>Test regular expressions against live text, inspect capture groups, and preview replacements with match highlighting.</p>
-      <div class="tags"><span class="badge">regex</span></div>
-    </a>
-    <a class="tool-card-item" href="/tools/cron-explainer.html">
-      <h3><span class="icon">cron</span>Cron expression explainer</h3>
-      <p>Translate any cron schedule into plain English and see the next runs in your local timezone.</p>
-      <div class="tags"><span class="badge">scheduling</span></div>
-    </a>
-    <a class="tool-card-item" href="/tools/encode-decode.html">
-      <h3><span class="icon">b64</span>Base64 / URL / hash</h3>
-      <p>Encode and decode text with Base64 and URL, escape HTML entities, and compute SHA checksums locally.</p>
-      <div class="tags"><span class="badge">encoding</span></div>
-    </a>
-    <a class="tool-card-item" href="/tools/timestamp-converter.html">
-      <h3><span class="icon">ts</span>Unix timestamp converter</h3>
-      <p>Convert between Unix epoch, ISO 8601 and human-readable dates, live clock included.</p>
-      <div class="tags"><span class="badge">time</span></div>
-    </a>
-    <a class="tool-card-item" href="/tools/password-generator.html">
-      <h3><span class="icon">pw</span>Password &amp; UUID generator</h3>
-      <p>Generate strong random passwords, memorable passphrases and v4 UUIDs with strength estimation.</p>
-      <div class="tags"><span class="badge">security</span></div>
-    </a>
-    <a class="tool-card-item" href="/tools/meta-tag-generator.html">
-      <h3><span class="icon">&lt;/&gt;</span>Meta tag &amp; OG generator</h3>
-      <p>Generate title, description, Open Graph and Twitter card tags with a live search result and social preview.</p>
-      <div class="tags"><span class="badge">SEO</span></div>
-    </a>
+    <!-- TOOLS-GRID:START -->
+    <a class="tool-card-item" href="/tools/token-counter.html"><h3><span class="icon">$</span>LLM token &amp; cost calculator</h3><p>Count tokens and estimate cost per request, per day and per month across 29 models. Batch + cache discounts, long-context tiers and peak/off-peak rates handled automatically.</p><div class="tags"><span class="badge">AI</span><span class="badge blue">featured</span></div></a>
+    <a class="tool-card-item" href="/tools/json-formatter.html"><h3><span class="icon">{}</span>JSON formatter &amp; validator</h3><p>Format, minify and validate JSON with exact error line and column. Shows size, key count and nesting depth at a glance.</p><div class="tags"><span class="badge">JSON</span></div></a>
+    <a class="tool-card-item" href="/tools/regex-tester.html"><h3><span class="icon">.*</span>Regex tester</h3><p>Test JavaScript regular expressions against live text, inspect capture groups, and preview replacements with match highlighting.</p><div class="tags"><span class="badge">regex</span></div></a>
+    <a class="tool-card-item" href="/tools/cron-explainer.html"><h3><span class="icon">cron</span>Cron expression explainer</h3><p>Translate any cron schedule into plain English and see the next runs in your local timezone.</p><div class="tags"><span class="badge">scheduling</span></div></a>
+    <a class="tool-card-item" href="/tools/encode-decode.html"><h3><span class="icon">b64</span>Base64 / URL / hash</h3><p>Encode and decode text with Base64 and URL, escape HTML entities, and compute SHA checksums locally.</p><div class="tags"><span class="badge">encoding</span></div></a>
+    <a class="tool-card-item" href="/tools/timestamp-converter.html"><h3><span class="icon">ts</span>Unix timestamp converter</h3><p>Convert between Unix epoch, ISO 8601 and human-readable dates, live clock included.</p><div class="tags"><span class="badge">time</span></div></a>
+    <a class="tool-card-item" href="/tools/password-generator.html"><h3><span class="icon">pw</span>Password &amp; UUID generator</h3><p>Generate strong random passwords, memorable passphrases and v4 UUIDs with strength estimation.</p><div class="tags"><span class="badge">security</span></div></a>
+    <a class="tool-card-item" href="/tools/meta-tag-generator.html"><h3><span class="icon">&lt;/&gt;</span>Meta tag &amp; OG generator</h3><p>Generate title, description, Open Graph and Twitter card tags with a live search result and social preview.</p><div class="tags"><span class="badge">SEO</span></div></a>
+    <!-- TOOLS-GRID:END -->
   </div>
 
-  <h2 class="section-title">LLM API pricing, model by model</h2>
+  <h2 class="section-title">On the roadmap</h2>
+  <p class="note" style="margin:0 0 14px">Planned next — every tool ships free, client-side and no-signup, same as the ones above. Open an issue on <a href="https://github.com/ezaiops/tools">GitHub</a> to vote for what ships first.</p>
+  <div class="tool-grid" id="roadmap">
+    <!-- ROADMAP:START -->
+    <div class="tool-card-item planned"><h3><span class="icon">gpu</span>Self-hosted vs API break-even</h3><p>Enter your monthly token volume, see where renting a GPU beats API pricing.</p><div class="tags"><span class="badge amber">roadmap</span><span class="badge">M build</span></div></div>
+    <div class="tool-card-item planned"><h3><span class="icon">cron</span>Cron schedule builder</h3><p>Pick days and times visually, get the cron expression — the reverse of the explainer.</p><div class="tags"><span class="badge amber">roadmap</span><span class="badge">S build</span></div></div>
+    <div class="tool-card-item planned"><h3><span class="icon">ip</span>Subnet &amp; CIDR calculator</h3><p>Network/mask/wildcard/host range math for any IPv4 CIDR block.</p><div class="tags"><span class="badge amber">roadmap</span><span class="badge">S build</span></div></div>
+    <div class="tool-card-item planned"><h3><span class="icon">%</span>Mortgage &amp; loan calculator</h3><p>Monthly payment, amortization schedule and extra-payment payoff scenarios.</p><div class="tags"><span class="badge amber">roadmap</span><span class="badge">M build</span></div></div>
+    <div class="tool-card-item planned"><h3><span class="icon">img</span>Image compressor &amp; converter</h3><p>Compress JPG/PNG and convert to WebP in the browser via canvas — nothing uploaded.</p><div class="tags"><span class="badge amber">roadmap</span><span class="badge">M build</span></div></div>
+    <div class="tool-card-item planned"><h3><span class="icon">pdf</span>PDF merge &amp; split</h3><p>Merge, split and reorder PDF pages locally with pdf-lib.</p><div class="tags"><span class="badge amber">roadmap</span><span class="badge">L build</span></div></div>
+    <div class="tool-card-item planned"><h3><span class="icon">diff</span>Text diff checker</h3><p>Side-by-side and inline diff for two blocks of text.</p><div class="tags"><span class="badge amber">roadmap</span><span class="badge">M build</span></div></div>
+    <div class="tool-card-item planned"><h3><span class="icon">jwt</span>JWT debugger</h3><p>Decode JWT header, payload and expiry locally with signature checks.</p><div class="tags"><span class="badge amber">roadmap</span><span class="badge">S build</span></div></div>
+    <div class="tool-card-item planned"><h3><span class="icon">u</span>Unit converter</h3><p>Length, weight, temperature, area, speed and data size conversions.</p><div class="tags"><span class="badge amber">roadmap</span><span class="badge">S build</span></div></div>
+    <div class="tool-card-item planned"><h3><span class="icon">qr</span>QR code generator</h3><p>Generate QR codes as SVG or PNG, with error-correction level options.</p><div class="tags"><span class="badge amber">roadmap</span><span class="badge">S build</span></div></div>
+    <!-- ROADMAP:END -->
+  </div>
+
+<h2 class="section-title">LLM API pricing, model by model</h2>
   <div class="tool-grid">
     <a class="tool-card-item" href="/models/index.html">
       <h3><span class="icon">$</span>All model pricing pages</h3>
