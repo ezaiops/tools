@@ -255,12 +255,13 @@ def index_page():
     html = html.replace("@@LD@@", ld)
     html += """
 <main class="wrap tool-page">
-  <nav class="crumbs"><a href="/">Home</a> / LLM pricing</nav>
+  <nav class="crumbs"><a href="/">Home</a> / LLM pricing<a class="main-site-link" href="https://ezaiops.com">ezaiops.com \u2197</a></nav>
   <h1>LLM API pricing, model by model</h1>
   <p class="lead">Every major frontier model, priced per 1M tokens, side by side. Data verified
   against official provider documentation on @@UPD@@. Pick a row for the full breakdown, a
   calculator and neighbor comparisons — or jump straight to the
   <a href="/tools/token-counter.html">token &amp; cost calculator</a>.</p>
+  <p class="main-site-banner">Part of <a href="https://ezaiops.com">ezaiops.com</a> — field notes on AI agent observability, LLMOps and production AI ops, written in Chinese.</p>
 
   <section class="panel">
     <table class="data">

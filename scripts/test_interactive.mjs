@@ -79,6 +79,7 @@ console.log("\n== index.html ==");
   check("8 tool cards", $$(doc, 'a.tool-card-item[href^="/tools/"]').length === 8);
   check("model hub linked", $$(doc, 'a[href="/models/index.html"]').length >= 2);
   check("footer year rendered", /\d{4}/.test($(doc, "[data-year]").textContent));
+  check("main site banner", $$(doc, "a.main-site-banner, .main-site-banner a").length >= 1);
   check("no console errors", errors.length === 0, errors.join(" | "));
 }
 
@@ -350,6 +351,8 @@ console.log("\n== models/index.html ==");
   check("29 rows", $$(doc, "table.data tbody tr").length === 29, String($$(doc, "table.data tbody tr").length));
   check("links to model pages", $$(doc, 'a[href^="/models/"]').length >= 29);
   check("sources listed", $$(doc, ".prose ul li").length === 10, String($$(doc, ".prose ul li").length));
+  check("main site link in crumbs", $$(doc, ".main-site-link").length === 1);
+  check("main site banner", $$(doc, ".main-site-banner a").length >= 1);
   check("no console errors", errors.length === 0, errors.join(" | "));
 }
 
