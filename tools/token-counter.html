@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LLM Token Counter &amp; Cost Calculator — Per Request &amp; Monthly | ezaiops tools</title>
+<meta name="description" content="Count tokens and estimate API cost per request, per day and per month across 29 models: GPT-6, Claude Fable 5.1, Gemini 3.8 Flash, DeepSeek V4.1 Flash, Grok 4.7. Batch and cache discounts included.">
+<link rel="canonical" href="https://tools.ezaiops.com/tools/token-counter.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="LLM Token Counter &amp; Cost Calculator">
+<meta property="og:description" content="Count tokens and estimate per-request, daily and monthly API cost across 29 LLMs. Runs fully in your browser.">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "LLM Token Counter & Cost Calculator",
+  "url": "https://tools.ezaiops.com/tools/token-counter.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/"><span class="logo">ez</span>ezaiops <small>tools</small></a>
+    <nav class="site-nav">
+      <a href="/">Tools</a>
+      <a href="/models/index.html">LLM pricing</a>
+      <a href="https://ezaiops.com">Blog</a>
+      <a href="https://github.com/ezaiops">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap tool-page">
+  <nav class="crumbs"><a href="/">Home</a> / Tools / <a href="/tools/token-counter.html">Token counter</a></nav>
+  <h1>LLM token counter &amp; cost calculator</h1>
+  <p class="lead">Paste a prompt to count its tokens and price it across 29 models — per request, per day and per month, with batch-API and prompt-cache discounts applied. Tokenization runs locally with the official GPT tokenizer; your text never leaves this page.</p>
+
+  <section class="panel">
+    <label class="field-label" for="tc-input">Prompt or text</label>
+    <textarea id="tc-input" class="mono" rows="8" placeholder="Paste your prompt here…"></textarea>
+    <div class="btn-row">
+      <button class="btn small" id="tc-sample" type="button">Load sample prompt</button>
+      <button class="btn small" id="tc-clear" type="button">Clear</button>
+      <span class="badge" id="tc-token-mode">loading tokenizer…</span>
+    </div>
+
+    <div class="field-row" style="margin-top:14px">
+      <div class="field">
+        <label class="field-label" for="tc-model">Model</label>
+        <select id="tc-model"></select>
+        <div class="hint">Prices per 1M tokens, updated <span id="tc-updated">—</span>.</div>
+      </div>
+      <div class="field" style="flex:0 1 180px">
+        <label class="field-label" for="tc-output-tokens">Expected output tokens</label>
+        <input type="number" id="tc-output-tokens" min="0" step="1" value="500">
+        <div class="hint">Optional — set 0 for input-only.</div>
+      </div>
+    </div>
+    <div class="check-row" style="margin-top:10px">
+      <label><input type="checkbox" id="tc-compare" checked> Compare all models for this text</label>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat"><div class="k">Tokens</div><div class="v" id="tc-tokens">0</div></div>
+      <div class="stat"><div class="k">Characters</div><div class="v" id="tc-chars">0</div></div>
+      <div class="stat"><div class="k">Words</div><div class="v" id="tc-words">0</div></div>
+      <div class="stat"><div class="k">Estimated cost per request</div><div class="v" id="tc-cost">$0</div></div>
+      <div class="stat"><div class="k">Cost per 1,000 requests</div><div class="v" id="tc-cost-1k">—</div></div>
+    </div>
+
+    <dl class="kv-list">
+      <dt>Selected model</dt><dd id="tc-sel-model">—</dd>
+      <dt>Input price</dt><dd id="tc-sel-input">—</dd>
+      <dt>Output price</dt><dd id="tc-sel-output">—</dd>
+      <dt>Cached input</dt><dd id="tc-sel-cached">—</dd>
+      <dt>Context window</dt><dd id="tc-sel-context">—</dd>
+    </dl>
+
+    <table class="data hidden" id="tc-compare-wrap">
+      <thead><tr><th>#</th><th>Model</th><th>Provider</th><th class="num">Input cost</th><th class="num">Output cost</th><th class="num">Total</th></tr></thead>
+      <tbody id="tc-compare-body"></tbody>
+    </table>
+    <p class="note">Counts use the official cl100k_base / o200k_base byte-pair encoding for OpenAI GPT-family models. Other providers tokenize differently, so treat those counts as close approximations. Tiered models (GPT-6 Astra, Gemini 3.1 Pro, Grok 4.x, MiniMax M3) show their standard-tier price; see each <a href="/models/index.html">pricing page</a> for long-context rates, caching discounts and batch-API savings.</p>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin:0 0 12px;font-size:16px">Monthly cost projection</h2>
+    <p class="note" style="margin:0 0 12px">Model a production workload: tokens per request multiplied by daily volume, with batch and caching discounts. This is the number that decides your bill.</p>
+
+    <div class="field-row">
+      <div class="field">
+        <label class="field-label" for="mc-in">Input tokens per request</label>
+        <input type="number" id="mc-in" class="mono" min="0" step="1" value="1500">
+      </div>
+      <div class="field">
+        <label class="field-label" for="mc-out">Output tokens per request</label>
+        <input type="number" id="mc-out" class="mono" min="0" step="1" value="500">
+      </div>
+      <div class="field">
+        <label class="field-label" for="mc-req">Requests per day</label>
+        <input type="number" id="mc-req" class="mono" min="0" step="1" value="10000">
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <span style="font-size:13px;color:var(--muted);align-self:center">Presets:</span>
+      <button class="btn small" data-preset="chat" type="button">Chatbot</button>
+      <button class="btn small" data-preset="rag" type="button">RAG pipeline</button>
+      <button class="btn small" data-preset="code" type="button">Code assistant</button>
+      <button class="btn small" data-preset="batch" type="button">Batch processing</button>
+      <button class="btn small" id="mc-from-text" type="button">Use counts from text above</button>
+    </div>
+
+    <div class="field-row" style="margin-top:12px">
+      <div class="field">
+        <label class="field-label">Discounts</label>
+        <div class="check-row">
+          <label><input type="checkbox" id="mc-batch"> Batch API (50% off, async)</label>
+        </div>
+      </div>
+      <div class="field">
+        <label class="field-label" for="mc-cache">Cache-hit ratio: <strong id="mc-cache-val">0%</strong></label>
+        <input type="range" id="mc-cache" min="0" max="90" step="5" value="0" style="width:100%">
+        <div class="hint">Share of input tokens served from cache at the model's cached rate.</div>
+      </div>
+    </div>
+
+    <pre class="code-out error hidden" id="mc-warn" style="margin-top:12px"></pre>
+
+    <div class="stats-grid">
+      <div class="stat"><div class="k">Cost per request</div><div class="v" id="mc-cost-req">—</div></div>
+      <div class="stat"><div class="k">Cost per day</div><div class="v" id="mc-cost-day">—</div></div>
+      <div class="stat"><div class="k">Cost per month (30d)</div><div class="v" id="mc-cost-month">—</div></div>
+      <div class="stat"><div class="k">Cost per year</div><div class="v" id="mc-cost-year">—</div></div>
+    </div>
+
+    <h3 style="font-size:14px;margin:18px 0 0">Every model at this workload</h3>
+    <table class="data">
+      <thead><tr><th>#</th><th>Model</th><th>Provider</th><th class="num">Per request</th><th class="num">Per month</th></tr></thead>
+      <tbody id="mc-rows"></tbody>
+    </table>
+
+    <div class="btn-row">
+      <button class="btn small" id="mc-share" type="button">Copy share link</button>
+      <button class="btn small" id="mc-csv" type="button">Download CSV</button>
+    </div>
+    <input type="text" id="mc-share-url" class="mono" readonly style="margin-top:8px;font-size:12px" aria-label="Shareable link">
+    <p class="note">Batch discounts (50% off) apply to OpenAI, Anthropic and Google batch APIs; cached-input rates use each provider's published cache-read price, and the batch discount is applied before the cache mix. Long-context tiers (e.g. GPT-6 Astra above 272K tokens per request) switch automatically in the projection.</p>
+  </section>
+
+  <div class="ad-slot">
+    <strong>Ad slot</strong>
+    Google AdSense placeholder — activated once the site is approved and has steady traffic.
+  </div>
+
+  <section class="prose">
+    <h2>How the cost calculation works</h2>
+    <p>Every provider bills by the token. Your text is first converted into tokens — for GPT-family models this uses the same byte-pair-encoding tokenizer OpenAI serves in production, so the count matches what the API reports. Cost is then <code>(input tokens ÷ 1,000,000) × input price + (output tokens ÷ 1,000,000) × output price</code>, using each provider's list price. The monthly projection multiplies that per-request cost by your daily volume and 30 days.</p>
+    <p>Two distortions dominate real bills: output tokens are billed at 2–8× the input rate, and agentic or chain-of-thought workloads are output-heavy. The three levers that actually cut a bill are the batch API (typically 50% off), prompt caching (cache hits often cost around 10% of the base input rate — decisive for RAG with a repeated corpus), and right-sizing the model — routing the easy 80% of traffic to a mini or flash tier is usually the largest single saving.</p>
+
+    <h2>Tips to cut your LLM bill</h2>
+    <ul>
+      <li><strong>Batch APIs cut 50%.</strong> OpenAI, Anthropic and Google all halve input and output prices for asynchronous batch workloads — ideal for nightly enrichment or bulk classification.</li>
+      <li><strong>Prompt caching.</strong> A cache hit on Anthropic Claude can drop input cost to roughly 10% of base; Gemini context caching typically saves 80–90% on repeated context.</li>
+      <li><strong>Right-size the model.</strong> A Luna/Haiku/Flash-class call is often 5–20× cheaper than the flagship for routing, extraction or summarization — model the swap in the table above before deciding.</li>
+      <li><strong>Watch output length.</strong> Set a max-token limit; runaway completions are the most common source of surprise bills.</li>
+    </ul>
+
+    <h2>Frequently asked questions</h2>
+    <details class="faq">
+      <summary>How accurate is the token count?</summary>
+      <div class="faq-body">Exact for OpenAI GPT-family models (cl100k_base / o200k_base). For Claude, Gemini, Grok and DeepSeek it is a close approximation — those vendors use different tokenizers and do not publish them all.</div>
+    </details>
+    <details class="faq">
+      <summary>Does my prompt leave my browser?</summary>
+      <div class="faq-body">No. Tokenization and cost calculation happen in JavaScript on your device. The tool makes no network requests with your content.</div>
+    </details>
+    <details class="faq">
+      <summary>How is the monthly estimate computed?</summary>
+      <div class="faq-body">Per-request cost × requests per day × 30. Per-request cost uses the input/output tokens you entered, with the batch discount applied to both rates when enabled and the cache-hit ratio mixed into the input rate using the model's cached price. Long-context tiers switch automatically when tokens per request cross a provider's threshold.</div>
+    </details>
+    <details class="faq">
+      <summary>Are these the official prices?</summary>
+      <div class="faq-body">The table is compiled from each provider's official pricing documentation and cross-checked against aggregators. Rates change frequently — always confirm against the provider before committing budget.</div>
+    </details>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h4>Popular tools</h4>
+        <ul>
+          <li><a href="/tools/token-counter.html">LLM token &amp; cost calculator</a></li>
+          <li><a href="/tools/json-formatter.html">JSON formatter</a></li>
+          <li><a href="/tools/regex-tester.html">Regex tester</a></li>
+          <li><a href="/tools/cron-explainer.html">Cron explainer</a></li>
+          <li><a href="/tools/encode-decode.html">Base64 / URL / hash</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>LLM pricing</h4>
+        <ul>
+          <li><a href="/models/index.html">All models</a></li>
+          <li><a href="/models/gpt-6-astra.html">GPT-6 Astra pricing</a></li>
+          <li><a href="/models/claude-fable-5-1.html">Claude Fable 5.1 pricing</a></li>
+          <li><a href="/models/gemini-3-8-flash.html">Gemini 3.8 Flash pricing</a></li>
+          <li><a href="/models/deepseek-v4-1-flash.html">DeepSeek V4.1 Flash pricing</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>More</h4>
+        <ul>
+          <li><a href="https://ezaiops.com">ezaiops.com</a></li>
+          <li><a href="/privacy.html">Privacy policy</a></li>
+          <li><a href="https://github.com/ezaiops">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">&copy; <span data-year>2026</span> ezaiops. Free tools, no signup, runs entirely in your browser.</div>
+  </div>
+</footer>
+
+<script src="/assets/common.js" defer></script>
+<script src="/assets/models.js" defer></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  function esc(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+  var data = window.EZ_MODELS || { models: [], updated: "" };
+  var models = data.models || [];
+
+  var input = $("#tc-input");
+  var modelSel = $("#tc-model");
+  var outTokens = $("#tc-output-tokens");
+  var compareCb = $("#tc-compare");
+  var tbody = $("#tc-compare-body");
+  var compareTable = $("#tc-compare-wrap");
+
+  if (data.updated) $("#tc-updated").textContent = data.updated;
+
+  var groups = {};
+  models.forEach(function (m) { (groups[m.provider] = groups[m.provider] || []).push(m); });
+  Object.keys(groups).sort().forEach(function (p) {
+    var opt = document.createElement("optgroup");
+    opt.label = p;
+    groups[p].forEach(function (m) {
+      var o = document.createElement("option");
+      o.value = m.id;
+      o.textContent = m.name + "  $" + fmtPrice(m.input) + " in / $" + fmtPrice(m.output) + " out";
+      opt.appendChild(o);
+    });
+    modelSel.appendChild(opt);
+  });
+  try {
+    var saved = localStorage.getItem("ez-tc-model");
+    if (saved && models.some(function (m) { return m.id === saved; })) modelSel.value = saved;
+  } catch (e) { /* storage unavailable */ }
+  if (!modelSel.value && models.length) modelSel.value = models[0].id;
+
+  var tokState = 0; // 0 idle, 1 loading, 2 ok, 3 failed
+  var encoder = null;
+  function loadTokenizer() {
+    if (tokState !== 0) return;
+    tokState = 1;
+    try {
+      Promise.resolve(import("https://esm.sh/gpt-tokenizer")).then(function (m) {
+        if (m && typeof m.encode === "function") { encoder = m.encode; tokState = 2; } else { tokState = 3; }
+        update();
+      }).catch(function () { tokState = 3; update(); });
+    } catch (e) { tokState = 3; update(); }
+  }
+  function heuristic(text) {
+    var cjk = 0, other = 0;
+    for (var i = 0; i < text.length; i++) {
+      var c = text.charCodeAt(i);
+      if ((c >= 0x4e00 && c <= 0x9fff) || (c >= 0x3000 && c <= 0x303f) || (c >= 0xff00 && c <= 0xffef)) cjk++;
+      else other++;
+    }
+    return cjk + Math.ceil(other / 4);
+  }
+  function countTokens(text) {
+    if (encoder) { try { return encoder(text).length; } catch (e) { /* fall through */ } }
+    return heuristic(text);
+  }
+  function fmtPrice(n) { return n >= 1 ? String(n) : String(Math.round(n * 1000) / 1000); }
+  function money(n) {
+    if (!isFinite(n) || n <= 0) return "$0";
+    if (n < 0.000001) return "<$0.000001";
+    var d = n < 0.01 ? 6 : n < 1 ? 4 : 2;
+    return "$" + n.toFixed(d);
+  }
+  function currentModel() {
+    for (var i = 0; i < models.length; i++) if (models[i].id === modelSel.value) return models[i];
+    return models[0] || null;
+  }
+  function num(el, fallback) {
+    var v = parseInt(el.value, 10);
+    return isFinite(v) && v >= 0 ? v : (fallback || 0);
+  }
+
+  // ---------- text-based single-request panel ----------
+  var timer = null;
+  function schedule() { clearTimeout(timer); timer = setTimeout(update, 200); }
+  function update() {
+    var text = input.value;
+    var t = countTokens(text);
+    var m = currentModel();
+    var outN = num(outTokens, 0);
+    var outCost = m ? outN * m.output / 1e6 : 0;
+    var total = (m ? t * m.input / 1e6 : 0) + outCost;
+
+    $("#tc-tokens").textContent = t.toLocaleString();
+    $("#tc-chars").textContent = text.length.toLocaleString();
+    $("#tc-words").textContent = text.trim() ? text.trim().split(/\s+/).length.toLocaleString() : "0";
+    $("#tc-cost").innerHTML = money(total) + (m ? " <small>@ " + esc(m.name) + "</small>" : "");
+    $("#tc-cost-1k").textContent = money(total * 1000);
+
+    var mode = $("#tc-token-mode");
+    if (tokState === 2) { mode.textContent = "exact BPE tokenizer"; mode.className = "badge green"; }
+    else if (tokState === 3) { mode.textContent = "approx. tokenizer (offline)"; mode.className = "badge amber"; }
+    else { mode.textContent = "loading tokenizer…"; mode.className = "badge amber"; }
+
+    if (m) {
+      $("#tc-sel-model").textContent = m.name + " (" + m.provider + ")";
+      $("#tc-sel-input").textContent = "$" + fmtPrice(m.input);
+      $("#tc-sel-output").textContent = "$" + fmtPrice(m.output);
+      $("#tc-sel-cached").textContent = m.cached_input != null ? "$" + fmtPrice(m.cached_input) : "—";
+      $("#tc-sel-context").textContent = m.context || "—";
+    }
+
+    if (compareCb.checked && models.length) {
+      var rows = models.slice().sort(function (a, b) {
+        return (t * a.input / 1e6 + outN * a.output / 1e6) - (t * b.input / 1e6 + outN * b.output / 1e6);
+      }).slice(0, 8);
+      tbody.innerHTML = rows.map(function (mm, i) {
+        var sel = mm === m;
+        return "<tr" + (sel ? ' style="background:var(--accent-soft)"' : "") + "><td>" + (i + 1) + "</td><td>" + esc(mm.name) +
+          "</td><td>" + esc(mm.provider) + "</td><td class=\"num\">" + money(t * mm.input / 1e6) +
+          "</td><td class=\"num\">" + money(outN * mm.output / 1e6) + "</td><td class=\"num\"><strong>" + money(t * mm.input / 1e6 + outN * mm.output / 1e6) + "</strong></td></tr>";
+      }).join("");
+      compareTable.classList.remove("hidden");
+    } else {
+      compareTable.classList.add("hidden");
+    }
+  }
+
+  var SAMPLE = "You are a routing agent for a customer support pipeline.\n\nGiven the ticket below, classify the intent, extract the order ID if present, and draft a one-paragraph reply.\n\nTicket: Hi, my order #45821 arrived damaged and the support page keeps timing out. I need a replacement and a refund for the shipping fee. This is the third email I've sent.\n\nRespond as JSON: {\"intent\": ..., \"order_id\": ..., \"reply\": ...}";
+
+  input.addEventListener("input", schedule);
+  outTokens.addEventListener("input", schedule);
+  modelSel.addEventListener("change", function () {
+    try { localStorage.setItem("ez-tc-model", modelSel.value); } catch (e) { /* ignore */ }
+    update(); recalcMonthly();
+  });
+  compareCb.addEventListener("change", update);
+  $("#tc-clear").addEventListener("click", function () { input.value = ""; update(); input.focus(); });
+  $("#tc-sample").addEventListener("click", function () { input.value = SAMPLE; update(); });
+
+  // ---------- monthly projection panel ----------
+  var mcIn = $("#mc-in"), mcOut = $("#mc-out"), mcReq = $("#mc-req");
+  var mcBatch = $("#mc-batch"), mcCache = $("#mc-cache"), mcWarn = $("#mc-warn");
+
+  function rates(m, tokensIn) {
+    var tier = m.tier_threshold && tokensIn > m.tier_threshold &&
+      m.input_high != null && m.output_high != null;
+    var pin = tier ? m.input_high : m.input;
+    var pout = tier ? m.output_high : m.output;
+    if (mcBatch.checked) { pin /= 2; pout /= 2; }
+    return { pin: pin, pout: pout, tier: tier };
+  }
+  function effInputPrice(m, r) {
+    var ratio = parseInt(mcCache.value, 10) / 100;
+    if (m.cached_input == null || ratio <= 0) return r.pin;
+    return (1 - ratio) * r.pin + ratio * m.cached_input;
+  }
+  function reqCost(m) {
+    var ti = num(mcIn, 0), to = num(mcOut, 0);
+    var r = rates(m, ti);
+    return (ti * effInputPrice(m, r) + to * r.pout) / 1e6;
+  }
+
+  function recalcMonthly() {
+    var m = currentModel();
+    var reqs = num(mcReq, 0);
+    var cost = reqCost(m);
+    $("#mc-cost-req").textContent = money(cost);
+    $("#mc-cost-day").textContent = money(cost * reqs);
+    $("#mc-cost-month").textContent = money(cost * reqs * 30);
+    $("#mc-cost-year").textContent = money(cost * reqs * 365);
+    $("#mc-cache-val").textContent = mcCache.value + "%";
+
+    var ti = num(mcIn, 0);
+    if (m && m.tier_threshold && ti > m.tier_threshold) {
+      mcWarn.textContent = "Note: " + m.name + " bills requests above " + m.tier_threshold.toLocaleString() +
+        " tokens at its long-context tier — the projection uses that higher rate.";
+      mcWarn.classList.remove("hidden");
+    } else {
+      mcWarn.classList.add("hidden");
+    }
+
+    var rows = models.slice().sort(function (a, b) { return reqCost(a) - reqCost(b); });
+    $("#mc-rows").innerHTML = rows.map(function (mm, i) {
+      var c = reqCost(mm);
+      return "<tr" + (mm === m ? ' style="background:var(--accent-soft)"' : "") + "><td>" + (i + 1) +
+        "</td><td>" + esc(mm.name) + "</td><td>" + esc(mm.provider) +
+        "</td><td class=\"num\">" + money(c) + "</td><td class=\"num\"><strong>" + money(c * reqs * 30) + "</strong></td></tr>";
+    }).join("");
+
+    buildShareUrl();
+  }
+
+  var mTimer = null;
+  function scheduleMonthly() { clearTimeout(mTimer); mTimer = setTimeout(recalcMonthly, 150); }
+  [mcIn, mcOut, mcReq].forEach(function (el) { el.addEventListener("input", scheduleMonthly); });
+  mcBatch.addEventListener("change", recalcMonthly);
+  mcCache.addEventListener("input", scheduleMonthly);
+
+  var PRESETS = {
+    chat: { i: 1500, o: 500, r: 10000 },
+    rag: { i: 3000, o: 500, r: 5000 },
+    code: { i: 2000, o: 1000, r: 2000 },
+    batch: { i: 1000, o: 200, r: 100000 }
+  };
+  document.querySelectorAll("[data-preset]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var p = PRESETS[b.getAttribute("data-preset")];
+      mcIn.value = p.i; mcOut.value = p.o; mcReq.value = p.r;
+      if (b.getAttribute("data-preset") === "batch") mcBatch.checked = true;
+      recalcMonthly();
+    });
+  });
+  $("#mc-from-text").addEventListener("click", function () {
+    mcIn.value = String(countTokens(input.value));
+    mcOut.value = outTokens.value || "0";
+    recalcMonthly();
+  });
+
+  function buildShareUrl() {
+    var params = [];
+    params.push("m=" + encodeURIComponent(modelSel.value));
+    params.push("i=" + num(mcIn, 0));
+    params.push("o=" + num(mcOut, 0));
+    params.push("r=" + num(mcReq, 0));
+    if (mcBatch.checked) params.push("b=1");
+    params.push("c=" + mcCache.value);
+    var url = location.origin + location.pathname + "?" + params.join("&");
+    $("#mc-share-url").value = url;
+    try { history.replaceState(null, "", "?" + params.join("&")); } catch (e) { /* file:// etc. */ }
+    return url;
+  }
+  $("#mc-share").addEventListener("click", function () {
+    window.ezTools.copy(buildShareUrl());
+  });
+  $("#mc-csv").addEventListener("click", function () {
+    var reqs = num(mcReq, 0);
+    var lines = ["model,provider,per_request_usd,per_month_usd"];
+    models.forEach(function (mm) {
+      var c = reqCost(mm);
+      lines.push('"' + mm.name + '","' + mm.provider + '",' + c.toFixed(6) + "," + (c * reqs * 30).toFixed(2));
+    });
+    try {
+      var blob = new Blob([lines.join("\n")], { type: "text/csv" });
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "llm-cost-estimate.csv";
+      a.click();
+      URL.revokeObjectURL(a.href);
+    } catch (e) {
+      window.ezTools.toast("Download not supported in this browser — use Copy share link");
+    }
+  });
+
+  function prefillFromUrl() {
+    var q;
+    try { q = new URLSearchParams(location.search); } catch (e) { return; }
+    if (!q.get("m") && !q.get("r")) return;
+    if (q.get("m") && models.some(function (m) { return m.id === q.get("m"); })) modelSel.value = q.get("m");
+    if (q.get("i")) mcIn.value = q.get("i");
+    if (q.get("o")) mcOut.value = q.get("o");
+    if (q.get("r")) mcReq.value = q.get("r");
+    if (q.get("b") === "1") mcBatch.checked = true;
+    if (q.get("c")) mcCache.value = q.get("c");
+  }
+
+  prefillFromUrl();
+  update();
+  recalcMonthly();
+  loadTokenizer();
+});
+</script>
+</body>

@@ -1,0 +1,325 @@
+window.EZ_MODELS = {
+  "updated": "2026-10-12",
+  "models": [
+    {
+      "id": "gpt-6-astra",
+      "name": "GPT-6 Astra",
+      "provider": "OpenAI",
+      "input": 10.0,
+      "output": 50.0,
+      "cached_input": 1.0,
+      "context": "1.05M",
+      "tier_threshold": 272000,
+      "input_high": 20.0,
+      "output_high": 75.0,
+      "note": "Flagship. Prompts above 272K tokens bill at $20/$75"
+    },
+    {
+      "id": "gpt-6-1-sol",
+      "name": "GPT-6.1 Sol",
+      "provider": "OpenAI",
+      "input": 2.0,
+      "output": 10.0,
+      "cached_input": 0.1,
+      "context": "1.05M",
+      "note": "High-demand coding and agent tier; cache read $0.10 per 1M"
+    },
+    {
+      "id": "gpt-6-luna",
+      "name": "GPT-6 Luna",
+      "provider": "OpenAI",
+      "input": 0.1,
+      "output": 0.5,
+      "cached_input": 0.01,
+      "context": "1.05M",
+      "note": "Cheapest GPT-6 tier"
+    },
+    {
+      "id": "gpt-5-6-sol",
+      "name": "GPT-5.6 Sol",
+      "provider": "OpenAI",
+      "input": 5.0,
+      "output": 30.0,
+      "cached_input": null,
+      "context": null,
+      "note": "Previous-generation flagship, GA July 2026"
+    },
+    {
+      "id": "gpt-5-6-terra",
+      "name": "GPT-5.6 Terra",
+      "provider": "OpenAI",
+      "input": 2.0,
+      "output": 12.0,
+      "cached_input": null,
+      "context": null,
+      "note": "Mid-tier of the GPT-5.6 family"
+    },
+    {
+      "id": "gpt-5-6-luna",
+      "name": "GPT-5.6 Luna",
+      "provider": "OpenAI",
+      "input": 0.2,
+      "output": 1.2,
+      "cached_input": null,
+      "context": null,
+      "note": "Budget tier of the GPT-5.6 family"
+    },
+    {
+      "id": "claude-fable-5-1",
+      "name": "Claude Fable 5.1",
+      "provider": "Anthropic",
+      "input": 10.0,
+      "output": 50.0,
+      "cached_input": 0.25,
+      "context": "1M",
+      "note": "Highest-capability and most widely available Claude"
+    },
+    {
+      "id": "claude-opus-5-5",
+      "name": "Claude Opus 5.5",
+      "provider": "Anthropic",
+      "input": 4.0,
+      "output": 20.0,
+      "cached_input": 0.2,
+      "context": "1M",
+      "note": "Cache hits $0.20 per 1M; 5-minute cache write $5 per 1M"
+    },
+    {
+      "id": "claude-opus-5",
+      "name": "Claude Opus 5",
+      "provider": "Anthropic",
+      "input": 5.0,
+      "output": 25.0,
+      "cached_input": 0.5,
+      "context": "1M",
+      "note": "Full 1M context window at the standard rate"
+    },
+    {
+      "id": "claude-sonnet-5-5",
+      "name": "Claude Sonnet 5.5",
+      "provider": "Anthropic",
+      "input": 2.0,
+      "output": 10.0,
+      "cached_input": 0.2,
+      "context": "1M",
+      "note": "The everyday workhorse tier"
+    },
+    {
+      "id": "claude-sonnet-5",
+      "name": "Claude Sonnet 5",
+      "provider": "Anthropic",
+      "input": 2.0,
+      "output": 10.0,
+      "cached_input": 0.2,
+      "context": "1M",
+      "note": "Intro rate made permanent"
+    },
+    {
+      "id": "claude-haiku-4-5",
+      "name": "Claude Haiku 4.5",
+      "provider": "Anthropic",
+      "input": 1.0,
+      "output": 5.0,
+      "cached_input": 0.1,
+      "context": "200K",
+      "note": "Fastest and cheapest Claude tier"
+    },
+    {
+      "id": "gemini-3-1-pro",
+      "name": "Gemini 3.1 Pro",
+      "provider": "Google",
+      "input": 2.0,
+      "output": 12.0,
+      "cached_input": null,
+      "context": "1M",
+      "tier_threshold": 200000,
+      "input_high": 4.0,
+      "output_high": 18.0,
+      "note": "Prompts up to 200K tokens $2.00/$12.00; above 200K the rate doubles to $4.00/$18.00"
+    },
+    {
+      "id": "gemini-3-8-flash",
+      "name": "Gemini 3.8 Flash",
+      "provider": "Google",
+      "input": 0.75,
+      "output": 3.75,
+      "cached_input": 0.075,
+      "context": "1.05M",
+      "note": "Introductory price in effect through 2026-12-31"
+    },
+    {
+      "id": "gemini-3-5-flash-lite",
+      "name": "Gemini 3.5 Flash-Lite",
+      "provider": "Google",
+      "input": 0.3,
+      "output": 2.5,
+      "cached_input": 0.03,
+      "context": "1.05M",
+      "note": "Flat rate regardless of prompt length"
+    },
+    {
+      "id": "grok-4-7",
+      "name": "Grok 4.7",
+      "provider": "xAI",
+      "input": 2.0,
+      "output": 6.0,
+      "cached_input": 0.5,
+      "context": "500K",
+      "tier_threshold": 200000,
+      "input_high": 4.0,
+      "output_high": 12.0,
+      "note": "Prompts under 200K tokens $2.00/$6.00; at 200K+ $4.00/$12.00 and the cache rate doubles"
+    },
+    {
+      "id": "grok-4-5",
+      "name": "Grok 4.5",
+      "provider": "xAI",
+      "input": 2.0,
+      "output": 6.0,
+      "cached_input": null,
+      "context": null,
+      "tier_threshold": 200000,
+      "input_high": 4.0,
+      "output_high": 12.0,
+      "note": "Prompts under 200K tokens $2.00/$6.00; at 200K+ the rate doubles to $4.00/$12.00"
+    },
+    {
+      "id": "grok-4-3",
+      "name": "Grok 4.3",
+      "provider": "xAI",
+      "input": 1.25,
+      "output": 2.5,
+      "cached_input": null,
+      "context": null,
+      "tier_threshold": 200000,
+      "input_high": 2.5,
+      "output_high": 5.0,
+      "note": "Prompts under 200K tokens $1.25/$2.50; at 200K+ $2.50/$5.00. Output is only 2x input"
+    },
+    {
+      "id": "deepseek-v4-1-flash",
+      "name": "DeepSeek V4.1 Flash",
+      "provider": "DeepSeek",
+      "input": 0.15,
+      "output": 0.6,
+      "cached_input": 0.003,
+      "context": "1M",
+      "note": "Off-peak rates shown. Weekday peak windows (UTC 01:00-04:00 and 06:00-10:00) double to $0.30/$1.20. Multimodal, open weights, up to 384K output tokens"
+    },
+    {
+      "id": "deepseek-v4-flash",
+      "name": "DeepSeek V4-Flash",
+      "provider": "DeepSeek",
+      "input": 0.14,
+      "output": 0.28,
+      "cached_input": 0.0028,
+      "context": null,
+      "note": "Legacy - superseded by V4.1 Flash in September 2026"
+    },
+    {
+      "id": "glm-5-3",
+      "name": "GLM-5.3",
+      "provider": "Z.AI",
+      "input": 1.4,
+      "output": 4.4,
+      "cached_input": 0.26,
+      "context": "1M",
+      "note": "Pay-as-you-go pricing now live"
+    },
+    {
+      "id": "glm-5-3-flash",
+      "name": "GLM-5.3 Flash",
+      "provider": "Z.AI",
+      "input": 0.15,
+      "output": 0.5,
+      "cached_input": 0.03,
+      "context": "1M",
+      "note": "Cheapest GLM-5.3 tier"
+    },
+    {
+      "id": "glm-5-3-flashx",
+      "name": "GLM-5.3 FlashX",
+      "provider": "Z.AI",
+      "input": 0.37,
+      "output": 1.25,
+      "cached_input": 0.075,
+      "context": "1M",
+      "note": "Faster GLM-5.3 tier"
+    },
+    {
+      "id": "kimi-k3",
+      "name": "Kimi K3",
+      "provider": "Moonshot",
+      "input": 3.0,
+      "output": 15.0,
+      "cached_input": 0.3,
+      "context": "1M",
+      "note": "Global API with full open weights; cache write $3 per 5 min, $6 per hour"
+    },
+    {
+      "id": "minimax-m3",
+      "name": "MiniMax M3",
+      "provider": "MiniMax",
+      "input": 0.3,
+      "output": 1.2,
+      "cached_input": 0.06,
+      "context": "1M",
+      "tier_threshold": 512000,
+      "input_high": 0.6,
+      "output_high": 2.4,
+      "note": "Above 512K tokens per request the rate is $0.60/$2.40"
+    },
+    {
+      "id": "mimo-v2-6-flash",
+      "name": "MiMo V2.6 Flash",
+      "provider": "Xiaomi",
+      "input": 0.14,
+      "output": 0.28,
+      "cached_input": 0.0028,
+      "context": "1M",
+      "note": "Batch API runs at half price"
+    },
+    {
+      "id": "mistral-medium-3-5",
+      "name": "Mistral Medium 3.5",
+      "provider": "Mistral",
+      "input": 1.5,
+      "output": 7.5,
+      "cached_input": null,
+      "context": null,
+      "note": "European provider, mid-tier flagship"
+    },
+    {
+      "id": "mistral-large-3",
+      "name": "Mistral Large 3",
+      "provider": "Mistral",
+      "input": 0.5,
+      "output": 1.5,
+      "cached_input": null,
+      "context": null,
+      "note": "Large context open-weight alternative"
+    },
+    {
+      "id": "mistral-small-4",
+      "name": "Mistral Small 4",
+      "provider": "Mistral",
+      "input": 0.15,
+      "output": 0.6,
+      "cached_input": 0.015,
+      "context": "131K",
+      "note": "Budget tier, good for classification workloads"
+    }
+  ],
+  "sources": [
+    "https://developers.openai.com/api/docs/pricing",
+    "https://platform.claude.com/docs/en/about-claude/pricing",
+    "https://ai.google.dev/gemini-api/docs/pricing",
+    "https://api-docs.deepseek.com/quick_start/pricing/",
+    "https://docs.x.ai/docs/models",
+    "https://docs.z.ai/guides/overview/pricing",
+    "https://platform.moonshot.ai/docs/pricing",
+    "https://platform.minimaxi.com/docs/price",
+    "https://platform.xiaomimimo.com/docs/en-US/price/pay-as-you-go",
+    "https://mistral.ai/pricing/api"
+  ]
+};

@@ -1,0 +1,6 @@
+# ads.txt for tools.ezaiops.com
+# After your Google AdSense account is approved, replace pub-0000000000000000
+# with your own publisher ID below. Until then this placeholder is not loaded
+# by any ad request and is harmless to keep live.
+
+# google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0

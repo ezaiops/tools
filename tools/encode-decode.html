@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Base64 Encoder, URL Encoder &amp; Hash Generator — ezaiops tools</title>
+<meta name="description" content="Encode and decode text with Base64 and URL, escape HTML entities, and compute SHA-256 checksums. All conversion happens locally in your browser.">
+<link rel="canonical" href="https://tools.ezaiops.com/tools/encode-decode.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Base64 / URL Encoder &amp; Hash Generator">
+<meta property="og:description" content="Base64, URL, HTML escaping and SHA-256 hashing in the browser.">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Base64 / URL Encoder & Hash Generator",
+  "url": "https://tools.ezaiops.com/tools/encode-decode.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/"><span class="logo">ez</span>ezaiops <small>tools</small></a>
+    <nav class="site-nav">
+      <a href="/">Tools</a>
+      <a href="/models/index.html">LLM pricing</a>
+      <a href="https://ezaiops.com">Blog</a>
+      <a href="https://github.com/ezaiops">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap tool-page">
+  <nav class="crumbs"><a href="/">Home</a> / Tools / <a href="/tools/encode-decode.html">Base64 / URL / hash</a></nav>
+  <h1>Base64 / URL encoder &amp; hash generator</h1>
+  <p class="lead">Encode and decode text with Base64 or URL encoding, escape HTML entities, or compute cryptographic checksums — including a pure-JavaScript SHA-256 that works even in non-secure contexts. UTF-8 safe throughout.</p>
+
+  <section class="panel">
+    <div class="btn-row" role="tablist" style="margin-top:0">
+      <button class="btn small primary" data-tab="b64" type="button">Base64</button>
+      <button class="btn small" data-tab="url" type="button">URL</button>
+      <button class="btn small" data-tab="html" type="button">HTML entities</button>
+      <button class="btn small" data-tab="hash" type="button">Hash</button>
+    </div>
+
+    <label class="field-label" for="ed-input" style="margin-top:14px">Input</label>
+    <textarea id="ed-input" class="mono" rows="5" spellcheck="false">Hello, ezaiops! 你好</textarea>
+
+    <div id="ed-hash-controls" class="field-row hidden" style="margin-top:12px">
+      <div class="field" style="flex:0 1 200px">
+        <label class="field-label" for="ed-algo">Algorithm</label>
+        <select id="ed-algo">
+          <option value="SHA-256" selected>SHA-256</option>
+          <option value="SHA-1">SHA-1</option>
+          <option value="SHA-384">SHA-384</option>
+          <option value="SHA-512">SHA-512</option>
+        </select>
+      </div>
+      <div class="field" style="flex:0 1 200px">
+        <label class="field-label" for="ed-format">Output format</label>
+        <select id="ed-format">
+          <option value="hex" selected>Hexadecimal</option>
+          <option value="base64">Base64</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="btn-row" id="ed-actions-b64">
+      <button class="btn small primary" id="ed-b64-enc" type="button">Encode</button>
+      <button class="btn small" id="ed-b64-dec" type="button">Decode</button>
+    </div>
+    <div class="btn-row hidden" id="ed-actions-url">
+      <button class="btn small primary" id="ed-url-enc" type="button">Encode component</button>
+      <button class="btn small" id="ed-url-dec" type="button">Decode component</button>
+      <button class="btn small" id="ed-url-full-enc" type="button">Encode full URL</button>
+    </div>
+    <div class="btn-row hidden" id="ed-actions-html">
+      <button class="btn small primary" id="ed-html-esc" type="button">Escape</button>
+      <button class="btn small" id="ed-html-unesc" type="button">Unescape</button>
+    </div>
+    <div class="btn-row hidden" id="ed-actions-hash">
+      <button class="btn small primary" id="ed-hash-run" type="button">Compute hash</button>
+    </div>
+
+    <label class="field-label" for="ed-output" style="margin-top:14px">Output</label>
+    <textarea id="ed-output" class="mono" rows="5" spellcheck="false" readonly></textarea>
+    <div class="btn-row">
+      <button class="btn small" id="ed-copy" type="button" data-copy-target="#ed-output">Copy output</button>
+      <button class="btn small" id="ed-swap" type="button">Move output to input</button>
+      <button class="btn small" id="ed-clear" type="button">Clear</button>
+      <span class="badge amber" id="ed-hash-note">SHA-256 falls back to a built-in implementation; other algorithms need a secure context (https or localhost)</span>
+    </div>
+  </section>
+
+  <div class="ad-slot">
+    <strong>Ad slot</strong>
+    Google AdSense placeholder — activated once the site is approved and has steady traffic.
+  </div>
+
+  <section class="prose">
+    <h2>Encoding notes</h2>
+    <ul>
+      <li><strong>Base64</strong> turns binary or UTF-8 text into ASCII using a 64-character alphabet. Encoding is UTF-8 safe here, so CJK text and emoji round-trip correctly.</li>
+      <li><strong>URL encoding</strong> percent-encodes characters that are not allowed in URLs. "Component" mode (encodeURIComponent) escapes more aggressively — use it for query parameter values, not whole URLs.</li>
+      <li><strong>HTML entities</strong> prevent injection: <code>&amp;</code> for &amp;, <code>&lt;</code> for &lt; and so on.</li>
+      <li><strong>SHA-256</strong> is computed by a built-in implementation in JavaScript, so it works everywhere. SHA-1/384/512 use the browser's native <code>crypto.subtle</code>, which requires a secure context (https:// or localhost) — and SHA-1 is cryptographically broken, use it only for legacy checksums.</li>
+    </ul>
+
+    <h2>Frequently asked questions</h2>
+    <details class="faq">
+      <summary>Why does Base64 encoding make my file bigger?</summary>
+      <div class="faq-body">Base64 encodes 3 bytes as 4 characters, so output is about 33% larger. That is the cost of being able to carry binary data over text-only channels (JSON, URLs, email).</div>
+    </details>
+    <details class="faq">
+      <summary>Are my inputs uploaded?</summary>
+      <div class="faq-body">No. Every conversion runs locally. Nothing is transmitted.</div>
+    </details>
+    <details class="faq">
+      <summary>Base64 or hex for tokens?</summary>
+      <div class="faq-body">Hex is more common for hashes (it is what most checksum tools output); Base64 is more compact. This page outputs hex by default for hashes and can switch to Base64.</div>
+    </details>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h4>Popular tools</h4>
+        <ul>
+          <li><a href="/tools/token-counter.html">LLM token &amp; cost calculator</a></li>
+          <li><a href="/tools/json-formatter.html">JSON formatter</a></li>
+          <li><a href="/tools/regex-tester.html">Regex tester</a></li>
+          <li><a href="/tools/cron-explainer.html">Cron explainer</a></li>
+          <li><a href="/tools/encode-decode.html">Base64 / URL / hash</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>LLM pricing</h4>
+        <ul>
+          <li><a href="/models/index.html">All models</a></li>
+          <li><a href="/models/gpt-5-6-sol.html">GPT-5.6 Sol pricing</a></li>
+          <li><a href="/models/claude-opus-5.html">Claude Opus 5 pricing</a></li>
+          <li><a href="/models/gemini-3-1-pro.html">Gemini 3.1 Pro pricing</a></li>
+          <li><a href="/models/deepseek-v4-flash.html">DeepSeek V4-Flash pricing</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>More</h4>
+        <ul>
+          <li><a href="https://ezaiops.com">ezaiops.com</a></li>
+          <li><a href="/privacy.html">Privacy policy</a></li>
+          <li><a href="https://github.com/ezaiops">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">&copy; <span data-year>2026</span> ezaiops. Free tools, no signup, runs entirely in your browser.</div>
+  </div>
+</footer>
+
+<script src="/assets/common.js" defer></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  var input = $("#ed-input"), output = $("#ed-output");
+  var mode = "b64";
+
+  function toBytes(str) {
+    if (window.TextEncoder) return new TextEncoder().encode(str);
+    var out = [];
+    for (var i = 0; i < str.length; i++) out.push(str.charCodeAt(i) & 0xff);
+    return new Uint8Array(out);
+  }
+  function fromBytes(bytes) {
+    if (window.TextDecoder) return new TextDecoder().decode(bytes);
+    var s = "";
+    bytes.forEach(function (b) { s += String.fromCharCode(b); });
+    return s;
+  }
+  function b64encode(str) {
+    var bin = "";
+    toBytes(str).forEach(function (b) { bin += String.fromCharCode(b); });
+    return btoa(bin);
+  }
+  function b64decode(str) {
+    var bin = atob(str.trim());
+    var bytes = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return fromBytes(bytes);
+  }
+  function htmlEscape(s) {
+    return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+  }
+  function htmlUnescape(s) {
+    return s.replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, "\"").replace(/&#39;/g, "'").replace(/&amp;/g, "&");
+  }
+  function toHex(bytes) {
+    var s = "";
+    bytes.forEach(function (b) { s += (b < 16 ? "0" : "") + b.toString(16); });
+    return s;
+  }
+  function bytesToB64(bytes) {
+    var bin = "";
+    bytes.forEach(function (b) { bin += String.fromCharCode(b); });
+    return btoa(bin);
+  }
+
+  var SHA_K = [0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2];
+  function sha256Pure(bytes) {
+    var H = [0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19];
+    var bitLen = bytes.length * 8;
+    var padLen = (bytes.length + 9 + 63) & ~63;
+    var msg = new Uint8Array(padLen);
+    msg.set(bytes);
+    msg[bytes.length] = 0x80;
+    var dv = new DataView(msg.buffer);
+    dv.setUint32(padLen - 8, Math.floor(bitLen / 4294967296), false);
+    dv.setUint32(padLen - 4, bitLen >>> 0, false);
+    var w = new Uint32Array(64);
+    function rotr(x, n) { return (x >>> n) | (x << (32 - n)); }
+    for (var off = 0; off < padLen; off += 64) {
+      for (var i = 0; i < 16; i++) w[i] = dv.getUint32(off + i * 4, false);
+      for (var j = 16; j < 64; j++) {
+        var s0 = rotr(w[j - 15], 7) ^ rotr(w[j - 15], 18) ^ (w[j - 15] >>> 3);
+        var s1 = rotr(w[j - 2], 17) ^ rotr(w[j - 2], 19) ^ (w[j - 2] >>> 10);
+        w[j] = (w[j - 16] + s0 + w[j - 7] + s1) >>> 0;
+      }
+      var a = H[0], b = H[1], c = H[2], d = H[3], e = H[4], f = H[5], g = H[6], h = H[7];
+      for (var t = 0; t < 64; t++) {
+        var S1 = rotr(e, 6) ^ rotr(e, 11) ^ rotr(e, 25);
+        var ch = (e & f) ^ (~e & g);
+        var t1 = (h + S1 + ch + SHA_K[t] + w[t]) >>> 0;
+        var S0 = rotr(a, 2) ^ rotr(a, 13) ^ rotr(a, 22);
+        var maj = (a & b) ^ (a & c) ^ (b & c);
+        var t2 = (S0 + maj) >>> 0;
+        h = g; g = f; f = e; e = (d + t1) >>> 0;
+        d = c; c = b; b = a; a = (t1 + t2) >>> 0;
+      }
+      H[0] = (H[0] + a) >>> 0; H[1] = (H[1] + b) >>> 0; H[2] = (H[2] + c) >>> 0; H[3] = (H[3] + d) >>> 0;
+      H[4] = (H[4] + e) >>> 0; H[5] = (H[5] + f) >>> 0; H[6] = (H[6] + g) >>> 0; H[7] = (H[7] + h) >>> 0;
+    }
+    var out = new Uint8Array(32);
+    var odv = new DataView(out.buffer);
+    for (var k = 0; k < 8; k++) odv.setUint32(k * 4, H[k], false);
+    return out;
+  }
+
+  function hashAsync(algo, text, format) {
+    return new Promise(function (resolve, reject) {
+      var bytes = toBytes(text);
+      if (algo === "SHA-256") {
+        resolve(format === "hex" ? toHex(sha256Pure(bytes)) : bytesToB64(sha256Pure(bytes)));
+        return;
+      }
+      var subtle = window.crypto && window.crypto.subtle;
+      if (!subtle) {
+        reject(new Error(algo + " requires crypto.subtle, which needs https:// or localhost. SHA-256 always works."));
+        return;
+      }
+      subtle.digest(algo, bytes).then(function (buf) {
+        resolve(format === "hex" ? toHex(new Uint8Array(buf)) : bytesToB64(new Uint8Array(buf)));
+      }).catch(reject);
+    });
+  }
+
+  function setTab(next) {
+    mode = next;
+    document.querySelectorAll("[data-tab]").forEach(function (b) {
+      b.classList.toggle("primary", b.getAttribute("data-tab") === next);
+    });
+    $("#ed-actions-b64").classList.toggle("hidden", next !== "b64");
+    $("#ed-actions-url").classList.toggle("hidden", next !== "url");
+    $("#ed-actions-html").classList.toggle("hidden", next !== "html");
+    $("#ed-actions-hash").classList.toggle("hidden", next !== "hash");
+    $("#ed-hash-controls").classList.toggle("hidden", next !== "hash");
+    $("#ed-hash-note").classList.toggle("hidden", next !== "hash");
+    output.value = "";
+  }
+
+  function safe(fn) {
+    return function () {
+      try { output.value = fn(input.value); }
+      catch (e) { output.value = "Error: " + e.message; }
+    };
+  }
+
+  document.querySelectorAll("[data-tab]").forEach(function (b) {
+    b.addEventListener("click", function () { setTab(b.getAttribute("data-tab")); });
+  });
+  $("#ed-b64-enc").addEventListener("click", safe(b64encode));
+  $("#ed-b64-dec").addEventListener("click", safe(function (s) { return b64decode(s); }));
+  $("#ed-url-enc").addEventListener("click", safe(encodeURIComponent));
+  $("#ed-url-dec").addEventListener("click", safe(decodeURIComponent));
+  $("#ed-url-full-enc").addEventListener("click", safe(encodeURI));
+  $("#ed-html-esc").addEventListener("click", safe(htmlEscape));
+  $("#ed-html-unesc").addEventListener("click", safe(htmlUnescape));
+  $("#ed-hash-run").addEventListener("click", function () {
+    hashAsync($("#ed-algo").value, input.value, $("#ed-format").value).then(function (h) {
+      output.value = h;
+    }).catch(function (e) {
+      output.value = "Error: " + e.message;
+    });
+  });
+  $("#ed-swap").addEventListener("click", function () {
+    if (output.value && output.value.indexOf("Error:") !== 0) {
+      input.value = output.value;
+      output.value = "";
+    }
+  });
+  $("#ed-clear").addEventListener("click", function () { input.value = ""; output.value = ""; });
+
+  setTab("b64");
+});
+</script>
+</body>
+</html>

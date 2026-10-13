@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Unix Timestamp Converter — Epoch, ISO 8601, Local Time | ezaiops tools</title>
+<meta name="description" content="Convert Unix epoch timestamps to ISO 8601 and human-readable dates, with a live clock and millisecond support. Runs locally.">
+<link rel="canonical" href="https://tools.ezaiops.com/tools/timestamp-converter.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Unix Timestamp Converter">
+<meta property="og:description" content="Epoch to ISO 8601 and back, with a live clock.">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Unix Timestamp Converter",
+  "url": "https://tools.ezaiops.com/tools/timestamp-converter.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/"><span class="logo">ez</span>ezaiops <small>tools</small></a>
+    <nav class="site-nav">
+      <a href="/">Tools</a>
+      <a href="/models/index.html">LLM pricing</a>
+      <a href="https://ezaiops.com">Blog</a>
+      <a href="https://github.com/ezaiops">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap tool-page">
+  <nav class="crumbs"><a href="/">Home</a> / Tools / <a href="/tools/timestamp-converter.html">Timestamp converter</a></nav>
+  <h1>Unix timestamp converter</h1>
+  <p class="lead">Convert between Unix epoch (seconds or milliseconds), ISO 8601 strings and human-readable dates — in UTC and your local timezone. The clock at the top ticks live; everything below runs offline.</p>
+
+  <section class="panel">
+    <label class="field-label">Current time</label>
+    <div class="stats-grid">
+      <div class="stat"><div class="k">Unix seconds</div><div class="v" id="ts-now-s">—</div></div>
+      <div class="stat"><div class="k">Unix milliseconds</div><div class="v" id="ts-now-ms">—</div></div>
+      <div class="stat"><div class="k">ISO 8601 (UTC)</div><div class="v" id="ts-now-iso" style="font-size:14px">—</div></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn small" id="ts-copy-now" type="button" data-copy-target="#ts-now-s">Copy current unix time</button>
+    </div>
+  </section>
+
+  <section class="panel">
+    <label class="field-label" for="ts-input">Timestamp to convert</label>
+    <input type="text" id="ts-input" class="mono" value="0" spellcheck="false">
+    <div class="hint">Accepts unix seconds (10 digits), unix milliseconds (13 digits), ISO 8601 (<code>2026-10-13T06:00:00Z</code>), <code>2026-10-13 09:00</code>, or <code>now</code>. <span class="badge blue" id="ts-detected">—</span></div>
+    <div class="btn-row">
+      <button class="btn small" id="ts-now-btn" type="button">Now</button>
+      <button class="btn small" id="ts-clear" type="button">Clear</button>
+    </div>
+
+    <dl class="kv-list">
+      <dt>ISO 8601 (UTC)</dt><dd id="ts-iso">—</dd>
+      <dt>Local time</dt><dd id="ts-local">—</dd>
+      <dt>UTC offset</dt><dd id="ts-offset">—</dd>
+      <dt>RFC 2822</dt><dd id="ts-rfc">—</dd>
+      <dt>Day of week</dt><dd id="ts-dow">—</dd>
+      <dt>Unix seconds</dt><dd id="ts-secs">—</dd>
+      <dt>Unix milliseconds</dt><dd id="ts-msecs">—</dd>
+      <dt>Relative</dt><dd id="ts-rel">—</dd>
+    </dl>
+
+    <label class="field-label" for="ts-local-input" style="margin-top:16px">Human-readable date → unix</label>
+    <div class="field-row">
+      <div class="field"><input type="datetime-local" id="ts-local-input"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn small" id="ts-from-local" type="button">Convert to unix</button>
+    </div>
+    <p class="note" id="ts-local-out"></p>
+  </section>
+
+  <div class="ad-slot">
+    <strong>Ad slot</strong>
+    Google AdSense placeholder — activated once the site is approved and has steady traffic.
+  </div>
+
+  <section class="prose">
+    <h2>Unix time in one paragraph</h2>
+    <p>The Unix epoch is the number of seconds elapsed since <strong>00:00:00 UTC on January 1, 1970</strong> (leap seconds excluded — Unix time pretends every day has exactly 86,400 seconds). Millisecond timestamps are the same count multiplied by 1,000, which is what JavaScript's <code>Date.now()</code> and most JSON APIs return. A timestamp of <code>0</code> is therefore the epoch itself, and negative values are moments before 1970.</p>
+
+    <h2>Common timestamp pitfalls</h2>
+    <ul>
+      <li><strong>Seconds vs milliseconds.</strong> A 10-digit timestamp is seconds; 13 digits is milliseconds. Mixing them is the single most common timestamp bug — 13-digit values overflow 32-bit ints and break some databases.</li>
+      <li><strong>Second-resolution storage.</strong> Storing a float like <code>1728790800.123</code> silently drops sub-second precision in many engines.</li>
+      <li><strong>Year 2038.</strong> 32-bit signed seconds overflow on January 19, 2038. Use 64-bit storage or milliseconds.</li>
+      <li><strong>Server timezone is not your timezone.</strong> convert in UTC and format at the edge; never format a timestamp in the timezone of whatever VM happens to run your code.</li>
+    </ul>
+
+    <h2>Frequently asked questions</h2>
+    <details class="faq">
+      <summary>What is the maximum timestamp?</summary>
+      <div class="faq-body">JavaScript dates are reliable up to ±8,640,000,000,000,000 ms around the epoch — roughly ±273,790 years, far beyond any practical use. 64-bit systems share a similar limit.</div>
+    </details>
+    <details class="faq">
+      <summary>Are leap seconds counted?</summary>
+      <div class="faq-body">No. Unix time ignores leap seconds; UTC and Unix clocks drift apart by a second each time a leap second is inserted, and are re-synchronized on the next. For logging purposes the difference is invisible.</div>
+    </details>
+    <details class="faq">
+      <summary>Does this send my timestamps anywhere?</summary>
+      <div class="faq-body">No. All conversions happen in your browser with the built-in Date object.</div>
+    </details>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h4>Popular tools</h4>
+        <ul>
+          <li><a href="/tools/token-counter.html">LLM token &amp; cost calculator</a></li>
+          <li><a href="/tools/json-formatter.html">JSON formatter</a></li>
+          <li><a href="/tools/regex-tester.html">Regex tester</a></li>
+          <li><a href="/tools/cron-explainer.html">Cron explainer</a></li>
+          <li><a href="/tools/encode-decode.html">Base64 / URL / hash</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>LLM pricing</h4>
+        <ul>
+          <li><a href="/models/index.html">All models</a></li>
+          <li><a href="/models/gpt-5-6-sol.html">GPT-5.6 Sol pricing</a></li>
+          <li><a href="/models/claude-opus-5.html">Claude Opus 5 pricing</a></li>
+          <li><a href="/models/gemini-3-1-pro.html">Gemini 3.1 Pro pricing</a></li>
+          <li><a href="/models/deepseek-v4-flash.html">DeepSeek V4-Flash pricing</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>More</h4>
+        <ul>
+          <li><a href="https://ezaiops.com">ezaiops.com</a></li>
+          <li><a href="/privacy.html">Privacy policy</a></li>
+          <li><a href="https://github.com/ezaiops">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">&copy; <span data-year>2026</span> ezaiops. Free tools, no signup, runs entirely in your browser.</div>
+  </div>
+</footer>
+
+<script src="/assets/common.js" defer></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  var input = $("#ts-input");
+
+  var DOW = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+  function pad(n) { return ("0" + n).slice(-2); }
+  function isoUTC(d) {
+    return d.getUTCFullYear() + "-" + pad(d.getUTCMonth() + 1) + "-" + pad(d.getUTCDate()) +
+      "T" + pad(d.getUTCHours()) + ":" + pad(d.getUTCMinutes()) + ":" + pad(d.getUTCSeconds()) + "Z";
+  }
+  function localStr(d) {
+    return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()) +
+      " " + pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds());
+  }
+  function rfc2822(d) {
+    var MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    return DOW[d.getDay()].slice(0, 3) + ", " + pad(d.getDate()) + " " + MON[d.getMonth()] + " " + d.getFullYear() +
+      " " + pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds());
+  }
+  function offsetStr(d) {
+    var off = -d.getTimezoneOffset();
+    var sign = off >= 0 ? "+" : "-";
+    var a = Math.abs(off);
+    return "UTC" + sign + pad(Math.floor(a / 60)) + ":" + pad(a % 60);
+  }
+  function relative(d, now) {
+    var diff = Math.round((d.getTime() - now.getTime()) / 1000);
+    var abs = Math.abs(diff);
+    var unit, val;
+    if (abs < 60) { unit = "second"; val = abs; }
+    else if (abs < 3600) { unit = "minute"; val = Math.round(abs / 60); }
+    else if (abs < 86400) { unit = "hour"; val = Math.round(abs / 3600); }
+    else if (abs < 2592000) { unit = "day"; val = Math.round(abs / 86400); }
+    else if (abs < 31536000) { unit = "month"; val = Math.round(abs / 2592000); }
+    else { unit = "year"; val = Math.round(abs / 31536000); }
+    var s = val + " " + unit + (val === 1 ? "" : "s");
+    return diff >= 0 ? "in " + s : s + " ago";
+  }
+
+  function parseInput(s) {
+    s = String(s || "").trim();
+    if (!s) return { date: null, kind: "empty" };
+    if (s.toLowerCase() === "now") return { date: new Date(), kind: "now" };
+    if (/^-?\d{1,13}$/.test(s)) {
+      var n = parseInt(s, 10);
+      var isMs = s.replace(/^-/, "").length > 10;
+      return { date: new Date(isMs ? n : n * 1000), kind: isMs ? "unix ms" : "unix s" };
+    }
+    var d = new Date(s);
+    if (isNaN(d.getTime())) return { date: null, kind: "unparsed" };
+    return { date: d, kind: "date string" };
+  }
+
+  function convert() {
+    var parsed = parseInput(input.value);
+    var badge = $("#ts-detected");
+    badge.textContent = parsed.kind;
+    badge.className = "badge " + (parsed.date ? "blue" : "amber");
+    if (!parsed.date) {
+      ["iso", "local", "offset", "rfc", "dow", "secs", "msecs", "rel"].forEach(function (k) {
+        $("#ts-" + k).textContent = "—";
+      });
+      return;
+    }
+    var d = parsed.date;
+    var now = new Date();
+    $("#ts-iso").textContent = isoUTC(d);
+    $("#ts-local").textContent = localStr(d);
+    $("#ts-offset").textContent = offsetStr(d);
+    $("#ts-rfc").textContent = rfc2822(d);
+    $("#ts-dow").textContent = DOW[d.getDay()];
+    $("#ts-secs").textContent = String(Math.floor(d.getTime() / 1000));
+    $("#ts-msecs").textContent = String(d.getTime());
+    $("#ts-rel").textContent = relative(d, now);
+  }
+
+  function tick() {
+    var now = new Date();
+    $("#ts-now-s").textContent = String(Math.floor(now.getTime() / 1000));
+    $("#ts-now-ms").textContent = String(now.getTime());
+    $("#ts-now-iso").textContent = isoUTC(now);
+  }
+
+  input.addEventListener("input", convert);
+  $("#ts-now-btn").addEventListener("click", function () {
+    input.value = String(Math.floor(Date.now() / 1000));
+    convert();
+  });
+  $("#ts-clear").addEventListener("click", function () { input.value = ""; convert(); });
+  $("#ts-from-local").addEventListener("click", function () {
+    var v = $("#ts-local-input").value;
+    if (!v) { $("#ts-local-out").textContent = "Pick a date and time first."; return; }
+    var ms = new Date(v).getTime();
+    $("#ts-local-out").textContent = isNaN(ms)
+      ? "Could not parse that value."
+      : v + " local = " + Math.floor(ms / 1000) + " (unix seconds), " + ms + " ms, " + new Date(ms).toISOString();
+  });
+
+  tick();
+  convert();
+  var timer = setInterval(tick, 1000);
+  window.addEventListener("beforeunload", function () { clearInterval(timer); });
+});
+</script>
+</body>
+</html>

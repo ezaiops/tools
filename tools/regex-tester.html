@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Regex Tester — JavaScript Regular Expressions Live | ezaiops tools</title>
+<meta name="description" content="Test JavaScript regular expressions against live text with match highlighting, capture groups and replacement preview.">
+<link rel="canonical" href="https://tools.ezaiops.com/tools/regex-tester.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Regex Tester (JavaScript)">
+<meta property="og:description" content="Test JavaScript regular expressions with live match highlighting.">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Regex Tester",
+  "url": "https://tools.ezaiops.com/tools/regex-tester.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/"><span class="logo">ez</span>ezaiops <small>tools</small></a>
+    <nav class="site-nav">
+      <a href="/">Tools</a>
+      <a href="/models/index.html">LLM pricing</a>
+      <a href="https://ezaiops.com">Blog</a>
+      <a href="https://github.com/ezaiops">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap tool-page">
+  <nav class="crumbs"><a href="/">Home</a> / Tools / <a href="/tools/regex-tester.html">Regex tester</a></nav>
+  <h1>Regex tester</h1>
+  <p class="lead">Test JavaScript regular expressions against live text. Matches are highlighted as you type, capture groups are listed per match, and the replacement preview shows exactly what <code>String.replace()</code> would produce.</p>
+
+  <section class="panel">
+    <div class="field-row">
+      <div class="field" style="flex:2 1 240px">
+        <label class="field-label" for="rt-pattern">Pattern</label>
+        <input type="text" id="rt-pattern" class="mono" value="\b\w+@\w+\.\w+\b" spellcheck="false">
+      </div>
+      <div class="field" style="flex:0 1 220px">
+        <label class="field-label">Flags</label>
+        <div class="check-row">
+          <label><input type="checkbox" id="rt-g" checked> g</label>
+          <label><input type="checkbox" id="rt-i"> i</label>
+          <label><input type="checkbox" id="rt-m"> m</label>
+          <label><input type="checkbox" id="rt-s"> s</label>
+          <label><input type="checkbox" id="rt-d"> d</label>
+        </div>
+      </div>
+    </div>
+
+    <label class="field-label" for="rt-text" style="margin-top:14px">Test string</label>
+    <textarea id="rt-text" class="mono" rows="6" spellcheck="false">Ping me at ops@ezaiops.com or backup+alerts@ezaiops.io.
+Not-an-email: broken@, @missing, spaces in@address.</textarea>
+
+    <div class="field-row" style="margin-top:14px">
+      <div class="field">
+        <label class="field-label" for="rt-replace">Replacement (supports $1, $2, …)</label>
+        <input type="text" id="rt-replace" class="mono" value="[$1]" spellcheck="false">
+      </div>
+    </div>
+
+    <pre class="code-out error hidden" id="rt-err"></pre>
+
+    <div class="stats-grid">
+      <div class="stat"><div class="k">Matches</div><div class="v" id="rt-count">0</div></div>
+      <div class="stat"><div class="k">Capture groups</div><div class="v" id="rt-groups">0</div></div>
+      <div class="stat"><div class="k">Flags</div><div class="v" id="rt-flags">g</div></div>
+    </div>
+
+    <h3 style="font-size:14px;margin:18px 0 0">Highlighted matches</h3>
+    <pre class="code-out" id="rt-highlight">—</pre>
+
+    <h3 style="font-size:14px;margin:18px 0 0">Replacement preview</h3>
+    <pre class="code-out" id="rt-replace-out">—</pre>
+
+    <h3 style="font-size:14px;margin:18px 0 0">Match details</h3>
+    <table class="data">
+      <thead><tr><th>#</th><th>Match</th><th>Index</th><th>Groups</th></tr></thead>
+      <tbody id="rt-rows"></tbody>
+    </table>
+  </section>
+
+  <div class="ad-slot">
+    <strong>Ad slot</strong>
+    Google AdSense placeholder — activated once the site is approved and has steady traffic.
+  </div>
+
+  <section class="prose">
+    <h2>JavaScript regex quick reference</h2>
+    <table class="data">
+      <thead><tr><th>Pattern</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">\d \D</td><td>Digit / non-digit</td></tr>
+        <tr><td class="mono">\w \W</td><td>Word char (letters, digits, _) / non-word</td></tr>
+        <tr><td class="mono">\s \S</td><td>Whitespace / non-whitespace</td></tr>
+        <tr><td class="mono">[a-z] [^a-z]</td><td>Character range / negated set</td></tr>
+        <tr><td class="mono">a+ a* a?</td><td>One or more / zero or more / optional</td></tr>
+        <tr><td class="mono">a{2,4}</td><td>Between 2 and 4 repetitions</td></tr>
+        <tr><td class="mono">(...)</td><td>Capturing group</td></tr>
+        <tr><td class="mono">(?:...)</td><td>Non-capturing group</td></tr>
+        <tr><td class="mono">(?&lt;name&gt;...)</td><td>Named capturing group</td></tr>
+        <tr><td class="mono">a|b</td><td>Alternation</td></tr>
+        <tr><td class="mono">^ $</td><td>Start / end of string (with m flag: of each line)</td></tr>
+        <tr><td class="mono">\b \B</td><td>Word boundary / non-boundary</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Frequently asked questions</h2>
+    <details class="faq">
+      <summary>Which regex flavor does this use?</summary>
+      <div class="faq-body">The ECMAScript (JavaScript) flavor, exactly as implemented by <code>new RegExp()</code> in your browser. Python, PCRE and Go regexes differ in details like named groups and possessive quantifiers.</div>
+    </details>
+    <details class="faq">
+      <summary>Why does my pattern hang the page?</summary>
+      <div class="faq-body">Catastrophic backtracking — nested quantifiers like <code>(a+)+b</code> over long non-matching input can take exponential time. Rewrite with atomic-style grouping or make the sub-pattern specific.</div>
+    </details>
+    <details class="faq">
+      <summary>What does the s flag do?</summary>
+      <div class="faq-body">It makes <code>.</code> match newline characters too. The d flag adds match indices, which the details table uses when present.</div>
+    </details>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h4>Popular tools</h4>
+        <ul>
+          <li><a href="/tools/token-counter.html">LLM token &amp; cost calculator</a></li>
+          <li><a href="/tools/json-formatter.html">JSON formatter</a></li>
+          <li><a href="/tools/regex-tester.html">Regex tester</a></li>
+          <li><a href="/tools/cron-explainer.html">Cron explainer</a></li>
+          <li><a href="/tools/encode-decode.html">Base64 / URL / hash</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>LLM pricing</h4>
+        <ul>
+          <li><a href="/models/index.html">All models</a></li>
+          <li><a href="/models/gpt-5-6-sol.html">GPT-5.6 Sol pricing</a></li>
+          <li><a href="/models/claude-opus-5.html">Claude Opus 5 pricing</a></li>
+          <li><a href="/models/gemini-3-1-pro.html">Gemini 3.1 Pro pricing</a></li>
+          <li><a href="/models/deepseek-v4-flash.html">DeepSeek V4-Flash pricing</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>More</h4>
+        <ul>
+          <li><a href="https://ezaiops.com">ezaiops.com</a></li>
+          <li><a href="/privacy.html">Privacy policy</a></li>
+          <li><a href="https://github.com/ezaiops">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">&copy; <span data-year>2026</span> ezaiops. Free tools, no signup, runs entirely in your browser.</div>
+  </div>
+</footer>
+
+<script src="/assets/common.js" defer></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  function esc(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+  var pattern = $("#rt-pattern"), text = $("#rt-text"), repl = $("#rt-replace");
+  var err = $("#rt-err"), hi = $("#rt-highlight"), rows = $("#rt-rows");
+  var flags = ["rt-g", "rt-i", "rt-m", "rt-s", "rt-d"];
+
+  var FLAG_IDS = { "rt-g": "g", "rt-i": "i", "rt-m": "m", "rt-s": "s", "rt-d": "d" };
+
+  function currentFlags() {
+    return Object.keys(FLAG_IDS)
+      .filter(function (id) { return $("#" + id).checked; })
+      .map(function (id) { return FLAG_IDS[id]; })
+      .join("");
+  }
+
+  function run() {
+    err.classList.add("hidden");
+    var f = currentFlags();
+    $("#rt-flags").textContent = f || "(none)";
+    var re;
+    try {
+      re = new RegExp(pattern.value, f);
+    } catch (e) {
+      err.textContent = "Invalid pattern: " + e.message;
+      err.classList.remove("hidden");
+      return;
+    }
+    var s = text.value;
+    var matches = [];
+    if (re.global || re.sticky) {
+      var m;
+      var guard = 0;
+      while ((m = re.exec(s)) !== null) {
+        matches.push(m);
+        if (m.index === re.lastIndex) re.lastIndex++;
+        if (++guard > 100000) break;
+      }
+    } else {
+      var one = re.exec(s);
+      if (one) matches.push(one);
+    }
+
+    $("#rt-count").textContent = String(matches.length);
+    $("#rt-groups").textContent = String(matches.reduce(function (n, m) {
+      return n + (m.length - 1);
+    }, 0));
+
+    hi.innerHTML = esc(s) || "—";
+    if (matches.length) {
+      var html = "";
+      var last = 0;
+      matches.forEach(function (m) {
+        html += esc(s.slice(last, m.index)) + "<mark>" + esc(m[0]) + "</mark>";
+        last = m.index + m[0].length;
+      });
+      html += esc(s.slice(last));
+      hi.innerHTML = html;
+    }
+
+    try {
+      $("#rt-replace-out").textContent = s.replace(re, repl.value || "");
+    } catch (e) {
+      $("#rt-replace-out").textContent = "(replacement failed: " + e.message + ")";
+    }
+
+    rows.innerHTML = matches.slice(0, 200).map(function (m, i) {
+      var groups = [];
+      for (var g = 1; g < m.length; g++) {
+        groups.push("$" + g + "=" + (m[g] === undefined ? "undefined" : JSON.stringify(m[g])));
+      }
+      if (m.groups) {
+        Object.keys(m.groups).forEach(function (k) {
+          groups.push(k + "=" + JSON.stringify(m.groups[k]));
+        });
+      }
+      return "<tr><td>" + (i + 1) + "</td><td class=\"mono\">" + esc(m[0]) + "</td><td class=\"num\">" + m.index +
+        "</td><td class=\"mono\">" + esc(groups.join(" ") || "—") + "</td></tr>";
+    }).join("") || "<tr><td colspan=\"4\">No matches</td></tr>";
+  }
+
+  [pattern, text, repl].forEach(function (el) { el.addEventListener("input", run); });
+  flags.forEach(function (id) { $("#" + id).addEventListener("change", run); });
+  run();
+});
+</script>
+</body>
+</html>

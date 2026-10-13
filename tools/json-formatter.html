@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JSON Formatter &amp; Validator — Format, Minify, Error Position | ezaiops tools</title>
+<meta name="description" content="Format, beautify, minify and validate JSON with exact error line and column. Shows size, key count and nesting depth. Runs locally in your browser.">
+<link rel="canonical" href="https://tools.ezaiops.com/tools/json-formatter.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="JSON Formatter &amp; Validator">
+<meta property="og:description" content="Format, minify and validate JSON with precise error positions.">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "JSON Formatter & Validator",
+  "url": "https://tools.ezaiops.com/tools/json-formatter.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/"><span class="logo">ez</span>ezaiops <small>tools</small></a>
+    <nav class="site-nav">
+      <a href="/">Tools</a>
+      <a href="/models/index.html">LLM pricing</a>
+      <a href="https://ezaiops.com">Blog</a>
+      <a href="https://github.com/ezaiops">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap tool-page">
+  <nav class="crumbs"><a href="/">Home</a> / Tools / <a href="/tools/json-formatter.html">JSON formatter</a></nav>
+  <h1>JSON formatter &amp; validator</h1>
+  <p class="lead">Paste JSON to format it with proper indentation, minify it for transport, or validate it — with the exact line and column of the first syntax error. Everything runs locally; large API payloads never leave the page.</p>
+
+  <section class="panel">
+    <label class="field-label" for="jf-input">Input JSON</label>
+    <textarea id="jf-input" class="mono" rows="9" placeholder='{"hello": "world", "items": [1, 2, 3]}' spellcheck="false"></textarea>
+    <div class="btn-row">
+      <button class="btn small primary" id="jf-format" type="button">Format</button>
+      <button class="btn small" id="jf-minify" type="button">Minify</button>
+      <button class="btn small" id="jf-validate" type="button">Validate</button>
+      <button class="btn small" id="jf-copy" type="button" data-copy-target="#jf-out">Copy result</button>
+      <button class="btn small" id="jf-sample" type="button">Sample</button>
+      <button class="btn small" id="jf-clear" type="button">Clear</button>
+      <label style="font-size:13px;display:inline-flex;align-items:center;gap:6px">Indent
+        <select id="jf-indent" style="width:auto">
+          <option value="2">2 spaces</option>
+          <option value="4" selected>4 spaces</option>
+          <option value="tab">Tab</option>
+        </select>
+      </label>
+    </div>
+
+    <pre class="code-out hidden" id="jf-out"></pre>
+    <pre class="code-out error hidden" id="jf-err"></pre>
+    <p class="note" id="jf-meta"></p>
+  </section>
+
+  <div class="ad-slot">
+    <strong>Ad slot</strong>
+    Google AdSense placeholder — activated once the site is approved and has steady traffic.
+  </div>
+
+  <section class="prose">
+    <h2>What this JSON formatter does</h2>
+    <p>Formatting (also called beautifying) re-serializes your document with consistent indentation, which makes deeply nested API responses readable. Minifying does the opposite — it strips all optional whitespace, which is what you want when shipping payloads over the wire or embedding data in a config file.</p>
+    <p>Validation parses the document strictly according to the JSON spec (RFC 8259) and reports the precise location of the first problem: the line, the column, and the parser's own message. That single position is usually enough to spot a trailing comma, an unescaped quote or a mismatched bracket.</p>
+
+    <h2>Common JSON errors and what they mean</h2>
+    <ul>
+      <li><strong>Trailing commas</strong> — <code>{"a": 1,}</code> is invalid JSON, though legal in JavaScript objects.</li>
+      <li><strong>Single quotes</strong> — JSON strings require double quotes; <code>{'a': 1}</code> fails.</li>
+      <li><strong>Comments</strong> — <code>//</code> and <code>/* */</code> are not allowed in strict JSON (use JSONC if you need comments in config).</li>
+      <li><strong>Unquoted keys</strong> — <code>{a: 1}</code> fails; keys must be strings.</li>
+      <li><strong>NaN / Infinity / undefined</strong> — none exist in JSON; use <code>null</code> or a string.</li>
+    </ul>
+
+    <h2>Frequently asked questions</h2>
+    <details class="faq">
+      <summary>Is there a size limit?</summary>
+      <div class="faq-body">The only limit is your browser's memory. Documents of several megabytes format instantly because everything happens on your device with no upload step.</div>
+    </details>
+    <details class="faq">
+      <summary>Is my JSON uploaded anywhere?</summary>
+      <div class="faq-body">No. Parsing, formatting and validation are done with the browser's built-in <code>JSON.parse</code> / <code>JSON.stringify</code>. Nothing is transmitted.</div>
+    </details>
+    <details class="faq">
+      <summary>Why does the formatted output reorder my keys?</summary>
+      <div class="faq-body">It doesn't — <code>JSON.stringify</code> preserves insertion order. If order changed, the input had duplicate keys and the parser kept the last occurrence, exactly as <code>JSON.parse</code> does.</div>
+    </details>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h4>Popular tools</h4>
+        <ul>
+          <li><a href="/tools/token-counter.html">LLM token &amp; cost calculator</a></li>
+          <li><a href="/tools/json-formatter.html">JSON formatter</a></li>
+          <li><a href="/tools/regex-tester.html">Regex tester</a></li>
+          <li><a href="/tools/cron-explainer.html">Cron explainer</a></li>
+          <li><a href="/tools/encode-decode.html">Base64 / URL / hash</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>LLM pricing</h4>
+        <ul>
+          <li><a href="/models/index.html">All models</a></li>
+          <li><a href="/models/gpt-5-6-sol.html">GPT-5.6 Sol pricing</a></li>
+          <li><a href="/models/claude-opus-5.html">Claude Opus 5 pricing</a></li>
+          <li><a href="/models/gemini-3-1-pro.html">Gemini 3.1 Pro pricing</a></li>
+          <li><a href="/models/deepseek-v4-flash.html">DeepSeek V4-Flash pricing</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>More</h4>
+        <ul>
+          <li><a href="https://ezaiops.com">ezaiops.com</a></li>
+          <li><a href="/privacy.html">Privacy policy</a></li>
+          <li><a href="https://github.com/ezaiops">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">&copy; <span data-year>2026</span> ezaiops. Free tools, no signup, runs entirely in your browser.</div>
+  </div>
+</footer>
+
+<script src="/assets/common.js" defer></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  var input = $("#jf-input"), out = $("#jf-out"), err = $("#jf-err"), meta = $("#jf-meta");
+
+  function indentValue() {
+    var v = $("#jf-indent").value;
+    return v === "tab" ? "\t" : parseInt(v, 10);
+  }
+  function hideAll() { out.classList.add("hidden"); err.classList.add("hidden"); }
+  function showOut(text) {
+    hideAll();
+    out.textContent = text;
+    out.classList.remove("hidden");
+  }
+  function showErr(text) {
+    hideAll();
+    err.textContent = text;
+    err.classList.remove("hidden");
+  }
+  function stats(txt, value) {
+    var bytes = 0;
+    try { bytes = new TextEncoder().encode(txt).length; } catch (e) { bytes = txt.length; }
+    meta.textContent = "Output: " + bytes + " bytes · " + countKeys(value) + " keys · depth " + depth(value);
+  }
+  function countKeys(v) {
+    if (Array.isArray(v)) return v.reduce(function (n, x) { return n + countKeys(x); }, 0);
+    if (v && typeof v === "object") return Object.keys(v).length + Object.keys(v).reduce(function (n, k) { return n + countKeys(v[k]); }, 0);
+    return 0;
+  }
+  function depth(v) {
+    if (Array.isArray(v)) return 1 + v.reduce(function (m, x) { return Math.max(m, depth(x)); }, 0);
+    if (v && typeof v === "object") return 1 + Object.keys(v).reduce(function (m, k) { return Math.max(m, depth(v[k])); }, 0);
+    return 0;
+  }
+  function parse(txt) {
+    try {
+      var v = JSON.parse(txt);
+      return { ok: true, value: v };
+    } catch (e) {
+      var msg = e && e.message ? e.message : String(e);
+      var line = 1, col = 1;
+      var m = /position (\d+)/.exec(msg);
+      if (m) {
+        var upto = txt.slice(0, parseInt(m[1], 10));
+        var lines = upto.split("\n");
+        line = lines.length;
+        col = lines[lines.length - 1].length + 1;
+      }
+      return { ok: false, msg: msg, line: line, col: col };
+    }
+  }
+
+  $("#jf-format").addEventListener("click", function () {
+    var r = parse(input.value);
+    if (!r.ok) { showErr(r.msg + "\n(at line " + r.line + ", column " + r.col + ")"); meta.textContent = ""; return; }
+    var s = JSON.stringify(r.value, null, indentValue());
+    showOut(s);
+    stats(s, r.value);
+  });
+  $("#jf-minify").addEventListener("click", function () {
+    var r = parse(input.value);
+    if (!r.ok) { showErr(r.msg + "\n(at line " + r.line + ", column " + r.col + ")"); meta.textContent = ""; return; }
+    var s = JSON.stringify(r.value);
+    showOut(s);
+    stats(s, r.value);
+  });
+  $("#jf-validate").addEventListener("click", function () {
+    var r = parse(input.value);
+    if (r.ok) {
+      showOut("Valid JSON ✔\n" + JSON.stringify(r.value, null, indentValue()));
+      stats(input.value, r.value);
+    } else {
+      showErr(r.msg + "\n(at line " + r.line + ", column " + r.col + ")");
+      meta.textContent = "";
+    }
+  });
+  var SAMPLE = "{\n  \"name\": \"ezaiops-tools\",\n  \"version\": 2,\n  \"private\": true,\n  \"scripts\": { \"dev\": \"python -m http.server\", \"deploy\": \"cf pages deploy .\" },\n  \"tools\": [\"token-counter\", \"json-formatter\", \"regex-tester\"],\n  \"features\": { \"clientSide\": true, \"signup\": false },\n  \"stars\": 0\n}";
+  $("#jf-sample").addEventListener("click", function () { input.value = SAMPLE; showOut(""); meta.textContent = "Sample loaded — press Format."; });
+  $("#jf-clear").addEventListener("click", function () { input.value = ""; hideAll(); meta.textContent = ""; });
+});
+</script>
+</body>
+</html>
