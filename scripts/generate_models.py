@@ -58,6 +58,18 @@ def neighbor_table(m, limit=5):
     return "".join(out)
 
 
+def time_row(m):
+    tp = m.get("time_pricing")
+    if not tp:
+        return ""
+    mult = tp.get("peak_multiplier", 2)
+    label = esc(tp.get("window_label", "Peak window"))
+    return ('<tr><td>Off-peak rate (default)</td><td class="num">%s</td><td class="num">%s</td></tr>'
+            '<tr><td>%s</td><td class="num">%s</td><td class="num">%s</td></tr>'
+            % (money(m["input"]), money(m["output"]), label,
+               money(m["input"] * mult), money(m["output"] * mult)))
+
+
 def model_page(m):
     name = m["name"]
     slug = m["id"]
@@ -73,9 +85,14 @@ def model_page(m):
         "mainEntity": [
             {"@type": "Question", "name": "How much does %s cost per 1M tokens?" % name,
              "acceptedAnswer": {"@type": "Answer", "text":
-             "%s: %s per 1M input tokens, %s per 1M output tokens. "
-             "Cached input is billed at %s per 1M tokens where caching is supported."
-             % (name, money(m["input"]), money(m["output"]), money(m.get("cached_input")))}},
+             ("%s: %s per 1M input tokens, %s per 1M output tokens. "
+              "Cached input is billed at %s per 1M tokens where caching is supported."
+              % (name, money(m["input"]), money(m["output"]), money(m.get("cached_input"))) +
+              (" Time-based pricing: the listed rate is the off-peak rate; %s the rate doubles to %s/%s."
+               % (m["time_pricing"].get("window_label", "during peak windows"),
+                  money(m["input"] * m["time_pricing"].get("peak_multiplier", 2)),
+                  money(m["output"] * m["time_pricing"].get("peak_multiplier", 2)))
+               if m.get("time_pricing") else ""))}},
             {"@type": "Question", "name": "Is the %s context window charged at a flat rate?" % name,
              "acceptedAnswer": {"@type": "Answer", "text":
              ("Context window: %s. %s" % (m.get("context") or "not published", m["note"]))
@@ -107,7 +124,7 @@ def model_page(m):
     html += CRUMBS.replace("@@NAME@@", esc(name))
     html += """
   <h1>%s API pricing: cost per 1M tokens</h1>
-  <p class="lead">%s currently costs <strong>%s per 1M input tokens</strong> and
+  <p class="lead">%s currently costs <strong>%s per 1M input tokens</strong>@@PRICEMODE@@ and
   <strong>%s per 1M output tokens</strong> through the %s API. %s
   Prices below were verified against official pricing documentation on %s.</p>
 
@@ -123,7 +140,7 @@ def model_page(m):
       <thead><tr><th>Tier</th><th class="num">Input / 1M</th><th class="num">Output / 1M</th></tr></thead>
       <tbody>
         <tr><td>Standard rate</td><td class="num">%s</td><td class="num">%s</td></tr>
-        %s
+        %s@@TIMEROW@@
       </tbody>
     </table>
     <dl class="kv-list">%s</dl>
@@ -204,6 +221,8 @@ def model_page(m):
         (" (Claude also charges a multi-tier cache write premium)" if m.get("cached_input") else ""),
     )
     html = html.replace("@@MODELCOUNT@@", str(len(MODELS)))
+    html = html.replace("@@PRICEMODE@@", " (off-peak)" if m.get("time_pricing") else "")
+    html = html.replace("@@TIMEROW@@", time_row(m))
 
     html += FOOT.replace("</body>", CALC_JS.replace("@@ID@@", slug) + "\n</body>")
     return html

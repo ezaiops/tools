@@ -123,18 +123,26 @@ console.log("\n== token-counter monthly projection ==");
   setInput(win, $("#mc-req", doc), "10000");
   mcBatchOff(win, doc);
   mcCache(win, doc, 0);
-  sel("deepseek-v4-1-flash");
+  sel("claude-sonnet-5-5");
   await sleep(250);
-  check("monthly per request", $("#mc-cost-req", doc).textContent === "$0.000525", $("#mc-cost-req", doc).textContent);
-  check("monthly total", $("#mc-cost-month", doc).textContent === "$157.50", $("#mc-cost-month", doc).textContent);
+  check("monthly per request", $("#mc-cost-req", doc).textContent === "$0.008000", $("#mc-cost-req", doc).textContent);
+  check("monthly total", $("#mc-cost-month", doc).textContent === "$2400.00", $("#mc-cost-month", doc).textContent);
   check("monthly rows 29", $$(doc, "#mc-rows tr").length === 29, String($$(doc, "#mc-rows tr").length));
   check("cheapest row first", /DeepSeek V4-Flash|MiMo V2.6 Flash/.test($$(doc, "#mc-rows tr")[0].textContent) &&
     /\$0\.000350/.test($$(doc, "#mc-rows tr")[0].textContent),
     $$(doc, "#mc-rows tr")[0].textContent.slice(0, 60));
 
+  sel("deepseek-v4-1-flash");
+  await sleep(250);
+  check("time pricing live badge", /Off-peak|Peak/.test($("#tc-sel-time", doc).textContent), $("#tc-sel-time", doc).textContent);
+  check("monthly time note visible", !$("#mc-time-note", doc).classList.contains("hidden"));
+  check("monthly time note range", /off-peak/.test($("#mc-time-note", doc).textContent) && /peak/.test($("#mc-time-note", doc).textContent),
+    $("#mc-time-note", doc).textContent);
+  sel("claude-sonnet-5-5");
+
   mcBatchOn(win, doc);
   await sleep(250);
-  check("batch halves cost", /^\$0\.00026/.test($("#mc-cost-req", doc).textContent), $("#mc-cost-req", doc).textContent);
+  check("batch halves cost", /^\$0\.004/.test($("#mc-cost-req", doc).textContent), $("#mc-cost-req", doc).textContent);
   mcBatchOff(win, doc);
 
   sel("gpt-6-1-sol");
@@ -325,6 +333,15 @@ console.log("\n== models/claude-opus-5.html ==");
   check("neighbors 5 rows", $$(doc, ".data tbody tr").length >= 5);
   check("faq present", $$(doc, "details.faq").length === 3);
   check("no console errors", errors.length === 0, errors.join(" | "));
+}
+
+console.log("\n== models/deepseek-v4-1-flash.html ==");
+{
+  const { doc } = await load("models/deepseek-v4-1-flash.html");
+  check("off-peak row", /Off-peak rate \(default\)/.test(doc.body.textContent));
+  check("peak window row", /Weekday peak \(UTC 01:00-04:00 and 06:00-10:00\)/.test(doc.body.textContent));
+  check("peak prices shown", /\$0\.30/.test(doc.body.textContent) && /\$1\.20/.test(doc.body.textContent));
+  check("lead marks off-peak", /\(off-peak\)/.test($(".lead", doc).textContent), $(".lead", doc).textContent.slice(0, 100));
 }
 
 console.log("\n== models/index.html ==");

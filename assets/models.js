@@ -204,6 +204,22 @@ window.EZ_MODELS = {
       "output": 0.6,
       "cached_input": 0.003,
       "context": "1M",
+      "time_pricing": {
+        "type": "peak_offpeak",
+        "peak_multiplier": 2,
+        "peak_windows_utc": [
+          [
+            60,
+            240
+          ],
+          [
+            360,
+            600
+          ]
+        ],
+        "peak_days": "Mon-Fri",
+        "window_label": "Weekday peak (UTC 01:00-04:00 and 06:00-10:00)"
+      },
       "note": "Off-peak rates shown. Weekday peak windows (UTC 01:00-04:00 and 06:00-10:00) double to $0.30/$1.20. Multimodal, open weights, up to 384K output tokens"
     },
     {

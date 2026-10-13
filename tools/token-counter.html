@@ -80,6 +80,7 @@
       <dt>Input price</dt><dd id="tc-sel-input">—</dd>
       <dt>Output price</dt><dd id="tc-sel-output">—</dd>
       <dt>Cached input</dt><dd id="tc-sel-cached">—</dd>
+      <dt>Time-based pricing</dt><dd id="tc-sel-time">—</dd>
       <dt>Context window</dt><dd id="tc-sel-context">—</dd>
     </dl>
 
@@ -140,6 +141,7 @@
       <div class="stat"><div class="k">Cost per month (30d)</div><div class="v" id="mc-cost-month">—</div></div>
       <div class="stat"><div class="k">Cost per year</div><div class="v" id="mc-cost-year">—</div></div>
     </div>
+    <p class="note hidden" id="mc-time-note"></p>
 
     <h3 style="font-size:14px;margin:18px 0 0">Every model at this workload</h3>
     <table class="data">
@@ -152,7 +154,7 @@
       <button class="btn small" id="mc-csv" type="button">Download CSV</button>
     </div>
     <input type="text" id="mc-share-url" class="mono" readonly style="margin-top:8px;font-size:12px" aria-label="Shareable link">
-    <p class="note">Batch discounts (50% off) apply to OpenAI, Anthropic and Google batch APIs; cached-input rates use each provider's published cache-read price, and the batch discount is applied before the cache mix. Long-context tiers (e.g. GPT-6 Astra above 272K tokens per request) switch automatically in the projection.</p>
+    <p class="note">Batch discounts (50% off) apply to OpenAI, Anthropic and Google batch APIs; cached-input rates use each provider's published cache-read price, and the batch discount is applied before the cache mix. Long-context tiers (e.g. GPT-6 Astra above 272K tokens per request) switch automatically in the projection. Models with time-based pricing (DeepSeek V4.1 Flash) apply the rate in effect right now — the monthly figure also shows the all-off-peak and all-peak extremes.</p>
   </section>
 
   <div class="ad-slot">
@@ -305,6 +307,25 @@ document.addEventListener("DOMContentLoaded", function () {
     for (var i = 0; i < models.length; i++) if (models[i].id === modelSel.value) return models[i];
     return models[0] || null;
   }
+  function timeMultiplier(m, now) {
+    if (!m || !m.time_pricing || m.time_pricing.type !== "peak_offpeak") return 1;
+    var day = now.getUTCDay();
+    var mins = now.getUTCHours() * 60 + now.getUTCMinutes();
+    var wins = m.time_pricing.peak_windows_utc || [];
+    var peak = day >= 1 && day <= 5 && wins.some(function (w) { return mins >= w[0] && mins < w[1]; });
+    return peak ? (m.time_pricing.peak_multiplier || 2) : 1;
+  }
+  function timeLabel(m, mult) {
+    if (!m || !m.time_pricing) return "—";
+    var win = m.time_pricing.window_label || "peak windows";
+    return mult > 1
+      ? "Peak rate active now (" + mult + "×) — " + win
+      : "Off-peak rate active — " + win + " bills at " + (m.time_pricing.peak_multiplier || 2) + "×";
+  }
+  function rateFor(mm, now) {
+    var mult = timeMultiplier(mm, now);
+    return { i: mm.input * mult, o: mm.output * mult };
+  }
   function num(el, fallback) {
     var v = parseInt(el.value, 10);
     return isFinite(v) && v >= 0 ? v : (fallback || 0);
@@ -317,9 +338,11 @@ document.addEventListener("DOMContentLoaded", function () {
     var text = input.value;
     var t = countTokens(text);
     var m = currentModel();
+    var now = new Date();
+    var mult = timeMultiplier(m, now);
     var outN = num(outTokens, 0);
-    var outCost = m ? outN * m.output / 1e6 : 0;
-    var total = (m ? t * m.input / 1e6 : 0) + outCost;
+    var outCost = m ? outN * m.output * mult / 1e6 : 0;
+    var total = (m ? t * m.input * mult / 1e6 : 0) + outCost;
 
     $("#tc-tokens").textContent = t.toLocaleString();
     $("#tc-chars").textContent = text.length.toLocaleString();
@@ -334,21 +357,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (m) {
       $("#tc-sel-model").textContent = m.name + " (" + m.provider + ")";
-      $("#tc-sel-input").textContent = "$" + fmtPrice(m.input);
-      $("#tc-sel-output").textContent = "$" + fmtPrice(m.output);
-      $("#tc-sel-cached").textContent = m.cached_input != null ? "$" + fmtPrice(m.cached_input) : "—";
+      $("#tc-sel-input").textContent = "$" + fmtPrice(m.input * mult);
+      $("#tc-sel-output").textContent = "$" + fmtPrice(m.output * mult);
+      $("#tc-sel-cached").textContent = m.cached_input != null ? "$" + fmtPrice(m.cached_input * mult) : "—";
       $("#tc-sel-context").textContent = m.context || "—";
+      $("#tc-sel-time").textContent = timeLabel(m, mult);
     }
 
     if (compareCb.checked && models.length) {
-      var rows = models.slice().sort(function (a, b) {
-        return (t * a.input / 1e6 + outN * a.output / 1e6) - (t * b.input / 1e6 + outN * b.output / 1e6);
-      }).slice(0, 8);
+      function modelCost(mm) {
+        var r = rateFor(mm, now);
+        return t * r.i / 1e6 + outN * r.o / 1e6;
+      }
+      var rows = models.slice().sort(function (a, b) { return modelCost(a) - modelCost(b); }).slice(0, 8);
       tbody.innerHTML = rows.map(function (mm, i) {
         var sel = mm === m;
+        var r = rateFor(mm, now);
+        var inC = t * r.i / 1e6, outC = outN * r.o / 1e6;
         return "<tr" + (sel ? ' style="background:var(--accent-soft)"' : "") + "><td>" + (i + 1) + "</td><td>" + esc(mm.name) +
-          "</td><td>" + esc(mm.provider) + "</td><td class=\"num\">" + money(t * mm.input / 1e6) +
-          "</td><td class=\"num\">" + money(outN * mm.output / 1e6) + "</td><td class=\"num\"><strong>" + money(t * mm.input / 1e6 + outN * mm.output / 1e6) + "</strong></td></tr>";
+          "</td><td>" + esc(mm.provider) + "</td><td class=\"num\">" + money(inC) +
+          "</td><td class=\"num\">" + money(outC) + "</td><td class=\"num\"><strong>" + money(inC + outC) + "</strong></td></tr>";
       }).join("");
       compareTable.classList.remove("hidden");
     } else {
@@ -372,22 +400,23 @@ document.addEventListener("DOMContentLoaded", function () {
   var mcIn = $("#mc-in"), mcOut = $("#mc-out"), mcReq = $("#mc-req");
   var mcBatch = $("#mc-batch"), mcCache = $("#mc-cache"), mcWarn = $("#mc-warn");
 
-  function rates(m, tokensIn) {
+  function rates(m, tokensIn, multOverride) {
     var tier = m.tier_threshold && tokensIn > m.tier_threshold &&
       m.input_high != null && m.output_high != null;
     var pin = tier ? m.input_high : m.input;
     var pout = tier ? m.output_high : m.output;
     if (mcBatch.checked) { pin /= 2; pout /= 2; }
-    return { pin: pin, pout: pout, tier: tier };
+    var mult = multOverride != null ? multOverride : timeMultiplier(m, new Date());
+    return { pin: pin * mult, pout: pout * mult, tier: tier };
   }
   function effInputPrice(m, r) {
     var ratio = parseInt(mcCache.value, 10) / 100;
     if (m.cached_input == null || ratio <= 0) return r.pin;
     return (1 - ratio) * r.pin + ratio * m.cached_input;
   }
-  function reqCost(m) {
+  function reqCost(m, multOverride) {
     var ti = num(mcIn, 0), to = num(mcOut, 0);
-    var r = rates(m, ti);
+    var r = rates(m, ti, multOverride);
     return (ti * effInputPrice(m, r) + to * r.pout) / 1e6;
   }
 
@@ -408,6 +437,17 @@ document.addEventListener("DOMContentLoaded", function () {
       mcWarn.classList.remove("hidden");
     } else {
       mcWarn.classList.add("hidden");
+    }
+
+    var tpNote = $("#mc-time-note");
+    if (m && m.time_pricing && m.time_pricing.type === "peak_offpeak") {
+      var peakMult = m.time_pricing.peak_multiplier || 2;
+      tpNote.textContent = "Time-based pricing: this projection uses the rate in effect right now. " +
+        "A month entirely off-peak costs " + money(reqCost(m, 1) * reqs * 30) +
+        "; entirely peak costs " + money(reqCost(m, peakMult) * reqs * 30) + ".";
+      tpNote.classList.remove("hidden");
+    } else {
+      tpNote.classList.add("hidden");
     }
 
     var rows = models.slice().sort(function (a, b) { return reqCost(a) - reqCost(b); });
