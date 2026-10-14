@@ -1,0 +1,40 @@
+/* Regex tester page dictionary. Chrome strings live in common.js. */
+window.I18N_DICTS = window.I18N_DICTS || [];
+window.I18N_DICTS.push({
+  "Test JavaScript regular expressions against live text. Matches are highlighted as you type, capture groups are listed per match, and the replacement preview shows exactly what String.replace() would produce.": "对文本实时测试 JavaScript 正则表达式。输入时即高亮匹配，逐条列出捕获分组，替换预览精确展示 String.replace() 的结果。",
+  "Pattern": "模式",
+  "Flags": "标志",
+  "Test string": "测试文本",
+  "Replacement (supports $1, $2, …)": "替换文本（支持 $1、$2 …）",
+  "Matches": "匹配数",
+  "Capture groups": "捕获组",
+  "Highlighted matches": "匹配高亮",
+  "Replacement preview": "替换预览",
+  "Match details": "匹配详情",
+  "Match": "匹配",
+  "Index": "位置",
+  "Groups": "分组",
+  "No matches": "无匹配",
+
+  "JavaScript regex quick reference": "JavaScript 正则速查",
+  "Meaning": "含义",
+  "Digit / non-digit": "数字 / 非数字",
+  "Word char (letters, digits, _) / non-word": "单词字符（字母、数字、_）/ 非单词字符",
+  "Whitespace / non-whitespace": "空白 / 非空白",
+  "Character range / negated set": "字符范围 / 排除集",
+  "One or more / zero or more / optional": "一次或多次 / 零次或多次 / 可选",
+  "Between 2 and 4 repetitions": "重复 2 到 4 次",
+  "Capturing group": "捕获组",
+  "Non-capturing group": "非捕获组",
+  "Named capturing group": "命名捕获组",
+  "Alternation": "二选一",
+  "Start / end of string (with m flag: of each line)": "字符串开头 / 结尾（带 m 标志时为每行）",
+  "Word boundary / non-boundary": "单词边界 / 非边界",
+
+  "Which regex flavor does this use?": "用的是哪种正则风格？",
+  "Why does my pattern hang the page?": "为什么我的正则会卡死页面？",
+  "What does the s flag do?": "s 标志有什么用？",
+  "el:The ECMAScript (JavaScript) flavor, exactly as implemented by new RegExp() in your browser. Python, PCRE and Go regexes differ in details like named groups and possessive quantifiers.": "ECMAScript（JavaScript）风格，与你浏览器中 <code>new RegExp()</code> 的实现完全一致。Python、PCRE 和 Go 的正则在命名分组、独占量词等细节上与此不同。",
+  "el:Catastrophic backtracking — nested quantifiers like (a+)+b over long non-matching input can take exponential time. Rewrite with atomic-style grouping or make the sub-pattern specific.": "灾难性回溯——像 <code>(a+)+b</code> 这样的嵌套量词，在长的不匹配输入上可能耗时指数级增长。改用原子分组写法，或让子模式更具体。",
+  "el:It makes . match newline characters too. The d flag adds match indices, which the details table uses when present.": "它让 <code>.</code> 也能匹配换行符。d 标志会附加匹配索引，详情表在有该标志时会使用。"
+});

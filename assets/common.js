@@ -13,7 +13,9 @@
         .replace(/'/g, "&#39;");
     },
     copy: function (text) {
-      var done = function () { ez.toast("Copied to clipboard"); };
+      var done = function () {
+        ez.toast(window.ezI18N ? window.ezI18N.t("Copied to clipboard") : "Copied to clipboard");
+      };
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(text).then(done, function () { ez.copyFallback(text); done(); });
       } else {
@@ -59,4 +61,12 @@
   document.addEventListener("DOMContentLoaded", function () {
     ez.$$("[data-year]").forEach(function (el) { el.textContent = String(new Date().getFullYear()); });
   });
+
+  // boot the i18n engine on every page (safe no-op when dictionaries miss)
+  (function () {
+    var s = document.createElement("script");
+    s.src = "/assets/i18n.js";
+    s.async = false;
+    document.head.appendChild(s);
+  })();
 })();

@@ -237,6 +237,12 @@
 document.addEventListener("DOMContentLoaded", function () {
   "use strict";
   var $ = function (s) { return document.querySelector(s); };
+  function ezT(k) { return window.ezI18N ? window.ezI18N.t(k) : k; }
+  function ezTf(k) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    if (window.ezI18N) return window.ezI18N.tf.apply(window.ezI18N, [k].concat(args));
+    return k.replace(/%s/g, function () { return String(args.shift()); });
+  }
   function esc(s) {
     return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
   }
@@ -319,8 +325,8 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!m || !m.time_pricing) return "—";
     var win = m.time_pricing.window_label || "peak windows";
     return mult > 1
-      ? "Peak rate active now (" + mult + "×) — " + win
-      : "Off-peak rate active — " + win + " bills at " + (m.time_pricing.peak_multiplier || 2) + "×";
+      ? ezTf("Peak rate active now (%s×) — %s", mult, win)
+      : ezTf("Off-peak rate active — %s bills at %s×", win, m.time_pricing.peak_multiplier || 2);
   }
   function rateFor(mm, now) {
     var mult = timeMultiplier(mm, now);
@@ -351,9 +357,9 @@ document.addEventListener("DOMContentLoaded", function () {
     $("#tc-cost-1k").textContent = money(total * 1000);
 
     var mode = $("#tc-token-mode");
-    if (tokState === 2) { mode.textContent = "exact BPE tokenizer"; mode.className = "badge green"; }
-    else if (tokState === 3) { mode.textContent = "approx. tokenizer (offline)"; mode.className = "badge amber"; }
-    else { mode.textContent = "loading tokenizer…"; mode.className = "badge amber"; }
+    if (tokState === 2) { mode.textContent = ezT("exact BPE tokenizer"); mode.className = "badge green"; }
+    else if (tokState === 3) { mode.textContent = ezT("approx. tokenizer (offline)"); mode.className = "badge amber"; }
+    else { mode.textContent = ezT("loading tokenizer…"); mode.className = "badge amber"; }
 
     if (m) {
       $("#tc-sel-model").textContent = m.name + " (" + m.provider + ")";
@@ -432,8 +438,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var ti = num(mcIn, 0);
     if (m && m.tier_threshold && ti > m.tier_threshold) {
-      mcWarn.textContent = "Note: " + m.name + " bills requests above " + m.tier_threshold.toLocaleString() +
-        " tokens at its long-context tier — the projection uses that higher rate.";
+      mcWarn.textContent = ezTf("Note: %s bills requests above %s tokens at its long-context tier — the projection uses that higher rate.",
+        m.name, m.tier_threshold.toLocaleString());
       mcWarn.classList.remove("hidden");
     } else {
       mcWarn.classList.add("hidden");
@@ -442,9 +448,8 @@ document.addEventListener("DOMContentLoaded", function () {
     var tpNote = $("#mc-time-note");
     if (m && m.time_pricing && m.time_pricing.type === "peak_offpeak") {
       var peakMult = m.time_pricing.peak_multiplier || 2;
-      tpNote.textContent = "Time-based pricing: this projection uses the rate in effect right now. " +
-        "A month entirely off-peak costs " + money(reqCost(m, 1) * reqs * 30) +
-        "; entirely peak costs " + money(reqCost(m, peakMult) * reqs * 30) + ".";
+      tpNote.textContent = ezTf("Time-based pricing: this projection uses the rate in effect right now. A month entirely off-peak costs %s; entirely peak costs %s.",
+        money(reqCost(m, 1) * reqs * 30), money(reqCost(m, peakMult) * reqs * 30));
       tpNote.classList.remove("hidden");
     } else {
       tpNote.classList.add("hidden");
@@ -495,6 +500,9 @@ document.addEventListener("DOMContentLoaded", function () {
     params.push("r=" + num(mcReq, 0));
     if (mcBatch.checked) params.push("b=1");
     params.push("c=" + mcCache.value);
+    var urlLang = null;
+    try { urlLang = new URLSearchParams(location.search).get("lang"); } catch (e) { /* file:// */ }
+    if (urlLang === "zh" || (window.ezI18N && window.ezI18N.lang === "zh")) params.push("lang=zh");
     var url = location.origin + location.pathname + "?" + params.join("&");
     $("#mc-share-url").value = url;
     try { history.replaceState(null, "", "?" + params.join("&")); } catch (e) { /* file:// etc. */ }
@@ -538,6 +546,7 @@ document.addEventListener("DOMContentLoaded", function () {
   update();
   recalcMonthly();
   loadTokenizer();
+  window.addEventListener("ez:i18n", function () { update(); recalcMonthly(); });
 });
 </script>
 </body>

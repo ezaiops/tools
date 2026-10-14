@@ -158,6 +158,12 @@
 document.addEventListener("DOMContentLoaded", function () {
   "use strict";
   var $ = function (s) { return document.querySelector(s); };
+  function ezT(k) { return window.ezI18N ? window.ezI18N.t(k) : k; }
+  function ezTf(k) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    if (window.ezI18N) return window.ezI18N.tf.apply(window.ezI18N, [k].concat(args));
+    return k.replace(/%s/g, function () { return String(args.shift()); });
+  }
   var input = $("#ts-input");
 
   var DOW = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -192,8 +198,8 @@ document.addEventListener("DOMContentLoaded", function () {
     else if (abs < 2592000) { unit = "day"; val = Math.round(abs / 86400); }
     else if (abs < 31536000) { unit = "month"; val = Math.round(abs / 2592000); }
     else { unit = "year"; val = Math.round(abs / 31536000); }
-    var s = val + " " + unit + (val === 1 ? "" : "s");
-    return diff >= 0 ? "in " + s : s + " ago";
+    var s = ezTf("%s " + unit + (val === 1 ? "" : "s"), val);
+    return diff >= 0 ? ezTf("in %s", s) : ezTf("%s ago", s);
   }
 
   function parseInput(s) {
@@ -248,11 +254,11 @@ document.addEventListener("DOMContentLoaded", function () {
   $("#ts-clear").addEventListener("click", function () { input.value = ""; convert(); });
   $("#ts-from-local").addEventListener("click", function () {
     var v = $("#ts-local-input").value;
-    if (!v) { $("#ts-local-out").textContent = "Pick a date and time first."; return; }
+    if (!v) { $("#ts-local-out").textContent = ezT("Pick a date and time first."); return; }
     var ms = new Date(v).getTime();
     $("#ts-local-out").textContent = isNaN(ms)
-      ? "Could not parse that value."
-      : v + " local = " + Math.floor(ms / 1000) + " (unix seconds), " + ms + " ms, " + new Date(ms).toISOString();
+      ? ezT("Could not parse that value.")
+      : ezTf("%s local = %s (unix seconds), %s ms, %s", v, Math.floor(ms / 1000), ms, new Date(ms).toISOString());
   });
 
   tick();

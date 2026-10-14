@@ -195,6 +195,50 @@ console.log("\n== token-counter share link prefill ==");
   check("prefill monthly", $("#mc-cost-month", doc).textContent === "$39.00", $("#mc-cost-month", doc).textContent);
 }
 
+console.log("\n== bilingual mode (?lang=zh) ==");
+{
+  const { doc, errors } = await load("tools/token-counter.html?lang=zh");
+  await sleep(400);
+  check("html lang is zh-CN", doc.documentElement.getAttribute("lang") === "zh-CN",
+    String(doc.documentElement.getAttribute("lang")));
+  check("switcher injected", doc.querySelector(".lang-switch") !== null);
+  check("switcher marks zh active", /active/.test(doc.querySelector('.lang-switch a[data-lang="zh"]').className || ""));
+  check("nav translated", /工具/.test(doc.querySelector(".site-nav").textContent));
+  check("footer translated", /无需注册|本地运行/.test(doc.querySelector(".site-footer").textContent));
+  check("h1 translated", /成本计算器/.test($("h1", doc).textContent), $("h1", doc).textContent);
+  check("field label translated", /Prompt 或文本/.test(doc.querySelector('label[for="tc-input"]').textContent));
+  check("placeholder translated", doc.querySelector("#mc-share-url") !== null);
+  check("dynamic badge translated", /分词器/.test($("#tc-token-mode", doc).textContent), $("#tc-token-mode", doc).textContent);
+  check("stats translated", /单次请求预估成本/.test(doc.body.textContent));
+  check("monthly section translated", /月度成本投射/.test(doc.body.textContent));
+  check("faq translated", /常见问题/.test(doc.body.textContent));
+  check("no console errors", errors.length === 0, errors.join(" | "));
+}
+
+console.log("\n== bilingual: dynamic strings ==");
+{
+  const { win, doc } = await load("tools/timestamp-converter.html?lang=zh");
+  await sleep(400);
+  setInput(win, $("#ts-input", doc), "0");
+  check("relative time zh", /年前/.test($("#ts-rel", doc).textContent), $("#ts-rel", doc).textContent);
+  check("kv labels zh", /本地时间/.test(doc.body.textContent));
+  check("lead zh", /互转/.test(doc.body.textContent));
+
+  const pw = await load("tools/password-generator.html?lang=zh");
+  await sleep(400);
+  check("strength line zh", /位/.test($("#pw-strength", pw.doc).textContent), $("#pw-strength", pw.doc).textContent);
+  check("tabs zh", /密码/.test(pw.doc.body.textContent));
+}
+
+console.log("\n== bilingual: model pages keep data in EN, chrome in ZH ==");
+{
+  const { doc } = await load("models/gpt-6-astra.html?lang=zh");
+  await sleep(400);
+  check("model nav translated", /工具/.test(doc.querySelector(".site-nav").textContent));
+  check("model h1 stays EN", /GPT-6 Astra API pricing/.test($("h1", doc).textContent));
+  check("crumb crumb main-site link kept", doc.querySelector(".main-site-link") !== null);
+}
+
 console.log("\n== json-formatter.html ==");
 {
   const { win, doc, errors } = await load("tools/json-formatter.html");

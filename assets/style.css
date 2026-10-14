@@ -78,9 +78,13 @@ img { max-width: 100%; }
   font-weight: 500;
 }
 .brand small { color: var(--muted); font-weight: 400; }
-.site-nav { margin-left: auto; display: flex; gap: 18px; font-size: 14px; flex-wrap: wrap; }
+.site-nav { margin-left: auto; display: flex; gap: 18px; font-size: 14px; flex-wrap: wrap; align-items: center; }
 .site-nav a { color: var(--muted); }
 .site-nav a:hover { color: var(--accent); text-decoration: none; }
+.lang-switch { display: inline-flex; gap: 2px; margin-left: 4px; border: 1px solid var(--border); border-radius: 999px; padding: 1px; }
+.lang-switch a { font-size: 12px; padding: 2px 9px; border-radius: 999px; color: var(--muted); line-height: 1.5; }
+.lang-switch a:hover { color: var(--accent); text-decoration: none; }
+.lang-switch a.active { background: var(--accent-soft); color: var(--accent-strong); }
 
 /* ---------- hero ---------- */
 .hero { padding: 44px 0 8px; }

@@ -105,6 +105,31 @@ The hub grid and the "On the roadmap" section are generated from `scripts/tools.
 
 Backlog lives in the same file with `"status": "planned"` plus `priority` (1 = next) and `effort` (S/M/L). Planned entries render publicly in the "On the roadmap" grid, so the roadmap on the site is always the file — edit priorities there to reorder what ships next.
 
+## Bilingual (EN / 中文)
+
+The site is English-first for global traffic, with a full Chinese toggle in the
+same 中文/EN pattern as ezaiops.com:
+
+- Switcher lives in the header (injected by `assets/i18n.js`); `?lang=zh` is a
+  shareable deep link, the choice persists in localStorage, and `<html lang>`
+  updates with it
+- Engine: `assets/i18n.js` — translates by matching DOM text nodes, so no page
+  markup needs `data-i18n` attributes. Dictionaries: `assets/i18n/common.js`
+  (header/footer/crumbs), `assets/i18n/hub.js`, `assets/i18n/privacy.js`,
+  `assets/i18n/tools/*.js`
+- Key forms: plain (a text node), `ph:` (placeholder), `title:` (attribute
+  value), `el:` (whole-element innerHTML — for paragraphs that contain
+  `<code>`/`<strong>` markup)
+- Dynamic JS strings go through `window.ezI18N.t()` / `.tf()`; pages re-render
+  on the `ez:i18n` event after the dictionary applies
+- The 29 generated pricing pages translate the chrome but keep their content
+  (numbers, model names, provider terms) in English
+- Both languages are covered by the test suite (the English suite plus a
+  `?lang=zh` suite that asserts static and dynamic translations)
+
+To fix or extend a translation, edit the matching file in `assets/i18n/` — the
+English text is the key, so a missing key simply stays English.
+
 ## Design notes
 
 - Light theme, system font stack, zero JS framework; every page is one HTML file with one inline script
