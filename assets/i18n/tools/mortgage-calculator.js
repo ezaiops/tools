@@ -22,6 +22,7 @@ window.I18N_DICTS.push({
   "Total interest": "总利息",
   "Total paid": "总还款",
   "Payoff time": "还清时间",
+  "Payoff date": "还清日期",
   "Interest saved": "节省利息",
   "Time saved": "提前还清",
   "Principal": "本金",

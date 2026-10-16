@@ -83,6 +83,7 @@
       <div class="stat"><div class="k">Total interest</div><div class="v" id="mo-interest">—</div></div>
       <div class="stat"><div class="k">Total paid</div><div class="v" id="mo-total">—</div></div>
       <div class="stat"><div class="k">Payoff time</div><div class="v" id="mo-payoff" style="font-size:15px">—</div></div>
+      <div class="stat" id="mo-date-stat"><div class="k">Payoff date</div><div class="v" id="mo-payoff-date" style="font-size:15px">—</div></div>
     </div>
     <div class="stats-grid" id="mo-extra-stats" style="margin-top:10px">
       <div class="stat"><div class="k">Interest saved</div><div class="v" id="mo-saved" style="font-size:15px">—</div></div>
@@ -242,6 +243,16 @@ document.addEventListener("DOMContentLoaded", function () {
     if (y) return ezTf("%s years", y);
     return ezTf("%s months", m);
   }
+  function payoffDate(months) {
+    if (!$("#mo-start").value) return "—";
+    var parts = $("#mo-start").value.split("-");
+    var d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1 + months, 1);
+    var months_EN = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    if (window.ezI18N && window.ezI18N.lang === "zh") {
+      return d.getFullYear() + " 年 " + (d.getMonth() + 1) + " 月";
+    }
+    return months_EN[d.getMonth()] + " " + d.getFullYear();
+  }
 
   var METHOD_LABELS = {
     installment: { payment: "Monthly payment", col: "Principal", note: "Early payments are mostly interest — that is how amortization works. The extra-payment scenario above shows what accelerating the principal does over the full term." },
@@ -266,6 +277,7 @@ document.addEventListener("DOMContentLoaded", function () {
     $("#mo-interest").textContent = money(withExtra.totalInterest);
     $("#mo-total").textContent = money(P + withExtra.totalInterest);
     $("#mo-payoff").textContent = withExtra.paidOff ? payoffLabel(withExtra.months) : ezT("Never — payment does not cover interest");
+    $("#mo-payoff-date").textContent = withExtra.paidOff ? payoffDate(withExtra.months) : "—";
 
     var lastStat = $("#mo-last-stat");
     if (method === "principal") {
