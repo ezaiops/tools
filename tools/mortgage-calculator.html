@@ -187,7 +187,7 @@ document.addEventListener("DOMContentLoaded", function () {
   var start = $("#mo-start");
   if (!start.value) {
     var d0 = new Date();
-    start.value = d0.getFullYear() + "-" + String(d0.getMonth() + 1).padStart(2, "0");
+    start.value = d0.getFullYear() + "-" + String(d0.getMonth() + 1).padStart(2, "0") + "-01";
   }
 
   // returns { payments: [{p, int, total}], totalInterest, months, first, last, paidOff }
@@ -240,8 +240,8 @@ document.addEventListener("DOMContentLoaded", function () {
   function payoffLabel(months) {
     var y = Math.floor(months / 12), m = months % 12;
     if (y && m) return ezTf("%s yr %s mo", y, m);
-    if (y) return ezTf("%s years", y);
-    return ezTf("%s months", m);
+    if (y) return ezTf(y === 1 ? "%s year" : "%s years", y);
+    return ezTf(m === 1 ? "%s month" : "%s months", m);
   }
   function payoffDate(months) {
     if (!$("#mo-start").value) return "—";

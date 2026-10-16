@@ -20,6 +20,8 @@ window.I18N_DICTS.push({
   "Payload is not valid base64url JSON.": "载荷不是合法的 base64url JSON。",
   "decoded": "已解码",
   "unsigned": "未签名",
+  "malformed": "格式错误",
+  "Malformed — a JWT has exactly three segments and this token has %s. The first two were decoded for inspection, but the token is not valid.": "格式错误——JWT 必须正好由三段组成，而该令牌有 %s 段。前两段已解码供排查，但令牌本身无效。",
   "invalid": "无效",
   "Paste a token and enter the HS256 secret to verify.": "粘贴令牌并输入 HS256 密钥以验证。",
   "Signature verification needs a secure context (https:// or localhost). Decoding works everywhere.": "签名验证需要安全上下文（https:// 或 localhost）。解码在任何环境都可用。",

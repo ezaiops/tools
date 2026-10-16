@@ -261,6 +261,13 @@ console.log("\n== cron-generator.html ==");
   check("step zero not in expr", $("#cg-expr", doc).value === "—");
   setInput(win, $("#cg-custom", doc), "5");
   check("custom value accepted", $("#cg-expr", doc).value === "5 * * * *", $("#cg-expr", doc).value);
+  setInput(win, $("#cg-custom", doc), "1-5/2");
+  await sleep(120);
+  check("range+step honoured in count", $("#cg-perday", doc).textContent === "2,160", $("#cg-perday", doc).textContent);
+  const runMins = $$(doc, "#cg-runs li").map((li) => (li.textContent.match(/\d\d:(\d\d)/) || [])[1]).join(",");
+  check("range+step run minutes", /^(01|03|05)(,(01|03|05))*$/.test(runMins), runMins);
+  setInput(win, $("#cg-custom", doc), "5-1");
+  check("descending range rejected", !$("#cg-err", doc).classList.contains("hidden"), $("#cg-err", doc).textContent);
 }
 
 console.log("\n== subnet-calculator.html ==");
@@ -284,7 +291,7 @@ console.log("\n== subnet-calculator.html ==");
 
 console.log("\n== self-host-vs-api.html ==");
 {
-  const { doc } = await load("tools/self-host-vs-api.html");
+  const { win, doc } = await load("tools/self-host-vs-api.html");
   const opts = $$(doc, "#sh-model option");
   check("model selector populated", opts.length === 29, String(opts.length));
   check("api cost $30,000", $("#sh-api-cost", doc).textContent === "$30,000", $("#sh-api-cost", doc).textContent);
@@ -293,6 +300,10 @@ console.log("\n== self-host-vs-api.html ==");
   check("breakeven any volume", /Any volume/.test($("#sh-breakeven", doc).textContent), $("#sh-breakeven", doc).textContent);
   check("note explains", /saves/.test($("#sh-note", doc).textContent));
   check("no capacity warning at low volume", $("#sh-cap-warn", doc).classList.contains("hidden"));
+  setInput(win, $("#sh-out", doc), "50000000000");
+  await sleep(300);
+  check("multi-GPU capacity warning", !$("#sh-cap-warn", doc).classList.contains("hidden"));
+  check("multi-GPU cost scaled", $("#sh-gpu-cost", doc).textContent === "$1,764", $("#sh-gpu-cost", doc).textContent);
 }
 
 console.log("\n== mortgage-calculator.html ==");
@@ -325,6 +336,14 @@ console.log("\n== mortgage-calculator.html ==");
   check("equal principal total interest lower", true); // covered by decline check
   method.value = "installment";
   method.dispatchEvent(new win.Event("change", { bubbles: true }));
+  await sleep(250);
+  check("payoff date rendered", /^[A-Z][a-z]{2} \d{4}$/.test($("#mo-payoff-date", doc).textContent), $("#mo-payoff-date", doc).textContent);
+  setInput(win, $("#mo-rate", doc), "0");
+  setInput(win, $("#mo-years", doc), "1");
+  setInput(win, $("#mo-amount", doc), "12000");
+  setInput(win, $("#mo-extra", doc), "11000");
+  await sleep(250);
+  check("singular month label", /1 month/.test($("#mo-payoff", doc).textContent), $("#mo-payoff", doc).textContent);
 }
 
 console.log("\n== mortgage bilingual currency ==");
@@ -359,6 +378,12 @@ console.log("\n== jwt-debugger.html ==");
   check("header JSON", /"alg": "HS256"/.test($("#jwt-header", doc).textContent));
   check("payload has sub", /"sub"/.test($("#jwt-payload", doc).textContent));
   check("expiry rendered", /\d/.test($("#jwt-exp", doc).textContent), $("#jwt-exp", doc).textContent);
+  const h2 = btoa(JSON.stringify({ alg: "none", typ: "JWT" })).replace(/=+$/, "");
+  const p2 = btoa(JSON.stringify({ sub: "x" })).replace(/=+$/, "");
+  setInput(win, $("#jwt-input", doc), h2 + "." + p2 + ".sig.extra");
+  await sleep(80);
+  check("four segments flagged malformed", /malformed/.test($("#jwt-state", doc).textContent), $("#jwt-state", doc).textContent);
+  check("malformed error shown", !$("#jwt-err", doc).classList.contains("hidden"));
 }
 
 console.log("\n== diff-checker.html ==");
@@ -433,6 +458,16 @@ console.log("\n== json-formatter.html ==");
   click(win, $("#jf-validate", doc));
   check("error visible", !$("#jf-err", doc).classList.contains("hidden"));
   check("error has line/col", /line \d+, column \d+/.test($("#jf-err", doc).textContent), $("#jf-err", doc).textContent);
+  setInput(win, $("#jf-input", doc), '{"a":1e999}');
+  click(win, $("#jf-format", doc));
+  check("overflow warning shown", !$("#jf-warn", doc).classList.contains("hidden"), $("#jf-warn", doc).textContent.slice(0, 80));
+  check("overflow warning names path", /\$\.a/.test($("#jf-warn", doc).textContent), $("#jf-warn", doc).textContent);
+  setInput(win, $("#jf-input", doc), '{"id":123456789012345678901234567890}');
+  click(win, $("#jf-format", doc));
+  check("precision warning shown", /lose precision/.test($("#jf-warn", doc).textContent), $("#jf-warn", doc).textContent.slice(0, 80));
+  setInput(win, $("#jf-input", doc), '{"a":1}');
+  click(win, $("#jf-format", doc));
+  check("no warning for normal numbers", $("#jf-warn", doc).classList.contains("hidden"));
   check("no console errors", errors.length === 0, errors.join(" | "));
 }
 

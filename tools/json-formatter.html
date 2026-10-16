@@ -63,6 +63,7 @@
 
     <pre class="code-out hidden" id="jf-out"></pre>
     <pre class="code-out error hidden" id="jf-err"></pre>
+    <p class="note hidden" id="jf-warn"></p>
     <p class="note" id="jf-meta"></p>
   </section>
 
@@ -142,6 +143,12 @@
 document.addEventListener("DOMContentLoaded", function () {
   "use strict";
   var $ = function (s) { return document.querySelector(s); };
+  function ezT(k) { return window.ezI18N ? window.ezI18N.t(k) : k; }
+  function ezTf(k) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    if (window.ezI18N) return window.ezI18N.tf.apply(window.ezI18N, [k].concat(args));
+    return k.replace(/%s/g, function () { return String(args.shift()); });
+  }
   var input = $("#jf-input"), out = $("#jf-out"), err = $("#jf-err"), meta = $("#jf-meta");
 
   function indentValue() {
@@ -192,33 +199,67 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  // JSON.parse turns literals beyond +/-1.8e308 into Infinity, and JSON.stringify
+  // silently writes Infinity as null — a quiet value change the user must be told about.
+  function findOverflow(v, path, hits) {
+    if (typeof v === "number" && !isFinite(v)) { hits.push(path); return hits; }
+    if (Array.isArray(v)) { v.forEach(function (x, i) { findOverflow(x, path + "[" + i + "]", hits); }); return hits; }
+    if (v && typeof v === "object") { Object.keys(v).forEach(function (k) { findOverflow(v[k], path + "." + k, hits); }); return hits; }
+    return hits;
+  }
+  function warn(txt, value) {
+    var warnEl = $("#jf-warn");
+    var msgs = [];
+    var hits = findOverflow(value, "$", []);
+    if (hits.length) {
+      msgs.push(ezTf("%s number(s) (%s) exceed JavaScript's range and were written as null.",
+        hits.length, hits.slice(0, 3).join(", ") + (hits.length > 3 ? ", …" : "")));
+    }
+    var longNum = /-?\d{16,}/.exec(txt);
+    if (longNum) {
+      msgs.push(ezTf("Integers longer than 15 digits (e.g. %s…) lose precision — JSON numbers are IEEE-754 doubles. Keep IDs as strings.",
+        longNum[0].slice(0, 18)));
+    }
+    if (msgs.length) {
+      warnEl.textContent = ezT("Heads up: ") + msgs.join(" ");
+      warnEl.classList.remove("hidden");
+    } else {
+      warnEl.classList.add("hidden");
+      warnEl.textContent = "";
+    }
+  }
+
   $("#jf-format").addEventListener("click", function () {
     var r = parse(input.value);
-    if (!r.ok) { showErr(r.msg + "\n(at line " + r.line + ", column " + r.col + ")"); meta.textContent = ""; return; }
+    if (!r.ok) { showErr(r.msg + "\n(at line " + r.line + ", column " + r.col + ")"); meta.textContent = ""; $("#jf-warn").classList.add("hidden"); return; }
     var s = JSON.stringify(r.value, null, indentValue());
     showOut(s);
     stats(s, r.value);
+    warn(input.value, r.value);
   });
   $("#jf-minify").addEventListener("click", function () {
     var r = parse(input.value);
-    if (!r.ok) { showErr(r.msg + "\n(at line " + r.line + ", column " + r.col + ")"); meta.textContent = ""; return; }
+    if (!r.ok) { showErr(r.msg + "\n(at line " + r.line + ", column " + r.col + ")"); meta.textContent = ""; $("#jf-warn").classList.add("hidden"); return; }
     var s = JSON.stringify(r.value);
     showOut(s);
     stats(s, r.value);
+    warn(input.value, r.value);
   });
   $("#jf-validate").addEventListener("click", function () {
     var r = parse(input.value);
     if (r.ok) {
       showOut("Valid JSON ✔\n" + JSON.stringify(r.value, null, indentValue()));
       stats(input.value, r.value);
+      warn(input.value, r.value);
     } else {
       showErr(r.msg + "\n(at line " + r.line + ", column " + r.col + ")");
       meta.textContent = "";
+      $("#jf-warn").classList.add("hidden");
     }
   });
   var SAMPLE = "{\n  \"name\": \"ezaiops-tools\",\n  \"version\": 2,\n  \"private\": true,\n  \"scripts\": { \"dev\": \"python -m http.server\", \"deploy\": \"cf pages deploy .\" },\n  \"tools\": [\"token-counter\", \"json-formatter\", \"regex-tester\"],\n  \"features\": { \"clientSide\": true, \"signup\": false },\n  \"stars\": 0\n}";
-  $("#jf-sample").addEventListener("click", function () { input.value = SAMPLE; showOut(""); meta.textContent = "Sample loaded — press Format."; });
-  $("#jf-clear").addEventListener("click", function () { input.value = ""; hideAll(); meta.textContent = ""; });
+  $("#jf-sample").addEventListener("click", function () { input.value = SAMPLE; showOut(""); meta.textContent = "Sample loaded — press Format."; $("#jf-warn").classList.add("hidden"); });
+  $("#jf-clear").addEventListener("click", function () { input.value = ""; hideAll(); meta.textContent = ""; $("#jf-warn").classList.add("hidden"); });
 });
 </script>
 </body>

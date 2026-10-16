@@ -244,16 +244,19 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     var apiCost = (ti * m.input + to * m.output) / 1e6;
     // GPU cost is FIXED by uptime: you pay for the machine whether or not it is busy.
-    var gpuFixed = r.gpu * r.hours;
-    // throughput only matters for capacity: can one GPU even serve this volume?
+    // throughput decides how many machines you need: if one GPU cannot generate the
+    // volume within the available hours, the projection must buy more of them.
     var requiredHours = r.tp > 0 ? to / r.tp / 3600 : 0;
+    var gpusNeeded = Math.max(1, Math.ceil(requiredHours / r.hours));
+    var gpuFixed = gpusNeeded * r.gpu * r.hours;
 
     $("#sh-api-cost").textContent = money(apiCost);
     $("#sh-gpu-cost").textContent = money(gpuFixed);
 
     var capWarn = $("#sh-cap-warn");
-    if (requiredHours > r.hours) {
-      capWarn.textContent = ezTf("Capacity warning: this workload needs about %s GPU-hours per month for generation, but the selected uptime provides %s. Scale to multiple GPUs (cost scales with it) or raise the throughput assumption.", bigNum(requiredHours), bigNum(r.hours));
+    if (gpusNeeded > 1) {
+      capWarn.textContent = ezTf("Capacity: this workload needs about %s GPU-hours per month for generation, and the selected uptime provides %s per GPU — the projection assumes %s GPUs (%s/month). Raise the throughput assumption if your stack is faster.",
+        bigNum(requiredHours), bigNum(r.hours), gpusNeeded, money(gpuFixed));
       capWarn.classList.remove("hidden");
     } else {
       capWarn.classList.add("hidden");

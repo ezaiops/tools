@@ -242,9 +242,22 @@ document.addEventListener("DOMContentLoaded", function () {
             return { error: field + " step \"" + p + "\" must be 1 or greater" };
           }
           nums = [step];
-        }
-        else if (range) nums = [parseInt(range[0], 10), parseInt(range[1], 10)];
-        else nums = [parseInt(p, 10)];
+        } else if (range) {
+          var endRaw = range[1], rStep = null;
+          if (endRaw.indexOf("/") > 0) {
+            var rp = endRaw.split("/");
+            endRaw = rp[0];
+            rStep = parseInt(rp[1], 10);
+            if (!isFinite(rStep) || rStep < 1) {
+              return { error: field + " step \"" + p + "\" must be 1 or greater" };
+            }
+          }
+          var rStart = parseInt(range[0], 10), rEnd = parseInt(endRaw, 10);
+          if (isFinite(rStart) && isFinite(rEnd) && rStart > rEnd) {
+            return { error: field + " range \"" + p + "\" is descending (" + rStart + " > " + rEnd + ")" };
+          }
+          nums = [rStart, rEnd];
+        } else nums = [parseInt(p, 10)];
         for (var j = 0; j < nums.length; j++) {
           if (!isFinite(nums[j]) || nums[j] < min || nums[j] > max) {
             return { error: field + " value \"" + p + "\" is out of range (" + min + "–" + max + ")" };
@@ -294,7 +307,14 @@ document.addEventListener("DOMContentLoaded", function () {
         for (var v = min; v <= max; v += step) out.push(v);
       } else if (part.indexOf("-") > 0) {
         var r = part.split("-");
-        for (var v2 = parseInt(r[0], 10); v2 <= parseInt(r[1], 10); v2++) out.push(v2);
+        var endRaw = r[1], rStep = 1;
+        if (endRaw.indexOf("/") > 0) {
+          var rp = endRaw.split("/");
+          endRaw = rp[0];
+          rStep = parseInt(rp[1], 10) || 1;
+        }
+        var rStart = parseInt(r[0], 10), rEnd = parseInt(endRaw, 10);
+        for (var v2 = rStart; v2 <= rEnd; v2 += rStep) out.push(v2);
       } else {
         out.push(parseInt(part, 10));
       }

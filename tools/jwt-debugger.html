@@ -155,6 +155,11 @@ document.addEventListener("DOMContentLoaded", function () {
   "use strict";
   var $ = function (s) { return document.querySelector(s); };
   function ezT(k) { return window.ezI18N ? window.ezI18N.t(k) : k; }
+  function ezTf(k) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    if (window.ezI18N) return window.ezI18N.tf.apply(window.ezI18N, [k].concat(args));
+    return k.replace(/%s/g, function () { return String(args.shift()); });
+  }
 
   var input = $("#jwt-input");
   var state = $("#jwt-state");
@@ -211,6 +216,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     state.textContent = parts.length === 3 && parts[2] ? ezT("decoded") : ezT("unsigned");
     state.className = "badge green";
+    if (parts.length > 3) {
+      err.textContent = ezTf("Malformed — a JWT has exactly three segments and this token has %s. The first two were decoded for inspection, but the token is not valid.", parts.length);
+      err.classList.remove("hidden");
+      state.textContent = ezT("malformed");
+      state.className = "badge red";
+    }
     $("#jwt-verify-out").textContent = "";
   }
 

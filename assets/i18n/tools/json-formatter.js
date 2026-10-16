@@ -31,5 +31,9 @@ window.I18N_DICTS.push({
   "Why does the formatted output reorder my keys?": "为什么格式化后键的顺序变了？",
   "The only limit is your browser's memory. Documents of several megabytes format instantly because everything happens on your device with no upload step.": "唯一限制是你浏览器的内存。几 MB 的文档也能瞬间格式化，因为一切都发生在你的设备上，没有上传环节。",
   "No. Parsing, formatting and validation are done with the browser's built-in JSON.parse / JSON.stringify. Nothing is transmitted.": "不会。解析、格式化和校验都由浏览器内置的 JSON.parse / JSON.stringify 完成，没有任何传输。",
-  "el:It doesn't — JSON.stringify preserves insertion order. If order changed, the input had duplicate keys and the parser kept the last occurrence, exactly as JSON.parse does.": "不会——<code>JSON.stringify</code> 保持插入顺序。如果顺序变了，说明输入里有重复键，解析器保留了最后一次出现的值，与 <code>JSON.parse</code> 的行为一致。"
+  "el:It doesn't — JSON.stringify preserves insertion order. If order changed, the input had duplicate keys and the parser kept the last occurrence, exactly as JSON.parse does.": "不会——<code>JSON.stringify</code> 保持插入顺序。如果顺序变了，说明输入里有重复键，解析器保留了最后一次出现的值，与 <code>JSON.parse</code> 的行为一致。",
+
+  "Heads up: ": "注意：",
+  "%s number(s) (%s) exceed JavaScript's range and were written as null.": "%s 个数值（%s）超出 JavaScript 的表示范围，已被写成 null。",
+  "Integers longer than 15 digits (e.g. %s…) lose precision — JSON numbers are IEEE-754 doubles. Keep IDs as strings.": "超过 15 位的整数（如 %s…）会丢失精度——JSON 数字是 IEEE-754 双精度浮点。ID 类字段请用字符串。"
 });

@@ -196,6 +196,7 @@ document.addEventListener("DOMContentLoaded", function () {
           if (dash >= 0) {
             lo = parseVal(base.slice(0, dash), names, min, max);
             hi = parseVal(base.slice(dash + 1), names, min, max);
+            if (lo > hi) throw new Error("descending range \"" + base + "\" (" + lo + " > " + hi + ")");
             ranges.push([lo, hi]);
           } else {
             lo = hi = parseVal(base, names, min, max);

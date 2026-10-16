@@ -33,7 +33,7 @@ window.I18N_DICTS.push({
   "%s output tokens/month": "每月 %s 输出 tokens",
   "Any volume — the fixed GPU cost sits below the API's input cost alone": "任意用量——固定 GPU 成本已低于 API 单输入部分的成本",
   "Never — the API output price is $0": "不可能——API 输出单价为 $0",
-  "Capacity warning: this workload needs about %s GPU-hours per month for generation, but the selected uptime provides %s. Scale to multiple GPUs (cost scales with it) or raise the throughput assumption.": "容量警告：该用量每月约需 %s GPU 小时的生成时间，而所选运行时长仅提供 %s。请扩展到多卡（成本随之上升）或提高吞吐假设。",
+  "Capacity: this workload needs about %s GPU-hours per month for generation, and the selected uptime provides %s per GPU — the projection assumes %s GPUs (%s/month). Raise the throughput assumption if your stack is faster.": "容量：该用量每月约需 %s GPU 小时的生成时间，而所选运行时长每卡仅提供 %s——投射按 %s 张卡计算（每月 %s）。如果你的推理栈更快，请调高吞吐假设。",
   "API is cheaper": "API 更便宜",
   "Self-hosting wins": "自托管更划算",
   "At this volume the API saves %s/month. The GPU only wins above the break-even shown above.": "在此用量下，API 每月省 %s。GPU 只有在超过上述盈亏平衡点后才划算。",
