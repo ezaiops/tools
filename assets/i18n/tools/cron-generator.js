@@ -50,7 +50,7 @@ window.I18N_DICTS.push({
   "Monthly, 1st 06:00": "每月 1 日 6 点",
   "Cron expression": "Cron 表达式",
   "Copy": "复制",
-  "Runs per day": "每日运行次数",
+  "Runs per 30 days": "每 30 天运行次数",
   "Next run": "下次运行",
   "Next 5 runs (your local timezone)": "未来 5 次运行（本地时区）",
   "Share this expression with the cron explainer to double-check what it means, or paste it straight into your crontab.": "把表达式贴到 Cron 解释器里复核含义，或直接粘进你的 crontab。",

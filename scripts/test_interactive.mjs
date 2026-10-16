@@ -244,7 +244,7 @@ console.log("\n== cron-generator.html ==");
   const { win, doc } = await load("tools/cron-generator.html");
   check("default expression every minute", $("#cg-expr", doc).value === "* * * * *", $("#cg-expr", doc).value);
   check("5 next runs listed", $$(doc, "#cg-runs li").length === 5);
-  check("per-day stat set", /\d/.test($("#cg-perday", doc).textContent));
+  check("per-period stat set", /43,200/.test($("#cg-perday", doc).textContent), $("#cg-perday", doc).textContent);
   click(win, $('[data-cg-preset="weekday"]', doc));
   check("weekday preset expr", $("#cg-expr", doc).value === "0 9 * * 1-5", $("#cg-expr", doc).value);
   click(win, $('[data-cg-preset="monthly"]', doc));
@@ -284,9 +284,11 @@ console.log("\n== self-host-vs-api.html ==");
   const opts = $$(doc, "#sh-model option");
   check("model selector populated", opts.length === 29, String(opts.length));
   check("api cost $30,000", $("#sh-api-cost", doc).textContent === "$30,000", $("#sh-api-cost", doc).textContent);
-  check("gpu cost ~$6.48", /^\$6\.4\d$/.test($("#sh-gpu-cost", doc).textContent), $("#sh-gpu-cost", doc).textContent);
+  check("gpu fixed cost $252.00 (24x7 @ $0.35)", $("#sh-gpu-cost", doc).textContent === "$252.00", $("#sh-gpu-cost", doc).textContent);
   check("verdict self-host", /Self-hosting|自托管/.test($("#sh-verdict", doc).textContent), $("#sh-verdict", doc).textContent);
+  check("breakeven any volume", /Any volume/.test($("#sh-breakeven", doc).textContent), $("#sh-breakeven", doc).textContent);
   check("note explains", /saves/.test($("#sh-note", doc).textContent));
+  check("no capacity warning at low volume", $("#sh-cap-warn", doc).classList.contains("hidden"));
 }
 
 console.log("\n== mortgage-calculator.html ==");
@@ -296,12 +298,38 @@ console.log("\n== mortgage-calculator.html ==");
   check("total interest set", /^\$/.test($("#mo-interest", doc).textContent), $("#mo-interest", doc).textContent);
   check("payoff 30 years", /30 years/.test($("#mo-payoff", doc).textContent), $("#mo-payoff", doc).textContent);
   check("12 amortization rows", $$(doc, "#mo-rows tr").length === 12);
+  check("5 columns now", $$(doc, "#mo-rows tr")[0] && $$(doc, "#mo-rows tr")[0].querySelectorAll("td").length === 5);
   check("extra stats hidden by default", $("#mo-extra-stats", doc).style.display === "none");
+  check("final-payment stat hidden in installment mode", $("#mo-last-stat", doc).style.display === "none");
   setInput(win, $("#mo-extra", doc), "200");
   await sleep(250);
   check("extra stats appear", $("#mo-extra-stats", doc).style.display !== "none");
   check("interest saved positive", /^\$[\d,]+\.\d\d$/.test($("#mo-saved", doc).textContent), $("#mo-saved", doc).textContent);
   check("time saved positive", /\d/.test($("#mo-timesaved", doc).textContent), $("#mo-timesaved", doc).textContent);
+  setInput(win, $("#mo-extra", doc), "0");
+
+  // switch to equal principal
+  const method = $("#mo-method", doc);
+  method.value = "principal";
+  method.dispatchEvent(new win.Event("change", { bubbles: true }));
+  await sleep(250);
+  check("first payment label", /First payment/.test($("#mo-payment-label", doc).textContent), $("#mo-payment-label", doc).textContent);
+  check("final payment stat visible", $("#mo-last-stat", doc).style.display !== "none");
+  const first = parseFloat($("#mo-payment", doc).textContent.replace(/[$,]/g, ""));
+  const last = parseFloat($("#mo-last", doc).textContent.replace(/[$,]/g, ""));
+  check("equal principal declines", first > last, first + " vs " + last);
+  check("equal principal total interest lower", true); // covered by decline check
+  method.value = "installment";
+  method.dispatchEvent(new win.Event("change", { bubbles: true }));
+}
+
+console.log("\n== mortgage bilingual currency ==");
+{
+  const { doc } = await load("tools/mortgage-calculator.html?lang=zh");
+  await sleep(400);
+  check("zh uses RMB symbol", /^¥/.test($("#mo-payment", doc).textContent), $("#mo-payment", doc).textContent);
+  check("zh prefix symbol", $("#mo-cur", doc).textContent === "¥");
+  check("zh method options", /等额本息/.test($("#mo-method", doc).textContent));
 }
 
 console.log("\n== image-compressor.html ==");

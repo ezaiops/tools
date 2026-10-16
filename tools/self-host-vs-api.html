@@ -108,6 +108,7 @@
       <div class="stat"><div class="k">Break-even output tokens</div><div class="v" id="sh-breakeven" style="font-size:15px">—</div></div>
       <div class="stat"><div class="k">Verdict</div><div class="v" id="sh-verdict" style="font-size:15px">—</div></div>
     </div>
+    <pre class="code-out error hidden" id="sh-cap-warn" style="margin-top:12px"></pre>
     <p class="note" id="sh-note"></p>
   </section>
 
@@ -242,27 +243,41 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
     var apiCost = (ti * m.input + to * m.output) / 1e6;
-    var gpuHours = to / r.tp / 3600;
-    var gpuCost = gpuHours * r.gpu;
+    // GPU cost is FIXED by uptime: you pay for the machine whether or not it is busy.
+    var gpuFixed = r.gpu * r.hours;
+    // throughput only matters for capacity: can one GPU even serve this volume?
+    var requiredHours = r.tp > 0 ? to / r.tp / 3600 : 0;
 
     $("#sh-api-cost").textContent = money(apiCost);
-    $("#sh-gpu-cost").textContent = money(gpuCost);
+    $("#sh-gpu-cost").textContent = money(gpuFixed);
 
-    // break-even: output tokens where gpuCost == apiCost, holding input constant
+    var capWarn = $("#sh-cap-warn");
+    if (requiredHours > r.hours) {
+      capWarn.textContent = ezTf("Capacity warning: this workload needs about %s GPU-hours per month for generation, but the selected uptime provides %s. Scale to multiple GPUs (cost scales with it) or raise the throughput assumption.", bigNum(requiredHours), bigNum(r.hours));
+      capWarn.classList.remove("hidden");
+    } else {
+      capWarn.classList.add("hidden");
+    }
+
+    // break-even: output tokens where API cost equals the fixed GPU cost, input volume held constant
     var inputApiCost = ti * m.input / 1e6;
     var perOutToken = m.output / 1e6;
-    var beTokens = perOutToken > 0 ? (gpuCost - inputApiCost) / perOutToken : Infinity;
-    $("#sh-breakeven").textContent = beTokens > 0 && isFinite(beTokens)
-      ? ezTf("%s output tokens/month", bigNum(beTokens))
-      : ezT("Never — GPU alone costs more than the API bill");
+    var beTokens = perOutToken > 0 ? (gpuFixed - inputApiCost) / perOutToken : Infinity;
+    if (beTokens > 0 && isFinite(beTokens)) {
+      $("#sh-breakeven").textContent = ezTf("%s output tokens/month", bigNum(beTokens));
+    } else if (isFinite(beTokens)) {
+      $("#sh-breakeven").textContent = ezT("Any volume — the fixed GPU cost sits below the API's input cost alone");
+    } else {
+      $("#sh-breakeven").textContent = ezT("Never — the API output price is $0");
+    }
 
     var verdict, note;
-    if (apiCost < gpuCost) {
+    if (apiCost < gpuFixed) {
       verdict = ezT("API is cheaper");
-      note = ezTf("At this volume the API saves %s/month. The GPU only wins above the break-even shown above.", money(gpuCost - apiCost));
+      note = ezTf("At this volume the API saves %s/month. The GPU only wins above the break-even shown above.", money(gpuFixed - apiCost));
     } else {
       verdict = ezT("Self-hosting wins");
-      note = ezTf("At this volume the GPU saves %s/month. Keep the API as a burst fallback — the margin narrows fast if volume drops.", money(apiCost - gpuCost));
+      note = ezTf("At this volume the GPU saves %s/month. Keep the API as a burst fallback — the margin narrows fast if volume drops.", money(apiCost - gpuFixed));
     }
     $("#sh-verdict").textContent = verdict;
     $("#sh-note").textContent = note;

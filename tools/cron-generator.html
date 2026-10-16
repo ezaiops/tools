@@ -133,7 +133,7 @@
     <pre class="code-out error hidden" id="cg-err" style="margin-top:10px"></pre>
 
     <div class="stats-grid">
-      <div class="stat"><div class="k">Runs per day</div><div class="v" id="cg-perday">—</div></div>
+      <div class="stat"><div class="k">Runs per 30 days</div><div class="v" id="cg-perday">—</div></div>
       <div class="stat"><div class="k">Next run</div><div class="v" id="cg-next" style="font-size:15px">—</div></div>
     </div>
     <h3 style="font-size:14px;margin:16px 0 0">Next 5 runs (your local timezone)</h3>
@@ -318,9 +318,31 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     $("#cg-next").textContent = runs.length ? fmtRun(runs[0]) : "never";
     $("#cg-runs").innerHTML = runs.map(function (r) { return "<li>" + fmtRun(r) + "</li>"; }).join("");
-    var perDay = mins.length * hours.length;
-    if (doms[0] !== 1 || doms.length < 31) perDay = "≈" + Math.round(mins.length * hours.length * doms.length * (dows.length || 7) / 30) + " / month";
-    $("#cg-perday").textContent = perDay;
+    $("#cg-perday").textContent = countRuns(expr, mins, hours, doms, months, dows).toLocaleString();
+  }
+
+  // exact count of runs in the next 30 days by simulation
+  function countRuns(expr, mins, hours, doms, months, dows) {
+    var f = expr.split(/\s+/);
+    mins = mins || expand(f[0], 0, 59);
+    hours = hours || expand(f[1], 0, 23);
+    doms = doms || expand(f[2], 1, 31);
+    months = months || expand(f[3], 1, 12);
+    dows = (dows || expand(f[4], 0, 7)).map(function (d) { return d % 7; });
+    var count = 0;
+    var d = new Date();
+    d.setSeconds(0, 0);
+    d.setMinutes(d.getMinutes() + 1);
+    var limit = 60 * 24 * 30;
+    for (var guard = 0; guard < limit; guard++) {
+      if (months.indexOf(d.getMonth() + 1) >= 0 &&
+          doms.indexOf(d.getDate()) >= 0 &&
+          dows.indexOf(d.getDay()) >= 0 &&
+          hours.indexOf(d.getHours()) >= 0 &&
+          mins.indexOf(d.getMinutes()) >= 0) count++;
+      d.setMinutes(d.getMinutes() + 1);
+    }
+    return count;
   }
 
   function fmtRun(d) {

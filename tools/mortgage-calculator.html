@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mortgage &amp; Loan Calculator — Amortization Schedule | ezaiops tools</title>
-<meta name="description" content="Calculate monthly payments, total interest and payoff dates for any loan, with extra-payment scenarios and a full amortization summary. Runs locally.">
+<title>Mortgage &amp; Loan Calculator — Amortization, Equal Principal | ezaiops tools</title>
+<meta name="description" content="Calculate monthly payments, total interest and payoff dates for any fixed-rate loan — with both 等额本息 (equal installment) and 等额本金 (equal principal) methods, extra-payment scenarios and an amortization summary. Runs locally.">
 <link rel="canonical" href="https://tools.ezaiops.com/tools/mortgage-calculator.html">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Mortgage &amp; Loan Calculator">
-<meta property="og:description" content="Monthly payment, total interest and extra-payment scenarios for any loan.">
+<meta property="og:description" content="Equal installment and equal principal loans, amortization and extra-payment scenarios.">
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
 <link rel="stylesheet" href="/assets/style.css">
 <script type="application/ld+json">
@@ -40,13 +40,21 @@
 <main class="wrap tool-page">
   <nav class="crumbs"><a href="/">Home</a> / Tools / <a href="/tools/mortgage-calculator.html">Loan calculator</a><a class="main-site-link" href="https://ezaiops.com">ezaiops.com ↗</a></nav>
   <h1>Mortgage &amp; loan calculator</h1>
-  <p class="lead">Work out the monthly payment, total interest and payoff date for any fixed-rate loan — then see what a modest extra monthly payment does to the interest bill. Standard amortization math, runs entirely in your browser.</p>
+  <p class="lead">Work out the monthly payment, total interest and payoff date for any fixed-rate loan — in either repayment method. <strong>Equal installment</strong> keeps every payment the same; <strong>equal principal</strong> pays a fixed slice of principal each month, so payments start high and shrink. Extra-payment scenarios included. Runs entirely in your browser.</p>
 
   <section class="panel">
     <div class="field-row">
+      <div class="field" style="flex:0 1 200px">
+        <label class="field-label" for="mo-method">Repayment method</label>
+        <select id="mo-method">
+          <option value="installment" selected>Equal installment (等额本息)</option>
+          <option value="principal">Equal principal (等额本金)</option>
+        </select>
+        <div class="hint" id="mo-method-hint">Every payment is the same amount.</div>
+      </div>
       <div class="field">
         <label class="field-label" for="mo-amount">Loan amount</label>
-        <div class="input-prefix"><span>$</span><input type="number" id="mo-amount" min="0" step="1000" value="400000"></div>
+        <div class="input-prefix"><span id="mo-cur">$</span><input type="number" id="mo-amount" min="0" step="1000" value="400000"></div>
       </div>
       <div class="field">
         <label class="field-label" for="mo-rate">Annual interest rate</label>
@@ -54,14 +62,14 @@
       </div>
       <div class="field">
         <label class="field-label" for="mo-years">Term</label>
-        <div class="input-prefix"><input type="number" id="mo-years" min="1" max="50" step="1" value="30"><span>years</span></div>
+        <div class="input-prefix"><input type="number" id="mo-years" min="1" max="50" step="1" value="30"><span id="mo-years-unit">years</span></div>
       </div>
     </div>
     <div class="field-row" style="margin-top:12px">
       <div class="field">
         <label class="field-label" for="mo-extra">Extra monthly payment</label>
-        <div class="input-prefix"><span>$</span><input type="number" id="mo-extra" min="0" step="50" value="0"></div>
-        <div class="hint">Optional — applied on top of the required payment.</div>
+        <div class="input-prefix"><span class="mo-cur">$</span><input type="number" id="mo-extra" min="0" step="50" value="0"></div>
+        <div class="hint">Optional — applied on top of the required payment; shortens the term.</div>
       </div>
       <div class="field">
         <label class="field-label" for="mo-start">First payment date</label>
@@ -70,7 +78,8 @@
     </div>
 
     <div class="stats-grid" style="margin-top:16px">
-      <div class="stat"><div class="k">Monthly payment</div><div class="v" id="mo-payment">—</div></div>
+      <div class="stat"><div class="k" id="mo-payment-label">Monthly payment</div><div class="v" id="mo-payment">—</div></div>
+      <div class="stat" id="mo-last-stat"><div class="k">Final payment</div><div class="v" id="mo-last" style="font-size:15px">—</div></div>
       <div class="stat"><div class="k">Total interest</div><div class="v" id="mo-interest">—</div></div>
       <div class="stat"><div class="k">Total paid</div><div class="v" id="mo-total">—</div></div>
       <div class="stat"><div class="k">Payoff time</div><div class="v" id="mo-payoff" style="font-size:15px">—</div></div>
@@ -82,10 +91,10 @@
 
     <h3 style="font-size:14px;margin:18px 0 0">Amortization — first 12 payments</h3>
     <table class="data">
-      <thead><tr><th class="num">#</th><th class="num">Principal</th><th class="num">Interest</th><th class="num">Balance</th></tr></thead>
+      <thead><tr><th class="num">#</th><th class="num" id="mo-col-p">Principal</th><th class="num">Interest</th><th class="num">Total payment</th><th class="num">Balance</th></tr></thead>
       <tbody id="mo-rows"></tbody>
     </table>
-    <p class="note">Early payments are mostly interest — that is how amortization works. The extra-payment scenario above shows what accelerating the principal does over the full term.</p>
+    <p class="note" id="mo-table-note">Early payments are mostly interest — that is how amortization works. The extra-payment scenario above shows what accelerating the principal does over the full term.</p>
   </section>
 
   <div class="ad-slot">
@@ -94,9 +103,10 @@
   </div>
 
   <section class="prose">
-    <h2>How the payment is computed</h2>
-    <p>The standard amortization formula: <code>M = P × r × (1+r)ⁿ ÷ ((1+r)ⁿ − 1)</code>, where P is the principal, r the monthly rate (annual ÷ 12) and n the number of payments. Each payment covers that month's interest first, with the remainder reducing principal — which is why the balance falls slowly at first and then faster.</p>
-    <p>An extra payment is pure principal, so it compounds: $200/month extra on a $400k / 30-year / 6.5% loan saves roughly $90k of interest and retires the loan about 7 years early. But only do this after higher-rate debt is cleared and an emergency fund exists — liquidity beats a few points of interest saved.</p>
+    <h2>Equal installment vs equal principal</h2>
+    <p><strong>Equal installment (等额本息)</strong> uses the standard amortization formula <code>M = P × r × (1+r)ⁿ ÷ ((1+r)ⁿ − 1)</code>: P is the principal, r the monthly rate (annual ÷ 12), n the number of payments. Every payment is identical; each one covers that month's interest first and shrinks the balance slowly at first, then faster. <strong>Total interest is higher</strong> than equal principal, but the early payments are lower — easier on cash flow.</p>
+    <p><strong>Equal principal (等额本金)</strong> pays a fixed <code>P ÷ n</code> of principal every month plus interest on whatever balance remains. The first payment is the largest (full principal slice plus interest on the whole loan); each subsequent payment is smaller. <strong>Total interest is lower</strong> — often 15–25% less — because the balance drops immediately, but you need the income to absorb the higher early payments.</p>
+    <p>Which is better? Equal principal wins if your income comfortably covers the early payments and you plan to hold the loan long-term. Equal installment wins if cash flow is tight or you expect to invest the difference at a return above the loan rate. An extra payment is pure principal in both methods, so it compounds either way.</p>
 
     <h2>Frequently asked questions</h2>
     <details class="faq">
@@ -104,12 +114,16 @@
       <div class="faq-body">No — this is principal and interest only, the P&amp;I part of a mortgage payment. Property taxes, homeowners insurance, HOA fees and PMI are added on top by your lender.</div>
     </details>
     <details class="faq">
+      <summary>Which method saves more money?</summary>
+      <div class="faq-body">Equal principal, almost always — its total interest is typically 15–25% lower because the outstanding balance falls from day one. The cost is a higher first payment: roughly 1.3–1.5× the equal-installment payment on a 30-year loan. Run both here with the same numbers and compare the total-interest figures directly.</div>
+    </details>
+    <details class="faq">
       <summary>Are the numbers exact?</summary>
-      <div class="faq-body">Yes for fixed-rate loans — the formula is exact and rounding is applied only to the displayed cents. Variable-rate loans require a schedule per rate period.</div>
+      <div class="faq-body">Yes for fixed-rate loans — the formulas are exact and rounding is applied only to the displayed cents. Variable-rate loans require a schedule per rate period.</div>
     </details>
     <details class="faq">
       <summary>Can I use this for car loans or student loans?</summary>
-      <div class="faq-body">Absolutely — any fixed-rate installment loan works. Just enter the amount, rate and term in years.</div>
+      <div class="faq-body">Absolutely — any fixed-rate installment loan works. Just enter the amount, rate and term in years. (Some Chinese auto loans use equal principal with a shorter term; both methods are supported.)</div>
     </details>
   </section>
 </main>
@@ -161,36 +175,65 @@ document.addEventListener("DOMContentLoaded", function () {
     if (window.ezI18N) return window.ezI18N.tf.apply(window.ezI18N, [k].concat(args));
     return k.replace(/%s/g, function () { return String(args.shift()); });
   }
+  function cur() { return window.ezI18N && window.ezI18N.lang === "zh" ? "¥" : "$"; }
   function money(n) {
-    return "$" + (Math.round(n * 100) / 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    return cur() + (Math.round(n * 100) / 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+  function applyCurrency() {
+    document.querySelectorAll(".mo-cur, #mo-cur").forEach(function (el) { el.textContent = cur(); });
   }
 
   var start = $("#mo-start");
   if (!start.value) {
-    var d = new Date();
-    start.value = d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0");
+    var d0 = new Date();
+    start.value = d0.getFullYear() + "-" + String(d0.getMonth() + 1).padStart(2, "0");
   }
 
-  function amortize(P, annualRate, years, extra) {
+  // returns { payments: [{p, int, total}], totalInterest, months, first, last, paidOff }
+  function amortize(P, annualRate, years, extra, method) {
     var n = years * 12;
     var r = annualRate / 100 / 12;
-    var payment = r > 0
-      ? P * r * Math.pow(1 + r, n) / (Math.pow(1 + r, n) - 1)
-      : P / n;
+    var payments = [];
     var balance = P;
     var totalInterest = 0;
     var months = 0;
-    var rows = [];
-    while (balance > 0.005 && months < n * 2) {
-      var interest = balance * r;
-      var principal = Math.min(payment + extra - interest, balance);
-      balance -= principal;
-      totalInterest += interest;
-      months++;
-      if (rows.length < 12) rows.push({ i: months, p: principal, int: interest, bal: balance });
-      if (payment + extra <= interest) break; // never pays off
+    var guard = 0;
+
+    if (method === "principal") {
+      var slice = P / n;
+      while (balance > 0.005 && guard < n * 2) {
+        var interestP = balance * r;
+        var principalP = Math.min(slice + extra, balance);
+        balance -= principalP;
+        totalInterest += interestP;
+        months++;
+        payments.push({ p: principalP, int: interestP, total: principalP + interestP });
+        if (++guard > n * 2) break;
+      }
+    } else {
+      var payment = r > 0
+        ? P * r * Math.pow(1 + r, n) / (Math.pow(1 + r, n) - 1)
+        : P / n;
+      while (balance > 0.005 && guard < n * 2) {
+        var interestI = balance * r;
+        var principalI = Math.min(payment + extra - interestI, balance);
+        balance -= principalI;
+        totalInterest += interestI;
+        months++;
+        payments.push({ p: principalI, int: interestI, total: principalI + interestI });
+        if (payment + extra <= interestI) break;
+        if (++guard > n * 2) break;
+      }
     }
-    return { payment: payment, totalInterest: totalInterest, months: months, rows: rows, paidOff: balance <= 0.005 };
+
+    return {
+      payments: payments,
+      totalInterest: totalInterest,
+      months: months,
+      first: payments.length ? payments[0].total : 0,
+      last: payments.length ? payments[payments.length - 1].total : 0,
+      paidOff: balance <= 0.005
+    };
   }
 
   function payoffLabel(months) {
@@ -200,20 +243,37 @@ document.addEventListener("DOMContentLoaded", function () {
     return ezTf("%s months", m);
   }
 
+  var METHOD_LABELS = {
+    installment: { payment: "Monthly payment", col: "Principal", note: "Early payments are mostly interest — that is how amortization works. The extra-payment scenario above shows what accelerating the principal does over the full term." },
+    principal: { payment: "First payment", col: "Principal slice", note: "Equal principal pays a fixed principal slice every month, so the total payment declines as the balance shrinks." }
+  };
+
   function recalc() {
     var P = Math.max(0, parseFloat($("#mo-amount").value) || 0);
     var rate = Math.max(0, parseFloat($("#mo-rate").value) || 0);
     var years = Math.max(1, parseFloat($("#mo-years").value) || 1);
     var extra = Math.max(0, parseFloat($("#mo-extra").value) || 0);
+    var method = $("#mo-method").value;
     if (P <= 0) return;
 
-    var base = amortize(P, rate, years, 0);
-    var withExtra = amortize(P, rate, years, extra);
+    var base = amortize(P, rate, years, 0, method);
+    var withExtra = amortize(P, rate, years, extra, method);
 
-    $("#mo-payment").textContent = money(base.payment);
+    $("#mo-payment-label").textContent = ezT(METHOD_LABELS[method].payment);
+    $("#mo-col-p").textContent = ezT(METHOD_LABELS[method].col);
+    $("#mo-table-note").textContent = ezT(METHOD_LABELS[method].note);
+    $("#mo-payment").textContent = money(base.first);
     $("#mo-interest").textContent = money(withExtra.totalInterest);
     $("#mo-total").textContent = money(P + withExtra.totalInterest);
     $("#mo-payoff").textContent = withExtra.paidOff ? payoffLabel(withExtra.months) : ezT("Never — payment does not cover interest");
+
+    var lastStat = $("#mo-last-stat");
+    if (method === "principal") {
+      lastStat.style.display = "";
+      $("#mo-last").textContent = money(base.last);
+    } else {
+      lastStat.style.display = "none";
+    }
 
     var extraStats = $("#mo-extra-stats");
     if (extra > 0 && withExtra.paidOff) {
@@ -224,10 +284,19 @@ document.addEventListener("DOMContentLoaded", function () {
       extraStats.style.display = "none";
     }
 
-    $("#mo-rows").innerHTML = base.rows.map(function (row) {
-      return "<tr><td class=\"num\">" + row.i + "</td><td class=\"num\">" + money(row.p) +
-        "</td><td class=\"num\">" + money(row.int) + "</td><td class=\"num\">" + money(row.bal) + "</td></tr>";
+    $("#mo-rows").innerHTML = base.payments.slice(0, 12).map(function (row, i) {
+      return "<tr><td class=\"num\">" + (i + 1) + "</td><td class=\"num\">" + money(row.p) +
+        "</td><td class=\"num\">" + money(row.int) + "</td><td class=\"num\">" + money(row.total) +
+        "</td><td class=\"num\">" + money(P - base.payments.slice(0, i + 1).reduce(function (s, x) { return s + x.p; }, 0)) + "</td></tr>";
     }).join("");
+  }
+
+  var METHOD_HINTS = {
+    installment: "Every payment is the same amount.",
+    principal: "Fixed principal each month; payments decline."
+  };
+  function syncMethod() {
+    $("#mo-method-hint").textContent = ezT(METHOD_HINTS[$("#mo-method").value]);
   }
 
   var t = null;
@@ -235,9 +304,12 @@ document.addEventListener("DOMContentLoaded", function () {
   ["mo-amount", "mo-rate", "mo-years", "mo-extra"].forEach(function (id) {
     $("#" + id).addEventListener("input", schedule);
   });
+  $("#mo-method").addEventListener("change", function () { syncMethod(); recalc(); });
 
+  applyCurrency();
+  syncMethod();
   recalc();
-  window.addEventListener("ez:i18n", recalc);
+  window.addEventListener("ez:i18n", function () { applyCurrency(); syncMethod(); recalc(); });
 });
 </script>
 </body>
