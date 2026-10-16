@@ -237,7 +237,12 @@ document.addEventListener("DOMContentLoaded", function () {
         var step = p.indexOf("*/") === 0 ? parseInt(p.slice(2), 10) : null;
         var range = p.indexOf("-") > 0 ? p.split("-") : null;
         var nums = [];
-        if (step != null) nums = [step];
+        if (step != null) {
+          if (!isFinite(step) || step < 1) {
+            return { error: field + " step \"" + p + "\" must be 1 or greater" };
+          }
+          nums = [step];
+        }
         else if (range) nums = [parseInt(range[0], 10), parseInt(range[1], 10)];
         else nums = [parseInt(p, 10)];
         for (var j = 0; j < nums.length; j++) {
@@ -271,6 +276,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function fail(msg) {
+    $("#cg-expr").value = "—";
     $("#cg-err").textContent = ezT("Invalid field: ") + msg;
     $("#cg-err").classList.remove("hidden");
     $("#cg-desc").textContent = "";

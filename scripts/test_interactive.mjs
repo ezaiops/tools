@@ -255,6 +255,10 @@ console.log("\n== cron-generator.html ==");
   check("custom row visible", !$("#cg-custom-row", doc).classList.contains("hidden"));
   setInput(win, $("#cg-custom", doc), "99");
   check("custom value rejected", !$("#cg-err", doc).classList.contains("hidden"), $("#cg-err", doc).textContent);
+  check("expr cleared on invalid", $("#cg-expr", doc).value === "—", $("#cg-expr", doc).value);
+  setInput(win, $("#cg-custom", doc), "*/0");
+  check("step zero rejected", !$("#cg-err", doc).classList.contains("hidden"), $("#cg-err", doc).textContent);
+  check("step zero not in expr", $("#cg-expr", doc).value === "—");
   setInput(win, $("#cg-custom", doc), "5");
   check("custom value accepted", $("#cg-expr", doc).value === "5 * * * *", $("#cg-expr", doc).value);
 }
@@ -371,6 +375,14 @@ console.log("\n== diff-checker.html ==");
   setInput(win, $("#df-b", doc), "a\nx\nc");
   await sleep(400);
   check("one line changed after edit", $("#df-changed", doc).textContent === "1", $("#df-changed", doc).textContent);
+  setInput(win, $("#df-a", doc), "x");
+  setInput(win, $("#df-b", doc), "");
+  await sleep(400);
+  check("line removed not changed", $("#df-removed", doc).textContent === "1" && $("#df-changed", doc).textContent === "0",
+    "removed=" + $("#df-removed", doc).textContent + " changed=" + $("#df-changed", doc).textContent);
+  setInput(win, $("#df-a", doc), "");
+  await sleep(400);
+  check("both empty shows empty state", /both sides empty/.test($("#df-output", doc).textContent) && $("#df-total", doc).textContent === "0");
 }
 
 console.log("\n== unit-converter.html ==");

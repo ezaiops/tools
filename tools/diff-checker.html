@@ -221,7 +221,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function pairChanges(ops) {
-    // group consecutive del/add into change pairs
+    // group consecutive del/add into change pairs; empty lines never pair (they are pure del/add)
     var rows = [];
     var i = 0;
     while (i < ops.length) {
@@ -229,6 +229,8 @@ document.addEventListener("DOMContentLoaded", function () {
       var dels = [], adds = [];
       while (i < ops.length && ops[i].type === "del") { dels.push(ops[i].a); i++; }
       while (i < ops.length && ops[i].type === "add") { adds.push(ops[i].b); i++; }
+      dels = dels.filter(function (l) { return l !== ""; });
+      adds = adds.filter(function (l) { return l !== ""; });
       var len = Math.max(dels.length, adds.length);
       for (var j = 0; j < len; j++) {
         if (j < dels.length && j < adds.length) rows.push({ type: "chg", del: dels[j], add: adds[j] });
@@ -240,8 +242,18 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function render() {
-    var a = $("#df-a").value.replace(/\n$/, "").split("\n");
-    var b = $("#df-b").value.replace(/\n$/, "").split("\n");
+    var aRaw = $("#df-a").value;
+    var bRaw = $("#df-b").value;
+    if (!aRaw.trim() && !bRaw.trim()) {
+      $("#df-added").textContent = "0";
+      $("#df-removed").textContent = "0";
+      $("#df-changed").textContent = "0";
+      $("#df-total").textContent = "0";
+      $("#df-output").innerHTML = '<div class="df-row"><div class="df-gutter"></div><div class="df-text df-empty">(both sides empty)</div></div>';
+      return;
+    }
+    var a = aRaw.replace(/\n$/, "").split("\n");
+    var b = bRaw.replace(/\n$/, "").split("\n");
     var ops = myers(a, b);
     var rows = pairChanges(ops);
     var added = 0, removed = 0, changed = 0;
