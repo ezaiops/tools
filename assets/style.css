@@ -294,6 +294,11 @@ table.data tr:hover td { background: var(--accent-soft); }
 .kv-list dt { color: var(--muted); }
 .kv-list dd { margin: 0; font-variant-numeric: tabular-nums; }
 
+/* Ad slots stay hidden until AdSense is approved and configured.
+   To re-enable: delete this rule, then either replace each .ad-slot
+   placeholder with an AdSense unit or add the Auto ads snippet to <head>. */
+.ad-slot { display: none; }
+
 .ad-slot {
   border: 1px dashed var(--border-strong);
   border-radius: var(--radius);
