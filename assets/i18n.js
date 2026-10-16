@@ -147,9 +147,34 @@
     nav.appendChild(wrap);
   }
 
+  // Outbound links to the main site follow the UI language: the English tools UI
+  // points at the English blog (/en/), the Chinese UI at the Chinese root.
+  function localizeMainSiteLinks() {
+    var anchors = document.querySelectorAll('a[href^="https://ezaiops.com"]');
+    Array.prototype.forEach.call(anchors, function (a) {
+      var href = a.getAttribute("href");
+      if (lang === "en") {
+        if (/^https:\/\/ezaiops\.com\/?$/.test(href)) {
+          a.setAttribute("href", "https://ezaiops.com/en/");
+        }
+        if (/in Chinese/.test(a.getAttribute("title") || "")) {
+          a.setAttribute("title", "ezaiops.com — AI agent observability & LLMOps field notes (in English)");
+        }
+      } else {
+        if (/^https:\/\/ezaiops\.com\/en\/?$/.test(href)) {
+          a.setAttribute("href", "https://ezaiops.com/");
+        }
+        if (/in English/.test(a.getAttribute("title") || "")) {
+          a.setAttribute("title", "ezaiops.com — AI agent observability & LLMOps field notes (in Chinese)");
+        }
+      }
+    });
+  }
+
   function finish(count) {
     document.documentElement.setAttribute("lang", lang === "zh" ? "zh-CN" : "en");
     injectSwitcher();
+    localizeMainSiteLinks();
     window.dispatchEvent(new CustomEvent("ez:i18n", { detail: { lang: lang, replaced: count } }));
   }
 
@@ -161,7 +186,7 @@
       return loadScript("/assets/" + f).catch(function () { /* dictionary missing: keep English */ });
     })).then(function () {
       dicts = (window.I18N_DICTS || []).slice();
-      if (lang !== "zh") { injectSwitcher(); return; }
+      if (lang !== "zh") { injectSwitcher(); localizeMainSiteLinks(); return; }
       var count = applyDict(mergeDicts());
       finish(count);
     }).catch(function () { /* never break the page over i18n */ });

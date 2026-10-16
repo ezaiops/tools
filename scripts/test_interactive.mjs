@@ -444,6 +444,23 @@ console.log("\n== pdf-tools.html ==");
   check("download disabled", $("#pdf-download", doc).disabled === true);
 }
 
+console.log("\n== bilingual: main-site link localization ==");
+{
+  const en = await load("tools/token-counter.html");
+  await sleep(400);
+  check("EN page links to English blog", en.doc.querySelector(".main-site-link").getAttribute("href") === "https://ezaiops.com/en/",
+    en.doc.querySelector(".main-site-link").getAttribute("href"));
+  const blogLink = en.doc.querySelector('.site-nav a[href^="https://ezaiops.com"]');
+  check("EN blog tooltip says English", /in English/.test(blogLink.getAttribute("title") || ""), blogLink.getAttribute("title"));
+
+  const zh = await load("tools/token-counter.html?lang=zh");
+  await sleep(400);
+  check("ZH page links to Chinese blog", /^https:\/\/ezaiops\.com\/?$/.test(zh.doc.querySelector(".main-site-link").getAttribute("href")),
+    zh.doc.querySelector(".main-site-link").getAttribute("href"));
+  check("ZH blog tooltip stays Chinese", /中文/.test(zh.doc.querySelector('.site-nav a[href^="https://ezaiops.com"]').getAttribute("title") || ""),
+    zh.doc.querySelector('.site-nav a[href^="https://ezaiops.com"]').getAttribute("title"));
+}
+
 console.log("\n== json-formatter.html ==");
 {
   const { win, doc, errors } = await load("tools/json-formatter.html");
