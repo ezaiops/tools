@@ -2,7 +2,7 @@
  * Keyed by the exact English text (or ph:/title: prefixed attribute value). */
 window.I18N_DICTS = window.I18N_DICTS || [];
 window.I18N_DICTS.push({
-  "title:ezaiops.com — AI agent observability & LLMOps field notes (in Chinese)": "ezaiops.com — AI Agent 可观测性与 LLMOps 实战笔记（中文）",
+  "title:ezaiops.com — AI agent observability & LLMOps field notes (in English)": "ezaiops.com — AI Agent 可观测性与 LLMOps 实战笔记（中文）",
 
   "Tools": "工具",
   "LLM pricing": "模型价格",

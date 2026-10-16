@@ -4,7 +4,7 @@ window.I18N_DICTS.push({
   "Free AI & DevOps tools that run in your browser": "免费 AI 与 DevOps 工具，全部在浏览器本地运行",
   "Small, fast utilities for the work around LLMs and infrastructure: count tokens and estimate what an API call will actually cost, format JSON, test regex, explain cron, hash strings, convert timestamps. No signup, no server round-trip, no data collection.": "围绕 LLM 与基础设施日常工作的小工具：分词与成本估算、JSON 格式化、正则测试、Cron 解释、字符串哈希、时间戳转换。无需注册，无服务端往返，不收集数据。",
   "Browse LLM pricing (29 models)": "浏览 LLM 价格（29 个模型）",
-  "Part of ezaiops.com — field notes on AI agent observability, LLMOps and production AI ops, written in Chinese.": "ezaiops.com 的一部分——AI Agent 可观测性、LLMOps 与生产级 AI 运维的中文实战笔记。",
+  "Part of ezaiops.com — field notes on AI agent observability, LLMOps and production AI ops.": "ezaiops.com 的一部分——AI Agent 可观测性、LLMOps 与生产级 AI 运维的中文实战笔记。",
 
   "All tools": "全部工具",
   "LLM API pricing, model by model": "逐模型 LLM API 价格",

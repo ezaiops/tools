@@ -446,6 +446,17 @@ console.log("\n== pdf-tools.html ==");
 
 console.log("\n== bilingual: main-site link localization ==");
 {
+  // The English tools site is the default, so the raw HTML must already point at the
+  // English blog — correct even if the i18n script never runs (stale cache, JS off).
+  const raw = await JSDOM.fromURL(BASE + "/tools/token-counter.html", { resources: "usable", pretendToBeVisual: true });
+  const rawDoc = raw.window.document;
+  check("no-JS HTML points at English blog",
+    rawDoc.querySelector(".main-site-link").getAttribute("href") === "https://ezaiops.com/en/",
+    rawDoc.querySelector(".main-site-link").getAttribute("href"));
+  check("no-JS header Blog link English",
+    rawDoc.querySelector('.site-nav a[href^="https://ezaiops.com"]').getAttribute("href") === "https://ezaiops.com/en/");
+  raw.window.close();
+
   const en = await load("tools/token-counter.html");
   await sleep(400);
   check("EN page links to English blog", en.doc.querySelector(".main-site-link").getAttribute("href") === "https://ezaiops.com/en/",

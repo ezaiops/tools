@@ -68,7 +68,7 @@ HEAD = """<!doctype html>
     <nav class="site-nav">
       <a href="/">Tools</a>
       <a href="/models/index.html">LLM pricing</a>
-      <a href="https://ezaiops.com" title="ezaiops.com — AI agent observability &amp; LLMOps field notes (in Chinese)">Blog</a>
+      <a href="https://ezaiops.com/en/" title="ezaiops.com — AI agent observability &amp; LLMOps field notes (in English)">Blog</a>
       <a href="https://github.com/ezaiops">GitHub</a>
     </nav>
   </div>
@@ -77,7 +77,7 @@ HEAD = """<!doctype html>
 
 CRUMBS = """
 <main class="wrap tool-page">
-  <nav class="crumbs"><a href="/">Home</a> / <a href="/models/index.html">LLM pricing</a> / @@NAME@@<a class="main-site-link" href="https://ezaiops.com">ezaiops.com \u2197</a></nav>
+  <nav class="crumbs"><a href="/">Home</a> / <a href="/models/index.html">LLM pricing</a> / @@NAME@@<a class="main-site-link" href="https://ezaiops.com/en/">ezaiops.com \u2197</a></nav>
 """
 
 FOOT = """
@@ -113,7 +113,7 @@ FOOT = """
       <div>
         <h4>More</h4>
         <ul>
-          <li><a href="https://ezaiops.com">ezaiops.com</a></li>
+          <li><a href="https://ezaiops.com/en/">ezaiops.com</a></li>
           <li><a href="/privacy.html">Privacy policy</a></li>
           <li><a href="https://github.com/ezaiops">GitHub</a></li>
         </ul>
