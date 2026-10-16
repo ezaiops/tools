@@ -239,6 +239,146 @@ console.log("\n== bilingual: model pages keep data in EN, chrome in ZH ==");
   check("crumb crumb main-site link kept", doc.querySelector(".main-site-link") !== null);
 }
 
+console.log("\n== cron-generator.html ==");
+{
+  const { win, doc } = await load("tools/cron-generator.html");
+  check("default expression every minute", $("#cg-expr", doc).value === "* * * * *", $("#cg-expr", doc).value);
+  check("5 next runs listed", $$(doc, "#cg-runs li").length === 5);
+  check("per-day stat set", /\d/.test($("#cg-perday", doc).textContent));
+  click(win, $('[data-cg-preset="weekday"]', doc));
+  check("weekday preset expr", $("#cg-expr", doc).value === "0 9 * * 1-5", $("#cg-expr", doc).value);
+  click(win, $('[data-cg-preset="monthly"]', doc));
+  check("monthly preset expr", $("#cg-expr", doc).value === "0 6 1 * *", $("#cg-expr", doc).value);
+  click(win, $('[data-cg-preset="health"]', doc));
+  $("#cg-minute", doc).value = "custom";
+  $("#cg-minute", doc).dispatchEvent(new win.Event("change", { bubbles: true }));
+  check("custom row visible", !$("#cg-custom-row", doc).classList.contains("hidden"));
+  setInput(win, $("#cg-custom", doc), "99");
+  check("custom value rejected", !$("#cg-err", doc).classList.contains("hidden"), $("#cg-err", doc).textContent);
+  setInput(win, $("#cg-custom", doc), "5");
+  check("custom value accepted", $("#cg-expr", doc).value === "5 * * * *", $("#cg-expr", doc).value);
+}
+
+console.log("\n== subnet-calculator.html ==");
+{
+  const { win, doc } = await load("tools/subnet-calculator.html");
+  const txt = $("#sn-results", doc).textContent;
+  check("network address", /192\.168\.1\.0\/26/.test(txt), txt.slice(0, 120));
+  check("broadcast address", /192\.168\.1\.63/.test(txt));
+  check("usable host range", /192\.168\.1\.1 – 192\.168\.1\.62/.test(txt));
+  check("usable hosts 62", /62/.test(txt));
+  check("mask shown", /255\.255\.255\.192/.test(txt));
+  check("binary rows", $$(doc, "#sn-binary tr").length === 3);
+  check("prefix table 7 rows", $$(doc, "#sn-table tr").length === 7);
+  setInput(win, $("#sn-input", doc), "999.1.1.1/24");
+  click(win, $("#sn-calc", doc));
+  check("invalid address error", !$("#sn-err", doc).classList.contains("hidden"));
+  click(win, $('[data-sn="203.0.113.42/30"]', doc));
+  const t2 = $("#sn-results", doc).textContent;
+  check("/30 point-to-point", /203\.0\.113\.40\/30/.test(t2) && /Usable hosts2/.test(t2), t2.slice(0, 100));
+}
+
+console.log("\n== self-host-vs-api.html ==");
+{
+  const { doc } = await load("tools/self-host-vs-api.html");
+  const opts = $$(doc, "#sh-model option");
+  check("model selector populated", opts.length === 29, String(opts.length));
+  check("api cost $30,000", $("#sh-api-cost", doc).textContent === "$30,000", $("#sh-api-cost", doc).textContent);
+  check("gpu cost ~$6.48", /^\$6\.4\d$/.test($("#sh-gpu-cost", doc).textContent), $("#sh-gpu-cost", doc).textContent);
+  check("verdict self-host", /Self-hosting|自托管/.test($("#sh-verdict", doc).textContent), $("#sh-verdict", doc).textContent);
+  check("note explains", /saves/.test($("#sh-note", doc).textContent));
+}
+
+console.log("\n== mortgage-calculator.html ==");
+{
+  const { win, doc } = await load("tools/mortgage-calculator.html");
+  check("monthly payment ~$2,528", /^\$2,?52\d\.\d\d$/.test($("#mo-payment", doc).textContent), $("#mo-payment", doc).textContent);
+  check("total interest set", /^\$/.test($("#mo-interest", doc).textContent), $("#mo-interest", doc).textContent);
+  check("payoff 30 years", /30 years/.test($("#mo-payoff", doc).textContent), $("#mo-payoff", doc).textContent);
+  check("12 amortization rows", $$(doc, "#mo-rows tr").length === 12);
+  check("extra stats hidden by default", $("#mo-extra-stats", doc).style.display === "none");
+  setInput(win, $("#mo-extra", doc), "200");
+  await sleep(250);
+  check("extra stats appear", $("#mo-extra-stats", doc).style.display !== "none");
+  check("interest saved positive", /^\$[\d,]+\.\d\d$/.test($("#mo-saved", doc).textContent), $("#mo-saved", doc).textContent);
+  check("time saved positive", /\d/.test($("#mo-timesaved", doc).textContent), $("#mo-timesaved", doc).textContent);
+}
+
+console.log("\n== image-compressor.html ==");
+{
+  const { win, doc } = await load("tools/image-compressor.html");
+  check("compress disabled without file", $("#ic-run", doc).disabled === true);
+  check("download disabled without file", $("#ic-download", doc).disabled === true);
+  $("#ic-quality", doc).value = "50";
+  $("#ic-quality", doc).dispatchEvent(new win.Event("input", { bubbles: true }));
+  check("quality label syncs", $("#ic-quality-val", doc).textContent === "50%");
+}
+
+console.log("\n== jwt-debugger.html ==");
+{
+  const { win, doc } = await load("tools/jwt-debugger.html");
+  setInput(win, $("#jwt-input", doc), "not-a-jwt");
+  check("invalid jwt flagged", /invalid/.test($("#jwt-state", doc).textContent), $("#jwt-state", doc).textContent);
+  check("error shown", !$("#jwt-err", doc).classList.contains("hidden"));
+  click(win, $("#jwt-sample", doc));
+  await sleep(100);
+  check("sample decoded", /decoded/.test($("#jwt-state", doc).textContent), $("#jwt-state", doc).textContent);
+  check("alg HS256", $("#jwt-alg", doc).textContent === "HS256");
+  check("header JSON", /"alg": "HS256"/.test($("#jwt-header", doc).textContent));
+  check("payload has sub", /"sub"/.test($("#jwt-payload", doc).textContent));
+  check("expiry rendered", /\d/.test($("#jwt-exp", doc).textContent), $("#jwt-exp", doc).textContent);
+}
+
+console.log("\n== diff-checker.html ==");
+{
+  const { win, doc } = await load("tools/diff-checker.html");
+  check("two lines changed", $("#df-changed", doc).textContent === "2", $("#df-changed", doc).textContent);
+  check("nothing added", $("#df-added", doc).textContent === "0");
+  check("nothing removed", $("#df-removed", doc).textContent === "0");
+  check("total 4 lines", $("#df-total", doc).textContent === "4");
+  check("rows rendered", $$(doc, "#df-output .df-row").length >= 6);
+  click(win, $("#df-swap", doc));
+  check("swap keeps changes", $("#df-changed", doc).textContent === "2");
+  setInput(win, $("#df-a", doc), "a\nb\nc");
+  setInput(win, $("#df-b", doc), "a\nx\nc");
+  await sleep(400);
+  check("one line changed after edit", $("#df-changed", doc).textContent === "1", $("#df-changed", doc).textContent);
+}
+
+console.log("\n== unit-converter.html ==");
+{
+  const { win, doc } = await load("tools/unit-converter.html");
+  check("default length conversion", /39,370/.test($("#uc-result", doc).textContent), $("#uc-result", doc).textContent);
+  check("all-units table", $$(doc, "#uc-all tr").length === 11);
+  $("#uc-cat", doc).value = "temp";
+  $("#uc-cat", doc).dispatchEvent(new win.Event("change", { bubbles: true }));
+  setInput(win, $("#uc-value", doc), "212");
+  await sleep(50);
+  check("212F to K = 373.15", /373\.15/.test($("#uc-result", doc).textContent), $("#uc-result", doc).textContent);
+  check("temp formula shown", /K =/.test($("#uc-formula", doc).textContent), $("#uc-formula", doc).textContent);
+}
+
+console.log("\n== qr-generator.html ==");
+{
+  const { win, doc } = await load("tools/qr-generator.html");
+  click(win, $("#qr-gen", doc));
+  await sleep(300);
+  check("generate gives feedback", /encoder|Done|blocked|network/i.test($("#qr-note", doc).textContent), $("#qr-note", doc).textContent);
+  check("quality/EC options present", $$(doc, "#qr-ec option").length === 4);
+}
+
+console.log("\n== pdf-tools.html ==");
+{
+  const { win, doc } = await load("tools/pdf-tools.html");
+  check("merge panel default", !$("#pdf-panel-merge", doc).classList.contains("hidden"));
+  check("split panel hidden", $("#pdf-panel-split", doc).classList.contains("hidden"));
+  click(win, $('[data-pdftab="split"]', doc));
+  check("tab switches", $("#pdf-panel-split", doc).classList.contains("hidden") === false);
+  click(win, $("#pdf-merge", doc));
+  check("merge without files warns", /at least one PDF/.test($("#pdf-merge-note", doc).textContent), $("#pdf-merge-note", doc).textContent);
+  check("download disabled", $("#pdf-download", doc).disabled === true);
+}
+
 console.log("\n== json-formatter.html ==");
 {
   const { win, doc, errors } = await load("tools/json-formatter.html");

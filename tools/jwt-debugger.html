@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JWT Debugger — Decode &amp; Verify Tokens Locally | ezaiops tools</title>
+<meta name="description" content="Decode JWT header, payload and expiry locally. Check the algorithm, read the claims, and verify HMAC-SHA256 signatures without pasting your token anywhere.">
+<link rel="canonical" href="https://tools.ezaiops.com/tools/jwt-debugger.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="JWT Debugger">
+<meta property="og:description" content="Decode and verify JWTs locally — header, payload, expiry.">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "JWT Debugger",
+  "url": "https://tools.ezaiops.com/tools/jwt-debugger.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/"><span class="logo">ez</span>ezaiops <small>tools</small></a>
+    <nav class="site-nav">
+      <a href="/">Tools</a>
+      <a href="/models/index.html">LLM pricing</a>
+      <a href="https://ezaiops.com" title="ezaiops.com — AI agent observability &amp; LLMOps field notes (in Chinese)">Blog</a>
+      <a href="https://github.com/ezaiops">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap tool-page">
+  <nav class="crumbs"><a href="/">Home</a> / Tools / <a href="/tools/jwt-debugger.html">JWT debugger</a><a class="main-site-link" href="https://ezaiops.com">ezaiops.com ↗</a></nav>
+  <h1>JWT debugger</h1>
+  <p class="lead">Paste a JSON Web Token to see its header, payload and expiry at a glance — decoded entirely in your browser. Verify HMAC-SHA256 signatures locally with a secret; nothing is transmitted.</p>
+
+  <section class="panel">
+    <label class="field-label" for="jwt-input">Encoded token</label>
+    <textarea id="jwt-input" class="mono" rows="4" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0IiwibmFtZSI6IkV4YW1wbGUifQ.signature"></textarea>
+    <div class="btn-row">
+      <button class="btn small" id="jwt-sample" type="button">Load sample token</button>
+      <button class="btn small" id="jwt-clear" type="button">Clear</button>
+      <span class="badge" id="jwt-state">—</span>
+    </div>
+
+    <div class="field-row" style="margin-top:12px">
+      <div class="field" style="flex:1 1 280px">
+        <label class="field-label" for="jwt-secret">HMAC secret (optional, for signature check)</label>
+        <input type="text" id="jwt-secret" class="mono" placeholder="your-256-bit-secret">
+        <div class="hint">Only used to recompute the signature locally. HS256 only; RS/ES need the public key.</div>
+      </div>
+      <div class="field" style="flex:0 1 160px;align-self:flex-end">
+        <button class="btn" id="jwt-verify" type="button">Verify signature</button>
+      </div>
+    </div>
+    <p class="note" id="jwt-verify-out"></p>
+
+    <div class="stats-grid" id="jwt-stats" style="margin-top:6px">
+      <div class="stat"><div class="k">Algorithm</div><div class="v" id="jwt-alg" style="font-size:15px">—</div></div>
+      <div class="stat"><div class="k">Expires</div><div class="v" id="jwt-exp" style="font-size:15px">—</div></div>
+      <div class="stat"><div class="k">Issued at</div><div class="v" id="jwt-iat" style="font-size:15px">—</div></div>
+      <div class="stat"><div class="k">Subject</div><div class="v" id="jwt-sub" style="font-size:15px">—</div></div>
+    </div>
+
+    <div class="tool-grid" style="margin-top:16px;grid-template-columns:1fr 1fr">
+      <div class="panel" style="background:#fff">
+        <label class="field-label">Header</label>
+        <pre class="code-out" id="jwt-header" style="max-height:220px;overflow:auto">—</pre>
+      </div>
+      <div class="panel" style="background:#fff">
+        <label class="field-label">Payload</label>
+        <pre class="code-out" id="jwt-payload" style="max-height:220px;overflow:auto">—</pre>
+      </div>
+    </div>
+    <pre class="code-out error hidden" id="jwt-err" style="margin-top:12px"></pre>
+  </section>
+
+  <div class="ad-slot">
+    <strong>Ad slot</strong>
+    Google AdSense placeholder — activated once the site is approved and has steady traffic.
+  </div>
+
+  <section class="prose">
+    <h2>Reading a JWT</h2>
+    <p>A JWT is three base64url segments joined by dots: <code>header.payload.signature</code>. The header says which algorithm signed it (<code>alg</code>) and the token type; the payload carries claims — registered ones like <code>sub</code> (subject), <code>iat</code> (issued at) and <code>exp</code> (expiry) plus whatever your issuer adds. The signature covers the first two segments, which is why decoding alone proves nothing about authenticity — anyone can re-encode a modified payload. Always verify the signature server-side against the issuer's keys.</p>
+    <ul>
+      <li><strong>alg: none</strong> in the header is a red flag — it asks the verifier to skip signature checking entirely. Never accept it.</li>
+      <li><strong>exp</strong> is in seconds since the epoch; expired tokens should be rejected, not silently refreshed.</li>
+      <li>HS256 uses a shared secret; RS256/ES256 use asymmetric keys — signature checks here cover HS256 only.</li>
+    </ul>
+
+    <h2>Frequently asked questions</h2>
+    <details class="faq">
+      <summary>Is it safe to paste a real token here?</summary>
+      <div class="faq-body">Decoding happens locally and nothing leaves the page. Still, treat tokens like passwords: if it is a long-lived production token, prefer a throwaway one. The signature check needs your secret, which also never leaves the page.</div>
+    </details>
+    <details class="faq">
+      <summary>Why does the signature check fail on a valid token?</summary>
+      <div class="faq-body">Common causes: the token uses RS256/ES256 (not supported here), the secret has surrounding whitespace, or the token was signed by a different issuer. Only HS256 is checked.</div>
+    </details>
+    <details class="faq">
+      <summary>Can I edit the payload and re-sign?</summary>
+      <div class="faq-body">No — this tool is read-only by design. Tamper-testing belongs in your test suite with your own keys.</div>
+    </details>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h4>Popular tools</h4>
+        <ul>
+          <li><a href="/tools/token-counter.html">LLM token &amp; cost calculator</a></li>
+          <li><a href="/tools/json-formatter.html">JSON formatter</a></li>
+          <li><a href="/tools/regex-tester.html">Regex tester</a></li>
+          <li><a href="/tools/cron-explainer.html">Cron explainer</a></li>
+          <li><a href="/tools/encode-decode.html">Base64 / URL / hash</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>LLM pricing</h4>
+        <ul>
+          <li><a href="/models/index.html">All models</a></li>
+          <li><a href="/models/gpt-6-astra.html">GPT-6 Astra pricing</a></li>
+          <li><a href="/models/claude-fable-5-1.html">Claude Fable 5.1 pricing</a></li>
+          <li><a href="/models/gemini-3-8-flash.html">Gemini 3.8 Flash pricing</a></li>
+          <li><a href="/models/deepseek-v4-1-flash.html">DeepSeek V4.1 Flash pricing</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>More</h4>
+        <ul>
+          <li><a href="https://ezaiops.com">ezaiops.com</a></li>
+          <li><a href="/privacy.html">Privacy policy</a></li>
+          <li><a href="https://github.com/ezaiops">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">&copy; <span data-year>2026</span> ezaiops. Free tools, no signup, runs entirely in your browser.</div>
+  </div>
+</footer>
+
+<script src="/assets/common.js" defer></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  function ezT(k) { return window.ezI18N ? window.ezI18N.t(k) : k; }
+
+  var input = $("#jwt-input");
+  var state = $("#jwt-state");
+  var err = $("#jwt-err");
+
+  function b64urlDecode(str) {
+    var s = str.replace(/-/g, "+").replace(/_/g, "/");
+    while (s.length % 4) s += "=";
+    var bin = atob(s);
+    var bytes = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return new TextDecoder().decode(bytes);
+  }
+
+  function decode() {
+    err.classList.add("hidden");
+    var raw = input.value.trim();
+    if (!raw) { state.textContent = "—"; state.className = "badge"; return; }
+    var parts = raw.split(".");
+    if (parts.length < 2) {
+      err.textContent = ezT("Not a JWT — expected three dot-separated segments.");
+      err.classList.remove("hidden");
+      state.textContent = ezT("invalid");
+      state.className = "badge red";
+      return;
+    }
+    var header, payload;
+    try { header = JSON.parse(b64urlDecode(parts[0])); } catch (e) {
+      err.textContent = ezT("Header is not valid base64url JSON.");
+      err.classList.remove("hidden");
+      return;
+    }
+    try { payload = JSON.parse(b64urlDecode(parts[1])); } catch (e) {
+      err.textContent = ezT("Payload is not valid base64url JSON.");
+      err.classList.remove("hidden");
+      return;
+    }
+
+    $("#jwt-header").textContent = JSON.stringify(header, null, 2);
+    $("#jwt-payload").textContent = JSON.stringify(payload, null, 2);
+    $("#jwt-alg").textContent = header.alg || "—";
+    $("#jwt-sub").textContent = payload.sub || "—";
+
+    var exp = payload.exp, iat = payload.iat;
+    var now = Math.floor(Date.now() / 1000);
+    var expEl = $("#jwt-exp");
+    if (typeof exp === "number") {
+      var d = new Date(exp * 1000);
+      expEl.textContent = d.toLocaleString() + (exp < now ? " (expired)" : "");
+      expEl.style.color = exp < now ? "var(--red)" : "";
+    } else { expEl.textContent = "—"; expEl.style.color = ""; }
+    var iatEl = $("#jwt-iat");
+    iatEl.textContent = typeof iat === "number" ? new Date(iat * 1000).toLocaleString() : "—";
+
+    state.textContent = parts.length === 3 && parts[2] ? ezT("decoded") : ezT("unsigned");
+    state.className = "badge green";
+    $("#jwt-verify-out").textContent = "";
+  }
+
+  $("#jwt-sample").addEventListener("click", function () {
+    var header = btoa(JSON.stringify({ alg: "HS256", typ: "JWT" })).replace(/=+$/, "");
+    var payload = btoa(JSON.stringify({
+      sub: "1234567890",
+      name: "Example User",
+      iat: Math.floor(Date.now() / 1000),
+      exp: Math.floor(Date.now() / 1000) + 3600
+    })).replace(/=+$/, "");
+    input.value = header + "." + payload + ".c2lnbmF0dXJlLXBsYWNlaG9sZGVy";
+    $("#jwt-secret").value = "secret";
+    decode();
+  });
+  $("#jwt-clear").addEventListener("click", function () {
+    input.value = "";
+    $("#jwt-secret").value = "";
+    $("#jwt-verify-out").textContent = "";
+    $("#jwt-header").textContent = "—";
+    $("#jwt-payload").textContent = "—";
+    $("#jwt-alg").textContent = "—";
+    $("#jwt-exp").textContent = "—";
+    $("#jwt-iat").textContent = "—";
+    $("#jwt-sub").textContent = "—";
+    state.textContent = "—";
+    state.className = "badge";
+  });
+
+  $("#jwt-verify").addEventListener("click", function () {
+    var out = $("#jwt-verify-out");
+    var raw = input.value.trim();
+    var parts = raw.split(".");
+    var secret = $("#jwt-secret").value;
+    if (parts.length !== 3 || !secret) {
+      out.textContent = ezT("Paste a token and enter the HS256 secret to verify.");
+      return;
+    }
+    var subtle = window.crypto && window.crypto.subtle;
+    if (!subtle) {
+      out.textContent = ezT("Signature verification needs a secure context (https:// or localhost). Decoding works everywhere.");
+      return;
+    }
+    var enc = new TextEncoder();
+    crypto.subtle.importKey("raw", enc.encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"])
+      .then(function (key) {
+        return crypto.subtle.sign("HMAC", key, enc.encode(parts[0] + "." + parts[1]));
+      })
+      .then(function (sig) {
+        var expected = btoa(String.fromCharCode.apply(null, new Uint8Array(sig)))
+          .replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+        out.textContent = expected === parts[2]
+          ? ezT("Signature VALID — the token was signed with this secret.")
+          : ezT("Signature INVALID — wrong secret, or the token was modified.");
+      })
+      .catch(function () {
+        out.textContent = ezT("Verification failed — check the secret and try again.");
+      });
+  });
+
+  input.addEventListener("input", decode);
+  decode();
+});
+</script>
+</body>
+</html>

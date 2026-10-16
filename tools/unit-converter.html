@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Unit Converter — Length, Weight, Temperature, Data | ezaiops tools</title>
+<meta name="description" content="Convert length, weight, temperature, area, speed and data size units instantly. Runs locally, no signup.">
+<link rel="canonical" href="https://tools.ezaiops.com/tools/unit-converter.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Unit Converter">
+<meta property="og:description" content="Length, weight, temperature, area, speed and data size conversions.">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Unit Converter",
+  "url": "https://tools.ezaiops.com/tools/unit-converter.html",
+  "applicationCategory": "UtilityApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/"><span class="logo">ez</span>ezaiops <small>tools</small></a>
+    <nav class="site-nav">
+      <a href="/">Tools</a>
+      <a href="/models/index.html">LLM pricing</a>
+      <a href="https://ezaiops.com" title="ezaiops.com — AI agent observability &amp; LLMOps field notes (in Chinese)">Blog</a>
+      <a href="https://github.com/ezaiops">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap tool-page">
+  <nav class="crumbs"><a href="/">Home</a> / Tools / <a href="/tools/unit-converter.html">Unit converter</a><a class="main-site-link" href="https://ezaiops.com">ezaiops.com ↗</a></nav>
+  <h1>Unit converter</h1>
+  <p class="lead">Convert between common units across six categories — length, weight, temperature, area, speed and data size. Type a value, read every equivalent at once. All math runs locally.</p>
+
+  <section class="panel">
+    <div class="field-row">
+      <div class="field" style="flex:0 1 130px">
+        <label class="field-label" for="uc-cat">Category</label>
+        <select id="uc-cat">
+          <option value="length" selected>Length</option>
+          <option value="weight">Weight</option>
+          <option value="temp">Temperature</option>
+          <option value="area">Area</option>
+          <option value="speed">Speed</option>
+          <option value="data">Data size</option>
+        </select>
+      </div>
+      <div class="field" style="flex:0 1 160px">
+        <label class="field-label" for="uc-from">From</label>
+        <select id="uc-from"></select>
+      </div>
+      <div class="field" style="flex:0 1 160px">
+        <label class="field-label" for="uc-to">To</label>
+        <select id="uc-to"></select>
+      </div>
+      <div class="field" style="flex:1 1 160px">
+        <label class="field-label" for="uc-value">Value</label>
+        <input type="number" id="uc-value" class="mono" value="1" step="any">
+      </div>
+    </div>
+
+    <div class="stats-grid" style="margin-top:16px">
+      <div class="stat"><div class="k" id="uc-result-label">Result</div><div class="v" id="uc-result" style="font-size:17px">—</div></div>
+      <div class="stat"><div class="k">Formula</div><div class="v" id="uc-formula" style="font-size:13px;font-weight:400">—</div></div>
+    </div>
+
+    <h3 style="font-size:14px;margin:18px 0 0">All units at this value</h3>
+    <table class="data">
+      <thead><tr><th>Unit</th><th class="num">Equivalent</th></tr></thead>
+      <tbody id="uc-all"></tbody>
+    </table>
+  </section>
+
+  <div class="ad-slot">
+    <strong>Ad slot</strong>
+    Google AdSense placeholder — activated once the site is approved and has steady traffic.
+  </div>
+
+  <section class="prose">
+    <h2>Conventions used</h2>
+    <ul>
+      <li><strong>Length</strong> — international mile (1,609.344 m) and nautical mile (1,852 m); feet/inches are US survey conventions.</li>
+      <li><strong>Weight</strong> — 1 lb = 0.45359237 kg exactly; a US ton is 2,000 lb, a metric tonne is 1,000 kg.</li>
+      <li><strong>Temperature</strong> — exact conversions, not approximations: °F = °C × 9/5 + 32, K = °C + 273.15.</li>
+      <li><strong>Data size</strong> — binary units (KiB = 1,024 B) and decimal units (KB = 1,000 B) are listed separately, because storage marketing and operating systems disagree about which is meant.</li>
+    </ul>
+
+    <h2>Frequently asked questions</h2>
+    <details class="faq">
+      <summary>Why do my "GB" files not fill a "GB" drive?</summary>
+      <div class="faq-body">Drive makers use decimal GB (10⁹ bytes); operating systems report binary GiB (2³⁰ bytes). A "1 TB" drive shows as ~931 GiB. This tool keeps both conventions separate so you can see which is which.</div>
+    </details>
+    <details class="faq">
+      <summary>How precise are the results?</summary>
+      <div class="faq-body">Conversions use exact SI definitions where they exist (kg, m, s), so precision is limited only by JavaScript's double arithmetic — far beyond practical needs. Displayed values are rounded to 6 significant digits.</div>
+    </details>
+    <details class="faq">
+      <summary>Does it support currency or time zones?</summary>
+      <div class="faq-body">No — currency rates change daily and need a live source, and time zones need a tz database. Both are out of scope for an offline converter.</div>
+    </details>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h4>Popular tools</h4>
+        <ul>
+          <li><a href="/tools/token-counter.html">LLM token &amp; cost calculator</a></li>
+          <li><a href="/tools/json-formatter.html">JSON formatter</a></li>
+          <li><a href="/tools/regex-tester.html">Regex tester</a></li>
+          <li><a href="/tools/cron-explainer.html">Cron explainer</a></li>
+          <li><a href="/tools/encode-decode.html">Base64 / URL / hash</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>LLM pricing</h4>
+        <ul>
+          <li><a href="/models/index.html">All models</a></li>
+          <li><a href="/models/gpt-6-astra.html">GPT-6 Astra pricing</a></li>
+          <li><a href="/models/claude-fable-5-1.html">Claude Fable 5.1 pricing</a></li>
+          <li><a href="/models/gemini-3-8-flash.html">Gemini 3.8 Flash pricing</a></li>
+          <li><a href="/models/deepseek-v4-1-flash.html">DeepSeek V4.1 Flash pricing</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>More</h4>
+        <ul>
+          <li><a href="https://ezaiops.com">ezaiops.com</a></li>
+          <li><a href="/privacy.html">Privacy policy</a></li>
+          <li><a href="https://github.com/ezaiops">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">&copy; <span data-year>2026</span> ezaiops. Free tools, no signup, runs entirely in your browser.</div>
+  </div>
+</footer>
+
+<script src="/assets/common.js" defer></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+
+  // factor = value of one unit in the category's base unit
+  var CATS = {
+    length: {
+      base: "meter",
+      units: {
+        "Nanometer (nm)": 1e-9, "Micrometer (µm)": 1e-6, "Millimeter (mm)": 0.001,
+        "Centimeter (cm)": 0.01, "Meter (m)": 1, "Kilometer (km)": 1000,
+        "Inch (in)": 0.0254, "Foot (ft)": 0.3048, "Yard (yd)": 0.9144,
+        "Mile (mi)": 1609.344, "Nautical mile (nmi)": 1852
+      }
+    },
+    weight: {
+      base: "kilogram",
+      units: {
+        "Milligram (mg)": 1e-6, "Gram (g)": 0.001, "Kilogram (kg)": 1,
+        "Metric tonne (t)": 1000, "Ounce (oz)": 0.028349523125, "Pound (lb)": 0.45359237,
+        "Stone (st)": 6.35029318, "US ton (short)": 907.18474
+      }
+    },
+    temp: {
+      base: "celsius",
+      units: { "Celsius (°C)": 1, "Fahrenheit (°F)": 1, "Kelvin (K)": 1 }
+    },
+    area: {
+      base: "square meter",
+      units: {
+        "Square millimeter (mm²)": 1e-6, "Square centimeter (cm²)": 1e-4,
+        "Square meter (m²)": 1, "Square kilometer (km²)": 1e6,
+        "Hectare (ha)": 10000, "Acre (ac)": 4046.8564224,
+        "Square foot (ft²)": 0.09290304, "Square mile (mi²)": 2589988.110336
+      }
+    },
+    speed: {
+      base: "meter per second",
+      units: {
+        "Meter per second (m/s)": 1, "Kilometer per hour (km/h)": 1 / 3.6,
+        "Mile per hour (mph)": 0.44704, "Foot per second (ft/s)": 0.3048,
+        "Knot (kn)": 0.514444444
+      }
+    },
+    data: {
+      base: "byte",
+      units: {
+        "Bit (b)": 0.125, "Byte (B)": 1,
+        "Kilobyte (KB, 10³)": 1000, "Kibibyte (KiB, 2¹⁰)": 1024,
+        "Megabyte (MB, 10⁶)": 1e6, "Mebibyte (MiB, 2²⁰)": 1048576,
+        "Gigabyte (GB, 10⁹)": 1e9, "Gibibyte (GiB, 2³⁰)": 1073741824,
+        "Terabyte (TB, 10¹²)": 1e12, "Tebibyte (TiB, 2⁴⁰)": 1099511627776
+      }
+    }
+  };
+
+  function toBase(cat, unit, v) {
+    if (cat === "temp") {
+      if (unit.indexOf("Celsius") === 0) return v;
+      if (unit.indexOf("Fahrenheit") === 0) return (v - 32) * 5 / 9;
+      return v - 273.15;
+    }
+    return v * CATS[cat].units[unit];
+  }
+  function fromBase(cat, unit, v) {
+    if (cat === "temp") {
+      if (unit.indexOf("Celsius") === 0) return v;
+      if (unit.indexOf("Fahrenheit") === 0) return v * 9 / 5 + 32;
+      return v + 273.15;
+    }
+    return v / CATS[cat].units[unit];
+  }
+
+  function fmt(n) {
+    if (!isFinite(n)) return "—";
+    if (n === 0) return "0";
+    var abs = Math.abs(n);
+    if (abs >= 1e9 || abs < 1e-6) return n.toExponential(4);
+    return parseFloat(n.toPrecision(6)).toLocaleString();
+  }
+
+  function populate() {
+    var cat = $("#uc-cat").value;
+    var names = Object.keys(CATS[cat].units);
+    var from = $("#uc-from"), to = $("#uc-to");
+    var oldFrom = from.value, oldTo = to.value;
+    from.innerHTML = "";
+    to.innerHTML = "";
+    names.forEach(function (n) {
+      var o1 = document.createElement("option"); o1.value = n; o1.textContent = n; from.appendChild(o1);
+      var o2 = document.createElement("option"); o2.value = n; o2.textContent = n; to.appendChild(o2);
+    });
+    from.value = names.indexOf(oldFrom) >= 0 ? oldFrom : names[Math.floor(names.length / 2)];
+    to.value = names.indexOf(oldTo) >= 0 ? oldTo : names[Math.min(names.length - 1, Math.floor(names.length / 2) + 1)];
+    convert();
+  }
+
+  function convert() {
+    var cat = $("#uc-cat").value;
+    var v = parseFloat($("#uc-value").value);
+    if (!isFinite(v)) {
+      $("#uc-result").textContent = "—";
+      $("#uc-formula").textContent = "—";
+      $("#uc-all").innerHTML = "";
+      return;
+    }
+    var fromU = $("#uc-from").value, toU = $("#uc-to").value;
+    var base = toBase(cat, fromU, v);
+    var out = fromBase(cat, toU, base);
+    $("#uc-result-label").textContent = fromU + " → " + toU;
+    $("#uc-result").textContent = fmt(v) + " " + fromU + " = " + fmt(out) + " " + toU;
+
+    var formula = "";
+    if (cat === "temp") {
+      if (fromU.indexOf("Celsius") === 0 && toU.indexOf("Fahrenheit") === 0) formula = "°F = °C × 9/5 + 32";
+      else if (fromU.indexOf("Fahrenheit") === 0 && toU.indexOf("Celsius") === 0) formula = "°C = (°F − 32) × 5/9";
+      else if (fromU.indexOf("Celsius") === 0 && toU.indexOf("Kelvin") === 0) formula = "K = °C + 273.15";
+      else if (fromU.indexOf("Kelvin") === 0 && toU.indexOf("Celsius") === 0) formula = "°C = K − 273.15";
+      else if (fromU.indexOf("Fahrenheit") === 0 && toU.indexOf("Kelvin") === 0) formula = "K = (°F − 32) × 5/9 + 273.15";
+      else if (fromU.indexOf("Kelvin") === 0 && toU.indexOf("Fahrenheit") === 0) formula = "°F = (K − 273.15) × 9/5 + 32";
+      else formula = "same scale";
+    } else {
+      formula = "× " + fmt(CATS[cat].units[toU] / CATS[cat].units[fromU]);
+    }
+    $("#uc-formula").textContent = formula;
+
+    $("#uc-all").innerHTML = Object.keys(CATS[cat].units).map(function (n) {
+      var eq = fromBase(cat, n, base);
+      var sel = n === toU ? ' style="background:var(--accent-soft)"' : "";
+      return "<tr" + sel + "><td>" + n + "</td><td class=\"num\">" + fmt(eq) + "</td></tr>";
+    }).join("");
+  }
+
+  $("#uc-cat").addEventListener("change", populate);
+  $("#uc-from").addEventListener("change", convert);
+  $("#uc-to").addEventListener("change", convert);
+  $("#uc-value").addEventListener("input", convert);
+
+  populate();
+});
+</script>
+</body>
+</html>

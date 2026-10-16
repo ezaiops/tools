@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Self-Hosted vs API Break-Even Calculator — LLM GPU Cost | ezaiops tools</title>
+<meta name="description" content="Enter your monthly token volume and see where renting a GPU beats LLM API pricing. Break-even tokens, monthly cost comparison and per-model API rates.">
+<link rel="canonical" href="https://tools.ezaiops.com/tools/self-host-vs-api.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Self-Hosted vs API Break-Even Calculator">
+<meta property="og:description" content="Where does renting a GPU beat API pricing? Run the numbers.">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Self-Hosted vs API Break-Even Calculator",
+  "url": "https://tools.ezaiops.com/tools/self-host-vs-api.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/"><span class="logo">ez</span>ezaiops <small>tools</small></a>
+    <nav class="site-nav">
+      <a href="/">Tools</a>
+      <a href="/models/index.html">LLM pricing</a>
+      <a href="https://ezaiops.com" title="ezaiops.com — AI agent observability &amp; LLMOps field notes (in Chinese)">Blog</a>
+      <a href="https://github.com/ezaiops">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap tool-page">
+  <nav class="crumbs"><a href="/">Home</a> / Tools / <a href="/tools/self-host-vs-api.html">Self-host vs API</a><a class="main-site-link" href="https://ezaiops.com">ezaiops.com ↗</a></nav>
+  <h1>Self-hosted vs API break-even</h1>
+  <p class="lead">API pricing is convenient but not always cheapest. Enter your monthly token volume and GPU assumptions to find the break-even point — the workload size where renting a GPU and running an open model (vLLM, SGLang, llama.cpp) beats paying per token. List prices from our <a href="/models/index.html">pricing table</a>, verified 2026-10-13.</p>
+
+  <section class="panel">
+    <div class="field-row">
+      <div class="field">
+        <label class="field-label" for="sh-in">Monthly input tokens</label>
+        <input type="number" id="sh-in" class="mono" min="0" step="1000000" value="2000000000">
+        <div class="hint">Prompts, system messages, context.</div>
+      </div>
+      <div class="field">
+        <label class="field-label" for="sh-out">Monthly output tokens</label>
+        <input type="number" id="sh-out" class="mono" min="0" step="1000000" value="200000000">
+        <div class="hint">Completions. Usually 5–20% of input volume.</div>
+      </div>
+      <div class="field">
+        <label class="field-label" for="sh-model">API model to compare</label>
+        <select id="sh-model"></select>
+      </div>
+    </div>
+    <div class="field-row" style="margin-top:12px">
+      <div class="field">
+        <label class="field-label" for="sh-gpu">GPU hourly rate</label>
+        <select id="sh-gpu">
+          <option value="0.35" selected>Consumer 4090 — $0.35/hr</option>
+          <option value="0.8">L4 / A10 — $0.80/hr</option>
+          <option value="1.5">A100 40GB — $1.50/hr</option>
+          <option value="2.5">H100 80GB — $2.50/hr</option>
+          <option value="custom">Custom…</option>
+        </select>
+      </div>
+      <div class="field">
+        <label class="field-label" for="sh-throughput">Output throughput</label>
+        <select id="sh-throughput">
+          <option value="3000" selected>3,000 tok/s — single 4090, 8B model</option>
+          <option value="6000">6,000 tok/s — 4090 / L4, larger model</option>
+          <option value="15000">15,000 tok/s — A100, 70B (2×GPU)</option>
+          <option value="custom">Custom…</option>
+        </select>
+        <div class="hint">Aggregate generation speed of your serving stack.</div>
+      </div>
+      <div class="field">
+        <label class="field-label" for="sh-util">Uptime assumption</label>
+        <select id="sh-util">
+          <option value="24" selected>24×7 — always on</option>
+          <option value="12">12 h/day — scale to zero at night</option>
+          <option value="4">4 h/day — batch only</option>
+        </select>
+      </div>
+    </div>
+    <div class="hidden" id="sh-custom-row" style="margin-top:12px">
+      <div class="field-row">
+        <div class="field">
+          <label class="field-label" for="sh-gpu-custom">GPU rate ($/hr)</label>
+          <input type="number" id="sh-gpu-custom" class="mono" min="0" step="0.05" value="1.1">
+        </div>
+        <div class="field">
+          <label class="field-label" for="sh-tp-custom">Throughput (tok/s)</label>
+          <input type="number" id="sh-tp-custom" class="mono" min="1" step="500" value="3000">
+        </div>
+      </div>
+    </div>
+
+    <div class="stats-grid" style="margin-top:16px">
+      <div class="stat"><div class="k">API cost per month</div><div class="v" id="sh-api-cost">—</div></div>
+      <div class="stat"><div class="k">Self-hosted cost per month</div><div class="v" id="sh-gpu-cost">—</div></div>
+      <div class="stat"><div class="k">Break-even output tokens</div><div class="v" id="sh-breakeven" style="font-size:15px">—</div></div>
+      <div class="stat"><div class="k">Verdict</div><div class="v" id="sh-verdict" style="font-size:15px">—</div></div>
+    </div>
+    <p class="note" id="sh-note"></p>
+  </section>
+
+  <div class="ad-slot">
+    <strong>Ad slot</strong>
+    Google AdSense placeholder — activated once the site is approved and has steady traffic.
+  </div>
+
+  <section class="prose">
+    <h2>How the break-even math works</h2>
+    <p>Self-hosting has roughly fixed cost (GPU-hours × rate) and effectively zero marginal cost per token; APIs are pure marginal cost (tokens × price). The break-even is where the two lines cross:</p>
+    <p class="mono" style="font-size:13px">break-even tokens = GPU monthly cost ÷ API price per token</p>
+    <p>The catch is <strong>utilization</strong>: a 24×7 GPU burns money whether or not requests arrive, so below the break-even you are strictly worse off, and near it you carry ops risk (SLA, upgrades, security patches) that an API absorbs. Above it — typically hundreds of millions of tokens per month — the GPU wins, often by 3–10×. For most teams the honest answer is: start on the API, move the stable high-volume slice to self-hosting once it clearly exceeds break-even, and keep the API as the burst fallback.</p>
+    <p>Model quality is the other half of the equation — this tool compares <em>cost</em> only. A 70B open model is not a GPT-6-class model; the fair comparison is usually an open model against a cheaper API tier (see the <a href="/models/index.html">pricing table</a>).</p>
+
+    <h2>Frequently asked questions</h2>
+    <details class="faq">
+      <summary>Are the GPU rates realistic?</summary>
+      <div class="faq-body">They are typical on-demand cloud rates for single GPUs (RunPod, Lambda, Vast.ai class). Reserved or spot pricing goes lower; enterprise on-demand goes higher. Set your own with "Custom…".</div>
+    </details>
+    <details class="faq">
+      <summary>What throughput should I assume?</summary>
+      <div class="faq-body">A single 4090 serving an 8B model with vLLM does roughly 2,000–4,000 output tok/s; a 70B model on 2×A100 is in the 5,000–15,000 range for short contexts. Long contexts and batching change both numbers — measure with your own workload.</div>
+    </details>
+    <details class="faq">
+      <summary>Does this include engineering time?</summary>
+      <div class="faq-body">No — only compute. Running your own inference stack means ops work (deployment, monitoring, upgrades, on-call). As a rule of thumb, add a full-time engineer's amortized cost if you go self-hosted; the calculator's verdict assumes you already have that capacity.</div>
+    </details>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h4>Popular tools</h4>
+        <ul>
+          <li><a href="/tools/token-counter.html">LLM token &amp; cost calculator</a></li>
+          <li><a href="/tools/json-formatter.html">JSON formatter</a></li>
+          <li><a href="/tools/regex-tester.html">Regex tester</a></li>
+          <li><a href="/tools/cron-explainer.html">Cron explainer</a></li>
+          <li><a href="/tools/encode-decode.html">Base64 / URL / hash</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>LLM pricing</h4>
+        <ul>
+          <li><a href="/models/index.html">All models</a></li>
+          <li><a href="/models/gpt-6-astra.html">GPT-6 Astra pricing</a></li>
+          <li><a href="/models/claude-fable-5-1.html">Claude Fable 5.1 pricing</a></li>
+          <li><a href="/models/gemini-3-8-flash.html">Gemini 3.8 Flash pricing</a></li>
+          <li><a href="/models/deepseek-v4-1-flash.html">DeepSeek V4.1 Flash pricing</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>More</h4>
+        <ul>
+          <li><a href="https://ezaiops.com">ezaiops.com</a></li>
+          <li><a href="/privacy.html">Privacy policy</a></li>
+          <li><a href="https://github.com/ezaiops">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">&copy; <span data-year>2026</span> ezaiops. Free tools, no signup, runs entirely in your browser.</div>
+  </div>
+</footer>
+
+<script src="/assets/common.js" defer></script>
+<script src="/assets/models.js" defer></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  function ezT(k) { return window.ezI18N ? window.ezI18N.t(k) : k; }
+  function ezTf(k) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    if (window.ezI18N) return window.ezI18N.tf.apply(window.ezI18N, [k].concat(args));
+    return k.replace(/%s/g, function () { return String(args.shift()); });
+  }
+  function money(n) {
+    if (!isFinite(n) || n <= 0) return "$0";
+    if (n >= 1000) return "$" + Math.round(n).toLocaleString();
+    return "$" + n.toFixed(2);
+  }
+  function bigNum(n) {
+    if (n >= 1e12) return (n / 1e12).toFixed(1) + "T";
+    if (n >= 1e9) return (n / 1e9).toFixed(1) + "B";
+    if (n >= 1e6) return (n / 1e6).toFixed(1) + "M";
+    if (n >= 1e3) return (n / 1e3).toFixed(1) + "K";
+    return String(Math.round(n));
+  }
+
+  var models = (window.EZ_MODELS || {}).models || [];
+  var sel = $("#sh-model");
+  models.forEach(function (m) {
+    var o = document.createElement("option");
+    o.value = m.id;
+    o.textContent = m.name + " — $" + m.input + "/$" + m.output;
+    sel.appendChild(o);
+  });
+  if (models.length) sel.value = models[0].id;
+
+  var gpuSel = $("#sh-gpu"), tpSel = $("#sh-throughput"), utilSel = $("#sh-util");
+  var customRow = $("#sh-custom-row");
+  function syncCustom() {
+    customRow.classList.toggle("hidden", gpuSel.value !== "custom" && tpSel.value !== "custom");
+  }
+
+  function rates() {
+    var gpu = gpuSel.value === "custom" ? Math.max(0, parseFloat($("#sh-gpu-custom").value) || 0) : parseFloat(gpuSel.value);
+    var tp = tpSel.value === "custom" ? Math.max(1, parseFloat($("#sh-tp-custom").value) || 1) : parseFloat(tpSel.value);
+    var hours = parseFloat(utilSel.value);
+    return { gpu: gpu, tp: tp, hours: hours * 30 };
+  }
+
+  function currentModel() {
+    for (var i = 0; i < models.length; i++) if (models[i].id === sel.value) return models[i];
+    return null;
+  }
+
+  function recalc() {
+    var m = currentModel();
+    var ti = Math.max(0, parseFloat($("#sh-in").value) || 0);
+    var to = Math.max(0, parseFloat($("#sh-out").value) || 0);
+    var r = rates();
+    if (!m || ti + to <= 0) {
+      $("#sh-api-cost").textContent = "—";
+      $("#sh-gpu-cost").textContent = "—";
+      $("#sh-breakeven").textContent = "—";
+      $("#sh-verdict").textContent = "—";
+      $("#sh-note").textContent = "";
+      return;
+    }
+    var apiCost = (ti * m.input + to * m.output) / 1e6;
+    var gpuHours = to / r.tp / 3600;
+    var gpuCost = gpuHours * r.gpu;
+
+    $("#sh-api-cost").textContent = money(apiCost);
+    $("#sh-gpu-cost").textContent = money(gpuCost);
+
+    // break-even: output tokens where gpuCost == apiCost, holding input constant
+    var inputApiCost = ti * m.input / 1e6;
+    var perOutToken = m.output / 1e6;
+    var beTokens = perOutToken > 0 ? (gpuCost - inputApiCost) / perOutToken : Infinity;
+    $("#sh-breakeven").textContent = beTokens > 0 && isFinite(beTokens)
+      ? ezTf("%s output tokens/month", bigNum(beTokens))
+      : ezT("Never — GPU alone costs more than the API bill");
+
+    var verdict, note;
+    if (apiCost < gpuCost) {
+      verdict = ezT("API is cheaper");
+      note = ezTf("At this volume the API saves %s/month. The GPU only wins above the break-even shown above.", money(gpuCost - apiCost));
+    } else {
+      verdict = ezT("Self-hosting wins");
+      note = ezTf("At this volume the GPU saves %s/month. Keep the API as a burst fallback — the margin narrows fast if volume drops.", money(apiCost - gpuCost));
+    }
+    $("#sh-verdict").textContent = verdict;
+    $("#sh-note").textContent = note;
+  }
+
+  var t = null;
+  function schedule() { clearTimeout(t); t = setTimeout(recalc, 150); }
+  [$("#sh-in"), $("#sh-out"), $("#sh-gpu-custom"), $("#sh-tp-custom")].forEach(function (el) {
+    el.addEventListener("input", schedule);
+  });
+  [sel, gpuSel, tpSel, utilSel].forEach(function (el) {
+    el.addEventListener("change", function () { syncCustom(); recalc(); });
+  });
+
+  syncCustom();
+  recalc();
+  window.addEventListener("ez:i18n", recalc);
+});
+</script>
+</body>
+</html>

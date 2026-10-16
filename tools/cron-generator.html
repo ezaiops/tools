@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cron Schedule Builder — Visual Cron Expression Generator | ezaiops tools</title>
+<meta name="description" content="Build cron expressions visually: pick minutes, hours, days and weekdays, get the exact expression with a description and the next runs. The reverse of a cron explainer.">
+<link rel="canonical" href="https://tools.ezaiops.com/tools/cron-generator.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Cron Schedule Builder">
+<meta property="og:description" content="Build cron expressions visually and see what they mean.">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Cron Schedule Builder",
+  "url": "https://tools.ezaiops.com/tools/cron-generator.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/"><span class="logo">ez</span>ezaiops <small>tools</small></a>
+    <nav class="site-nav">
+      <a href="/">Tools</a>
+      <a href="/models/index.html">LLM pricing</a>
+      <a href="https://ezaiops.com" title="ezaiops.com — AI agent observability &amp; LLMOps field notes (in Chinese)">Blog</a>
+      <a href="https://github.com/ezaiops">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap tool-page">
+  <nav class="crumbs"><a href="/">Home</a> / Tools / <a href="/tools/cron-generator.html">Cron builder</a><a class="main-site-link" href="https://ezaiops.com">ezaiops.com ↗</a></nav>
+  <h1>Cron schedule builder</h1>
+  <p class="lead">Pick the schedule in plain controls — minutes, hours, days, weekdays — and get the exact cron expression, a description, and the next times it will fire. The reverse of the <a href="/tools/cron-explainer.html">cron explainer</a>.</p>
+
+  <section class="panel">
+    <div class="field-row">
+      <div class="field">
+        <label class="field-label" for="cg-minute">Minute</label>
+        <select id="cg-minute">
+          <option value="*" selected>Every minute</option>
+          <option value="*/5">Every 5 minutes</option>
+          <option value="*/10">Every 10 minutes</option>
+          <option value="*/15">Every 15 minutes</option>
+          <option value="*/30">Every 30 minutes</option>
+          <option value="0">On the hour (:00)</option>
+          <option value="30">At :30</option>
+          <option value="custom">Custom…</option>
+        </select>
+      </div>
+      <div class="field">
+        <label class="field-label" for="cg-hour">Hour</label>
+        <select id="cg-hour">
+          <option value="*" selected>Every hour</option>
+          <option value="*/2">Every 2 hours</option>
+          <option value="*/6">Every 6 hours</option>
+          <option value="0">Midnight (00:00)</option>
+          <option value="6">6:00</option>
+          <option value="9">9:00</option>
+          <option value="12">12:00 (noon)</option>
+          <option value="18">18:00</option>
+          <option value="custom">Custom…</option>
+        </select>
+      </div>
+    </div>
+    <div class="field-row" style="margin-top:12px">
+      <div class="field">
+        <label class="field-label" for="cg-dom">Day of month</label>
+        <select id="cg-dom">
+          <option value="*" selected>Every day</option>
+          <option value="1">The 1st</option>
+          <option value="15">The 15th</option>
+          <option value="*/2">Every 2 days</option>
+          <option value="1-7">Days 1–7</option>
+          <option value="custom">Custom…</option>
+        </select>
+      </div>
+      <div class="field">
+        <label class="field-label" for="cg-month">Month</label>
+        <select id="cg-month">
+          <option value="*" selected>Every month</option>
+          <option value="1,4,7,10">Every quarter</option>
+          <option value="1">January</option>
+          <option value="6">June</option>
+          <option value="12">December</option>
+          <option value="custom">Custom…</option>
+        </select>
+      </div>
+      <div class="field">
+        <label class="field-label" for="cg-dow">Day of week</label>
+        <select id="cg-dow">
+          <option value="*" selected>Every day</option>
+          <option value="1-5">Weekdays (Mon–Fri)</option>
+          <option value="0,6">Weekend (Sat–Sun)</option>
+          <option value="1">Monday</option>
+          <option value="3">Wednesday</option>
+          <option value="5">Friday</option>
+        </select>
+      </div>
+    </div>
+    <div class="hidden" id="cg-custom-row" style="margin-top:12px">
+      <div class="field">
+        <label class="field-label" for="cg-custom">Custom field value</label>
+        <input type="text" id="cg-custom" class="mono" placeholder="e.g. 5 or 1-3,7">
+        <div class="hint">Accepts lists (1,3,5), ranges (1-5) and steps (*/5).</div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <span style="font-size:13px;color:var(--muted);align-self:center">Presets:</span>
+      <button class="btn small" data-cg-preset="health" type="button">Health check */5</button>
+      <button class="btn small" data-cg-preset="hourly" type="button">Hourly</button>
+      <button class="btn small" data-cg-preset="daily" type="button">Daily 09:00</button>
+      <button class="btn small" data-cg-preset="weekday" type="button">Weekdays 09:00</button>
+      <button class="btn small" data-cg-preset="monthly" type="button">Monthly, 1st 06:00</button>
+    </div>
+
+    <label class="field-label" for="cg-expr" style="margin-top:16px">Cron expression</label>
+    <div class="field-row" style="margin-top:6px">
+      <input type="text" id="cg-expr" class="mono" readonly style="flex:1 1 260px;font-size:16px">
+      <button class="btn" id="cg-copy" type="button" data-copy-target="#cg-expr">Copy</button>
+    </div>
+    <p class="note" id="cg-desc"></p>
+    <pre class="code-out error hidden" id="cg-err" style="margin-top:10px"></pre>
+
+    <div class="stats-grid">
+      <div class="stat"><div class="k">Runs per day</div><div class="v" id="cg-perday">—</div></div>
+      <div class="stat"><div class="k">Next run</div><div class="v" id="cg-next" style="font-size:15px">—</div></div>
+    </div>
+    <h3 style="font-size:14px;margin:16px 0 0">Next 5 runs (your local timezone)</h3>
+    <ol class="plain-list" id="cg-runs" style="font-size:13.5px"></ol>
+    <p class="note">Share this expression with the <a href="/tools/cron-explainer.html">cron explainer</a> to double-check what it means, or paste it straight into your crontab.</p>
+  </section>
+
+  <div class="ad-slot">
+    <strong>Ad slot</strong>
+    Google AdSense placeholder — activated once the site is approved and has steady traffic.
+  </div>
+
+  <section class="prose">
+    <h2>How cron expressions are built</h2>
+    <p>A cron line has five fields — minute, hour, day of month, month, day of week — separated by spaces. Each field accepts a wildcard (<code>*</code>), a single value, a list (<code>1,15</code>), a range (<code>1-5</code>) or a step (<code>*/5</code>). This builder emits the shortest correct form for whatever you pick, so <code>0 9 * * 1-5</code> — 9am on weekdays — stays minimal instead of expanding into lists.</p>
+    <p>One classic trap: when <strong>both</strong> day-of-month and day-of-week are restricted, cron fires on days matching <em>either</em> field, not both. If you pick "the 1st" plus "Monday", you get the 1st <em>and</em> every Monday — usually not what people intend. Leave one of the two on "Every day" for the intersection you expect.</p>
+
+    <h2>Frequently asked questions</h2>
+    <details class="faq">
+      <summary>Can I build a six-field expression with seconds?</summary>
+      <div class="faq-body">No — this builder targets standard Unix five-field cron. Quartz-style expressions with a seconds field are a different syntax used by Java schedulers; translate them by hand.</div>
+    </details>
+    <details class="faq">
+      <summary>Why does my weekday schedule also fire on the 1st?</summary>
+      <div class="faq-body">Because you restricted both the day-of-month and day-of-week fields. Cron ORs them together. Set day-of-month back to "Every day" and the weekday restriction will apply alone.</div>
+    </details>
+    <details class="faq">
+      <summary>Is the generated expression valid on Linux and macOS?</summary>
+      <div class="faq-body">Yes — both use Vixie cron, the same dialect this builder targets. Systemd timers and Kubernetes CronJobs also accept standard expressions.</div>
+    </details>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h4>Popular tools</h4>
+        <ul>
+          <li><a href="/tools/token-counter.html">LLM token &amp; cost calculator</a></li>
+          <li><a href="/tools/json-formatter.html">JSON formatter</a></li>
+          <li><a href="/tools/regex-tester.html">Regex tester</a></li>
+          <li><a href="/tools/cron-explainer.html">Cron explainer</a></li>
+          <li><a href="/tools/encode-decode.html">Base64 / URL / hash</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>LLM pricing</h4>
+        <ul>
+          <li><a href="/models/index.html">All models</a></li>
+          <li><a href="/models/gpt-6-astra.html">GPT-6 Astra pricing</a></li>
+          <li><a href="/models/claude-fable-5-1.html">Claude Fable 5.1 pricing</a></li>
+          <li><a href="/models/gemini-3-8-flash.html">Gemini 3.8 Flash pricing</a></li>
+          <li><a href="/models/deepseek-v4-1-flash.html">DeepSeek V4.1 Flash pricing</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>More</h4>
+        <ul>
+          <li><a href="https://ezaiops.com">ezaiops.com</a></li>
+          <li><a href="/privacy.html">Privacy policy</a></li>
+          <li><a href="https://github.com/ezaiops">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">&copy; <span data-year>2026</span> ezaiops. Free tools, no signup, runs entirely in your browser.</div>
+  </div>
+</footer>
+
+<script src="/assets/common.js" defer></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  function ezT(k) { return window.ezI18N ? window.ezI18N.t(k) : k; }
+  function ezTf(k) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    if (window.ezI18N) return window.ezI18N.tf.apply(window.ezI18N, [k].concat(args));
+    return k.replace(/%s/g, function () { return String(args.shift()); });
+  }
+
+  var MONTH_NAMES = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  var DOW_NAMES = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+  var fields = { minute: $("#cg-minute"), hour: $("#cg-hour"), dom: $("#cg-dom"), month: $("#cg-month"), dow: $("#cg-dow") };
+  var customRow = $("#cg-custom-row"), customInput = $("#cg-custom");
+  var activeField = null;
+
+  function setCustomVisibility() {
+    var anyCustom = false;
+    Object.keys(fields).forEach(function (k) { if (fields[k].value === "custom") anyCustom = true; });
+    customRow.classList.toggle("hidden", !anyCustom);
+  }
+
+  function resolve(field, value, min, max) {
+    if (value === "custom") {
+      var v = (customInput.value || "").trim() || "*";
+      var parts = v.split(",");
+      for (var i = 0; i < parts.length; i++) {
+        var p = parts[i];
+        if (p === "*") continue;
+        var step = p.indexOf("*/") === 0 ? parseInt(p.slice(2), 10) : null;
+        var range = p.indexOf("-") > 0 ? p.split("-") : null;
+        var nums = [];
+        if (step != null) nums = [step];
+        else if (range) nums = [parseInt(range[0], 10), parseInt(range[1], 10)];
+        else nums = [parseInt(p, 10)];
+        for (var j = 0; j < nums.length; j++) {
+          if (!isFinite(nums[j]) || nums[j] < min || nums[j] > max) {
+            return { error: field + " value \"" + p + "\" is out of range (" + min + "–" + max + ")" };
+          }
+        }
+      }
+      return { value: v };
+    }
+    return { value: value };
+  }
+
+  function build() {
+    var m = resolve("minute", fields.minute.value, 0, 59);
+    if (m.error) return fail(m.error);
+    var h = resolve("hour", fields.hour.value, 0, 23);
+    if (h.error) return fail(h.error);
+    var d = resolve("day-of-month", fields.dom.value, 1, 31);
+    if (d.error) return fail(d.error);
+    var mo = resolve("month", fields.month.value, 1, 12);
+    if (mo.error) return fail(mo.error);
+    var w = resolve("day-of-week", fields.dow.value, 0, 7);
+    if (w.error) return fail(w.error);
+
+    var expr = [m.value, h.value, d.value, mo.value, w.value].join(" ");
+    $("#cg-expr").value = expr;
+    $("#cg-err").classList.add("hidden");
+    describe(expr);
+    nextRuns(expr);
+  }
+
+  function fail(msg) {
+    $("#cg-err").textContent = ezT("Invalid field: ") + msg;
+    $("#cg-err").classList.remove("hidden");
+    $("#cg-desc").textContent = "";
+    $("#cg-perday").textContent = "—";
+    $("#cg-next").textContent = "—";
+    $("#cg-runs").innerHTML = "";
+  }
+
+  function expand(field, min, max) {
+    if (field === "*") { var all = []; for (var i = min; i <= max; i++) all.push(i); return all; }
+    var out = [];
+    field.split(",").forEach(function (part) {
+      if (part.indexOf("*/") === 0) {
+        var step = parseInt(part.slice(2), 10) || 1;
+        for (var v = min; v <= max; v += step) out.push(v);
+      } else if (part.indexOf("-") > 0) {
+        var r = part.split("-");
+        for (var v2 = parseInt(r[0], 10); v2 <= parseInt(r[1], 10); v2++) out.push(v2);
+      } else {
+        out.push(parseInt(part, 10));
+      }
+    });
+    return out;
+  }
+
+  function nextRuns(expr) {
+    var f = expr.split(/\s+/);
+    var mins = expand(f[0], 0, 59), hours = expand(f[1], 0, 23);
+    var doms = expand(f[2], 1, 31), months = expand(f[3], 1, 12), dows = expand(f[4], 0, 7).map(function (d) { return d % 7; });
+    var runs = [];
+    var d = new Date();
+    d.setSeconds(0, 0);
+    d.setMinutes(d.getMinutes() + 1);
+    for (var guard = 0; guard < 500000 && runs.length < 5; guard++) {
+      if (months.indexOf(d.getMonth() + 1) === -1 ||
+          doms.indexOf(d.getDate()) === -1 ||
+          dows.indexOf(d.getDay()) === -1) {
+        d.setMinutes(d.getMinutes() + 1);
+        continue;
+      }
+      if (hours.indexOf(d.getHours()) === -1) { d.setMinutes(d.getMinutes() + 1); continue; }
+      if (mins.indexOf(d.getMinutes()) === -1) { d.setMinutes(d.getMinutes() + 1); continue; }
+      runs.push(new Date(d));
+      d.setMinutes(d.getMinutes() + 1);
+    }
+    $("#cg-next").textContent = runs.length ? fmtRun(runs[0]) : "never";
+    $("#cg-runs").innerHTML = runs.map(function (r) { return "<li>" + fmtRun(r) + "</li>"; }).join("");
+    var perDay = mins.length * hours.length;
+    if (doms[0] !== 1 || doms.length < 31) perDay = "≈" + Math.round(mins.length * hours.length * doms.length * (dows.length || 7) / 30) + " / month";
+    $("#cg-perday").textContent = perDay;
+  }
+
+  function fmtRun(d) {
+    var pad = function (n) { return n < 10 ? "0" + n : "" + n; };
+    return DOW_NAMES[d.getDay()] + " " + MONTH_NAMES[d.getMonth()] + " " + d.getDate() + ", " +
+      pad(d.getHours()) + ":" + pad(d.getMinutes());
+  }
+
+  function describe(expr) {
+    var f = expr.split(/\s+/);
+    var parts = [];
+    if (f[0] === "*") parts.push("every minute");
+    else if (f[0].indexOf("*/") === 0) parts.push("every " + f[0].slice(2) + " minutes");
+    else parts.push("at minute " + f[0]);
+    if (f[1] === "*") parts.push("of every hour");
+    else parts.push("past hour " + f[1]);
+    if (f[2] !== "*" || f[4] !== "*") {
+      if (f[2] !== "*") parts.push("on day-of-month " + f[2]);
+      if (f[4] !== "*") parts.push("on day-of-week " + f[4]);
+      if (f[2] !== "*" && f[4] !== "*") parts.push("(either matches — see the note below)");
+    }
+    if (f[3] !== "*") parts.push("in month " + f[3]);
+    $("#cg-desc").textContent = "Runs " + parts.join(", ") + ".";
+  }
+
+  Object.keys(fields).forEach(function (k) {
+    fields[k].addEventListener("change", function () { setCustomVisibility(); build(); });
+  });
+  customInput.addEventListener("input", build);
+
+  var PRESETS = {
+    health: ["*/5", "*", "*", "*", "*"],
+    hourly: ["0", "*", "*", "*", "*"],
+    daily: ["0", "9", "*", "*", "*"],
+    weekday: ["0", "9", "*", "*", "1-5"],
+    monthly: ["0", "6", "1", "*", "*"]
+  };
+  document.querySelectorAll("[data-cg-preset]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var p = PRESETS[b.getAttribute("data-cg-preset")];
+      var vals = [fields.minute, fields.hour, fields.dom, fields.month, fields.dow];
+      for (var i = 0; i < 5; i++) {
+        var opt = Array.prototype.find.call(vals[i].options, function (o) { return o.value === p[i]; });
+        if (opt) vals[i].value = p[i];
+      }
+      setCustomVisibility();
+      build();
+    });
+  });
+
+  setCustomVisibility();
+  build();
+  window.addEventListener("ez:i18n", function () { build(); });
+});
+</script>
+</body>
+</html>

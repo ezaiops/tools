@@ -89,7 +89,7 @@
       "desc": "Pick days and times visually, get the cron expression — the reverse of the explainer.",
       "tags": ["scheduling"],
       "category": "dev",
-      "status": "planned",
+      "status": "live",
       "priority": 1,
       "effort": "S",
       "note": "Pairs with the explainer; shares its parser/tests"
@@ -102,7 +102,7 @@
       "desc": "Network/mask/wildcard/host range math for any IPv4 CIDR block.",
       "tags": ["networking"],
       "category": "devops",
-      "status": "planned",
+      "status": "live",
       "priority": 1,
       "effort": "S",
       "note": "Pure JS integer math; classic bookmarked utility"
@@ -115,7 +115,7 @@
       "desc": "Enter your monthly token volume, see where renting a GPU beats API pricing.",
       "tags": ["AI"],
       "category": "ai",
-      "status": "planned",
+      "status": "live",
       "priority": 1,
       "effort": "M",
       "note": "Fits the ezaiops niche; competitors rank well for the query cluster"
@@ -128,7 +128,7 @@
       "desc": "Monthly payment, amortization schedule and extra-payment payoff scenarios.",
       "tags": ["finance"],
       "category": "finance",
-      "status": "planned",
+      "status": "live",
       "priority": 2,
       "effort": "M",
       "note": "Highest-RPM query cluster for AdSense"
@@ -141,7 +141,7 @@
       "desc": "Compress JPG/PNG and convert to WebP in the browser via canvas — nothing uploaded.",
       "tags": ["images", "volume"],
       "category": "media",
-      "status": "planned",
+      "status": "live",
       "priority": 2,
       "effort": "M",
       "note": "Mass-market search volume; pure client-side, no server needed"
@@ -154,7 +154,7 @@
       "desc": "Merge, split and reorder PDF pages locally with pdf-lib.",
       "tags": ["pdf", "volume"],
       "category": "media",
-      "status": "planned",
+      "status": "live",
       "priority": 3,
       "effort": "L",
       "note": "Huge volume, heavy competition from ilovepdf-class sites; long-tail only"
@@ -167,7 +167,7 @@
       "desc": "Decode JWT header, payload and expiry locally with signature checks.",
       "tags": ["security"],
       "category": "dev",
-      "status": "planned",
+      "status": "live",
       "priority": 3,
       "effort": "S",
       "note": "Bathroom-break utility devs search for weekly"
@@ -180,7 +180,7 @@
       "desc": "Side-by-side and inline diff for two blocks of text.",
       "tags": ["text"],
       "category": "dev",
-      "status": "planned",
+      "status": "live",
       "priority": 3,
       "effort": "M",
       "note": "Needs a small diff algorithm (Myers) or vendored lib"
@@ -193,7 +193,7 @@
       "desc": "Length, weight, temperature, area, speed and data size conversions.",
       "tags": ["convert"],
       "category": "dev",
-      "status": "planned",
+      "status": "live",
       "priority": 4,
       "effort": "S",
       "note": "Low competition, steady but modest volume"
@@ -206,7 +206,7 @@
       "desc": "Generate QR codes as SVG or PNG, with error-correction level options.",
       "tags": ["images"],
       "category": "media",
-      "status": "planned",
+      "status": "live",
       "priority": 4,
       "effort": "S",
       "note": "Mature space; differentiate on privacy (client-side rendering)"

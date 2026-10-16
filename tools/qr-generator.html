@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QR Code Generator — SVG &amp; PNG, Client-Side | ezaiops tools</title>
+<meta name="description" content="Generate QR codes from any link or text as SVG or PNG, with error-correction levels. Rendered in your browser — nothing is sent to a server.">
+<link rel="canonical" href="https://tools.ezaiops.com/tools/qr-generator.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="QR Code Generator">
+<meta property="og:description" content="Client-side QR codes as SVG or PNG.">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "QR Code Generator",
+  "url": "https://tools.ezaiops.com/tools/qr-generator.html",
+  "applicationCategory": "UtilityApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/"><span class="logo">ez</span>ezaiops <small>tools</small></a>
+    <nav class="site-nav">
+      <a href="/">Tools</a>
+      <a href="/models/index.html">LLM pricing</a>
+      <a href="https://ezaiops.com" title="ezaiops.com — AI agent observability &amp; LLMOps field notes (in Chinese)">Blog</a>
+      <a href="https://github.com/ezaiops">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap tool-page">
+  <nav class="crumbs"><a href="/">Home</a> / Tools / <a href="/tools/qr-generator.html">QR generator</a><a class="main-site-link" href="https://ezaiops.com">ezaiops.com ↗</a></nav>
+  <h1>QR code generator</h1>
+  <p class="lead">Turn any link or text into a QR code as SVG (crisp at any size) or PNG. The code is generated in your browser — the content is never sent to a QR service, which is the difference between this and the trackable "free" generators out there.</p>
+
+  <section class="panel">
+    <div class="field-row">
+      <div class="field" style="flex:1 1 300px">
+        <label class="field-label" for="qr-text">Link or text</label>
+        <input type="text" id="qr-text" class="mono" value="https://tools.ezaiops.com" placeholder="https://…">
+      </div>
+      <div class="field" style="flex:0 1 140px">
+        <label class="field-label" for="qr-ec">Error correction</label>
+        <select id="qr-ec">
+          <option value="L" selected>L — 7% recovery</option>
+          <option value="M">M — 15% recovery</option>
+          <option value="Q">Q — 25% recovery</option>
+          <option value="H">H — 30% recovery</option>
+        </select>
+      </div>
+      <div class="field" style="flex:0 1 130px">
+        <label class="field-label" for="qr-size">Size (px)</label>
+        <input type="number" id="qr-size" min="64" max="1024" step="32" value="256">
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn primary" id="qr-gen" type="button">Generate</button>
+      <button class="btn" id="qr-png" type="button">Download PNG</button>
+      <button class="btn" id="qr-svg" type="button">Download SVG</button>
+    </div>
+    <p class="note" id="qr-note"></p>
+
+    <div id="qr-output" style="margin-top:14px;text-align:center"></div>
+  </section>
+
+  <div class="ad-slot">
+    <strong>Ad slot</strong>
+    Google AdSense placeholder — activated once the site is approved and has steady traffic.
+  </div>
+
+  <section class="prose">
+    <h2>Choosing an error-correction level</h2>
+    <p>QR codes carry their own redundancy: higher levels let a scanner recover even when part of the code is dirty, printed poorly, or covered by a logo. The trade-off is that higher redundancy needs a larger (denser) symbol for the same content.</p>
+    <ul>
+      <li><strong>L (7%)</strong> — smallest code, clean digital displays or screens.</li>
+      <li><strong>M (15%)</strong> — the everyday default; good for posters and packaging.</li>
+      <li><strong>Q (25%)</strong> — outdoor signage, anything that might get scuffed.</li>
+      <li><strong>H (30%)</strong> — overlaid logos, industrial environments, codes that will take abuse.</li>
+    </ul>
+    <p>The generator library (<code>qrcode-generator</code>) is loaded from a CDN on first use; if it cannot load, the page tells you instead of failing silently. Once loaded, everything runs offline.</p>
+
+    <h2>Frequently asked questions</h2>
+    <details class="faq">
+      <summary>Do the codes expire or track scans?</summary>
+      <div class="faq-body">No. A QR code is just a picture of your text — there is no redirect service involved, so nothing expires and nothing is tracked. Scan counts are impossible because there is no server in the middle.</div>
+    </details>
+    <details class="faq">
+      <summary>SVG or PNG?</summary>
+      <div class="faq-body">SVG for anything printed or scaled — it stays razor-sharp at any size and is tiny. PNG when you need a raster image for a chat app or CMS upload field.</div>
+    </details>
+    <details class="faq">
+      <summary>Can I put a logo in the middle?</summary>
+      <div class="faq-body">Not with this tool directly, but pick error correction Q or H and paste a small logo over the center in any editor — the redundancy absorbs it.</div>
+    </details>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h4>Popular tools</h4>
+        <ul>
+          <li><a href="/tools/token-counter.html">LLM token &amp; cost calculator</a></li>
+          <li><a href="/tools/json-formatter.html">JSON formatter</a></li>
+          <li><a href="/tools/regex-tester.html">Regex tester</a></li>
+          <li><a href="/tools/cron-explainer.html">Cron explainer</a></li>
+          <li><a href="/tools/encode-decode.html">Base64 / URL / hash</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>LLM pricing</h4>
+        <ul>
+          <li><a href="/models/index.html">All models</a></li>
+          <li><a href="/models/gpt-6-astra.html">GPT-6 Astra pricing</a></li>
+          <li><a href="/models/claude-fable-5-1.html">Claude Fable 5.1 pricing</a></li>
+          <li><a href="/models/gemini-3-8-flash.html">Gemini 3.8 Flash pricing</a></li>
+          <li><a href="/models/deepseek-v4-1-flash.html">DeepSeek V4.1 Flash pricing</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>More</h4>
+        <ul>
+          <li><a href="https://ezaiops.com">ezaiops.com</a></li>
+          <li><a href="/privacy.html">Privacy policy</a></li>
+          <li><a href="https://github.com/ezaiops">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">&copy; <span data-year>2026</span> ezaiops. Free tools, no signup, runs entirely in your browser.</div>
+  </div>
+</footer>
+
+<script src="/assets/common.js" defer></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  function ezT(k) { return window.ezI18N ? window.ezI18N.t(k) : k; }
+
+  var note = $("#qr-note");
+  var qrLib = null;
+  var loading = null;
+  var svgMarkup = null;
+
+  function loadLib() {
+    if (qrLib) return Promise.resolve(qrLib);
+    if (loading) return loading;
+    note.textContent = ezT("Loading the QR encoder…");
+    loading = import("https://esm.sh/qrcode-generator@1.4.4").then(function (m) {
+      qrLib = m.default || m;
+      note.textContent = "";
+      return qrLib;
+    }).catch(function () {
+      note.textContent = ezT("Could not load the QR encoder (network blocked?). Try again on a normal connection.");
+      loading = null;
+      throw new Error("qr lib unavailable");
+    });
+    return loading;
+  }
+
+  function generate() {
+    var text = $("#qr-text").value.trim();
+    if (!text) { note.textContent = ezT("Enter a link or text first."); return; }
+    loadLib().then(function (lib) {
+      var ec = $("#qr-ec").value;
+      var size = Math.max(64, Math.min(1024, parseInt($("#qr-size").value, 10) || 256));
+      var qr = lib(0, ec);
+      qr.addData(text);
+      qr.make();
+      svgMarkup = qr.createSvgTag({ cellSize: Math.max(2, Math.floor(size / qr.getModuleCount())), margin: 2, scalable: true });
+      $("#qr-output").innerHTML = svgMarkup;
+      var svg = $("#qr-output").querySelector("svg");
+      if (svg) { svg.style.maxWidth = "100%"; svg.style.height = "auto"; }
+      note.textContent = ezT("Done — download as PNG or SVG.");
+    }).catch(function () { /* note already set */ });
+  }
+
+  function download(name, blob) {
+    try {
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = name;
+      a.click();
+      URL.revokeObjectURL(a.href);
+    } catch (e) {
+      note.textContent = ezT("Download not supported in this browser.");
+    }
+  }
+
+  $("#qr-gen").addEventListener("click", generate);
+  $("#qr-text").addEventListener("keydown", function (e) { if (e.key === "Enter") generate(); });
+
+  $("#qr-svg").addEventListener("click", function () {
+    if (!svgMarkup) { note.textContent = ezT("Generate a code first."); return; }
+    download("qr-code.svg", new Blob([svgMarkup], { type: "image/svg+xml" }));
+  });
+
+  $("#qr-png").addEventListener("click", function () {
+    if (!svgMarkup) { note.textContent = ezT("Generate a code first."); return; }
+    var size = Math.max(64, Math.min(1024, parseInt($("#qr-size").value, 10) || 256));
+    var img = new Image();
+    var svgUrl = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgMarkup)));
+    img.onload = function () {
+      var canvas = document.createElement("canvas");
+      canvas.width = size;
+      canvas.height = size;
+      var ctx = canvas.getContext("2d");
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, size, size);
+      ctx.drawImage(img, 0, 0, size, size);
+      canvas.toBlob(function (blob) {
+        if (blob) download("qr-code.png", blob);
+        else note.textContent = ezT("PNG export failed — use SVG instead.");
+      }, "image/png");
+    };
+    img.onerror = function () { note.textContent = ezT("PNG export failed — use SVG instead."); };
+    img.src = svgUrl;
+  });
+
+  window.addEventListener("ez:i18n", function () {
+    note.textContent = svgMarkup ? ezT("Done — download as PNG or SVG.") : "";
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PDF Merge &amp; Split — Pages Locally | ezaiops tools</title>
+<meta name="description" content="Merge multiple PDFs into one, or extract selected page ranges into a new file — all in your browser with pdf-lib. Nothing is uploaded.">
+<link rel="canonical" href="https://tools.ezaiops.com/tools/pdf-tools.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="PDF Merge &amp; Split">
+<meta property="og:description" content="Merge and split PDFs locally — nothing uploaded.">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "PDF Merge & Split",
+  "url": "https://tools.ezaiops.com/tools/pdf-tools.html",
+  "applicationCategory": "UtilityApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/"><span class="logo">ez</span>ezaiops <small>tools</small></a>
+    <nav class="site-nav">
+      <a href="/">Tools</a>
+      <a href="/models/index.html">LLM pricing</a>
+      <a href="https://ezaiops.com" title="ezaiops.com — AI agent observability &amp; LLMOps field notes (in Chinese)">Blog</a>
+      <a href="https://github.com/ezaiops">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap tool-page">
+  <nav class="crumbs"><a href="/">Home</a> / Tools / <a href="/tools/pdf-tools.html">PDF tools</a><a class="main-site-link" href="https://ezaiops.com">ezaiops.com ↗</a></nav>
+  <h1>PDF merge &amp; split</h1>
+  <p class="lead">Combine several PDFs into one file, or pull selected page ranges out of a PDF — locally, with <code>pdf-lib</code>. Your documents are read in the browser and never uploaded, which matters for anything confidential.</p>
+
+  <section class="panel">
+    <div class="btn-row" style="margin-top:0">
+      <button class="btn small primary" data-pdftab="merge" type="button">Merge PDFs</button>
+      <button class="btn small" data-pdftab="split" type="button">Extract pages</button>
+    </div>
+
+    <div id="pdf-panel-merge" style="margin-top:14px">
+      <label class="field-label" for="pdf-files">PDF files (in order)</label>
+      <input type="file" id="pdf-files" accept="application/pdf" multiple>
+      <div class="hint">They are merged in the order listed — most browsers list alphabetically, so name them 01-, 02-…</div>
+      <div class="btn-row">
+        <button class="btn primary" id="pdf-merge" type="button">Merge into one PDF</button>
+      </div>
+      <p class="note" id="pdf-merge-note"></p>
+    </div>
+
+    <div id="pdf-panel-split" class="hidden" style="margin-top:14px">
+      <div class="field-row">
+        <div class="field" style="flex:1 1 260px">
+          <label class="field-label" for="pdf-one">Source PDF</label>
+          <input type="file" id="pdf-one" accept="application/pdf">
+        </div>
+        <div class="field" style="flex:1 1 220px">
+          <label class="field-label" for="pdf-range">Pages to extract</label>
+          <input type="text" id="pdf-range" class="mono" placeholder="1-3, 7, 10-12">
+          <div class="hint">1-based, comma-separated ranges.</div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn primary" id="pdf-split" type="button">Extract pages</button>
+      </div>
+      <p class="note" id="pdf-split-note"></p>
+    </div>
+
+    <div class="stats-grid" style="margin-top:14px">
+      <div class="stat"><div class="k">Output pages</div><div class="v" id="pdf-pages">—</div></div>
+      <div class="stat"><div class="k">Output size</div><div class="v" id="pdf-size">—</div></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn" id="pdf-download" type="button" disabled>Download result</button>
+    </div>
+  </section>
+
+  <div class="ad-slot">
+    <strong>Ad slot</strong>
+    Google AdSense placeholder — activated once the site is approved and has steady traffic.
+  </div>
+
+  <section class="prose">
+    <h2>What runs locally</h2>
+    <p>The whole operation uses <code>pdf-lib</code>, a pure-JavaScript PDF library loaded from a CDN on first use. Your files are read with <code>FileReader</code>, assembled or trimmed in memory, and written back with <code>URL.createObjectURL</code>. No server ever sees the bytes — and no size or rate limits, because there is nothing to meter.</p>
+    <ul>
+      <li><strong>Merge</strong> concatenates full documents in the order you list them. Bookmarks and form fields from the sources are not preserved.</li>
+      <li><strong>Extract</strong> copies the selected pages into a new document. Pages stay exactly as they were — text, images and vector content included.</li>
+      <li>Encrypted PDFs need their password removed before they can be processed here.</li>
+    </ul>
+
+    <h2>Frequently asked questions</h2>
+    <details class="faq">
+      <summary>Is there a file size limit?</summary>
+      <div class="faq-body">Only your device's memory. Files in the tens of megabytes are fine on desktop; phone browsers start struggling somewhere around 50–100 MB total.</div>
+    </details>
+    <details class="faq">
+      <summary>Why is the merged file bigger than the sum of its parts?</summary>
+      <div class="faq-body">It shouldn't be by much — pdf-lib copies pages without recompression, so sizes are roughly additive. If a file balloons, it likely embedded a font that was already duplicated across sources.</div>
+    </details>
+    <details class="faq">
+      <summary>Can I rotate, reorder or delete pages?</summary>
+      <div class="faq-body">Not in this version — merge and extract only. Reordering is possible by extracting ranges in the order you want them and merging the results.</div>
+    </details>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h4>Popular tools</h4>
+        <ul>
+          <li><a href="/tools/token-counter.html">LLM token &amp; cost calculator</a></li>
+          <li><a href="/tools/json-formatter.html">JSON formatter</a></li>
+          <li><a href="/tools/regex-tester.html">Regex tester</a></li>
+          <li><a href="/tools/cron-explainer.html">Cron explainer</a></li>
+          <li><a href="/tools/encode-decode.html">Base64 / URL / hash</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>LLM pricing</h4>
+        <ul>
+          <li><a href="/models/index.html">All models</a></li>
+          <li><a href="/models/gpt-6-astra.html">GPT-6 Astra pricing</a></li>
+          <li><a href="/models/claude-fable-5-1.html">Claude Fable 5.1 pricing</a></li>
+          <li><a href="/models/gemini-3-8-flash.html">Gemini 3.8 Flash pricing</a></li>
+          <li><a href="/models/deepseek-v4-1-flash.html">DeepSeek V4.1 Flash pricing</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>More</h4>
+        <ul>
+          <li><a href="https://ezaiops.com">ezaiops.com</a></li>
+          <li><a href="/privacy.html">Privacy policy</a></li>
+          <li><a href="https://github.com/ezaiops">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">&copy; <span data-year>2026</span> ezaiops. Free tools, no signup, runs entirely in your browser.</div>
+  </div>
+</footer>
+
+<script src="/assets/common.js" defer></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  function ezT(k) { return window.ezI18N ? window.ezI18N.t(k) : k; }
+
+  var pdfLib = null;
+  var loading = null;
+  var outBlob = null;
+
+  function loadLib() {
+    if (pdfLib) return Promise.resolve(pdfLib);
+    if (loading) return loading;
+    loading = import("https://esm.sh/pdf-lib@1.17.1").then(function (m) {
+      pdfLib = m;
+      return pdfLib;
+    }).catch(function () {
+      loading = null;
+      throw new Error("pdf-lib unavailable");
+    });
+    return loading;
+  }
+  function withLib(noteEl, fn) {
+    noteEl.textContent = ezT("Loading the PDF engine…");
+    loadLib().then(fn).catch(function () {
+      noteEl.textContent = ezT("Could not load the PDF engine (network blocked?). Try again on a normal connection.");
+    });
+  }
+  function fmtSize(bytes) {
+    if (bytes < 1024) return bytes + " B";
+    if (bytes < 1048576) return (bytes / 1024).toFixed(1) + " KB";
+    return (bytes / 1048576).toFixed(2) + " MB";
+  }
+  function readFile(file) {
+    return new Promise(function (resolve, reject) {
+      var r = new FileReader();
+      r.onload = function () { resolve(new Uint8Array(r.result)); };
+      r.onerror = reject;
+      r.readAsArrayBuffer(file);
+    });
+  }
+  function parseRanges(str, max) {
+    var out = [];
+    str.split(",").forEach(function (part) {
+      part = part.trim();
+      if (!part) return;
+      var m = part.match(/^(\d+)\s*-\s*(\d+)$/);
+      if (m) {
+        var a = parseInt(m[1], 10), b = parseInt(m[2], 10);
+        if (a < 1 || b > max || a > b) throw new Error(ezT("Page range %s is out of bounds (1–%s)"));
+        for (var i = a; i <= b; i++) out.push(i - 1);
+      } else {
+        var n = parseInt(part, 10);
+        if (!isFinite(n) || n < 1 || n > max) throw new Error(ezT("Page %s is out of bounds (1–%s)"));
+        out.push(n - 1);
+      }
+    });
+    if (!out.length) throw new Error(ezT("No valid pages selected"));
+    return out;
+  }
+  function finish(blob, pages) {
+    outBlob = blob;
+    $("#pdf-pages").textContent = String(pages);
+    $("#pdf-size").textContent = fmtSize(blob.size);
+    $("#pdf-download").disabled = false;
+  }
+
+  document.querySelectorAll("[data-pdftab]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      document.querySelectorAll("[data-pdftab]").forEach(function (x) {
+        x.classList.toggle("primary", x === b);
+      });
+      $("#pdf-panel-merge").classList.toggle("hidden", b.getAttribute("data-pdftab") !== "merge");
+      $("#pdf-panel-split").classList.toggle("hidden", b.getAttribute("data-pdftab") !== "split");
+    });
+  });
+
+  $("#pdf-merge").addEventListener("click", function () {
+    var files = $("#pdf-files").files;
+    var note = $("#pdf-merge-note");
+    if (!files || files.length < 1) { note.textContent = ezT("Choose at least one PDF."); return; }
+    withLib(note, function () {
+      return Promise.all(Array.prototype.map.call(files, readFile)).then(function (buffers) {
+        return pdfLib.PDFDocument.create().then(function (doc) {
+          return buffers.reduce(function (chain, bytes) {
+            return chain.then(function () {
+              return pdfLib.PDFDocument.load(bytes).then(function (src) {
+                return doc.copyPages(src, src.getPageIndices());
+              }).then(function (pages) {
+                pages.forEach(function (p) { doc.addPage(p); });
+              });
+            });
+          }, Promise.resolve()).then(function () { return doc.save(); });
+        });
+      }).then(function (bytes) {
+        finish(new Blob([bytes], { type: "application/pdf" }), files.reduce(function (n, f) { return n; }, 0) || 0);
+        note.textContent = ezT("Merged — press Download.");
+      });
+    });
+  });
+
+  $("#pdf-split").addEventListener("click", function () {
+    var file = $("#pdf-one").files && $("#pdf-one").files[0];
+    var note = $("#pdf-split-note");
+    if (!file) { note.textContent = ezT("Choose a source PDF."); return; }
+    withLib(note, function () {
+      return readFile(file).then(function (bytes) {
+        return pdfLib.PDFDocument.load(bytes);
+      }).then(function (src) {
+        var indices = parseRanges($("#pdf-range").value, src.getPageCount());
+        return pdfLib.PDFDocument.create().then(function (doc) {
+          return doc.copyPages(src, indices).then(function (pages) {
+            pages.forEach(function (p) { doc.addPage(p); });
+            return doc.save();
+          }).then(function (bytes) {
+            finish(new Blob([bytes], { type: "application/pdf" }), indices.length);
+            note.textContent = ezT("Extracted — press Download.");
+          });
+        });
+      }).catch(function (e) {
+        note.textContent = e && e.message ? e.message : ezT("Could not process that PDF (encrypted or damaged?).");
+      });
+    });
+  });
+
+  $("#pdf-download").addEventListener("click", function () {
+    if (!outBlob) return;
+    try {
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(outBlob);
+      a.download = "ezaiops-pdf.pdf";
+      a.click();
+      URL.revokeObjectURL(a.href);
+    } catch (e) {
+      note.textContent = ezT("Download not supported in this browser.");
+    }
+  });
+});
+</script>
+</body>
+</html>

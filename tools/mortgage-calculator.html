@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mortgage &amp; Loan Calculator — Amortization Schedule | ezaiops tools</title>
+<meta name="description" content="Calculate monthly payments, total interest and payoff dates for any loan, with extra-payment scenarios and a full amortization summary. Runs locally.">
+<link rel="canonical" href="https://tools.ezaiops.com/tools/mortgage-calculator.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Mortgage &amp; Loan Calculator">
+<meta property="og:description" content="Monthly payment, total interest and extra-payment scenarios for any loan.">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Mortgage & Loan Calculator",
+  "url": "https://tools.ezaiops.com/tools/mortgage-calculator.html",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/"><span class="logo">ez</span>ezaiops <small>tools</small></a>
+    <nav class="site-nav">
+      <a href="/">Tools</a>
+      <a href="/models/index.html">LLM pricing</a>
+      <a href="https://ezaiops.com" title="ezaiops.com — AI agent observability &amp; LLMOps field notes (in Chinese)">Blog</a>
+      <a href="https://github.com/ezaiops">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap tool-page">
+  <nav class="crumbs"><a href="/">Home</a> / Tools / <a href="/tools/mortgage-calculator.html">Loan calculator</a><a class="main-site-link" href="https://ezaiops.com">ezaiops.com ↗</a></nav>
+  <h1>Mortgage &amp; loan calculator</h1>
+  <p class="lead">Work out the monthly payment, total interest and payoff date for any fixed-rate loan — then see what a modest extra monthly payment does to the interest bill. Standard amortization math, runs entirely in your browser.</p>
+
+  <section class="panel">
+    <div class="field-row">
+      <div class="field">
+        <label class="field-label" for="mo-amount">Loan amount</label>
+        <div class="input-prefix"><span>$</span><input type="number" id="mo-amount" min="0" step="1000" value="400000"></div>
+      </div>
+      <div class="field">
+        <label class="field-label" for="mo-rate">Annual interest rate</label>
+        <div class="input-prefix"><input type="number" id="mo-rate" min="0" step="0.01" value="6.5"><span>%</span></div>
+      </div>
+      <div class="field">
+        <label class="field-label" for="mo-years">Term</label>
+        <div class="input-prefix"><input type="number" id="mo-years" min="1" max="50" step="1" value="30"><span>years</span></div>
+      </div>
+    </div>
+    <div class="field-row" style="margin-top:12px">
+      <div class="field">
+        <label class="field-label" for="mo-extra">Extra monthly payment</label>
+        <div class="input-prefix"><span>$</span><input type="number" id="mo-extra" min="0" step="50" value="0"></div>
+        <div class="hint">Optional — applied on top of the required payment.</div>
+      </div>
+      <div class="field">
+        <label class="field-label" for="mo-start">First payment date</label>
+        <input type="date" id="mo-start" class="mono">
+      </div>
+    </div>
+
+    <div class="stats-grid" style="margin-top:16px">
+      <div class="stat"><div class="k">Monthly payment</div><div class="v" id="mo-payment">—</div></div>
+      <div class="stat"><div class="k">Total interest</div><div class="v" id="mo-interest">—</div></div>
+      <div class="stat"><div class="k">Total paid</div><div class="v" id="mo-total">—</div></div>
+      <div class="stat"><div class="k">Payoff time</div><div class="v" id="mo-payoff" style="font-size:15px">—</div></div>
+    </div>
+    <div class="stats-grid" id="mo-extra-stats" style="margin-top:10px">
+      <div class="stat"><div class="k">Interest saved</div><div class="v" id="mo-saved" style="font-size:15px">—</div></div>
+      <div class="stat"><div class="k">Time saved</div><div class="v" id="mo-timesaved" style="font-size:15px">—</div></div>
+    </div>
+
+    <h3 style="font-size:14px;margin:18px 0 0">Amortization — first 12 payments</h3>
+    <table class="data">
+      <thead><tr><th class="num">#</th><th class="num">Principal</th><th class="num">Interest</th><th class="num">Balance</th></tr></thead>
+      <tbody id="mo-rows"></tbody>
+    </table>
+    <p class="note">Early payments are mostly interest — that is how amortization works. The extra-payment scenario above shows what accelerating the principal does over the full term.</p>
+  </section>
+
+  <div class="ad-slot">
+    <strong>Ad slot</strong>
+    Google AdSense placeholder — activated once the site is approved and has steady traffic.
+  </div>
+
+  <section class="prose">
+    <h2>How the payment is computed</h2>
+    <p>The standard amortization formula: <code>M = P × r × (1+r)ⁿ ÷ ((1+r)ⁿ − 1)</code>, where P is the principal, r the monthly rate (annual ÷ 12) and n the number of payments. Each payment covers that month's interest first, with the remainder reducing principal — which is why the balance falls slowly at first and then faster.</p>
+    <p>An extra payment is pure principal, so it compounds: $200/month extra on a $400k / 30-year / 6.5% loan saves roughly $90k of interest and retires the loan about 7 years early. But only do this after higher-rate debt is cleared and an emergency fund exists — liquidity beats a few points of interest saved.</p>
+
+    <h2>Frequently asked questions</h2>
+    <details class="faq">
+      <summary>Does this include taxes, insurance or PMI?</summary>
+      <div class="faq-body">No — this is principal and interest only, the P&amp;I part of a mortgage payment. Property taxes, homeowners insurance, HOA fees and PMI are added on top by your lender.</div>
+    </details>
+    <details class="faq">
+      <summary>Are the numbers exact?</summary>
+      <div class="faq-body">Yes for fixed-rate loans — the formula is exact and rounding is applied only to the displayed cents. Variable-rate loans require a schedule per rate period.</div>
+    </details>
+    <details class="faq">
+      <summary>Can I use this for car loans or student loans?</summary>
+      <div class="faq-body">Absolutely — any fixed-rate installment loan works. Just enter the amount, rate and term in years.</div>
+    </details>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h4>Popular tools</h4>
+        <ul>
+          <li><a href="/tools/token-counter.html">LLM token &amp; cost calculator</a></li>
+          <li><a href="/tools/json-formatter.html">JSON formatter</a></li>
+          <li><a href="/tools/regex-tester.html">Regex tester</a></li>
+          <li><a href="/tools/cron-explainer.html">Cron explainer</a></li>
+          <li><a href="/tools/encode-decode.html">Base64 / URL / hash</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>LLM pricing</h4>
+        <ul>
+          <li><a href="/models/index.html">All models</a></li>
+          <li><a href="/models/gpt-6-astra.html">GPT-6 Astra pricing</a></li>
+          <li><a href="/models/claude-fable-5-1.html">Claude Fable 5.1 pricing</a></li>
+          <li><a href="/models/gemini-3-8-flash.html">Gemini 3.8 Flash pricing</a></li>
+          <li><a href="/models/deepseek-v4-1-flash.html">DeepSeek V4.1 Flash pricing</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>More</h4>
+        <ul>
+          <li><a href="https://ezaiops.com">ezaiops.com</a></li>
+          <li><a href="/privacy.html">Privacy policy</a></li>
+          <li><a href="https://github.com/ezaiops">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">&copy; <span data-year>2026</span> ezaiops. Free tools, no signup, runs entirely in your browser.</div>
+  </div>
+</footer>
+
+<script src="/assets/common.js" defer></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  function ezT(k) { return window.ezI18N ? window.ezI18N.t(k) : k; }
+  function ezTf(k) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    if (window.ezI18N) return window.ezI18N.tf.apply(window.ezI18N, [k].concat(args));
+    return k.replace(/%s/g, function () { return String(args.shift()); });
+  }
+  function money(n) {
+    return "$" + (Math.round(n * 100) / 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  var start = $("#mo-start");
+  if (!start.value) {
+    var d = new Date();
+    start.value = d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0");
+  }
+
+  function amortize(P, annualRate, years, extra) {
+    var n = years * 12;
+    var r = annualRate / 100 / 12;
+    var payment = r > 0
+      ? P * r * Math.pow(1 + r, n) / (Math.pow(1 + r, n) - 1)
+      : P / n;
+    var balance = P;
+    var totalInterest = 0;
+    var months = 0;
+    var rows = [];
+    while (balance > 0.005 && months < n * 2) {
+      var interest = balance * r;
+      var principal = Math.min(payment + extra - interest, balance);
+      balance -= principal;
+      totalInterest += interest;
+      months++;
+      if (rows.length < 12) rows.push({ i: months, p: principal, int: interest, bal: balance });
+      if (payment + extra <= interest) break; // never pays off
+    }
+    return { payment: payment, totalInterest: totalInterest, months: months, rows: rows, paidOff: balance <= 0.005 };
+  }
+
+  function payoffLabel(months) {
+    var y = Math.floor(months / 12), m = months % 12;
+    if (y && m) return ezTf("%s yr %s mo", y, m);
+    if (y) return ezTf("%s years", y);
+    return ezTf("%s months", m);
+  }
+
+  function recalc() {
+    var P = Math.max(0, parseFloat($("#mo-amount").value) || 0);
+    var rate = Math.max(0, parseFloat($("#mo-rate").value) || 0);
+    var years = Math.max(1, parseFloat($("#mo-years").value) || 1);
+    var extra = Math.max(0, parseFloat($("#mo-extra").value) || 0);
+    if (P <= 0) return;
+
+    var base = amortize(P, rate, years, 0);
+    var withExtra = amortize(P, rate, years, extra);
+
+    $("#mo-payment").textContent = money(base.payment);
+    $("#mo-interest").textContent = money(withExtra.totalInterest);
+    $("#mo-total").textContent = money(P + withExtra.totalInterest);
+    $("#mo-payoff").textContent = withExtra.paidOff ? payoffLabel(withExtra.months) : ezT("Never — payment does not cover interest");
+
+    var extraStats = $("#mo-extra-stats");
+    if (extra > 0 && withExtra.paidOff) {
+      extraStats.style.display = "";
+      $("#mo-saved").textContent = money(base.totalInterest - withExtra.totalInterest);
+      $("#mo-timesaved").textContent = payoffLabel(base.months - withExtra.months);
+    } else {
+      extraStats.style.display = "none";
+    }
+
+    $("#mo-rows").innerHTML = base.rows.map(function (row) {
+      return "<tr><td class=\"num\">" + row.i + "</td><td class=\"num\">" + money(row.p) +
+        "</td><td class=\"num\">" + money(row.int) + "</td><td class=\"num\">" + money(row.bal) + "</td></tr>";
+    }).join("");
+  }
+
+  var t = null;
+  function schedule() { clearTimeout(t); t = setTimeout(recalc, 150); }
+  ["mo-amount", "mo-rate", "mo-years", "mo-extra"].forEach(function (id) {
+    $("#" + id).addEventListener("input", schedule);
+  });
+
+  recalc();
+  window.addEventListener("ez:i18n", recalc);
+});
+</script>
+</body>
+</html>

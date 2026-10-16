@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Image Compressor &amp; Converter — JPG/PNG to WebP in Browser | ezaiops tools</title>
+<meta name="description" content="Compress JPG/PNG images and convert to WebP entirely in your browser with canvas. Quality slider, before/after sizes, no upload, no signup.">
+<link rel="canonical" href="https://tools.ezaiops.com/tools/image-compressor.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Image Compressor &amp; Converter">
+<meta property="og:description" content="Compress images locally with canvas — nothing uploaded.">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Image Compressor & Converter",
+  "url": "https://tools.ezaiops.com/tools/image-compressor.html",
+  "applicationCategory": "MultimediaApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/"><span class="logo">ez</span>ezaiops <small>tools</small></a>
+    <nav class="site-nav">
+      <a href="/">Tools</a>
+      <a href="/models/index.html">LLM pricing</a>
+      <a href="https://ezaiops.com" title="ezaiops.com — AI agent observability &amp; LLMOps field notes (in Chinese)">Blog</a>
+      <a href="https://github.com/ezaiops">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap tool-page">
+  <nav class="crumbs"><a href="/">Home</a> / Tools / <a href="/tools/image-compressor.html">Image compressor</a><a class="main-site-link" href="https://ezaiops.com">ezaiops.com ↗</a></nav>
+  <h1>Image compressor &amp; converter</h1>
+  <p class="lead">Drop in a JPG or PNG, dial the quality, and download a smaller file — or convert straight to WebP. Everything happens in your browser with the canvas API: your image is never uploaded anywhere, which matters for anything private.</p>
+
+  <section class="panel">
+    <div class="field-row">
+      <div class="field" style="flex:1 1 300px">
+        <label class="field-label" for="ic-file">Image file</label>
+        <input type="file" id="ic-file" accept="image/jpeg,image/png,image/webp">
+        <div class="hint">JPG, PNG or WebP. Multiple files are processed one by one.</div>
+      </div>
+      <div class="field" style="flex:0 1 160px">
+        <label class="field-label" for="ic-format">Output format</label>
+        <select id="ic-format">
+          <option value="webp" selected>WebP (smallest)</option>
+          <option value="jpeg">JPEG</option>
+          <option value="png">PNG (lossless)</option>
+        </select>
+      </div>
+      <div class="field" style="flex:0 1 200px">
+        <label class="field-label" for="ic-quality">Quality: <strong id="ic-quality-val">80%</strong></label>
+        <input type="range" id="ic-quality" min="10" max="100" step="5" value="80" style="width:100%">
+      </div>
+    </div>
+    <div class="field-row" style="margin-top:12px">
+      <div class="field" style="flex:0 1 160px">
+        <label class="field-label" for="ic-scale">Resize</label>
+        <select id="ic-scale">
+          <option value="1" selected>Original size</option>
+          <option value="0.75">75%</option>
+          <option value="0.5">50%</option>
+          <option value="0.25">25%</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn primary" id="ic-run" type="button" disabled>Compress</button>
+      <button class="btn" id="ic-download" type="button" disabled>Download</button>
+    </div>
+
+    <div class="stats-grid" style="margin-top:14px">
+      <div class="stat"><div class="k">Original size</div><div class="v" id="ic-before">—</div></div>
+      <div class="stat"><div class="k">Compressed size</div><div class="v" id="ic-after">—</div></div>
+      <div class="stat"><div class="k">Saved</div><div class="v" id="ic-saved">—</div></div>
+      <div class="stat"><div class="k">Dimensions</div><div class="v" id="ic-dims" style="font-size:15px">—</div></div>
+    </div>
+    <div id="ic-preview" style="margin-top:14px"></div>
+    <p class="note" id="ic-note"></p>
+  </section>
+
+  <div class="ad-slot">
+    <strong>Ad slot</strong>
+    Google AdSense placeholder — activated once the site is approved and has steady traffic.
+  </div>
+
+  <section class="prose">
+    <h2>What this tool actually does</h2>
+    <p>Your file is read with <code>FileReader</code> into an <code>&lt;img&gt;</code>, drawn onto a <code>&lt;canvas&gt;</code> (which is where resizing happens), and re-encoded with <code>canvas.toBlob()</code> at the quality you chose. That is the same encode/decode path the browser itself uses — there is no magic, and no server.</p>
+    <ul>
+      <li><strong>WebP</strong> typically gives 25–40% smaller files than JPEG at equivalent quality, and supports transparency that JPEG cannot. Supported by all current browsers.</li>
+      <li><strong>JPEG</strong> is the universal fallback; quality 80 is the sweet spot for photos.</li>
+      <li><strong>PNG</strong> is lossless — re-encoding an already-PNG file rarely shrinks it unless you resize or drop to 8-bit colors, which this tool does not do.</li>
+    </ul>
+    <p>Best results come from starting with the largest original you have: downscaling in canvas beats upscaling a small file, and a photo shot at 4000px compressed to 25% usually looks better than a 1000px original at 25%.</p>
+
+    <h2>Frequently asked questions</h2>
+    <details class="faq">
+      <summary>Is there a file size limit?</summary>
+      <div class="faq-body">The practical limit is your device's memory. Files up to roughly 20–30 MB work fine on desktop; very large images (100 MB+) may fail on phones.</div>
+    </details>
+    <details class="faq">
+      <summary>Does quality 80 look bad?</summary>
+      <div class="faq-body">For photographs, rarely noticeable. Drop to 60–70 for thumbnails and social previews; keep 90+ for images with text or fine line art.</div>
+    </details>
+    <details class="faq">
+      <summary>Where do my images go?</summary>
+      <div class="faq-body">Nowhere. The file picker, canvas and download all happen locally; the page makes no network requests with your image data.</div>
+    </details>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h4>Popular tools</h4>
+        <ul>
+          <li><a href="/tools/token-counter.html">LLM token &amp; cost calculator</a></li>
+          <li><a href="/tools/json-formatter.html">JSON formatter</a></li>
+          <li><a href="/tools/regex-tester.html">Regex tester</a></li>
+          <li><a href="/tools/cron-explainer.html">Cron explainer</a></li>
+          <li><a href="/tools/encode-decode.html">Base64 / URL / hash</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>LLM pricing</h4>
+        <ul>
+          <li><a href="/models/index.html">All models</a></li>
+          <li><a href="/models/gpt-6-astra.html">GPT-6 Astra pricing</a></li>
+          <li><a href="/models/claude-fable-5-1.html">Claude Fable 5.1 pricing</a></li>
+          <li><a href="/models/gemini-3-8-flash.html">Gemini 3.8 Flash pricing</a></li>
+          <li><a href="/models/deepseek-v4-1-flash.html">DeepSeek V4.1 Flash pricing</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>More</h4>
+        <ul>
+          <li><a href="https://ezaiops.com">ezaiops.com</a></li>
+          <li><a href="/privacy.html">Privacy policy</a></li>
+          <li><a href="https://github.com/ezaiops">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">&copy; <span data-year>2026</span> ezaiops. Free tools, no signup, runs entirely in your browser.</div>
+  </div>
+</footer>
+
+<script src="/assets/common.js" defer></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  function ezT(k) { return window.ezI18N ? window.ezI18N.t(k) : k; }
+
+  var fileInput = $("#ic-file");
+  var quality = $("#ic-quality"), qualityVal = $("#ic-quality-val");
+  var formatSel = $("#ic-format"), scaleSel = $("#ic-scale");
+  var runBtn = $("#ic-run"), dlBtn = $("#ic-download");
+  var note = $("#ic-note");
+  var currentBlob = null, currentName = "image";
+
+  function fmtSize(bytes) {
+    if (bytes < 1024) return bytes + " B";
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
+    return (bytes / 1024 / 1024).toFixed(2) + " MB";
+  }
+
+  quality.addEventListener("input", function () { qualityVal.textContent = quality.value + "%"; });
+  fileInput.addEventListener("change", function () {
+    var f = fileInput.files && fileInput.files[0];
+    runBtn.disabled = !f;
+    dlBtn.disabled = true;
+    note.textContent = f ? ezT("Ready — press Compress.") : "";
+    $("#ic-before").textContent = f ? fmtSize(f.size) : "—";
+    $("#ic-after").textContent = "—";
+    $("#ic-saved").textContent = "—";
+    $("#ic-dims").textContent = "—";
+    $("#ic-preview").innerHTML = "";
+  });
+
+  runBtn.addEventListener("click", function () {
+    var f = fileInput.files && fileInput.files[0];
+    if (!f) return;
+    currentName = f.name.replace(/\.[^.]+$/, "");
+    var reader = new FileReader();
+    reader.onload = function () {
+      var img = new Image();
+      img.onload = function () {
+        var scale = parseFloat(scaleSel.value);
+        var w = Math.max(1, Math.round(img.width * scale));
+        var h = Math.max(1, Math.round(img.height * scale));
+        var canvas = document.createElement("canvas");
+        canvas.width = w;
+        canvas.height = h;
+        var ctx = canvas.getContext("2d");
+        if (formatSel.value === "jpeg") {
+          ctx.fillStyle = "#ffffff";
+          ctx.fillRect(0, 0, w, h);
+        }
+        ctx.drawImage(img, 0, 0, w, h);
+        var q = parseInt(quality.value, 10) / 100;
+        var mime = formatSel.value === "webp" ? "image/webp" : formatSel.value === "jpeg" ? "image/jpeg" : "image/png";
+        canvas.toBlob(function (blob) {
+          if (!blob) {
+            note.textContent = ezT("This browser could not encode that format — try WebP or JPEG.");
+            return;
+          }
+          currentBlob = blob;
+          var pct = f.size > 0 ? Math.round((1 - blob.size / f.size) * 100) : 0;
+          $("#ic-after").textContent = fmtSize(blob.size);
+          $("#ic-saved").textContent = (pct >= 0 ? pct + "% smaller" : Math.abs(pct) + "% larger");
+          $("#ic-dims").textContent = img.width + "×" + img.height + " → " + w + "×" + h;
+          dlBtn.disabled = false;
+          note.textContent = blob.size >= f.size
+            ? ezT("The re-encode is larger than the original — try a lower quality or a smaller resize.")
+            : ezT("Done — press Download.");
+          var url = URL.createObjectURL(blob);
+          $("#ic-preview").innerHTML = '<img src="' + url + '" alt="preview" style="max-width:100%;max-height:280px;border:1px solid var(--border);border-radius:8px">';
+        }, mime, q);
+      };
+      img.onerror = function () { note.textContent = ezT("Could not read that image file."); };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(f);
+  });
+
+  dlBtn.addEventListener("click", function () {
+    if (!currentBlob) return;
+    try {
+      var ext = formatSel.value === "jpeg" ? "jpg" : formatSel.value;
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(currentBlob);
+      a.download = currentName + "-compressed." + ext;
+      a.click();
+      URL.revokeObjectURL(a.href);
+    } catch (e) {
+      note.textContent = ezT("Download not supported in this browser.");
+    }
+  });
+
+  window.addEventListener("ez:i18n", function () {
+    note.textContent = fileInput.files && fileInput.files[0] ? ezT("Ready — press Compress.") : "";
+  });
+});
+</script>
+</body>
+</html>
