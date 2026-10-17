@@ -3,7 +3,7 @@ window.I18N_DICTS = window.I18N_DICTS || [];
 window.I18N_DICTS.push({
   "Free AI & DevOps tools that run in your browser": "免费 AI 与 DevOps 工具，全部在浏览器本地运行",
   "Small, fast utilities for the work around LLMs and infrastructure: count tokens and estimate what an API call will actually cost, format JSON, test regex, explain cron, hash strings, convert timestamps. No signup, no server round-trip, no data collection.": "围绕 LLM 与基础设施日常工作的小工具：分词与成本估算、JSON 格式化、正则测试、Cron 解释、字符串哈希、时间戳转换。无需注册，无服务端往返，不收集数据。",
-  "Browse LLM pricing (29 models)": "浏览 LLM 价格（29 个模型）",
+  "Browse LLM pricing (34 models)": "浏览 LLM 价格（34 个模型）",
   "Part of ezaiops.com — field notes on AI agent observability, LLMOps and production AI ops.": "ezaiops.com 的一部分——AI Agent 可观测性、LLMOps 与生产级 AI 运维的中文实战笔记。",
 
   "All tools": "全部工具",
@@ -38,10 +38,10 @@ window.I18N_DICTS.push({
   "L build": "L 级工期",
 
   "All model pricing pages": "全部模型价格页",
-  "Per-1M-token input and output prices, context windows and caching discounts for 29 models, side by side.": "29 个模型的每百万 token 输入/输出价格、上下文窗口与缓存折扣，并排对比。",
+  "Per-1M-token input and output prices, context windows and caching discounts for 34 models, side by side.": "34 个模型的每百万 token 输入/输出价格、上下文窗口与缓存折扣，并排对比。",
   "29 pages": "29 个页面",
 
-  "Count tokens and estimate cost per request, per day and per month across 29 models. Batch + cache discounts, long-context tiers and peak/off-peak rates handled automatically.": "分词并估算单次、每日、每月成本，覆盖 29 个模型。自动处理 Batch 五折、缓存折扣、长上下文档位与峰谷分时计价。",
+  "Count tokens and estimate cost per request, per day and per month across 34 models. Batch + cache discounts, long-context tiers and peak/off-peak rates handled automatically.": "分词并估算单次、每日、每月成本，覆盖 34 个模型。自动处理 Batch 五折、缓存折扣、长上下文档位与峰谷分时计价。",
   "Format, minify and validate JSON with exact error line and column. Shows size, key count and nesting depth at a glance.": "格式化、压缩与校验 JSON，精确定位错误行列，一眼看清体积、键数量与嵌套深度。",
   "Test JavaScript regular expressions against live text, inspect capture groups, and preview replacements with match highlighting.": "对文本实时测试 JavaScript 正则表达式，查看捕获分组，预览替换结果并高亮匹配。",
   "Translate any cron schedule into plain English and see the next runs in your local timezone.": "把任意 cron 表达式翻译成人话，并按你本地时区显示接下来的运行时间。",

@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-13",
+  "updated": "2026-10-18",
   "models": [
     {
       "id": "gpt-6-astra",
@@ -38,11 +38,11 @@
       "id": "gpt-5-6-sol",
       "name": "GPT-5.6 Sol",
       "provider": "OpenAI",
-      "input": 5.0,
-      "output": 30.0,
+      "input": 4.0,
+      "output": 20.0,
       "cached_input": null,
       "context": null,
-      "note": "Previous-generation flagship, GA July 2026"
+      "note": "Previous-generation flagship. Promotional $4/$20 in effect through at least 2026-11-21 (list $5/$30); long-context requests bill $8/$30"
     },
     {
       "id": "gpt-5-6-terra",
@@ -123,6 +123,29 @@
       "cached_input": 0.1,
       "context": "200K",
       "note": "Fastest and cheapest Claude tier"
+    },
+    {
+      "id": "claude-haiku-5-5",
+      "name": "Claude Haiku 5.5",
+      "provider": "Anthropic",
+      "input": 0.1,
+      "output": 0.5,
+      "cached_input": 0.01,
+      "context": "1M",
+      "tier_threshold": 100000,
+      "input_high": 0.5,
+      "output_high": 2.5,
+      "note": "Newest and cheapest Claude tier. Prompts above 100K tokens (cached tokens included) bill at $0.50/$2.50"
+    },
+    {
+      "id": "gemini-4-argon",
+      "name": "Gemini 4 Argon",
+      "provider": "Google",
+      "input": 2.0,
+      "output": 10.0,
+      "cached_input": null,
+      "context": "1.05M",
+      "note": "Flagship reasoning model, released October 2026. Introductory $2/$10 through 2026-11-30, then $4/$20. Implicit caching only (no published cached rate)"
     },
     {
       "id": "gemini-3-1-pro",
@@ -207,21 +230,46 @@
       "time_pricing": {
         "type": "peak_offpeak",
         "peak_multiplier": 2,
-        "peak_windows_utc": [[60, 240], [360, 600]],
+        "peak_windows_utc": [
+          [
+            60,
+            240
+          ],
+          [
+            360,
+            600
+          ]
+        ],
         "peak_days": "Mon-Fri",
         "window_label": "Weekday peak (UTC 01:00-04:00 and 06:00-10:00)"
       },
       "note": "Off-peak rates shown. Weekday peak windows (UTC 01:00-04:00 and 06:00-10:00) double to $0.30/$1.20. Multimodal, open weights, up to 384K output tokens"
     },
     {
-      "id": "deepseek-v4-flash",
-      "name": "DeepSeek V4-Flash",
+      "id": "deepseek-v4-pro",
+      "name": "DeepSeek V4 Pro",
       "provider": "DeepSeek",
-      "input": 0.14,
-      "output": 0.28,
-      "cached_input": 0.0028,
-      "context": null,
-      "note": "Legacy - superseded by V4.1 Flash in September 2026"
+      "input": 0.66,
+      "output": 1.98,
+      "cached_input": 0.022,
+      "context": "1M",
+      "time_pricing": {
+        "type": "peak_offpeak",
+        "peak_multiplier": 2,
+        "peak_windows_utc": [
+          [
+            60,
+            240
+          ],
+          [
+            360,
+            600
+          ]
+        ],
+        "peak_days": "Mon-Fri",
+        "window_label": "Weekday peak (UTC 01:00-04:00 and 06:00-10:00)"
+      },
+      "note": "Off-peak rates shown. Weekday peak doubles to $1.32/$3.96. Text-only (no vision), 1M context, up to 384K output"
     },
     {
       "id": "glm-5-3",
@@ -264,6 +312,16 @@
       "note": "Global API with full open weights; cache write $3 per 5 min, $6 per hour"
     },
     {
+      "id": "kimi-k2-7-code",
+      "name": "Kimi K2.7 Code",
+      "provider": "Moonshot",
+      "input": 0.95,
+      "output": 4.0,
+      "cached_input": 0.19,
+      "context": "262K",
+      "note": "Coding-focused tier. High-speed variant bills $1.90/$8.00"
+    },
+    {
       "id": "minimax-m3",
       "name": "MiniMax M3",
       "provider": "MiniMax",
@@ -275,6 +333,16 @@
       "input_high": 0.6,
       "output_high": 2.4,
       "note": "Above 512K tokens per request the rate is $0.60/$2.40"
+    },
+    {
+      "id": "mimo-v2-6-pro",
+      "name": "MiMo V2.6 Pro",
+      "provider": "Xiaomi",
+      "input": 0.435,
+      "output": 0.87,
+      "cached_input": 0.0036,
+      "context": null,
+      "note": "Batch API runs at half price. Ultra-speed variant bills $4.35/$8.70"
     },
     {
       "id": "mimo-v2-6-flash",
@@ -295,6 +363,16 @@
       "cached_input": null,
       "context": null,
       "note": "European provider, mid-tier flagship"
+    },
+    {
+      "id": "mistral-large-4",
+      "name": "Mistral Large 4",
+      "provider": "Mistral",
+      "input": 0.68,
+      "output": 2.09,
+      "cached_input": 0.07,
+      "context": "1M",
+      "note": "Released 2026-10-06, public preview, open weights. Sale pricing — list is $1.36/$4.18"
     },
     {
       "id": "mistral-large-3",

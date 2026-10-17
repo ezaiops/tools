@@ -14,12 +14,15 @@ import glob
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE = "https://tools.ezaiops.com"
-TODAY = "2026-10-13"
-UPDATED = "2026-10-12"
+import datetime
 
 with open(os.path.join(ROOT, "scripts", "models.json"), encoding="utf-8") as fh:
     DATA = json.load(fh)
 MODELS = DATA["models"]
+# Derive both dates from the data file so the pages can never claim a different
+# "last updated" date than the prices they show.
+TODAY = datetime.date.today().isoformat()
+UPDATED = DATA.get("updated") or TODAY
 SOURCES = DATA.get("sources", [])
 BY_ID = {m["id"]: m for m in MODELS}
 
@@ -107,7 +110,7 @@ FOOT = """
           <li><a href="/models/gpt-5-6-sol.html">GPT-5.6 Sol pricing</a></li>
           <li><a href="/models/claude-opus-5.html">Claude Opus 5 pricing</a></li>
           <li><a href="/models/gemini-3-1-pro.html">Gemini 3.1 Pro pricing</a></li>
-          <li><a href="/models/deepseek-v4-flash.html">DeepSeek V4-Flash pricing</a></li>
+          <li><a href="/models/deepseek-v4-1-flash.html">DeepSeek V4.1 Flash pricing</a></li>
         </ul>
       </div>
       <div>

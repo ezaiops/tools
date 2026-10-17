@@ -1,7 +1,7 @@
 // Interactive DOM tests for tools.ezaiops.com using jsdom.
 // Run: node scripts/test_interactive.mjs   (with the local http server on :8901)
 import { createRequire } from "module";
-import { readFileSync } from "fs";
+import { readFileSync, readdirSync } from "fs";
 
 const require = createRequire("C:/Users/june_/.workbuddy-ai/binaries/node/workspace/");
 const { JSDOM, VirtualConsole } = require("jsdom");
@@ -9,6 +9,10 @@ const { JSDOM, VirtualConsole } = require("jsdom");
 const manifest = JSON.parse(readFileSync(new URL("./tools.json", import.meta.url), "utf8"));
 const liveN = manifest.tools.filter((t) => (t.status || "live") === "live").length;
 const plannedN = manifest.tools.filter((t) => t.status === "planned").length;
+// Read the live model count instead of hardcoding it, so adding a model does not
+// require touching every assertion.
+const modelData = JSON.parse(readFileSync(new URL("./models.json", import.meta.url), "utf8"));
+const modelN = modelData.models.length;
 
 const BASE = "http://127.0.0.1:8901";
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -96,7 +100,7 @@ console.log("\n== token-counter.html ==");
 {
   const { win, doc, errors } = await load("tools/token-counter.html");
   const opts = $$(doc, "#tc-model option");
-  check("29 models in selector", opts.length === 29, String(opts.length));
+  check("model selector matches data", opts.length === modelN, String(opts.length));
   check("provider groups", $$(doc, "#tc-model optgroup").length === 10);
   setInput(win, $("#tc-input", doc), "hello world");
   await sleep(500);
@@ -137,7 +141,7 @@ console.log("\n== token-counter monthly projection ==");
   await sleep(250);
   check("monthly per request", $("#mc-cost-req", doc).textContent === "$0.008000", $("#mc-cost-req", doc).textContent);
   check("monthly total", $("#mc-cost-month", doc).textContent === "$2400.00", $("#mc-cost-month", doc).textContent);
-  check("monthly rows 29", $$(doc, "#mc-rows tr").length === 29, String($$(doc, "#mc-rows tr").length));
+  check("monthly rows = model count", $$(doc, "#mc-rows tr").length === modelN, String($$(doc, "#mc-rows tr").length));
   check("cheapest row first", /DeepSeek V4-Flash|MiMo V2.6 Flash/.test($$(doc, "#mc-rows tr")[0].textContent) &&
     /\$0\.000350/.test($$(doc, "#mc-rows tr")[0].textContent),
     $$(doc, "#mc-rows tr")[0].textContent.slice(0, 60));
@@ -293,7 +297,7 @@ console.log("\n== self-host-vs-api.html ==");
 {
   const { win, doc } = await load("tools/self-host-vs-api.html");
   const opts = $$(doc, "#sh-model option");
-  check("model selector populated", opts.length === 29, String(opts.length));
+  check("model selector populated", opts.length === modelN, String(opts.length));
   check("api cost $30,000", $("#sh-api-cost", doc).textContent === "$30,000", $("#sh-api-cost", doc).textContent);
   check("gpu fixed cost $252.00 (24x7 @ $0.35)", $("#sh-gpu-cost", doc).textContent === "$252.00", $("#sh-gpu-cost", doc).textContent);
   check("verdict self-host", /Self-hosting|自托管/.test($("#sh-verdict", doc).textContent), $("#sh-verdict", doc).textContent);
@@ -641,15 +645,72 @@ console.log("\n== models/deepseek-v4-1-flash.html ==");
   check("lead marks off-peak", /\(off-peak\)/.test($(".lead", doc).textContent), $(".lead", doc).textContent.slice(0, 100));
 }
 
+console.log("\n== models: October 2026 release wave ==");
+{
+  const argon = await load("models/gemini-4-argon.html");
+  const aText = argon.doc.body.textContent;
+  check("argon shows $2 in / $10 out", /\$2\b/.test(aText) && /\$10\b/.test(aText));
+  check("argon notes the promo end date", /2026-11-30/.test(aText));
+  check("argon flat-rate FAQ (no tier)", /flat per-token rate/.test(aText));
+  check("no dangling cache price when caching has no rate", !/billed at —/.test(aText), aText.match(/billed at [^.]*\./)?.[0]);
+
+  const haiku = await load("models/claude-haiku-5-5.html");
+  const hText = haiku.doc.body.textContent;
+  check("haiku 5.5 tier threshold shown", /100K/.test(hText));
+  check("haiku 5.5 high-tier prices shown", /\$0\.50/.test(hText) && /\$2\.50/.test(hText));
+
+  const pro = await load("models/deepseek-v4-pro.html");
+  const pText = pro.doc.body.textContent;
+  check("v4 pro off-peak lead", /\$0\.66/.test(pText) && /\$1\.98/.test(pText));
+  check("v4 pro peak row doubles", /Weekday peak/.test(pText) && /\$1\.32/.test(pText) && /\$3\.96/.test(pText));
+
+  const large4 = await load("models/mistral-large-4.html");
+  const mText = large4.doc.body.textContent;
+  check("mistral large 4 sale price", /\$0\.68/.test(mText) && /\$2\.09/.test(mText));
+  check("mistral large 4 notes list price", /\$1\.36/.test(mText));
+
+  const tc = await load("tools/token-counter.html");
+  await sleep(400);
+  const ids = $$(tc.doc, "#tc-model option").map((o) => o.value);
+  for (const id of ["gemini-4-argon", "claude-haiku-5-5", "deepseek-v4-pro", "mistral-large-4", "mimo-v2-6-pro", "kimi-k2-7-code"]) {
+    check("token counter lists " + id, ids.includes(id));
+  }
+  check("retired deepseek-v4-flash gone", !ids.includes("deepseek-v4-flash"));
+}
+
 console.log("\n== models/index.html ==");
 {
   const { doc, errors } = await load("models/index.html");
-  check("29 rows", $$(doc, "table.data tbody tr").length === 29, String($$(doc, "table.data tbody tr").length));
-  check("links to model pages", $$(doc, 'a[href^="/models/"]').length >= 29);
+  check("one row per model", $$(doc, "table.data tbody tr").length === modelN, String($$(doc, "table.data tbody tr").length));
+  check("links to model pages", $$(doc, 'a[href^="/models/"]').length >= modelN);
   check("sources listed", $$(doc, ".prose ul li").length === 10, String($$(doc, ".prose ul li").length));
   check("main site link in crumbs", $$(doc, ".main-site-link").length === 1);
   check("main site banner", $$(doc, ".main-site-banner a").length >= 1);
   check("no console errors", errors.length === 0, errors.join(" | "));
+}
+
+console.log("\n== data / copy consistency ==");
+{
+  // Guards the two ways this repo has silently drifted before: copy that quotes a
+  // stale model count, and model pages left behind after a model is removed.
+  const data = JSON.parse(readFileSync(new URL("./models.json", import.meta.url), "utf8"));
+  const n = data.models.length;
+  const idx = readFileSync(new URL("../index.html", import.meta.url), "utf8");
+  const tc = readFileSync(new URL("../tools/token-counter.html", import.meta.url), "utf8");
+
+  const counts = (s) => [...s.matchAll(/(\d+)\s+models\b/g)].map((m) => Number(m[1]));
+  check("hub copy quotes the live model count", counts(idx).every((c) => c === n), counts(idx).join(",") + " vs " + n);
+  check("token-counter copy quotes the live count", counts(tc).every((c) => c === n), counts(tc).join(",") + " vs " + n);
+  check("token-counter quotes 1M-context flagship", /Gemini 4 Argon/.test(tc));
+
+  const dir = new URL("../models/", import.meta.url);
+  const pages = readdirSync(dir).filter((f) => f.endsWith(".html") && f !== "index.html").map((f) => f.slice(0, -5));
+  const ids = data.models.map((m) => m.id);
+  const orphans = pages.filter((p) => !ids.includes(p));
+  const missing = ids.filter((id) => !pages.includes(id));
+  check("no orphan model pages", orphans.length === 0, orphans.join(","));
+  check("every model has a page", missing.length === 0, missing.join(","));
+  check("models.js carries the data date", readFileSync(new URL("../assets/models.js", import.meta.url), "utf8").includes('"updated": "' + data.updated + '"'));
 }
 
 console.log("\n" + (failed === 0 ? "ALL " + passed + " CHECKS PASSED" : passed + " passed, " + failed + " FAILED"));

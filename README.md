@@ -17,7 +17,7 @@ Free AI & DevOps micro-tools that run entirely in the browser. Pure static site 
 | `tools/timestamp-converter.html` | Unix ↔ ISO 8601 ↔ local, live clock |
 | `tools/password-generator.html` | Passwords, passphrases, UUID v4, strength estimate |
 | `tools/meta-tag-generator.html` | Title/OG/Twitter tags with SERP + social preview |
-| `models/*.html` | 29 per-model SEO pricing pages (generated) |
+| `models/*.html` | 34 per-model SEO pricing pages (generated) |
 | `models/index.html` | Full pricing comparison hub |
 | `privacy.html` | AdSense-ready privacy policy placeholder |
 | `robots.txt`, `ads.txt`, `sitemap.xml` | Crawler + monetization files (`ads.txt` has a commented placeholder) |
@@ -83,7 +83,7 @@ python scripts/generate_models.py    # rewrites models/*.html, assets/models.js,
 python scripts/check_site.py         # verify everything still resolves
 ```
 
-Prices were sourced from official provider pricing docs on 2026-10-13 (OpenAI, Anthropic, Google, DeepSeek, xAI, Z.AI, Moonshot, MiniMax, Xiaomi, Mistral). Providers change rates often — re-verify before publishing.
+Prices were sourced from official provider pricing docs on 2026-10-18 (OpenAI, Anthropic, Google, DeepSeek, xAI, Z.AI, Moonshot, MiniMax, Xiaomi, Mistral). Providers change rates often — re-verify before publishing. `models.json`'s `updated` field drives the "last updated" date on every generated page, so bump it whenever prices change.
 
 ## Adding a new tool
 
@@ -122,7 +122,7 @@ same 中文/EN pattern as ezaiops.com:
   `<code>`/`<strong>` markup)
 - Dynamic JS strings go through `window.ezI18N.t()` / `.tf()`; pages re-render
   on the `ez:i18n` event after the dictionary applies
-- The 29 generated pricing pages translate the chrome but keep their content
+- The 34 generated pricing pages translate the chrome but keep their content
   (numbers, model names, provider terms) in English
 - Both languages are covered by the test suite (the English suite plus a
   `?lang=zh` suite that asserts static and dynamic translations)

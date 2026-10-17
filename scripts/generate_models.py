@@ -85,9 +85,10 @@ def model_page(m):
         "mainEntity": [
             {"@type": "Question", "name": "How much does %s cost per 1M tokens?" % name,
              "acceptedAnswer": {"@type": "Answer", "text":
-             ("%s: %s per 1M input tokens, %s per 1M output tokens. "
-              "Cached input is billed at %s per 1M tokens where caching is supported."
-              % (name, money(m["input"]), money(m["output"]), money(m.get("cached_input"))) +
+             ("%s: %s per 1M input tokens, %s per 1M output tokens."
+              % (name, money(m["input"]), money(m["output"])) +
+              ((" Cached input is billed at %s per 1M tokens where caching is supported."
+                % money(m["cached_input"])) if m.get("cached_input") is not None else "") +
               (" Time-based pricing: the listed rate is the off-peak rate; %s the rate doubles to %s/%s."
                % (m["time_pricing"].get("window_label", "during peak windows"),
                   money(m["input"] * m["time_pricing"].get("peak_multiplier", 2)),
@@ -311,6 +312,14 @@ def main():
         with open(path, "w", encoding="utf-8") as fh:
             fh.write(model_page(m))
         pages.append("%s/models/%s.html" % (BASE, m["id"]))
+
+    # Prune pages for models that were removed from models.json, otherwise a
+    # deleted model keeps a live, orphaned pricing page.
+    live = {m["id"] + ".html" for m in MODELS} | {"index.html"}
+    for p in sorted(glob.glob(os.path.join(ROOT, "models", "*.html"))):
+        if os.path.basename(p) not in live:
+            os.remove(p)
+            print("removed stale page: models/%s" % os.path.basename(p))
 
     with open(os.path.join(ROOT, "models", "index.html"), "w", encoding="utf-8") as fh:
         fh.write(index_page())
