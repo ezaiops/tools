@@ -643,6 +643,7 @@ console.log("\n== models/deepseek-v4-1-flash.html ==");
   check("peak window row", /Weekday peak \(UTC 01:00-04:00 and 06:00-10:00\)/.test(doc.body.textContent));
   check("peak prices shown", /\$0\.30/.test(doc.body.textContent) && /\$1\.20/.test(doc.body.textContent));
   check("lead marks off-peak", /\(off-peak\)/.test($(".lead", doc).textContent), $(".lead", doc).textContent.slice(0, 100));
+  check("names the 1017 snapshot", /1017 snapshot released 2026-10-17/.test(doc.body.textContent));
 }
 
 console.log("\n== models: October 2026 release wave ==");

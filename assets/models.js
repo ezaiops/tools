@@ -243,7 +243,7 @@ window.EZ_MODELS = {
         "peak_days": "Mon-Fri",
         "window_label": "Weekday peak (UTC 01:00-04:00 and 06:00-10:00)"
       },
-      "note": "Off-peak rates shown. Weekday peak windows (UTC 01:00-04:00 and 06:00-10:00) double to $0.30/$1.20. Multimodal, open weights, up to 384K output tokens"
+      "note": "1017 snapshot released 2026-10-17: same price, but outputs run ~30% shorter so cost per task drops. Off-peak rates shown; weekday peak doubles to $0.30/$1.20. Multimodal, open weights, 1M context, 384K max output"
     },
     {
       "id": "deepseek-v4-pro",
