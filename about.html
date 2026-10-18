@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About — ezaiops tools</title>
+<meta name="description" content="What tools.ezaiops.com is, why every tool runs in your browser, and how the LLM pricing data is sourced and kept current.">
+<link rel="canonical" href="https://tools.ezaiops.com/about.html">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/"><span class="logo">ez</span>ezaiops <small>tools</small></a>
+    <nav class="site-nav">
+      <a href="/">Tools</a>
+      <a href="/models/index.html">LLM pricing</a>
+      <a href="https://ezaiops.com/en/" title="ezaiops.com — AI agent observability &amp; LLMOps field notes (in English)">Blog</a>
+      <a href="https://github.com/ezaiops">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap tool-page">
+  <nav class="crumbs"><a href="/">Home</a> / <span>About</span><a class="main-site-link" href="https://ezaiops.com/en/">ezaiops.com ↗</a></nav>
+  <h1>About ezaiops tools</h1>
+  <p class="lead">Free utilities for LLM cost math and everyday engineering work. No accounts, no uploads, no backend that could store what you type.</p>
+
+  <section class="prose">
+    <h2>What this site is</h2>
+    <p>tools.ezaiops.com is a collection of 18 browser-based tools and a pricing database covering 34 LLM models. Everything is static HTML, CSS and JavaScript served from GitHub Pages — there is no application server behind it, which is why the tools can promise that your input stays on your device: there is nowhere for it to go.</p>
+
+    <h2>Why the tools run locally</h2>
+    <p>Most free online utilities work by posting your input to a server, processing it there, and sending back the result. That is fine for a colour picker and not fine for a prompt containing customer data, a JWT, a contract PDF or a private key. These tools parse, hash, compress and render in the tab you already have open. Three of them (the token counter, QR generator and PDF tools) download a library from a CDN the first time you use them; the library runs locally and your content is never part of that request.</p>
+
+    <h2>How the pricing data is maintained</h2>
+    <p>Every price on the site comes from a single data file, and each pricing page shows the date it was last verified. Rates are read from the providers' own documentation — OpenAI, Anthropic, Google, DeepSeek, xAI, Z.AI, Moonshot, MiniMax, Xiaomi and Mistral — rather than from aggregator blogs, because aggregators lag. Long-context tiers, cached-input rates, batch discounts and peak/off-peak windows are modelled explicitly rather than averaged into one number.</p>
+    <p>Pricing changes constantly. If you spot a figure that no longer matches the provider's page, <a href="/contact.html">tell us</a> and it gets corrected — that is the single most useful thing a reader can send.</p>
+
+    <h2>What we do not do</h2>
+    <ul>
+      <li>No accounts, no email capture, no newsletter gate.</li>
+      <li>No paid placement: nobody can buy a position in a comparison table or a "cheapest" label.</li>
+      <li>No selling or sharing of data, because the tools never collect it.</li>
+    </ul>
+
+    <h2>Who is behind it</h2>
+    <p>ezaiops publishes field notes on AI agent observability, LLMOps and production AI operations at <a href="https://ezaiops.com/en/">ezaiops.com</a>. The tools grew out of that work — the cost calculator exists because estimating an agent's monthly bill from a pricing page is genuinely annoying, and the subnet and cron utilities exist because we kept needing them. Source code and issue tracker live on <a href="https://github.com/ezaiops">GitHub</a>.</p>
+
+    <h2>Get in touch</h2>
+    <p>Corrections, bug reports and feature requests are all welcome — see the <a href="/contact.html">contact page</a> for the fastest route. The <a href="/privacy.html">privacy policy</a> explains what little data the site touches.</p>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="legal">&copy; <span data-year>2026</span> ezaiops. Free tools, no signup, runs entirely in your browser.</div>
+    <nav class="footer-links"><a href="/about.html">About</a><span>·</span><a href="/contact.html">Contact</a><span>·</span><a href="/privacy.html">Privacy</a></nav>
+  </div>
+</footer>
+
+<script src="/assets/common.js" defer></script>
+</body>
+</html>

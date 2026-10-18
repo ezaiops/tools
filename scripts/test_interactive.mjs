@@ -690,6 +690,56 @@ console.log("\n== models/index.html ==");
   check("no console errors", errors.length === 0, errors.join(" | "));
 }
 
+console.log("\n== pages: about / contact / privacy ==");
+{
+  // Brand names and URLs are the only strings allowed to stay Latin in Chinese mode.
+  const ALLOWED = /^(ezaiops|tools|GitHub|ezaiops\.com ↗|github\.com\/ezaiops\/tools)$/;
+  async function untranslated(rel) {
+    const { win, doc } = await load(rel + "?lang=zh");
+    await sleep(500);
+    const skip = new Set(["SCRIPT", "STYLE", "CODE", "PRE", "KBD", "NOSCRIPT"]);
+    const out = [];
+    const walker = doc.createTreeWalker(doc.body, win.NodeFilter.SHOW_TEXT);
+    while (walker.nextNode()) {
+      const n = walker.currentNode;
+      const t = (n.nodeValue || "").trim();
+      if (!t || t.length < 3 || skip.has(n.parentNode.nodeName)) continue;
+      if (/^[\d\s$%·—–\-+×/().,:]+$/.test(t)) continue;
+      if (/[\u4e00-\u9fff]/.test(t)) continue;
+      if (!/[A-Za-z]{3,}/.test(t)) continue;
+      if (ALLOWED.test(t)) continue;
+      out.push(t.slice(0, 60));
+    }
+    return out;
+  }
+
+  for (const p of ["about.html", "contact.html", "privacy.html"]) {
+    const left = await untranslated(p);
+    check(p + " fully translated", left.length === 0, left.join(" | "));
+  }
+
+  const about = await load("about.html");
+  check("about has one h1", $$(about.doc, "h1").length === 1);
+  check("about links to contact", $$(about.doc, 'a[href="/contact.html"]').length >= 1);
+  check("about names the tool and model counts", /18 browser-based tools/.test(about.doc.body.textContent) && /34 LLM models/.test(about.doc.body.textContent));
+
+  const contact = await load("contact.html");
+  check("contact links to the issue tracker", $$(contact.doc, 'a[href="https://github.com/ezaiops/tools/issues"]').length >= 1);
+  check("contact links to privacy", $$(contact.doc, 'a[href="/privacy.html"]').length >= 1);
+
+  const privacy = await load("privacy.html");
+  const pText = privacy.doc.body.textContent;
+  check("privacy covers consent for EEA/UK", /European Economic Area/.test(pText));
+  check("privacy covers hosting logs", /GitHub Pages/.test(pText) && /Server logs/.test(pText));
+  check("privacy covers user rights", /Your choices and rights/.test(pText));
+  check("privacy dated today", /October 18, 2026/.test(pText));
+
+  // Every page in the site must be able to reach these three pages.
+  const hub = await load("index.html");
+  const footerLinks = $$(hub.doc, '.site-footer a[href^="/about.html"], .site-footer a[href^="/contact.html"], .site-footer a[href^="/privacy.html"]');
+  check("hub footer links to about/contact/privacy", footerLinks.length === 3, String(footerLinks.length));
+}
+
 console.log("\n== data / copy consistency ==");
 {
   // Guards the two ways this repo has silently drifted before: copy that quotes a

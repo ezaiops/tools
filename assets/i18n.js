@@ -14,6 +14,8 @@
     "/": ["i18n/hub.js"],
     "/index.html": ["i18n/hub.js"],
     "/privacy.html": ["i18n/privacy.js"],
+    "/about.html": ["i18n/about.js"],
+    "/contact.html": ["i18n/contact.js"],
     "/tools/token-counter.html": ["i18n/tools/token-counter.js"],
     "/tools/json-formatter.html": ["i18n/tools/json-formatter.js"],
     "/tools/regex-tester.html": ["i18n/tools/regex-tester.js"],

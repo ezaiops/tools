@@ -27,6 +27,9 @@ window.I18N_DICTS.push({
   "DeepSeek V4.1 Flash pricing": "DeepSeek V4.1 Flash 价格",
   "More": "更多",
   "Privacy policy": "隐私政策",
+  "About": "关于",
+  "Contact": "联系",
+  "Privacy": "隐私",
   "el:© 2026 ezaiops. Free tools, no signup, runs entirely in your browser.": "© 2026 ezaiops。免费工具，无需注册，全部在浏览器本地运行。",
 
   "Ad slot": "广告位",
