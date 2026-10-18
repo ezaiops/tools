@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Part 2: per-model page rendering, comparison hub, sitemap."""
+import datetime
+import glob
 import json
 import os
-import glob
 from gen_common import (ROOT, BASE, TODAY, UPDATED, MODELS, SOURCES, BY_ID,
                         money, blended, esc, HEAD, CRUMBS, FOOT)
 
@@ -290,13 +291,20 @@ def index_page():
     return html
 
 
-def sitemap(paths):
-    body = "".join(
-        "  <url><loc>%s</loc><lastmod>%s</lastmod><changefreq>monthly</changefreq></url>\n"
-        % (p, TODAY) for p in paths)
+def sitemap(entries):
+    """entries: list of (url, absolute_path). lastmod comes from the file itself so
+    unchanged pages stop claiming they were updated on every regeneration."""
+    rows = []
+    for url, path in entries:
+        try:
+            stamp = datetime.date.fromtimestamp(os.path.getmtime(path)).isoformat()
+        except OSError:
+            stamp = TODAY
+        rows.append("  <url><loc>%s</loc><lastmod>%s</lastmod>"
+                    "<changefreq>monthly</changefreq></url>\n" % (url, stamp))
     return ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
             "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n"
-            + body + "</urlset>\n")
+            + "".join(rows) + "</urlset>\n")
 
 
 def main():
@@ -311,7 +319,7 @@ def main():
         path = os.path.join(ROOT, "models", m["id"] + ".html")
         with open(path, "w", encoding="utf-8") as fh:
             fh.write(model_page(m))
-        pages.append("%s/models/%s.html" % (BASE, m["id"]))
+        pages.append(("%s/models/%s.html" % (BASE, m["id"]), path))
 
     # Prune pages for models that were removed from models.json, otherwise a
     # deleted model keeps a live, orphaned pricing page.
@@ -323,13 +331,17 @@ def main():
 
     with open(os.path.join(ROOT, "models", "index.html"), "w", encoding="utf-8") as fh:
         fh.write(index_page())
-    pages.append(BASE + "/models/index.html")
+    pages.append((BASE + "/models/index.html", os.path.join(ROOT, "models", "index.html")))
 
-    static_pages = [BASE + "/"]
+    # "/" is the canonical home page, so index.html is deliberately not listed
+    # again here — a sitemap that lists both asks Google to crawl a duplicate.
+    static_pages = [(BASE + "/", os.path.join(ROOT, "index.html"))]
     for p in sorted(glob.glob(os.path.join(ROOT, "*.html"))):
-        static_pages.append(BASE + "/" + os.path.basename(p))
+        if os.path.basename(p) == "index.html":
+            continue
+        static_pages.append((BASE + "/" + os.path.basename(p), p))
     for p in sorted(glob.glob(os.path.join(ROOT, "tools", "*.html"))):
-        static_pages.append(BASE + "/tools/" + os.path.basename(p))
+        static_pages.append((BASE + "/tools/" + os.path.basename(p), p))
     allurls = static_pages + pages
 
     with open(os.path.join(ROOT, "sitemap.xml"), "w", encoding="utf-8") as fh:

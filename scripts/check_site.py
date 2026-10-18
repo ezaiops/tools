@@ -75,6 +75,10 @@ for page in pages:
 
 expected = [BASE + "/"]
 for page in pages:
+    # The home page is listed once, as "/" — listing /index.html as well would ask
+    # crawlers to index the same page under two URLs.
+    if rel(page) == "index.html":
+        continue
     expected.append(BASE + "/" + rel(page))
 
 sitemap_path = os.path.join(ROOT, "sitemap.xml")
