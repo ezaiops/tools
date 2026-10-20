@@ -1,8 +1,9 @@
 /* Hub page (index.html) dictionary. Chrome strings live in common.js. */
 window.I18N_DICTS = window.I18N_DICTS || [];
 window.I18N_DICTS.push({
-  "Free AI & DevOps tools, running in your browser": "免费 AI 与 DevOps 工具，全部在浏览器本地运行",
-  "18 utilities for LLM costs, JSON, cron, networks and files. No signup, no uploads — every calculation happens in the tab you already have open.": "18 个工具，覆盖 LLM 成本、JSON、Cron、网络与文件。无需注册，不上传内容——所有计算都在你已经打开的这个标签页里完成。",
+  "title:ezaiops tools — AI & DevOps utilities": "ezaiops tools — AI 与 DevOps 工具",
+  "Everyday tools for AI and DevOps": "AI 与 DevOps 的日常工具",
+  "This is the ezaiops toolbox: LLM cost math, JSON formatting, cron schedules, subnets, files and images. Pick one and get to work.": "这里是 ezaiops 的工具箱：算 LLM 成本、格式化 JSON、看懂 Cron、算子网、处理文件和图片。挑一个直接用。",
   "ph:Search tools…": "搜索工具…",
   "No tool matches that. Try “json”, “cron” or “token”.": "没有匹配的工具。试试 “json”、“cron” 或 “token”。",
 

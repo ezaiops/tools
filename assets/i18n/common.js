@@ -30,7 +30,7 @@ window.I18N_DICTS.push({
   "About": "关于",
   "Contact": "联系",
   "Privacy": "隐私",
-  "el:© 2026 ezaiops. Free tools, no signup, runs entirely in your browser.": "© 2026 ezaiops。免费工具，无需注册，全部在浏览器本地运行。",
+  "el:© 2026 ezaiops · your input never leaves your browser": "© 2026 ezaiops · 输入内容不会离开你的浏览器",
 
   "Ad slot": "广告位",
   "Google AdSense placeholder — activated once the site is approved and has steady traffic.": "Google AdSense 占位——网站通过审批并有稳定流量后启用。",

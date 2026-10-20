@@ -124,7 +124,7 @@ FOOT = """
         </ul>
       </div>
     </div>
-    <div class="legal">&copy; <span data-year>2026</span> ezaiops. Free tools, no signup, runs entirely in your browser.</div>
+    <div class="legal">&copy; <span data-year>2026</span> ezaiops &middot; your input never leaves your browser</div>
   </div>
 </footer>
 
