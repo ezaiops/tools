@@ -6,6 +6,11 @@ window.I18N_DICTS.push({
 
   "Tools": "工具",
   "el:tools": "工具",
+  "title:Page not found — ezaiops tools": "页面不存在 — ezaiops tools",
+  "This page doesn't exist": "这个页面不存在",
+  "The link may be out of date, or the tool moved. Everything on the site is one click away:": "链接可能已经过期，或者工具换了位置。站上的内容都在一次点击之内：",
+  "All tools": "全部工具",
+  "Popular tools": "常用工具",
   "LLM pricing": "模型价格",
   "Blog": "博客",
   "GitHub": "GitHub",

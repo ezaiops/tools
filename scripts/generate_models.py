@@ -337,7 +337,7 @@ def main():
     # again here — a sitemap that lists both asks Google to crawl a duplicate.
     static_pages = [(BASE + "/", os.path.join(ROOT, "index.html"))]
     for p in sorted(glob.glob(os.path.join(ROOT, "*.html"))):
-        if os.path.basename(p) == "index.html":
+        if os.path.basename(p) in ("index.html", "404.html"):
             continue
         static_pages.append((BASE + "/" + os.path.basename(p), p))
     for p in sorted(glob.glob(os.path.join(ROOT, "tools", "*.html"))):

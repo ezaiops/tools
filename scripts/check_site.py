@@ -77,7 +77,7 @@ expected = [BASE + "/"]
 for page in pages:
     # The home page is listed once, as "/" — listing /index.html as well would ask
     # crawlers to index the same page under two URLs.
-    if rel(page) == "index.html":
+    if rel(page) in ("index.html", "404.html"):
         continue
     expected.append(BASE + "/" + rel(page))
 
