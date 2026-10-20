@@ -1,7 +1,7 @@
 /* Hub page (index.html) dictionary. Chrome strings live in common.js. */
 window.I18N_DICTS = window.I18N_DICTS || [];
 window.I18N_DICTS.push({
-  "title:ezaiops tools — AI & DevOps utilities": "ezaiops tools — AI 与 DevOps 工具",
+  "title:ezaiops tools — AI & DevOps utilities": "ezaiops 工具 — AI 与 DevOps 日常工具",
   "Everyday tools for AI and DevOps": "AI 与 DevOps 的日常工具",
   "This is the ezaiops toolbox: LLM cost math, JSON formatting, cron schedules, subnets, files and images. Pick one and get to work.": "这里是 ezaiops 的工具箱：算 LLM 成本、格式化 JSON、看懂 Cron、算子网、处理文件和图片。挑一个直接用。",
   "ph:Search tools…": "搜索工具…",

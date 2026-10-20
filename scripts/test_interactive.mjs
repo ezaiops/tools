@@ -225,6 +225,8 @@ console.log("\n== bilingual mode (?lang=zh) ==");
   check("switcher marks zh active", /active/.test(doc.querySelector('.lang-switch a[data-lang="zh"]').className || ""));
   check("nav translated", /工具/.test(doc.querySelector(".site-nav").textContent));
   check("footer translated", /输入内容|不会离开/.test(doc.querySelector(".site-footer").textContent));
+  check("brand label translated", /工具/.test(doc.querySelector(".brand").textContent),
+    doc.querySelector(".brand").textContent);
   check("h1 translated", /成本计算器/.test($("h1", doc).textContent), $("h1", doc).textContent);
   check("field label translated", /Prompt 或文本/.test(doc.querySelector('label[for="tc-input"]').textContent));
   check("placeholder translated", doc.querySelector("#mc-share-url") !== null);

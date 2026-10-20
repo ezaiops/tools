@@ -5,6 +5,7 @@ window.I18N_DICTS.push({
   "title:ezaiops.com — AI agent observability & LLMOps field notes (in English)": "ezaiops.com — AI Agent 可观测性与 LLMOps 实战笔记（中文）",
 
   "Tools": "工具",
+  "el:tools": "工具",
   "LLM pricing": "模型价格",
   "Blog": "博客",
   "GitHub": "GitHub",
