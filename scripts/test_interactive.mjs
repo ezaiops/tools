@@ -83,16 +83,32 @@ function $$(a, b) {
 }
 console.log("\n== index.html ==");
 {
-  const { doc, errors } = await load("index.html");
+  const { win, doc, errors } = await load("index.html");
   check("title set", /ezaiops tools/.test(doc.title), doc.title);
   check("hub renders every live tool", $$(doc, '.tool-grid a.tool-card-item[href^="/tools/"]').length === liveN,
     $$(doc, '.tool-grid a.tool-card-item[href^="/tools/"]').length + " vs " + liveN);
-  check("roadmap cards", $$(doc, "#roadmap .tool-card-item").length === plannedN,
-    $$(doc, "#roadmap .tool-card-item").length + " vs " + plannedN);
-  check("planned cards are not links", $$(doc, "#roadmap a.tool-card-item").length === 0);
+  check("tools are grouped", $$(doc, "#tool-groups .tool-group").length >= 4,
+    String($$(doc, "#tool-groups .tool-group").length));
+  check("every card has an inline icon", $$(doc, "#tool-groups .tool-card-item .tool-icon svg").length === liveN,
+    String($$(doc, "#tool-groups .tool-card-item .tool-icon svg").length));
+  check("no leaked taxonomy badges on cards", $$(doc, "#tool-groups .tool-card-item .badge").length === 0);
   check("model hub linked", $$(doc, 'a[href="/models/index.html"]').length >= 2);
   check("footer year rendered", /\d{4}/.test($(doc, "[data-year]").textContent));
-  check("main site banner", $$(doc, "a.main-site-banner, .main-site-banner a").length >= 1);
+  check("hub links to the blog", $$(doc, 'a[href^="https://ezaiops.com"]').length >= 1);
+
+  const search = $("#tool-search", doc);
+  check("search box present", !!search);
+  search.value = "cron";
+  search.dispatchEvent(new win.Event("input", { bubbles: true }));
+  await sleep(80);
+  const visible = $$(doc, "#tool-groups .tool-card-item:not([hidden])");
+  check("search narrows to cron tools", visible.length === 2, String(visible.length));
+  check("empty groups hidden", $$(doc, "#tool-groups .tool-group:not([hidden])").length === 1,
+    String($$(doc, "#tool-groups .tool-group:not([hidden])").length));
+  search.value = "zzzz";
+  search.dispatchEvent(new win.Event("input", { bubbles: true }));
+  await sleep(80);
+  check("no-match message shown", !$("#search-empty", doc).hidden);
   check("no console errors", errors.length === 0, errors.join(" | "));
 }
 
@@ -479,8 +495,12 @@ console.log("\n== bilingual: main-site link localization ==");
 console.log("\n== json-formatter.html ==");
 {
   const { win, doc, errors } = await load("tools/json-formatter.html");
+  check("output pane shows a hint before any input", /appears here/.test($("#jf-out", doc).textContent),
+    $("#jf-out", doc).textContent);
+  check("output pane is not hidden on load", !$("#jf-out", doc).classList.contains("hidden"));
   setInput(win, $("#jf-input", doc), '{"b":1,"a":[1,2]}');
   click(win, $("#jf-format", doc));
+  check("hint replaced by real output", !$("#jf-out", doc).classList.contains("placeholder"));
   check("format indents", /\n    "a"/.test($("#jf-out", doc).textContent), $("#jf-out", doc).textContent);
   check("format meta stats", /bytes/.test($("#jf-meta", doc).textContent), $("#jf-meta", doc).textContent);
   check("keys counted", /2 keys/.test($("#jf-meta", doc).textContent), $("#jf-meta", doc).textContent);

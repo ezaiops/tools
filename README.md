@@ -87,15 +87,16 @@ Prices were sourced from official provider pricing docs on 2026-10-18 (OpenAI, A
 
 ## Adding a new tool
 
-The hub grid and the "On the roadmap" section are generated from `scripts/tools.json` — never hand-edit them in `index.html` (they sit between `<!-- TOOLS-GRID:START -->` markers).
+The hub grid is generated from `scripts/tools.json` — never hand-edit it in `index.html` (it sits between the `<!-- TOOLS-GRID:START -->` markers). Cards are grouped by `group`, and each card's icon comes from the `ICONS` map in `scripts/generate_hub.py` (24x24 grid, 1.5px stroke, inline SVG — no icon font, no image requests).
 
 1. Build the page: `tools/<id>.html`, copying the header/footer, SEO meta, explanation section and FAQ pattern from an existing tool page (see `tools/json-formatter.html` for a minimal template).
-2. Add an entry to `scripts/tools.json`:
+2. Add an entry to `scripts/tools.json`. `desc` should fit two lines on a card (~90 characters), `group` is one of `ai | text | time | net | files | calc`:
    ```json
-   { "id": "<id>", "name": "...", "url": "/tools/<id>.html", "icon": "x",
-     "desc": "One sentence on the card.", "tags": ["..."], "category": "dev", "status": "live" }
+   { "id": "<id>", "name": "...", "url": "/tools/<id>.html",
+     "desc": "One sentence on the card.", "group": "text", "status": "live" }
    ```
-3. Regenerate the hub and sitemap, then test and commit (the post-commit hook pushes automatically):
+3. Add an icon for the new id to `ICONS` in `scripts/generate_hub.py` (a fallback square is drawn if you forget, which is the tell that you forgot).
+4. Regenerate the hub and sitemap, then test and commit (the post-commit hook pushes automatically):
    ```bash
    python scripts/generate_hub.py
    python scripts/check_site.py

@@ -35,57 +35,78 @@
   </div>
 </header>
 
-<main class="wrap">
+<main class="wrap wide">
   <section class="hero">
-    <h1>Free AI &amp; DevOps tools that run in your browser</h1>
-    <p class="lead">Small, fast utilities for the work around LLMs and infrastructure: count tokens and estimate what an API call will actually cost, format JSON, test regex, explain cron, hash strings, convert timestamps. No signup, no server round-trip, no data collection.</p>
-    <div class="cta-row">
-      <a class="btn primary" href="/tools/token-counter.html">LLM token &amp; cost calculator</a>
-      <a class="btn" href="/models/index.html">Browse LLM pricing (34 models)</a>
+    <h1>Free AI &amp; DevOps tools, running in your browser</h1>
+    <p class="hero-sub">18 utilities for LLM costs, JSON, cron, networks and files. No signup, no uploads — every calculation happens in the tab you already have open.</p>
+    <div class="tool-search">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
+      <input id="tool-search" type="search" placeholder="Search tools…" autocomplete="off" aria-label="Search tools">
+      <kbd>/</kbd>
     </div>
-    <p class="main-site-banner">Part of <a href="https://ezaiops.com/en/">ezaiops.com</a> — field notes on AI agent observability, LLMOps and production AI ops.</p>
   </section>
 
-    <h2 class="section-title">All tools</h2>
-  <div class="tool-grid">
-    <!-- TOOLS-GRID:START -->
-    <a class="tool-card-item" href="/tools/token-counter.html"><h3><span class="icon">$</span>LLM token &amp; cost calculator</h3><p>Count tokens and estimate cost per request, per day and per month across 34 models. Batch + cache discounts, long-context tiers and peak/off-peak rates handled automatically.</p><div class="tags"><span class="badge">AI</span><span class="badge blue">featured</span></div></a>
-    <a class="tool-card-item" href="/tools/json-formatter.html"><h3><span class="icon">{}</span>JSON formatter &amp; validator</h3><p>Format, minify and validate JSON with exact error line and column. Shows size, key count and nesting depth at a glance.</p><div class="tags"><span class="badge">JSON</span></div></a>
-    <a class="tool-card-item" href="/tools/regex-tester.html"><h3><span class="icon">.*</span>Regex tester</h3><p>Test JavaScript regular expressions against live text, inspect capture groups, and preview replacements with match highlighting.</p><div class="tags"><span class="badge">regex</span></div></a>
-    <a class="tool-card-item" href="/tools/cron-explainer.html"><h3><span class="icon">cron</span>Cron expression explainer</h3><p>Translate any cron schedule into plain English and see the next runs in your local timezone.</p><div class="tags"><span class="badge">scheduling</span></div></a>
-    <a class="tool-card-item" href="/tools/encode-decode.html"><h3><span class="icon">b64</span>Base64 / URL / hash</h3><p>Encode and decode text with Base64 and URL, escape HTML entities, and compute SHA checksums locally.</p><div class="tags"><span class="badge">encoding</span></div></a>
-    <a class="tool-card-item" href="/tools/timestamp-converter.html"><h3><span class="icon">ts</span>Unix timestamp converter</h3><p>Convert between Unix epoch, ISO 8601 and human-readable dates, live clock included.</p><div class="tags"><span class="badge">time</span></div></a>
-    <a class="tool-card-item" href="/tools/password-generator.html"><h3><span class="icon">pw</span>Password &amp; UUID generator</h3><p>Generate strong random passwords, memorable passphrases and v4 UUIDs with strength estimation.</p><div class="tags"><span class="badge">security</span></div></a>
-    <a class="tool-card-item" href="/tools/meta-tag-generator.html"><h3><span class="icon">&lt;/&gt;</span>Meta tag &amp; OG generator</h3><p>Generate title, description, Open Graph and Twitter card tags with a live search result and social preview.</p><div class="tags"><span class="badge">SEO</span></div></a>
-    <a class="tool-card-item" href="/tools/cron-generator.html"><h3><span class="icon">cron</span>Cron schedule builder</h3><p>Pick days and times visually, get the cron expression — the reverse of the explainer.</p><div class="tags"><span class="badge">scheduling</span></div></a>
-    <a class="tool-card-item" href="/tools/subnet-calculator.html"><h3><span class="icon">ip</span>Subnet &amp; CIDR calculator</h3><p>Network/mask/wildcard/host range math for any IPv4 CIDR block.</p><div class="tags"><span class="badge">networking</span></div></a>
-    <a class="tool-card-item" href="/tools/self-host-vs-api.html"><h3><span class="icon">gpu</span>Self-hosted vs API break-even</h3><p>Enter your monthly token volume, see where renting a GPU beats API pricing.</p><div class="tags"><span class="badge">AI</span></div></a>
-    <a class="tool-card-item" href="/tools/mortgage-calculator.html"><h3><span class="icon">%</span>Mortgage &amp; loan calculator</h3><p>Monthly payment, amortization schedule and extra-payment payoff scenarios.</p><div class="tags"><span class="badge">finance</span></div></a>
-    <a class="tool-card-item" href="/tools/image-compressor.html"><h3><span class="icon">img</span>Image compressor &amp; converter</h3><p>Compress JPG/PNG and convert to WebP in the browser via canvas — nothing uploaded.</p><div class="tags"><span class="badge">images</span><span class="badge">volume</span></div></a>
-    <a class="tool-card-item" href="/tools/pdf-tools.html"><h3><span class="icon">pdf</span>PDF merge &amp; split</h3><p>Merge, split and reorder PDF pages locally with pdf-lib.</p><div class="tags"><span class="badge">pdf</span><span class="badge">volume</span></div></a>
-    <a class="tool-card-item" href="/tools/jwt-debugger.html"><h3><span class="icon">jwt</span>JWT debugger</h3><p>Decode JWT header, payload and expiry locally with signature checks.</p><div class="tags"><span class="badge">security</span></div></a>
-    <a class="tool-card-item" href="/tools/diff-checker.html"><h3><span class="icon">diff</span>Text diff checker</h3><p>Side-by-side and inline diff for two blocks of text.</p><div class="tags"><span class="badge">text</span></div></a>
-    <a class="tool-card-item" href="/tools/unit-converter.html"><h3><span class="icon">u</span>Unit converter</h3><p>Length, weight, temperature, area, speed and data size conversions.</p><div class="tags"><span class="badge">convert</span></div></a>
-    <a class="tool-card-item" href="/tools/qr-generator.html"><h3><span class="icon">qr</span>QR code generator</h3><p>Generate QR codes as SVG or PNG, with error-correction level options.</p><div class="tags"><span class="badge">images</span></div></a>
-    <!-- TOOLS-GRID:END -->
+  <div id="tool-groups">
+  <!-- TOOLS-GRID:START -->
+  <section class="tool-group" data-group="ai">
+    <h2 class="group-title">AI &amp; LLM</h2>
+    <div class="tool-grid">
+      <a class="tool-card-item" href="/tools/token-counter.html" data-name="llm token &amp; cost calculator count tokens and price a prompt across 34 models — per request, day and month, with cache and batch discounts. ai"><span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="5.5"/><path d="M18.2 11.4A5.5 5.5 0 1 1 11.4 18.2"/><path d="M8 6.8v4.4M6.2 9h3.6"/></svg></span><span class="tool-card-body"><span class="tool-card-title">LLM token &amp; cost calculator</span><span class="tool-card-desc">Count tokens and price a prompt across 34 models — per request, day and month, with cache and batch discounts.</span></span></a>
+      <a class="tool-card-item" href="/tools/self-host-vs-api.html" data-name="self-hosted vs api break-even find the monthly volume where renting a gpu beats per-token api pricing. ai"><span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="3.5" width="19" height="7" rx="2"/><rect x="2.5" y="13.5" width="19" height="7" rx="2"/><path d="M6 7h.01M6 17h.01"/></svg></span><span class="tool-card-body"><span class="tool-card-title">Self-hosted vs API break-even</span><span class="tool-card-desc">Find the monthly volume where renting a GPU beats per-token API pricing.</span></span></a>
+    </div>
+  </section>
+  <section class="tool-group" data-group="text">
+    <h2 class="group-title">Text &amp; data</h2>
+    <div class="tool-grid">
+      <a class="tool-card-item" href="/tools/json-formatter.html" data-name="json formatter &amp; validator format, minify and validate json, with the exact line and column of the first error. text"><span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 3H7a2 2 0 0 0-2 2v4a2 2 0 0 1-2 2 2 2 0 0 1 2 2v4a2 2 0 0 0 2 2h1.5"/><path d="M15.5 3H17a2 2 0 0 1 2 2v4a2 2 0 0 0 2 2 2 2 0 0 0-2 2v4a2 2 0 0 1-2 2h-1.5"/></svg></span><span class="tool-card-body"><span class="tool-card-title">JSON formatter &amp; validator</span><span class="tool-card-desc">Format, minify and validate JSON, with the exact line and column of the first error.</span></span></a>
+      <a class="tool-card-item" href="/tools/regex-tester.html" data-name="regex tester test javascript regex against live text, with capture groups and replacement preview. text"><span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M20.5 20.5 15.6 15.6"/><path d="M7.5 10.5h6M10.5 7.5v6"/></svg></span><span class="tool-card-body"><span class="tool-card-title">Regex tester</span><span class="tool-card-desc">Test JavaScript regex against live text, with capture groups and replacement preview.</span></span></a>
+      <a class="tool-card-item" href="/tools/encode-decode.html" data-name="base64 / url / hash base64, url encoding, html entities and sha hashes — computed locally. text"><span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h15l-3.5-3.5M21 16H6l3.5 3.5"/></svg></span><span class="tool-card-body"><span class="tool-card-title">Base64 / URL / hash</span><span class="tool-card-desc">Base64, URL encoding, HTML entities and SHA hashes — computed locally.</span></span></a>
+      <a class="tool-card-item" href="/tools/meta-tag-generator.html" data-name="meta tag &amp; og generator title, description, open graph and twitter tags with a live social preview. text"><span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4 12.6 21.4a2 2 0 0 1-2.8 0L2.6 14.2a2 2 0 0 1-.6-1.4V4a2 2 0 0 1 2-2h8.8a2 2 0 0 1 1.4.6l6.4 6.4a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.4"/></svg></span><span class="tool-card-body"><span class="tool-card-title">Meta tag &amp; OG generator</span><span class="tool-card-desc">Title, description, Open Graph and Twitter tags with a live social preview.</span></span></a>
+      <a class="tool-card-item" href="/tools/diff-checker.html" data-name="text diff checker line and word diff for two blocks of text, side by side or inline. text"><span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v18M18 3v18"/><path d="M2.5 8h7M2.5 16h7M14.5 8h7M14.5 16h7"/></svg></span><span class="tool-card-body"><span class="tool-card-title">Text diff checker</span><span class="tool-card-desc">Line and word diff for two blocks of text, side by side or inline.</span></span></a>
+    </div>
+  </section>
+  <section class="tool-group" data-group="time">
+    <h2 class="group-title">Time &amp; scheduling</h2>
+    <div class="tool-grid">
+      <a class="tool-card-item" href="/tools/cron-explainer.html" data-name="cron expression explainer turn any cron expression into plain english and the next runs in your timezone. time"><span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16.5" rx="2"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/><path d="M9 14h.01M12 14h.01M15 14h.01M9 17h.01M12 17h.01"/></svg></span><span class="tool-card-body"><span class="tool-card-title">Cron expression explainer</span><span class="tool-card-desc">Turn any cron expression into plain English and the next runs in your timezone.</span></span></a>
+      <a class="tool-card-item" href="/tools/timestamp-converter.html" data-name="unix timestamp converter convert between unix epoch, iso 8601 and local time, with a live clock. time"><span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 6.5V12l3.5 2"/></svg></span><span class="tool-card-body"><span class="tool-card-title">Unix timestamp converter</span><span class="tool-card-desc">Convert between Unix epoch, ISO 8601 and local time, with a live clock.</span></span></a>
+      <a class="tool-card-item" href="/tools/cron-generator.html" data-name="cron schedule builder pick days and times visually and get the cron expression — the reverse. time"><span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16.5" rx="2"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4M12 13v5M9.5 15.5h5"/></svg></span><span class="tool-card-body"><span class="tool-card-title">Cron schedule builder</span><span class="tool-card-desc">Pick days and times visually and get the cron expression — the reverse.</span></span></a>
+    </div>
+  </section>
+  <section class="tool-group" data-group="net">
+    <h2 class="group-title">Network &amp; security</h2>
+    <div class="tool-grid">
+      <a class="tool-card-item" href="/tools/password-generator.html" data-name="password &amp; uuid generator strong passwords, memorable passphrases and v4 uuids with entropy scoring. net"><span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><path d="M12 14.5v2.5"/></svg></span><span class="tool-card-body"><span class="tool-card-title">Password &amp; UUID generator</span><span class="tool-card-desc">Strong passwords, memorable passphrases and v4 UUIDs with entropy scoring.</span></span></a>
+      <a class="tool-card-item" href="/tools/subnet-calculator.html" data-name="subnet &amp; cidr calculator network, broadcast and host range for any ipv4 cidr block, plus the binary view. net"><span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.5" r="2.2"/><circle cx="4.8" cy="19" r="2.2"/><circle cx="19.2" cy="19" r="2.2"/><path d="M12 6.7v5.6M12 12.3 6.4 16.9M12 12.3l5.6 4.6"/></svg></span><span class="tool-card-body"><span class="tool-card-title">Subnet &amp; CIDR calculator</span><span class="tool-card-desc">Network, broadcast and host range for any IPv4 CIDR block, plus the binary view.</span></span></a>
+      <a class="tool-card-item" href="/tools/jwt-debugger.html" data-name="jwt debugger decode jwt header, payload and expiry, and verify hs256 signatures locally. net"><span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15.5" r="4.5"/><path d="M11.2 12.3 20 3.5M16.5 7l2.2 2.2M13.8 9.7l2.2 2.2"/></svg></span><span class="tool-card-body"><span class="tool-card-title">JWT debugger</span><span class="tool-card-desc">Decode JWT header, payload and expiry, and verify HS256 signatures locally.</span></span></a>
+    </div>
+  </section>
+  <section class="tool-group" data-group="files">
+    <h2 class="group-title">Files &amp; media</h2>
+    <div class="tool-grid">
+      <a class="tool-card-item" href="/tools/image-compressor.html" data-name="image compressor &amp; converter compress jpg/png and convert to webp in the browser — nothing is uploaded. files"><span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3.5" width="18" height="17" rx="2.5"/><circle cx="8.5" cy="9" r="1.6"/><path d="m21 15.5-4.5-4.5L5.5 20.5"/></svg></span><span class="tool-card-body"><span class="tool-card-title">Image compressor &amp; converter</span><span class="tool-card-desc">Compress JPG/PNG and convert to WebP in the browser — nothing is uploaded.</span></span></a>
+      <a class="tool-card-item" href="/tools/pdf-tools.html" data-name="pdf merge &amp; split merge, split and reorder pdf pages locally with pdf-lib. files"><span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2.5H6.5a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V8z"/><path d="M14 2.5V8h5.5"/><path d="M8.5 13h7M8.5 16.5h4.5"/></svg></span><span class="tool-card-body"><span class="tool-card-title">PDF merge &amp; split</span><span class="tool-card-desc">Merge, split and reorder PDF pages locally with pdf-lib.</span></span></a>
+      <a class="tool-card-item" href="/tools/qr-generator.html" data-name="qr code generator generate qr codes as svg or png with four error-correction levels. files"><span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.2"/><rect x="14" y="3" width="7" height="7" rx="1.2"/><rect x="3" y="14" width="7" height="7" rx="1.2"/><path d="M14 14h3.5v3.5H14zM20.5 14h.5M14 20.5h3.5M20.5 20.5h.5"/></svg></span><span class="tool-card-body"><span class="tool-card-title">QR code generator</span><span class="tool-card-desc">Generate QR codes as SVG or PNG with four error-correction levels.</span></span></a>
+    </div>
+  </section>
+  <section class="tool-group" data-group="calc">
+    <h2 class="group-title">Calculators</h2>
+    <div class="tool-grid">
+      <a class="tool-card-item" href="/tools/mortgage-calculator.html" data-name="mortgage &amp; loan calculator monthly payment, amortization schedule and extra-payment payoff scenarios. calc"><span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19.5 4.5 4.5 19.5"/><circle cx="7.5" cy="7.5" r="2.6"/><circle cx="16.5" cy="16.5" r="2.6"/></svg></span><span class="tool-card-body"><span class="tool-card-title">Mortgage &amp; loan calculator</span><span class="tool-card-desc">Monthly payment, amortization schedule and extra-payment payoff scenarios.</span></span></a>
+      <a class="tool-card-item" href="/tools/unit-converter.html" data-name="unit converter length, weight, temperature, area, speed and data size, including gib vs gb. calc"><span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18M7.5 7.5 3 12l4.5 4.5M16.5 7.5 21 12l-4.5 4.5"/></svg></span><span class="tool-card-body"><span class="tool-card-title">Unit converter</span><span class="tool-card-desc">Length, weight, temperature, area, speed and data size, including GiB vs GB.</span></span></a>
+    </div>
+  </section>
+  <!-- TOOLS-GRID:END -->
   </div>
+  <p class="search-empty" id="search-empty" hidden>No tool matches that. Try “json”, “cron” or “token”.</p>
 
-  <h2 class="section-title">On the roadmap</h2>
-  <p class="note" style="margin:0 0 14px">Nothing scheduled right now — every tool ships free, client-side and no-signup. Ideas welcome as issues on <a href="https://github.com/ezaiops/tools">GitHub</a>.</p>
-  <div class="tool-grid" id="roadmap">
-    <!-- ROADMAP:START -->
-    
-    <!-- ROADMAP:END -->
-  </div>
-
-<h2 class="section-title">LLM API pricing, model by model</h2>
-  <div class="tool-grid">
-    <a class="tool-card-item" href="/models/index.html">
-      <h3><span class="icon">$</span>All model pricing pages</h3>
-      <p>Per-1M-token input and output prices, context windows and caching discounts for 34 models, side by side.</p>
-      <div class="tags"><span class="badge blue">20+ pages</span><span class="badge">AI</span></div>
-    </a>
-  </div>
+  <section class="pricing-strip">
+    <div>
+      <h2>LLM API pricing, model by model</h2>
+      <p>34 models with per-1M-token input and output prices, context windows, cache rates and peak/off-peak windows — each page shows when it was last verified.</p>
+    </div>
+    <a class="btn primary" href="/models/index.html">Browse pricing</a>
+  </section>
 
   <div class="ad-slot">
     <strong>Ad slot</strong>
@@ -94,9 +115,8 @@
 
   <section class="prose">
     <h2>Why these tools exist</h2>
-    <p>Most "free" online utilities upload your content to a server, wrap a simple operation in a paywall, or bury it under ads before you can use it. These tools are the opposite: every calculation runs entirely in your browser, so a JSON payload, a prompt draft or a password never leaves the page. That also makes them fast — there is nothing to wait for but your own CPU.</p>
-    <p>The focus is the day-to-day work around LLM-powered systems: figuring out what a call will cost before you ship it, debugging the cron schedule that runs an agent, formatting an API response, escaping a string, or generating credentials for a new service. The LLM pricing pages are updated as providers publish new rates.</p>
-    <p>This site is maintained by <a href="https://ezaiops.com/en/">ezaiops</a>, where we write about AI agent observability and production LLM operations. If a tool here saves you time, the blog goes deeper into the same problems.</p>
+    <p>Most "free" online utilities upload your content to a server, wrap a simple operation in a paywall, or bury it under ads. These run entirely in your browser, so a JSON payload, a prompt draft or a password never leaves the page — and there is nothing to wait for but your own CPU. The pricing pages are re-checked against provider documentation and each one shows the date it was last verified.</p>
+    <p>Maintained by <a href="https://ezaiops.com/en/">ezaiops</a>, where we write about AI agent observability and production LLM operations. More about the site on the <a href="/about.html">about page</a>.</p>
 
     <h2>Frequently asked questions</h2>
     <details class="faq">
@@ -157,5 +177,42 @@
 </footer>
 
 <script src="/assets/common.js" defer></script>
+<script>
+(function () {
+  "use strict";
+  var input = document.getElementById("tool-search");
+  var empty = document.getElementById("search-empty");
+  if (!input) return;
+  var cards = [].slice.call(document.querySelectorAll("#tool-groups .tool-card-item"));
+  var groups = [].slice.call(document.querySelectorAll("#tool-groups .tool-group"));
+
+  function apply() {
+    var q = input.value.trim().toLowerCase();
+    var shown = 0;
+    cards.forEach(function (c) {
+      var hit = !q || (c.getAttribute("data-name") || "").indexOf(q) !== -1;
+      c.hidden = !hit;
+      if (hit) shown++;
+    });
+    groups.forEach(function (g) {
+      g.hidden = !g.querySelector(".tool-card-item:not([hidden])");
+    });
+    empty.hidden = shown !== 0;
+  }
+
+  input.addEventListener("input", apply);
+  document.addEventListener("keydown", function (ev) {
+    if (ev.key === "/" && document.activeElement !== input &&
+        !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.nodeName)) {
+      ev.preventDefault();
+      input.focus();
+    } else if (ev.key === "Escape" && document.activeElement === input) {
+      input.value = "";
+      apply();
+      input.blur();
+    }
+  });
+})();
+</script>
 </body>
 </html>

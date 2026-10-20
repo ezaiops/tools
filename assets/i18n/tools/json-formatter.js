@@ -1,6 +1,11 @@
 /* JSON formatter page dictionary. Chrome strings live in common.js. */
 window.I18N_DICTS = window.I18N_DICTS || [];
 window.I18N_DICTS.push({
+  "Input": "输入",
+  "Output": "输出",
+  "Copy": "复制",
+  "Formatted JSON appears here.": "格式化结果会显示在这里。",
+  "el:No. Parsing, formatting and validation are done with the browser's built-in JSON.parse / JSON.stringify. Nothing is transmitted.": "不会。解析、格式化和校验都由浏览器内置的 <code>JSON.parse</code> / <code>JSON.stringify</code> 完成，不会有任何传输。",
   "JSON formatter & validator": "JSON 格式化与校验",
   "Paste JSON to format it with proper indentation, minify it for transport, or validate it — with the exact line and column of the first syntax error. Everything runs locally; large API payloads never leave the page.": "粘贴 JSON，用规范的缩进格式化、压缩以便传输，或进行校验——并给出第一处语法错误的精确行列。全部本地运行，大型 API 报文也不会离开页面。",
   "Input JSON": "输入 JSON",

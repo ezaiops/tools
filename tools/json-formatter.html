@@ -37,34 +37,48 @@
   </div>
 </header>
 
-<main class="wrap tool-page">
+<main class="wrap wide tool-page">
   <nav class="crumbs"><a href="/">Home</a> / Tools / <a href="/tools/json-formatter.html">JSON formatter</a><a class="main-site-link" href="https://ezaiops.com/en/">ezaiops.com ↗</a></nav>
   <h1>JSON formatter &amp; validator</h1>
   <p class="lead">Paste JSON to format it with proper indentation, minify it for transport, or validate it — with the exact line and column of the first syntax error. Everything runs locally; large API payloads never leave the page.</p>
 
-  <section class="panel">
-    <label class="field-label" for="jf-input">Input JSON</label>
-    <textarea id="jf-input" class="mono" rows="9" placeholder='{"hello": "world", "items": [1, 2, 3]}' spellcheck="false"></textarea>
-    <div class="btn-row">
-      <button class="btn small primary" id="jf-format" type="button">Format</button>
-      <button class="btn small" id="jf-minify" type="button">Minify</button>
-      <button class="btn small" id="jf-validate" type="button">Validate</button>
-      <button class="btn small" id="jf-copy" type="button" data-copy-target="#jf-out">Copy result</button>
-      <button class="btn small" id="jf-sample" type="button">Sample</button>
-      <button class="btn small" id="jf-clear" type="button">Clear</button>
-      <label style="font-size:13px;display:inline-flex;align-items:center;gap:6px">Indent
-        <select id="jf-indent" style="width:auto">
-          <option value="2">2 spaces</option>
-          <option value="4" selected>4 spaces</option>
-          <option value="tab">Tab</option>
-        </select>
-      </label>
+  <section class="workbench">
+    <div class="pane">
+      <div class="pane-head">
+        <span class="pane-title">Input</span>
+        <span class="pane-actions">
+          <button class="btn small" id="jf-sample" type="button">Sample</button>
+          <button class="btn small" id="jf-clear" type="button">Clear</button>
+        </span>
+      </div>
+      <textarea id="jf-input" class="mono" rows="16" placeholder='{"hello": "world", "items": [1, 2, 3]}' spellcheck="false"></textarea>
+      <div class="pane-foot">
+        <label class="inline-field">Indent
+          <select id="jf-indent">
+            <option value="2">2 spaces</option>
+            <option value="4" selected>4 spaces</option>
+            <option value="tab">Tab</option>
+          </select>
+        </label>
+        <div class="btn-row">
+          <button class="btn small primary" id="jf-format" type="button">Format</button>
+          <button class="btn small" id="jf-minify" type="button">Minify</button>
+          <button class="btn small" id="jf-validate" type="button">Validate</button>
+        </div>
+      </div>
     </div>
-
-    <pre class="code-out hidden" id="jf-out"></pre>
-    <pre class="code-out error hidden" id="jf-err"></pre>
-    <p class="note hidden" id="jf-warn"></p>
-    <p class="note" id="jf-meta"></p>
+    <div class="pane">
+      <div class="pane-head">
+        <span class="pane-title">Output</span>
+        <span class="pane-actions">
+          <button class="btn small" id="jf-copy" type="button" data-copy-target="#jf-out">Copy</button>
+        </span>
+      </div>
+      <pre class="code-out placeholder" id="jf-out">Formatted JSON appears here.</pre>
+      <pre class="code-out error hidden" id="jf-err"></pre>
+      <p class="note hidden" id="jf-warn"></p>
+      <p class="note" id="jf-meta"></p>
+    </div>
   </section>
 
   <div class="ad-slot">
@@ -157,11 +171,20 @@ document.addEventListener("DOMContentLoaded", function () {
     var v = $("#jf-indent").value;
     return v === "tab" ? "\t" : parseInt(v, 10);
   }
+  var OUT_HINT = "Formatted JSON appears here.";
   function hideAll() { out.classList.add("hidden"); err.classList.add("hidden"); }
+  function resetOut() {
+    hideAll();
+    out.classList.remove("hidden");
+    out.classList.add("placeholder");
+    out.textContent = OUT_HINT;
+    meta.textContent = "";
+  }
   function showOut(text) {
     hideAll();
     out.textContent = text;
     out.classList.remove("hidden");
+    out.classList.remove("placeholder");
   }
   function showErr(text) {
     hideAll();

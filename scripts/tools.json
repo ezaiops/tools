@@ -6,119 +6,153 @@
       "name": "LLM token & cost calculator",
       "url": "/tools/token-counter.html",
       "icon": "$",
-      "desc": "Count tokens and estimate cost per request, per day and per month across 29 models. Batch + cache discounts, long-context tiers and peak/off-peak rates handled automatically.",
-      "tags": ["AI", "featured"],
+      "desc": "Count tokens and price a prompt across 34 models — per request, day and month, with cache and batch discounts.",
+      "tags": [
+        "AI",
+        "featured"
+      ],
       "category": "ai",
-      "status": "live"
+      "status": "live",
+      "group": "ai"
     },
     {
       "id": "json-formatter",
       "name": "JSON formatter & validator",
       "url": "/tools/json-formatter.html",
       "icon": "{}",
-      "desc": "Format, minify and validate JSON with exact error line and column. Shows size, key count and nesting depth at a glance.",
-      "tags": ["JSON"],
+      "desc": "Format, minify and validate JSON, with the exact line and column of the first error.",
+      "tags": [
+        "JSON"
+      ],
       "category": "dev",
-      "status": "live"
+      "status": "live",
+      "group": "text"
     },
     {
       "id": "regex-tester",
       "name": "Regex tester",
       "url": "/tools/regex-tester.html",
       "icon": ".*",
-      "desc": "Test JavaScript regular expressions against live text, inspect capture groups, and preview replacements with match highlighting.",
-      "tags": ["regex"],
+      "desc": "Test JavaScript regex against live text, with capture groups and replacement preview.",
+      "tags": [
+        "regex"
+      ],
       "category": "dev",
-      "status": "live"
+      "status": "live",
+      "group": "text"
     },
     {
       "id": "cron-explainer",
       "name": "Cron expression explainer",
       "url": "/tools/cron-explainer.html",
       "icon": "cron",
-      "desc": "Translate any cron schedule into plain English and see the next runs in your local timezone.",
-      "tags": ["scheduling"],
+      "desc": "Turn any cron expression into plain English and the next runs in your timezone.",
+      "tags": [
+        "scheduling"
+      ],
       "category": "dev",
-      "status": "live"
+      "status": "live",
+      "group": "time"
     },
     {
       "id": "encode-decode",
       "name": "Base64 / URL / hash",
       "url": "/tools/encode-decode.html",
       "icon": "b64",
-      "desc": "Encode and decode text with Base64 and URL, escape HTML entities, and compute SHA checksums locally.",
-      "tags": ["encoding"],
+      "desc": "Base64, URL encoding, HTML entities and SHA hashes — computed locally.",
+      "tags": [
+        "encoding"
+      ],
       "category": "dev",
-      "status": "live"
+      "status": "live",
+      "group": "text"
     },
     {
       "id": "timestamp-converter",
       "name": "Unix timestamp converter",
       "url": "/tools/timestamp-converter.html",
       "icon": "ts",
-      "desc": "Convert between Unix epoch, ISO 8601 and human-readable dates, live clock included.",
-      "tags": ["time"],
+      "desc": "Convert between Unix epoch, ISO 8601 and local time, with a live clock.",
+      "tags": [
+        "time"
+      ],
       "category": "dev",
-      "status": "live"
+      "status": "live",
+      "group": "time"
     },
     {
       "id": "password-generator",
       "name": "Password & UUID generator",
       "url": "/tools/password-generator.html",
       "icon": "pw",
-      "desc": "Generate strong random passwords, memorable passphrases and v4 UUIDs with strength estimation.",
-      "tags": ["security"],
+      "desc": "Strong passwords, memorable passphrases and v4 UUIDs with entropy scoring.",
+      "tags": [
+        "security"
+      ],
       "category": "dev",
-      "status": "live"
+      "status": "live",
+      "group": "net"
     },
     {
       "id": "meta-tag-generator",
       "name": "Meta tag & OG generator",
       "url": "/tools/meta-tag-generator.html",
       "icon": "</>",
-      "desc": "Generate title, description, Open Graph and Twitter card tags with a live search result and social preview.",
-      "tags": ["SEO"],
+      "desc": "Title, description, Open Graph and Twitter tags with a live social preview.",
+      "tags": [
+        "SEO"
+      ],
       "category": "dev",
-      "status": "live"
+      "status": "live",
+      "group": "text"
     },
     {
       "id": "cron-generator",
       "name": "Cron schedule builder",
       "url": "/tools/cron-generator.html",
       "icon": "cron",
-      "desc": "Pick days and times visually, get the cron expression — the reverse of the explainer.",
-      "tags": ["scheduling"],
+      "desc": "Pick days and times visually and get the cron expression — the reverse.",
+      "tags": [
+        "scheduling"
+      ],
       "category": "dev",
       "status": "live",
       "priority": 1,
       "effort": "S",
-      "note": "Pairs with the explainer; shares its parser/tests"
+      "note": "Pairs with the explainer; shares its parser/tests",
+      "group": "time"
     },
     {
       "id": "subnet-calculator",
       "name": "Subnet & CIDR calculator",
       "url": "/tools/subnet-calculator.html",
       "icon": "ip",
-      "desc": "Network/mask/wildcard/host range math for any IPv4 CIDR block.",
-      "tags": ["networking"],
+      "desc": "Network, broadcast and host range for any IPv4 CIDR block, plus the binary view.",
+      "tags": [
+        "networking"
+      ],
       "category": "devops",
       "status": "live",
       "priority": 1,
       "effort": "S",
-      "note": "Pure JS integer math; classic bookmarked utility"
+      "note": "Pure JS integer math; classic bookmarked utility",
+      "group": "net"
     },
     {
       "id": "self-host-vs-api",
       "name": "Self-hosted vs API break-even",
       "url": "/tools/self-host-vs-api.html",
       "icon": "gpu",
-      "desc": "Enter your monthly token volume, see where renting a GPU beats API pricing.",
-      "tags": ["AI"],
+      "desc": "Find the monthly volume where renting a GPU beats per-token API pricing.",
+      "tags": [
+        "AI"
+      ],
       "category": "ai",
       "status": "live",
       "priority": 1,
       "effort": "M",
-      "note": "Fits the ezaiops niche; competitors rank well for the query cluster"
+      "note": "Fits the ezaiops niche; competitors rank well for the query cluster",
+      "group": "ai"
     },
     {
       "id": "mortgage-calculator",
@@ -126,25 +160,32 @@
       "url": "/tools/mortgage-calculator.html",
       "icon": "%",
       "desc": "Monthly payment, amortization schedule and extra-payment payoff scenarios.",
-      "tags": ["finance"],
+      "tags": [
+        "finance"
+      ],
       "category": "finance",
       "status": "live",
       "priority": 2,
       "effort": "M",
-      "note": "Highest-RPM query cluster for AdSense"
+      "note": "Highest-RPM query cluster for AdSense",
+      "group": "calc"
     },
     {
       "id": "image-compressor",
       "name": "Image compressor & converter",
       "url": "/tools/image-compressor.html",
       "icon": "img",
-      "desc": "Compress JPG/PNG and convert to WebP in the browser via canvas — nothing uploaded.",
-      "tags": ["images", "volume"],
+      "desc": "Compress JPG/PNG and convert to WebP in the browser — nothing is uploaded.",
+      "tags": [
+        "images",
+        "volume"
+      ],
       "category": "media",
       "status": "live",
       "priority": 2,
       "effort": "M",
-      "note": "Mass-market search volume; pure client-side, no server needed"
+      "note": "Mass-market search volume; pure client-side, no server needed",
+      "group": "files"
     },
     {
       "id": "pdf-tools",
@@ -152,64 +193,80 @@
       "url": "/tools/pdf-tools.html",
       "icon": "pdf",
       "desc": "Merge, split and reorder PDF pages locally with pdf-lib.",
-      "tags": ["pdf", "volume"],
+      "tags": [
+        "pdf",
+        "volume"
+      ],
       "category": "media",
       "status": "live",
       "priority": 3,
       "effort": "L",
-      "note": "Huge volume, heavy competition from ilovepdf-class sites; long-tail only"
+      "note": "Huge volume, heavy competition from ilovepdf-class sites; long-tail only",
+      "group": "files"
     },
     {
       "id": "jwt-debugger",
       "name": "JWT debugger",
       "url": "/tools/jwt-debugger.html",
       "icon": "jwt",
-      "desc": "Decode JWT header, payload and expiry locally with signature checks.",
-      "tags": ["security"],
+      "desc": "Decode JWT header, payload and expiry, and verify HS256 signatures locally.",
+      "tags": [
+        "security"
+      ],
       "category": "dev",
       "status": "live",
       "priority": 3,
       "effort": "S",
-      "note": "Bathroom-break utility devs search for weekly"
+      "note": "Bathroom-break utility devs search for weekly",
+      "group": "net"
     },
     {
       "id": "diff-checker",
       "name": "Text diff checker",
       "url": "/tools/diff-checker.html",
       "icon": "diff",
-      "desc": "Side-by-side and inline diff for two blocks of text.",
-      "tags": ["text"],
+      "desc": "Line and word diff for two blocks of text, side by side or inline.",
+      "tags": [
+        "text"
+      ],
       "category": "dev",
       "status": "live",
       "priority": 3,
       "effort": "M",
-      "note": "Needs a small diff algorithm (Myers) or vendored lib"
+      "note": "Needs a small diff algorithm (Myers) or vendored lib",
+      "group": "text"
     },
     {
       "id": "unit-converter",
       "name": "Unit converter",
       "url": "/tools/unit-converter.html",
       "icon": "u",
-      "desc": "Length, weight, temperature, area, speed and data size conversions.",
-      "tags": ["convert"],
+      "desc": "Length, weight, temperature, area, speed and data size, including GiB vs GB.",
+      "tags": [
+        "convert"
+      ],
       "category": "dev",
       "status": "live",
       "priority": 4,
       "effort": "S",
-      "note": "Low competition, steady but modest volume"
+      "note": "Low competition, steady but modest volume",
+      "group": "calc"
     },
     {
       "id": "qr-generator",
       "name": "QR code generator",
       "url": "/tools/qr-generator.html",
       "icon": "qr",
-      "desc": "Generate QR codes as SVG or PNG, with error-correction level options.",
-      "tags": ["images"],
+      "desc": "Generate QR codes as SVG or PNG with four error-correction levels.",
+      "tags": [
+        "images"
+      ],
       "category": "media",
       "status": "live",
       "priority": 4,
       "effort": "S",
-      "note": "Mature space; differentiate on privacy (client-side rendering)"
+      "note": "Mature space; differentiate on privacy (client-side rendering)",
+      "group": "files"
     }
   ]
 }
