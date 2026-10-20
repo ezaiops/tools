@@ -1,6 +1,6 @@
 # tools.ezaiops.com
 
-Free AI & DevOps micro-tools that run entirely in the browser. Pure static site — no build step, no backend, no data collection. Ready to deploy to Cloudflare Pages.
+AI & DevOps micro-tools that run entirely in the browser. Pure static site — no build step, no backend, no data collection. Deployed on GitHub Pages at https://tools.ezaiops.com.
 
 **Live locally:** `python -m http.server 8901` in this directory, then open http://localhost:8901
 
@@ -9,7 +9,7 @@ Free AI & DevOps micro-tools that run entirely in the browser. Pure static site 
 | Path | What |
 |---|---|
 | `index.html` | Tool hub / landing page |
-| `tools/token-counter.html` | LLM token counter + cost calculator (22 models, official BPE tokenizer via CDN with heuristic fallback) |
+| `tools/token-counter.html` | LLM token counter + cost calculator (34 models, official BPE tokenizer via CDN with heuristic fallback) |
 | `tools/json-formatter.html` | Format / minify / validate JSON with error line+column |
 | `tools/regex-tester.html` | Live JS regex tester: highlighting, capture groups, replacement preview |
 | `tools/cron-explainer.html` | Cron → plain English + next 10 runs in local timezone |
@@ -17,23 +17,33 @@ Free AI & DevOps micro-tools that run entirely in the browser. Pure static site 
 | `tools/timestamp-converter.html` | Unix ↔ ISO 8601 ↔ local, live clock |
 | `tools/password-generator.html` | Passwords, passphrases, UUID v4, strength estimate |
 | `tools/meta-tag-generator.html` | Title/OG/Twitter tags with SERP + social preview |
+| `tools/cron-generator.html` | Visual cron builder — the reverse of the explainer |
+| `tools/subnet-calculator.html` | IPv4 CIDR: network/broadcast/hosts, masks, binary view |
+| `tools/self-host-vs-api.html` | GPU rental vs per-token API break-even |
+| `tools/mortgage-calculator.html` | 等额本息 / 等额本金 amortization + extra payments |
+| `tools/image-compressor.html` | Canvas-based JPG/PNG compression and WebP conversion |
+| `tools/jwt-debugger.html` | JWT decode + HS256 verification (crypto.subtle) |
+| `tools/diff-checker.html` | Myers line + word diff |
+| `tools/unit-converter.html` | Six unit categories incl. GiB vs GB |
+| `tools/qr-generator.html` | QR as SVG/PNG, four ECC levels |
+| `tools/pdf-tools.html` | PDF merge/split/reorder via pdf-lib |
 | `models/*.html` | 34 per-model SEO pricing pages (generated) |
 | `models/index.html` | Full pricing comparison hub |
-| `privacy.html` | AdSense-ready privacy policy placeholder |
+| `privacy.html`, `about.html`, `contact.html` | Privacy policy, about and contact pages |
 | `robots.txt`, `ads.txt`, `sitemap.xml` | Crawler + monetization files (`ads.txt` has a commented placeholder) |
 
 ## Local development
 
 ```bash
 # 1. serve
-cd tools-ezaiops
+cd tools
 python -m http.server 8901
 
 # 2. static checks (links, titles, h1, JSON-LD, sitemap)
 python scripts/check_site.py
 
 # 3. interactive tests (jsdom; needs jsdom in the managed node workspace)
-node scripts/test_interactive.mjs        # 86 checks
+node scripts/test_interactive.mjs        # 277 checks
 
 # 4. regenerate model pages + calculator data + sitemap after editing models.json
 python scripts/generate_models.py
@@ -44,7 +54,7 @@ python scripts/generate_models.py
 1. **Repo name: `tools`** — `github.com/ezaiops/tools` mirrors the subdomain, and because it is org-scoped there is no collision. Create it under the `ezaiops` account/org.
 2. Push this folder's contents to the repo **root**:
    ```bash
-   cd tools-ezaiops
+   cd tools
    git init && git add -A && git commit -m "init"
    git branch -M main
    git remote add origin git@github.com:ezaiops/tools.git
@@ -104,7 +114,7 @@ The hub grid is generated from `scripts/tools.json` — never hand-edit it in `i
    git add -A && git commit -m "Add <tool>"
    ```
 
-Backlog lives in the same file with `"status": "planned"` plus `priority` (1 = next) and `effort` (S/M/L). Planned entries render publicly in the "On the roadmap" grid, so the roadmap on the site is always the file — edit priorities there to reorder what ships next.
+Backlog lives in the same file with `"status": "planned"` plus `priority` (1 = next) and `effort` (S/M/L). Planned entries are no longer rendered on the hub — the empty roadmap block was removed in the redesign — so the manifest is now a private backlog. Keep it that way until there are enough planned tools to justify a public roadmap again.
 
 ## Bilingual (EN / 中文)
 
@@ -117,7 +127,7 @@ same 中文/EN pattern as ezaiops.com:
 - Engine: `assets/i18n.js` — translates by matching DOM text nodes, so no page
   markup needs `data-i18n` attributes. Dictionaries: `assets/i18n/common.js`
   (header/footer/crumbs), `assets/i18n/hub.js`, `assets/i18n/privacy.js`,
-  `assets/i18n/tools/*.js`
+  `assets/i18n/about.js`, `assets/i18n/contact.js`, `assets/i18n/tools/*.js`
 - Key forms: plain (a text node), `ph:` (placeholder), `title:` (attribute
   value), `el:` (whole-element innerHTML — for paragraphs that contain
   `<code>`/`<strong>` markup)
@@ -134,6 +144,8 @@ English text is the key, so a missing key simply stays English.
 ## Design notes
 
 - Light theme, system font stack, zero JS framework; every page is one HTML file with one inline script
+- Hub: client-side search (`/` focuses it), six category groups, inline SVG icons, no badges
+- Text tools use a two-pane workbench (`.workbench`): input left, output right, both always visible; it stacks below 900px
 - Shared chrome: `assets/style.css` (design system) + `assets/common.js` (copy-to-clipboard, footer year, toast)
-- JSON-LD on every page (SoftwareApplication / FAQPage / ItemList) for rich results
+- JSON-LD: `SoftwareApplication` + `Offer` on tool pages, `FAQPage` + `ItemList` on model pages, `WebSite` on the hub. Tool pages carry visible FAQ sections but no FAQPage schema — Google retired FAQ rich results, so it would add nothing
 - The token counter loads `gpt-tokenizer` from esm.sh at runtime; if the CDN is unreachable it falls back to a documented approximation, so the tool never breaks
