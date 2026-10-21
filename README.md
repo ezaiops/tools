@@ -30,7 +30,7 @@ AI & DevOps micro-tools that run entirely in the browser. Pure static site — n
 | `models/*.html` | 34 per-model SEO pricing pages (generated) |
 | `models/index.html` | Full pricing comparison hub |
 | `privacy.html`, `about.html`, `contact.html` | Privacy policy, about and contact pages |
-| `robots.txt`, `ads.txt`, `sitemap.xml` | Crawler + monetization files (`ads.txt` has a commented placeholder) |
+| `robots.txt`, `ads.txt`, `sitemap.xml` | Crawler + monetization files (`ads.txt` authorises the AdSense publisher ID) |
 
 ## Local development
 
@@ -80,7 +80,7 @@ output directory `/`. Every push to `main` auto-deploys.
 
 1. Site live on its own domain with original content pages (done — every tool page has an explanation section + FAQ)
 2. Apply at adsense.google.com with `tools.ezaiops.com`
-3. After approval: replace the placeholder in `ads.txt` with your `pub-` ID and uncomment the line
+3. `ads.txt` already authorises the publisher ID at the root of **both** hosts — AdSense reads it per-domain, so `ezaiops.com` and `tools.ezaiops.com` each need their own copy
 4. Replace each `<div class="ad-slot">…</div>` placeholder with your AdSense unit, or add the Auto ads snippet to `<head>`
 5. At ~10k monthly sessions, evaluate Ezoic as a higher-paying alternative
 
