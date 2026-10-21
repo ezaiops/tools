@@ -433,6 +433,36 @@ console.log("\n== mortgage provident fund and combined loans (zh) ==");
   check("commercial label is explicit", /^商贷金额$/.test($("#mo-amount-label", doc).textContent), $("#mo-amount-label", doc).textContent);
   check("commercial payment ignores the fund portion", /^¥4,324\.67$/.test($("#mo-payment", doc).textContent), $("#mo-payment", doc).textContent);
   check("no fund split line in commercial mode", $("#mo-split", doc).textContent === "", $("#mo-split", doc).textContent);
+
+  // switching away and back must restore the user's numbers, not the defaults
+  setInput(win, $("#mo-amount", doc), "1500000");
+  await sleep(250);
+  type.value = "fund";
+  type.dispatchEvent(new win.Event("change", { bubbles: true }));
+  await sleep(250);
+  check("fund still zeroes the commercial amount", $("#mo-comm-amount", doc).value === "0");
+  type.value = "comm";
+  type.dispatchEvent(new win.Event("change", { bubbles: true }));
+  await sleep(250);
+  check("round-trip keeps the typed amount", $("#mo-amount", doc).value === "1500000",
+    $("#mo-amount", doc).value);
+  check("restored payment uses the typed amount", /^¥6,487/.test($("#mo-payment", doc).textContent),
+    $("#mo-payment", doc).textContent);
+
+  // combo round-trip: both portions come back
+  type.value = "combo";
+  type.dispatchEvent(new win.Event("change", { bubbles: true }));
+  await sleep(250);
+  setInput(win, $("#mo-fund-amount", doc), "800000");
+  await sleep(250);
+  type.value = "comm";
+  type.dispatchEvent(new win.Event("change", { bubbles: true }));
+  await sleep(250);
+  type.value = "combo";
+  type.dispatchEvent(new win.Event("change", { bubbles: true }));
+  await sleep(250);
+  check("combo round-trip keeps both portions", $("#mo-fund-amount", doc).value === "800000" && $("#mo-comm-amount", doc).value !== "0",
+    $("#mo-fund-amount", doc).value + " + " + $("#mo-comm-amount", doc).value);
 }
 
 console.log("\n== image-compressor.html ==");

@@ -2,7 +2,7 @@
 window.I18N_DICTS = window.I18N_DICTS || [];
 window.I18N_DICTS.push({
   "Mortgage & loan calculator": "房贷与贷款计算器",
-  "el:Work out the monthly payment, total interest and payoff date for any fixed-rate loan — in either repayment method. Equal installment keeps every payment the same; equal principal pays a fixed slice of principal each month, so payments start high and shrink. Loans split across two rates (China's 公积金 + 商贷 combined loan) are itemised per payment. Runs entirely in your browser.": "计算固定利率贷款的月供、总利息与还清时间——支持商业贷款、公积金贷款与组合贷，两种还款方式任选。等额本息每期还款额相同；等额本金每月偿还固定本金，月供前高后低。组合贷会逐期分别列出公积金与商贷的本金和利息。全部在浏览器本地运行。",
+  "el:Work out the monthly payment, total interest and payoff date for any fixed-rate loan — in either repayment method. Equal installment keeps every payment the same; equal principal pays a fixed slice of principal each month, so payments start high and shrink. Loans split across two rates (China's 公积金 + 商贷 combined loan) are itemised per payment. Runs entirely in your browser.": "计算固定利率贷款的月供、总利息与还清时间——支持商业贷款、公积金贷款与组合贷，两种还款方式任选。<strong>等额本息</strong>每期还款额相同；<strong>等额本金</strong>每月偿还固定本金，月供前高后低。组合贷会逐期分别列出公积金与商贷的本金和利息。全部在浏览器本地运行。",
   "Loan calculator": "贷款计算器",
   "Repayment method": "还款方式",
   "Equal installment (等额本息)": "等额本息",

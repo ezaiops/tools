@@ -101,6 +101,12 @@ for extra in ["robots.txt", "ads.txt", "CNAME", ".nojekyll"]:
     if not os.path.exists(os.path.join(ROOT, extra)):
         problems.append("%s missing" % extra)
 
+# The hub search and the tool toggles hide elements with the hidden attribute,
+# which only works because style.css overrides author flex/grid display rules.
+css_text = open(os.path.join(ROOT, "assets", "style.css"), encoding="utf-8").read()
+if "[hidden] { display: none" not in css_text:
+    problems.append("assets/style.css lost the [hidden] display rule — JS-driven hiding (search filter, tool toggles) will silently stop working")
+
 print("pages checked: %d" % len(pages))
 print("sitemap entries: %d" % len(locs))
 if problems:

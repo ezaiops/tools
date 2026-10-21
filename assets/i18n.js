@@ -4,6 +4,8 @@
  * assets/i18n/*.js and are matched by DOM text nodes, so no page markup needs
  * data-i18n attributes. Dynamic JS strings use window.ezI18N.t()/tf().
  */
+var ASSET_V = "20261022a";
+
 (function () {
   "use strict";
 
@@ -185,7 +187,7 @@
     var path = location.pathname.replace(/\/$/, "/index.html");
     var files = ["i18n/common.js"].concat(DICT_FILES[location.pathname] || DICT_FILES[path] || []);
     Promise.all(files.map(function (f) {
-      return loadScript("/assets/" + f).catch(function () { /* dictionary missing: keep English */ });
+      return loadScript("/assets/" + f + "?v=" + ASSET_V).catch(function () { /* dictionary missing: keep English */ });
     })).then(function () {
       dicts = (window.I18N_DICTS || []).slice();
       if (lang !== "zh") { injectSwitcher(); localizeMainSiteLinks(); return; }
