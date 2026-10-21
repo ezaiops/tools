@@ -465,6 +465,39 @@ console.log("\n== mortgage provident fund and combined loans (zh) ==");
     $("#mo-fund-amount", doc).value + " + " + $("#mo-comm-amount", doc).value);
 }
 
+console.log("\n== mortgage: amount carries across loan types (zh) ==");
+{
+  const { win, doc } = await load("tools/mortgage-calculator.html?lang=zh");
+  await sleep(400);
+  const type = $("#mo-type", doc);
+
+  setInput(win, $("#mo-amount", doc), "500000");
+  await sleep(250);
+  type.value = "fund";
+  type.dispatchEvent(new win.Event("change", { bubbles: true }));
+  await sleep(300);
+  check("typed amount carries into the fund loan", $("#mo-amount", doc).value === "500000", $("#mo-amount", doc).value);
+  check("rate still follows the product", $("#mo-rate", doc).value === "2.6", $("#mo-rate", doc).value);
+  check("payment uses 50万 at 2.6%", /^¥2,001\.70$/.test($("#mo-payment", doc).textContent), $("#mo-payment", doc).textContent);
+
+  setInput(win, $("#mo-amount", doc), "1500000");
+  await sleep(300);
+  check("cap hint appears above 120万", $("#mo-amount-hint", doc).hidden === false && /上限/.test($("#mo-amount-hint", doc).textContent), $("#mo-amount-hint", doc).textContent);
+  setInput(win, $("#mo-amount", doc), "800000");
+  await sleep(300);
+  check("cap hint hides under the cap", $("#mo-amount-hint", doc).hidden === true);
+
+  // an untouched default still gets the target product's own seed
+  const fresh = await load("tools/mortgage-calculator.html?lang=zh");
+  await sleep(400);
+  const t2 = $("#mo-type", fresh.doc);
+  t2.value = "fund";
+  t2.dispatchEvent(new fresh.win.Event("change", { bubbles: true }));
+  await sleep(300);
+  check("untouched amount uses the fund seed", $("#mo-amount", fresh.doc).value === "600000", $("#mo-amount", fresh.doc).value);
+  fresh.win.close();
+}
+
 console.log("\n== image-compressor.html ==");
 {
   const { win, doc } = await load("tools/image-compressor.html");

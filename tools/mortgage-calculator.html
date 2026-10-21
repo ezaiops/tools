@@ -71,6 +71,7 @@
       <div class="field">
         <label class="field-label" for="mo-amount" id="mo-amount-label">Loan amount</label>
         <div class="input-prefix"><span class="mo-cur">$</span><input type="number" id="mo-amount" min="0" step="10000" value="400000"></div>
+        <div class="hint" id="mo-amount-hint" hidden></div>
       </div>
       <div class="field">
         <label class="field-label" for="mo-rate" id="mo-rate-label">Annual interest rate</label>
@@ -236,6 +237,7 @@ document.addEventListener("DOMContentLoaded", function () {
     en: { amount: 400000, rate: 7.4, years: 30 }
   };
   var dirty = false;
+  var amountTouched = false;
 
   var start = $("#mo-start");
   if (!start.value) {
@@ -354,6 +356,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function recalc() {
+    syncAmountHint();
     var parts = readParts();
     var total = parts.reduce(function (s, p) { return s + p.P; }, 0);
     if (total <= 0) return;
@@ -416,6 +419,16 @@ document.addEventListener("DOMContentLoaded", function () {
     }).join("");
   }
 
+  // Provident-fund loans have a per-city cap; warn instead of silently editing
+  // the number the user asked for.
+  function syncAmountHint() {
+    var el = $("#mo-amount-hint");
+    if (!el) return;
+    var over = isZh() && type() === "fund" && (parseFloat($("#mo-amount").value) || 0) > 1200000;
+    el.textContent = over ? "公积金贷款多数城市有上限（常见 50–120 万），请按当地政策核对。" : "";
+    el.hidden = !over;
+  }
+
   function syncVisibility() {
     var zh = isZh();
     var t = type();
@@ -445,6 +458,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function applyDefaults() {
     snapshots.comm = null; snapshots.fund = null; snapshots.combo = null;
     prevType = "comm";
+    amountTouched = false;
     var d = DEFAULTS[isZh() ? "zh" : "en"];
     $("#mo-amount").value = d.amount;
     $("#mo-rate").value = d.rate;
@@ -505,6 +519,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   $("#mo-type").addEventListener("change", function () {
     var t = $("#mo-type").value;
+    var singleNow = parseFloat($("#mo-amount").value) || 0;
     snapshots[prevType] = snapshotOf(prevType);
 
     if (t === "combo") {
@@ -535,7 +550,11 @@ document.addEventListener("DOMContentLoaded", function () {
         if (t === "comm") applySingle(s.c || 1000000, s.cr || 3.2);
         else applySingle(s.f || 600000, s.fr || 2.6);
       } else {
-        applySingle(t === "comm" ? 1000000 : 600000, t === "comm" ? 3.2 : 2.6);
+        // First visit to this type. The amount answers "how much am I borrowing",
+        // so a figure the user typed carries over; only the rate follows the
+        // product. Untouched defaults still get the product's own seed.
+        var seed = t === "comm" ? { a: 1000000, r: 3.2 } : { a: 600000, r: 2.6 };
+        applySingle(amountTouched ? singleNow : seed.a, seed.r);
       }
     }
 
@@ -545,8 +564,14 @@ document.addEventListener("DOMContentLoaded", function () {
   ["#mo-amount", "#mo-rate", "#mo-years", "#mo-extra", "#mo-fund-amount", "#mo-fund-rate", "#mo-comm-amount", "#mo-comm-rate"].forEach(function (sel) {
     var el = $(sel);
     if (!el) return;
-    el.addEventListener("input", function () { markDirty(); schedule(); });
-    el.addEventListener("change", function () { markDirty(); schedule(); });
+    el.addEventListener("input", function () {
+      if (sel === "#mo-amount") amountTouched = true;
+      markDirty(); schedule();
+    });
+    el.addEventListener("change", function () {
+      if (sel === "#mo-amount") amountTouched = true;
+      markDirty(); schedule();
+    });
   });
   $("#mo-start").addEventListener("change", recalc);
 
