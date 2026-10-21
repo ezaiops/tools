@@ -394,7 +394,8 @@ console.log("\n== mortgage provident fund and combined loans (zh) ==");
   type.dispatchEvent(new win.Event("change", { bubbles: true }));
   await sleep(300);
   check("fund switch sets the 2.6% rate", $("#mo-rate", doc).value === "2.6", $("#mo-rate", doc).value);
-  check("fund amount label", /公积金贷款金额/.test($("#mo-amount-label", doc).textContent), $("#mo-amount-label", doc).textContent);
+  check("fund amount label", /^公积金金额$/.test($("#mo-amount-label", doc).textContent), $("#mo-amount-label", doc).textContent);
+  check("fund mode zeroes the commercial amount", $("#mo-comm-amount", doc).value === "0", $("#mo-comm-amount", doc).value);
   check("fund payment ¥2,402.04", /^¥2,402\.04$/.test($("#mo-payment", doc).textContent), $("#mo-payment", doc).textContent);
 
   // combined loan: two portions, itemised per payment
@@ -402,6 +403,8 @@ console.log("\n== mortgage provident fund and combined loans (zh) ==");
   type.dispatchEvent(new win.Event("change", { bubbles: true }));
   await sleep(300);
   check("combo hides the single-amount row", $("#mo-single-row", doc).hidden === true);
+  check("combo seeds both portions", $("#mo-fund-amount", doc).value === "600000" && $("#mo-comm-amount", doc).value === "400000",
+    $("#mo-fund-amount", doc).value + " + " + $("#mo-comm-amount", doc).value);
   check("combo shows both amount rows", $("#mo-combo-row", doc).hidden === false);
   const head = $$(doc, "#mo-head th").map((th) => th.textContent.trim());
   check("combo table has 7 columns", head.length === 7, String(head.length));
@@ -420,6 +423,16 @@ console.log("\n== mortgage provident fund and combined loans (zh) ==");
   setInput(win, $("#mo-extra", doc), "0");
   await sleep(300);
   check("combo returns to the base payment", /^¥4,131\.91$/.test($("#mo-payment", doc).textContent), $("#mo-payment", doc).textContent);
+
+  // leaving combo must clear the portion that no longer applies
+  type.value = "comm";
+  type.dispatchEvent(new win.Event("change", { bubbles: true }));
+  await sleep(300);
+  check("commercial mode zeroes the fund amount", $("#mo-fund-amount", doc).value === "0", $("#mo-fund-amount", doc).value);
+  check("commercial mode hides the combo row", $("#mo-combo-row", doc).hidden === true);
+  check("commercial label is explicit", /^商贷金额$/.test($("#mo-amount-label", doc).textContent), $("#mo-amount-label", doc).textContent);
+  check("commercial payment ignores the fund portion", /^¥4,324\.67$/.test($("#mo-payment", doc).textContent), $("#mo-payment", doc).textContent);
+  check("no fund split line in commercial mode", $("#mo-split", doc).textContent === "", $("#mo-split", doc).textContent);
 }
 
 console.log("\n== image-compressor.html ==");

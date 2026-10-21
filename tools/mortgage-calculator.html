@@ -81,7 +81,7 @@
 
     <div class="field-row" id="mo-combo-row" style="margin-top:12px" hidden>
       <div class="field">
-        <label class="field-label" for="mo-fund-amount">公积金贷款金额</label>
+        <label class="field-label" for="mo-fund-amount">公积金金额</label>
         <div class="input-prefix"><span class="mo-cur">¥</span><input type="number" id="mo-fund-amount" min="0" step="10000" value="600000"></div>
       </div>
       <div class="field">
@@ -428,12 +428,12 @@ document.addEventListener("DOMContentLoaded", function () {
     var rateHint = $("#mo-rate-hint");
     if (zh) {
       if (t === "fund") {
-        amountLabel.textContent = "公积金贷款金额";
+        amountLabel.textContent = "公积金金额";
         rateLabel.textContent = "公积金利率";
         rateHint.textContent = "5 年以上首套 2.60%，二套 3.075%；5 年（含）以下首套 2.10%。";
       } else {
-        amountLabel.textContent = "贷款金额";
-        rateLabel.textContent = "年利率";
+        amountLabel.textContent = "商贷金额";
+        rateLabel.textContent = "商贷利率";
         rateHint.textContent = "5 年期以上 LPR 3.50% − 30BP = 3.20%，各城市可上下浮动。";
       }
     }
@@ -453,7 +453,11 @@ document.addEventListener("DOMContentLoaded", function () {
       $("#mo-comm-amount").value = d.comm;
       $("#mo-comm-rate").value = d.commRate;
     }
-    if (isZh()) $("#mo-type").value = "comm";
+    if (isZh()) {
+      $("#mo-type").value = "comm";
+      $("#mo-fund-amount").value = 0;
+      $("#mo-fund-rate").value = 2.6;
+    }
   }
 
   function applyCurrency() {
@@ -471,8 +475,23 @@ document.addEventListener("DOMContentLoaded", function () {
   });
   $("#mo-type").addEventListener("change", function () {
     var t = $("#mo-type").value;
-    if (t === "fund") { $("#mo-amount").value = 600000; $("#mo-rate").value = 2.6; }
-    if (t === "comm") { $("#mo-amount").value = 1000000; $("#mo-rate").value = 3.2; }
+    // Only the portions that apply to the chosen type may carry an amount.
+    if (t === "fund") {
+      $("#mo-comm-amount").value = 0;
+      $("#mo-comm-rate").value = 3.2;
+      $("#mo-amount").value = 600000;
+      $("#mo-rate").value = 2.6;
+    } else if (t === "comm") {
+      $("#mo-fund-amount").value = 0;
+      $("#mo-fund-rate").value = 2.6;
+      $("#mo-amount").value = 1000000;
+      $("#mo-rate").value = 3.2;
+    } else {
+      $("#mo-fund-amount").value = 600000;
+      $("#mo-fund-rate").value = 2.6;
+      $("#mo-comm-amount").value = 400000;
+      $("#mo-comm-rate").value = 3.2;
+    }
     syncVisibility(); markDirty(); recalc();
   });
   ["#mo-amount", "#mo-rate", "#mo-years", "#mo-extra", "#mo-fund-amount", "#mo-fund-rate", "#mo-comm-amount", "#mo-comm-rate"].forEach(function (sel) {
