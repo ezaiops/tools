@@ -39,6 +39,9 @@ AI & DevOps micro-tools that run entirely in the browser. Pure static site — n
 cd tools
 python -m http.server 8901
 
+# 4. after deploying, smoke-test the live site (defaults, round-trips, 404, ads.txt)
+node scripts/verify_live.mjs
+
 # 2. static checks (links, titles, h1, JSON-LD, sitemap)
 python scripts/check_site.py
 
