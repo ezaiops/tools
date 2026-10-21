@@ -243,9 +243,26 @@ img { max-width: 100%; }
 @media (max-width: 900px) { .workbench { grid-template-columns: 1fr; } }
 
 label.field-label { display: block; font-size: 13px; font-weight: 500; margin: 0 0 6px; color: var(--text); }
-.field-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: end; }
-.field { flex: 1 1 200px; }
-.field .hint { font-size: 12px; color: var(--muted); margin-top: 4px; }
+/* Grid, not flex: fields keep equal width and their labels/inputs share a
+   baseline even when only some of them carry a hint underneath. */
+.field-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
+  gap: 14px;
+  align-items: start;
+}
+.field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.field > .btn { align-self: flex-start; }
+/* Short-value controls look broken when a lone field fills a whole row */
+.field > select,
+.field > .input-prefix,
+.field > input[type="date"] { max-width: 360px; }
+/* a field whose only child is a button should size to the button, not fill the track */
+.field:has(> .btn:only-child) { justify-self: start; }
+.field .hint { font-size: 12px; color: var(--muted); margin: 0; }
+@media (max-width: 560px) {
+  .field-row { grid-template-columns: 1fr; }
+}
 .input-prefix { display: flex; align-items: stretch; border: 1px solid var(--border-strong); border-radius: 8px; background: #fff; overflow: hidden; }
 .input-prefix > span { display: flex; align-items: center; padding: 0 10px; font-size: 14px; color: var(--muted); background: var(--surface-2); }
 .input-prefix input { border: none !important; border-radius: 0 !important; flex: 1; min-width: 0; }
@@ -284,7 +301,7 @@ textarea.mono, input.mono { font-family: var(--mono); font-size: 13px; }
   padding: 10px 12px;
 }
 .stat .k { font-size: 12px; color: var(--muted); margin-bottom: 2px; }
-.stat .v { font-size: 19px; font-weight: 500; font-variant-numeric: tabular-nums; word-break: break-all; }
+.stat .v { font-size: 19px; font-weight: 500; font-variant-numeric: tabular-nums; word-break: normal; overflow-wrap: anywhere; }
 .stat .v small { font-size: 12px; color: var(--muted); font-weight: 400; }
 
 .code-out {

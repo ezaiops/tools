@@ -10,7 +10,7 @@
 <meta property="og:title" content="Base64 / URL Encoder &amp; Hash Generator">
 <meta property="og:description" content="Base64, URL, HTML escaping and SHA-256 hashing in the browser.">
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
-<link rel="stylesheet" href="/assets/style.css">
+<link rel="stylesheet" href="/assets/style.css?v=20261021c">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -54,7 +54,7 @@
     <textarea id="ed-input" class="mono" rows="5" spellcheck="false">Hello, ezaiops! 你好</textarea>
 
     <div id="ed-hash-controls" class="field-row hidden" style="margin-top:12px">
-      <div class="field" style="flex:0 1 200px">
+      <div class="field">
         <label class="field-label" for="ed-algo">Algorithm</label>
         <select id="ed-algo">
           <option value="SHA-256" selected>SHA-256</option>
@@ -63,7 +63,7 @@
           <option value="SHA-512">SHA-512</option>
         </select>
       </div>
-      <div class="field" style="flex:0 1 200px">
+      <div class="field">
         <label class="field-label" for="ed-format">Output format</label>
         <select id="ed-format">
           <option value="hex" selected>Hexadecimal</option>
@@ -167,7 +167,7 @@
   </div>
 </footer>
 
-<script src="/assets/common.js" defer></script>
+<script src="/assets/common.js?v=20261021c" defer></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   "use strict";

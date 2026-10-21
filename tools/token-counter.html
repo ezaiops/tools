@@ -10,7 +10,7 @@
 <meta property="og:title" content="LLM Token Counter &amp; Cost Calculator">
 <meta property="og:description" content="Count tokens and estimate per-request, daily and monthly API cost across 34 LLMs. Runs fully in your browser.">
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
-<link rel="stylesheet" href="/assets/style.css">
+<link rel="stylesheet" href="/assets/style.css?v=20261021c">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -57,7 +57,7 @@
         <select id="tc-model"></select>
         <div class="hint">Prices per 1M tokens, updated <span id="tc-updated">—</span>.</div>
       </div>
-      <div class="field" style="flex:0 1 180px">
+      <div class="field">
         <label class="field-label" for="tc-output-tokens">Expected output tokens</label>
         <input type="number" id="tc-output-tokens" min="0" step="1" value="500">
         <div class="hint">Optional — set 0 for input-only.</div>
@@ -233,8 +233,8 @@
   </div>
 </footer>
 
-<script src="/assets/common.js" defer></script>
-<script src="/assets/models.js" defer></script>
+<script src="/assets/common.js?v=20261021c" defer></script>
+<script src="/assets/models.js?v=20261021c" defer></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   "use strict";

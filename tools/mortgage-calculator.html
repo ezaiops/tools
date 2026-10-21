@@ -10,7 +10,7 @@
 <meta property="og:title" content="Mortgage &amp; Loan Calculator">
 <meta property="og:description" content="Equal installment and equal principal loans, amortization and extra-payment scenarios.">
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
-<link rel="stylesheet" href="/assets/style.css">
+<link rel="stylesheet" href="/assets/style.css?v=20261021c">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -44,7 +44,7 @@
 
   <section class="panel">
     <div class="field-row">
-      <div class="field" style="flex:0 1 220px">
+      <div class="field">
         <label class="field-label" for="mo-method">Repayment method</label>
         <select id="mo-method">
           <option value="installment" selected>Equal installment (等额本息)</option>
@@ -52,7 +52,7 @@
         </select>
         <div class="hint" id="mo-method-hint">Every payment is the same amount.</div>
       </div>
-      <div class="field" id="mo-type-field" style="flex:0 1 240px" hidden>
+      <div class="field" id="mo-type-field" hidden>
         <label class="field-label" for="mo-type">贷款类型</label>
         <select id="mo-type">
           <option value="comm" selected>商业贷款</option>
@@ -208,7 +208,7 @@
   </div>
 </footer>
 
-<script src="/assets/common.js" defer></script>
+<script src="/assets/common.js?v=20261021c" defer></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   "use strict";

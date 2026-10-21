@@ -10,7 +10,7 @@
 <meta property="og:title" content="JWT Debugger">
 <meta property="og:description" content="Decode and verify JWTs locally — header, payload, expiry.">
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
-<link rel="stylesheet" href="/assets/style.css">
+<link rel="stylesheet" href="/assets/style.css?v=20261021c">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -52,12 +52,12 @@
     </div>
 
     <div class="field-row" style="margin-top:12px">
-      <div class="field" style="flex:1 1 280px">
+      <div class="field">
         <label class="field-label" for="jwt-secret">HMAC secret (optional, for signature check)</label>
         <input type="text" id="jwt-secret" class="mono" placeholder="your-256-bit-secret">
         <div class="hint">Only used to recompute the signature locally. HS256 only; RS/ES need the public key.</div>
       </div>
-      <div class="field" style="flex:0 1 160px;align-self:flex-end">
+      <div class="field">
         <button class="btn" id="jwt-verify" type="button">Verify signature</button>
       </div>
     </div>
@@ -151,7 +151,7 @@
   </div>
 </footer>
 
-<script src="/assets/common.js" defer></script>
+<script src="/assets/common.js?v=20261021c" defer></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   "use strict";

@@ -10,7 +10,7 @@
 <meta property="og:title" content="QR Code Generator">
 <meta property="og:description" content="Client-side QR codes as SVG or PNG.">
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
-<link rel="stylesheet" href="/assets/style.css">
+<link rel="stylesheet" href="/assets/style.css?v=20261021c">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -44,11 +44,11 @@
 
   <section class="panel">
     <div class="field-row">
-      <div class="field" style="flex:1 1 300px">
+      <div class="field">
         <label class="field-label" for="qr-text">Link or text</label>
         <input type="text" id="qr-text" class="mono" value="https://tools.ezaiops.com" placeholder="https://…">
       </div>
-      <div class="field" style="flex:0 1 140px">
+      <div class="field">
         <label class="field-label" for="qr-ec">Error correction</label>
         <select id="qr-ec">
           <option value="L" selected>L — 7% recovery</option>
@@ -57,7 +57,7 @@
           <option value="H">H — 30% recovery</option>
         </select>
       </div>
-      <div class="field" style="flex:0 1 130px">
+      <div class="field">
         <label class="field-label" for="qr-size">Size (px)</label>
         <input type="number" id="qr-size" min="64" max="1024" step="32" value="256">
       </div>
@@ -142,7 +142,7 @@
   </div>
 </footer>
 
-<script src="/assets/common.js" defer></script>
+<script src="/assets/common.js?v=20261021c" defer></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   "use strict";

@@ -10,7 +10,7 @@
 <meta property="og:title" content="Unit Converter">
 <meta property="og:description" content="Length, weight, temperature, area, speed and data size conversions.">
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
-<link rel="stylesheet" href="/assets/style.css">
+<link rel="stylesheet" href="/assets/style.css?v=20261021c">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -44,7 +44,7 @@
 
   <section class="panel">
     <div class="field-row">
-      <div class="field" style="flex:0 1 130px">
+      <div class="field">
         <label class="field-label" for="uc-cat">Category</label>
         <select id="uc-cat">
           <option value="length" selected>Length</option>
@@ -55,15 +55,15 @@
           <option value="data">Data size</option>
         </select>
       </div>
-      <div class="field" style="flex:0 1 160px">
+      <div class="field">
         <label class="field-label" for="uc-from">From</label>
         <select id="uc-from"></select>
       </div>
-      <div class="field" style="flex:0 1 160px">
+      <div class="field">
         <label class="field-label" for="uc-to">To</label>
         <select id="uc-to"></select>
       </div>
-      <div class="field" style="flex:1 1 160px">
+      <div class="field">
         <label class="field-label" for="uc-value">Value</label>
         <input type="number" id="uc-value" class="mono" value="1" step="any">
       </div>
@@ -149,7 +149,7 @@
   </div>
 </footer>
 
-<script src="/assets/common.js" defer></script>
+<script src="/assets/common.js?v=20261021c" defer></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   "use strict";

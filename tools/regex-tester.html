@@ -10,7 +10,7 @@
 <meta property="og:title" content="Regex Tester (JavaScript)">
 <meta property="og:description" content="Test JavaScript regular expressions with live match highlighting.">
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
-<link rel="stylesheet" href="/assets/style.css">
+<link rel="stylesheet" href="/assets/style.css?v=20261021c">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -44,11 +44,11 @@
 
   <section class="panel">
     <div class="field-row">
-      <div class="field" style="flex:2 1 240px">
+      <div class="field">
         <label class="field-label" for="rt-pattern">Pattern</label>
         <input type="text" id="rt-pattern" class="mono" value="\b\w+@\w+\.\w+\b" spellcheck="false">
       </div>
-      <div class="field" style="flex:0 1 220px">
+      <div class="field">
         <label class="field-label">Flags</label>
         <div class="check-row">
           <label><input type="checkbox" id="rt-g" checked> g</label>
@@ -171,7 +171,7 @@ Not-an-email: broken@, @missing, spaces in@address.</textarea>
   </div>
 </footer>
 
-<script src="/assets/common.js" defer></script>
+<script src="/assets/common.js?v=20261021c" defer></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   "use strict";

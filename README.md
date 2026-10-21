@@ -147,5 +147,7 @@ English text is the key, so a missing key simply stays English.
 - Hub: client-side search (`/` focuses it), six category groups, inline SVG icons, no badges
 - Text tools use a two-pane workbench (`.workbench`): input left, output right, both always visible; it stacks below 900px
 - Shared chrome: `assets/style.css` (design system) + `assets/common.js` (copy-to-clipboard, footer year, toast)
+- Form rows use CSS grid (`.field-row`), not flex: labels and inputs line up even when only some fields carry a hint underneath. Inline `flex:` sizing on `.field` fights the grid — use the layout, not per-field widths
+- **Bump the cache version when editing CSS or shared JS.** Asset links carry `?v=YYYYMMDDx` because Cloudflare caches `/assets/*` for four hours; without a new version string, a CSS fix can take hours to reach anyone. Update the version in every HTML file plus `scripts/gen_common.py`, then regenerate
 - JSON-LD: `SoftwareApplication` + `Offer` on tool pages, `FAQPage` + `ItemList` on model pages, `WebSite` on the hub. Tool pages carry visible FAQ sections but no FAQPage schema — Google retired FAQ rich results, so it would add nothing
 - The token counter loads `gpt-tokenizer` from esm.sh at runtime; if the CDN is unreachable it falls back to a documented approximation, so the tool never breaks

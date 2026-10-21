@@ -10,7 +10,7 @@
 <meta property="og:title" content="Image Compressor &amp; Converter">
 <meta property="og:description" content="Compress images locally with canvas — nothing uploaded.">
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
-<link rel="stylesheet" href="/assets/style.css">
+<link rel="stylesheet" href="/assets/style.css?v=20261021c">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -44,12 +44,12 @@
 
   <section class="panel">
     <div class="field-row">
-      <div class="field" style="flex:1 1 300px">
+      <div class="field">
         <label class="field-label" for="ic-file">Image file</label>
         <input type="file" id="ic-file" accept="image/jpeg,image/png,image/webp">
         <div class="hint">JPG, PNG or WebP. One file at a time — the first selected file is used.</div>
       </div>
-      <div class="field" style="flex:0 1 160px">
+      <div class="field">
         <label class="field-label" for="ic-format">Output format</label>
         <select id="ic-format">
           <option value="webp" selected>WebP (smallest)</option>
@@ -57,13 +57,13 @@
           <option value="png">PNG (lossless)</option>
         </select>
       </div>
-      <div class="field" style="flex:0 1 200px">
+      <div class="field">
         <label class="field-label" for="ic-quality">Quality: <strong id="ic-quality-val">80%</strong></label>
         <input type="range" id="ic-quality" min="10" max="100" step="5" value="80" style="width:100%">
       </div>
     </div>
     <div class="field-row" style="margin-top:12px">
-      <div class="field" style="flex:0 1 160px">
+      <div class="field">
         <label class="field-label" for="ic-scale">Resize</label>
         <select id="ic-scale">
           <option value="1" selected>Original size</option>
@@ -158,7 +158,7 @@
   </div>
 </footer>
 
-<script src="/assets/common.js" defer></script>
+<script src="/assets/common.js?v=20261021c" defer></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   "use strict";

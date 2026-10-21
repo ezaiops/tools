@@ -10,7 +10,7 @@
 <meta property="og:title" content="Subnet &amp; CIDR Calculator">
 <meta property="og:description" content="IPv4 network, broadcast, host range and mask math for any CIDR block.">
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
-<link rel="stylesheet" href="/assets/style.css">
+<link rel="stylesheet" href="/assets/style.css?v=20261021c">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -44,15 +44,15 @@
 
   <section class="panel">
     <div class="field-row">
-      <div class="field" style="flex:1 1 240px">
+      <div class="field">
         <label class="field-label" for="sn-input">IPv4 address / CIDR</label>
         <input type="text" id="sn-input" class="mono" value="192.168.1.37/26" placeholder="192.168.1.37/26">
       </div>
-      <div class="field" style="flex:0 1 140px">
+      <div class="field">
         <label class="field-label" for="sn-prefix">Prefix</label>
         <select id="sn-prefix" style="width:auto"></select>
       </div>
-      <div class="field" style="flex:0 1 120px;align-self:flex-end">
+      <div class="field">
         <button class="btn primary" id="sn-calc" type="button" style="width:100%">Calculate</button>
       </div>
     </div>
@@ -144,7 +144,7 @@
   </div>
 </footer>
 
-<script src="/assets/common.js" defer></script>
+<script src="/assets/common.js?v=20261021c" defer></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   "use strict";
