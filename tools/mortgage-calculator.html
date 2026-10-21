@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mortgage &amp; Loan Calculator — Amortization, Equal Principal | ezaiops tools</title>
-<meta name="description" content="Calculate monthly payments, total interest and payoff dates for any fixed-rate loan — with both 等额本息 (equal installment) and 等额本金 (equal principal) methods, extra-payment scenarios and an amortization summary. Runs locally.">
+<meta name="description" content="Calculate monthly payments, total interest and payoff dates for any fixed-rate loan — equal installment (等额本息) or equal principal (等额本金), plus China's 公积金 and 组合贷 split-rate loans with each portion itemised per payment. Runs locally.">
 <link rel="canonical" href="https://tools.ezaiops.com/tools/mortgage-calculator.html">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Mortgage &amp; Loan Calculator">
@@ -40,11 +40,11 @@
 <main class="wrap tool-page">
   <nav class="crumbs"><a href="/">Home</a> / Tools / <a href="/tools/mortgage-calculator.html">Loan calculator</a><a class="main-site-link" href="https://ezaiops.com/en/">ezaiops.com ↗</a></nav>
   <h1>Mortgage &amp; loan calculator</h1>
-  <p class="lead">Work out the monthly payment, total interest and payoff date for any fixed-rate loan — in either repayment method. <strong>Equal installment</strong> keeps every payment the same; <strong>equal principal</strong> pays a fixed slice of principal each month, so payments start high and shrink. Extra-payment scenarios included. Runs entirely in your browser.</p>
+  <p class="lead">Work out the monthly payment, total interest and payoff date for any fixed-rate loan — in either repayment method. <strong>Equal installment</strong> keeps every payment the same; <strong>equal principal</strong> pays a fixed slice of principal each month, so payments start high and shrink. Loans split across two rates (China's 公积金 + 商贷 combined loan) are itemised per payment. Runs entirely in your browser.</p>
 
   <section class="panel">
     <div class="field-row">
-      <div class="field" style="flex:0 1 200px">
+      <div class="field" style="flex:0 1 220px">
         <label class="field-label" for="mo-method">Repayment method</label>
         <select id="mo-method">
           <option value="installment" selected>Equal installment (等额本息)</option>
@@ -52,24 +52,59 @@
         </select>
         <div class="hint" id="mo-method-hint">Every payment is the same amount.</div>
       </div>
-      <div class="field">
-        <label class="field-label" for="mo-amount">Loan amount</label>
-        <div class="input-prefix"><span id="mo-cur">$</span><input type="number" id="mo-amount" min="0" step="1000" value="400000"></div>
-      </div>
-      <div class="field">
-        <label class="field-label" for="mo-rate">Annual interest rate</label>
-        <div class="input-prefix"><input type="number" id="mo-rate" min="0" step="0.01" value="6.5"><span>%</span></div>
+      <div class="field" id="mo-type-field" style="flex:0 1 240px" hidden>
+        <label class="field-label" for="mo-type">贷款类型</label>
+        <select id="mo-type">
+          <option value="comm" selected>商业贷款</option>
+          <option value="fund">公积金贷款</option>
+          <option value="combo">组合贷（公积金 + 商贷）</option>
+        </select>
+        <div class="hint" id="mo-type-hint">利率按 2026 年 10 月口径预设，可手动改。</div>
       </div>
       <div class="field">
         <label class="field-label" for="mo-years">Term</label>
         <div class="input-prefix"><input type="number" id="mo-years" min="1" max="50" step="1" value="30"><span id="mo-years-unit">years</span></div>
       </div>
     </div>
+
+    <div class="field-row" id="mo-single-row" style="margin-top:12px">
+      <div class="field">
+        <label class="field-label" for="mo-amount" id="mo-amount-label">Loan amount</label>
+        <div class="input-prefix"><span class="mo-cur">$</span><input type="number" id="mo-amount" min="0" step="10000" value="400000"></div>
+      </div>
+      <div class="field">
+        <label class="field-label" for="mo-rate" id="mo-rate-label">Annual interest rate</label>
+        <div class="input-prefix"><input type="number" id="mo-rate" min="0" step="0.01" value="7.4"><span>%</span></div>
+        <div class="hint" id="mo-rate-hint"></div>
+      </div>
+    </div>
+
+    <div class="field-row" id="mo-combo-row" style="margin-top:12px" hidden>
+      <div class="field">
+        <label class="field-label" for="mo-fund-amount">公积金贷款金额</label>
+        <div class="input-prefix"><span class="mo-cur">¥</span><input type="number" id="mo-fund-amount" min="0" step="10000" value="600000"></div>
+      </div>
+      <div class="field">
+        <label class="field-label" for="mo-fund-rate">公积金利率</label>
+        <div class="input-prefix"><input type="number" id="mo-fund-rate" min="0" step="0.01" value="2.6"><span>%</span></div>
+        <div class="hint">5 年以上首套 2.60%，二套 3.075%；5 年（含）以下首套 2.10%。</div>
+      </div>
+      <div class="field">
+        <label class="field-label" for="mo-comm-amount">商贷金额</label>
+        <div class="input-prefix"><span class="mo-cur">¥</span><input type="number" id="mo-comm-amount" min="0" step="10000" value="400000"></div>
+      </div>
+      <div class="field">
+        <label class="field-label" for="mo-comm-rate">商贷利率</label>
+        <div class="input-prefix"><input type="number" id="mo-comm-rate" min="0" step="0.01" value="3.2"><span>%</span></div>
+        <div class="hint">5 年期以上 LPR 3.50% − 30BP = 3.20%，各城市可上下浮动。</div>
+      </div>
+    </div>
+
     <div class="field-row" style="margin-top:12px">
       <div class="field">
         <label class="field-label" for="mo-extra">Extra monthly payment</label>
         <div class="input-prefix"><span class="mo-cur">$</span><input type="number" id="mo-extra" min="0" step="50" value="0"></div>
-        <div class="hint">Optional — applied on top of the required payment; shortens the term.</div>
+        <div class="hint" id="mo-extra-hint">Optional — applied on top of the required payment; shortens the term.</div>
       </div>
       <div class="field">
         <label class="field-label" for="mo-start">First payment date</label>
@@ -78,7 +113,7 @@
     </div>
 
     <div class="stats-grid" style="margin-top:16px">
-      <div class="stat"><div class="k" id="mo-payment-label">Monthly payment</div><div class="v" id="mo-payment">—</div></div>
+      <div class="stat"><div class="k" id="mo-payment-label">Monthly payment</div><div class="v" id="mo-payment">—</div><div class="note" id="mo-split" style="margin:2px 0 0;font-size:12px"></div></div>
       <div class="stat" id="mo-last-stat"><div class="k">Final payment</div><div class="v" id="mo-last" style="font-size:15px">—</div></div>
       <div class="stat"><div class="k">Total interest</div><div class="v" id="mo-interest">—</div></div>
       <div class="stat"><div class="k">Total paid</div><div class="v" id="mo-total">—</div></div>
@@ -91,10 +126,12 @@
     </div>
 
     <h3 style="font-size:14px;margin:18px 0 0">Amortization — first 12 payments</h3>
-    <table class="data">
-      <thead><tr><th class="num">#</th><th class="num" id="mo-col-p">Principal</th><th class="num">Interest</th><th class="num">Total payment</th><th class="num">Balance</th></tr></thead>
-      <tbody id="mo-rows"></tbody>
-    </table>
+    <div style="overflow-x:auto">
+      <table class="data">
+        <thead id="mo-head"></thead>
+        <tbody id="mo-rows"></tbody>
+      </table>
+    </div>
     <p class="note" id="mo-table-note">Early payments are mostly interest — that is how amortization works. The extra-payment scenario above shows what accelerating the principal does over the full term.</p>
   </section>
 
@@ -125,6 +162,10 @@
     <details class="faq">
       <summary>Can I use this for car loans or student loans?</summary>
       <div class="faq-body">Absolutely — any fixed-rate installment loan works. Just enter the amount, rate and term in years. (Some Chinese auto loans use equal principal with a shorter term; both methods are supported.)</div>
+    </details>
+    <details class="faq">
+      <summary>Does this handle China's housing provident fund (公积金) and combined loans?</summary>
+      <div class="faq-body">Yes, in the Chinese version of this page. Pick 公积金贷款 for a single fund loan, or 组合贷 to enter the fund and commercial portions separately — each with its own rate and term. The amortization table then lists fund principal and interest beside commercial principal and interest for every payment, because the two portions amortize independently. Extra payments are applied to the commercial portion first, since it carries the higher rate.</div>
     </details>
   </section>
 </main>
@@ -178,13 +219,23 @@ document.addEventListener("DOMContentLoaded", function () {
     if (window.ezI18N) return window.ezI18N.tf.apply(window.ezI18N, [k].concat(args));
     return k.replace(/%s/g, function () { return String(args.shift()); });
   }
-  function cur() { return window.ezI18N && window.ezI18N.lang === "zh" ? "¥" : "$"; }
+  function lang() { return (window.ezI18N && window.ezI18N.lang) || "en"; }
+  function isZh() { return lang() === "zh"; }
+  function cur() { return isZh() ? "¥" : "$"; }
   function money(n) {
     return cur() + (Math.round(n * 100) / 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
-  function applyCurrency() {
-    document.querySelectorAll(".mo-cur, #mo-cur").forEach(function (el) { el.textContent = cur(); });
+  function money0(n) {
+    return cur() + Math.round(n).toLocaleString(undefined, { maximumFractionDigits: 0 });
   }
+
+  // 2026-10 rates: China commercial = 5y+ LPR 3.50% - 30bp; provident fund first
+  // home over 5 years = 2.60%. US = Freddie Mac 30y fixed, week of 2026-10-15.
+  var DEFAULTS = {
+    zh: { amount: 1000000, rate: 3.2, years: 30, fund: 600000, fundRate: 2.6, comm: 400000, commRate: 3.2 },
+    en: { amount: 400000, rate: 7.4, years: 30 }
+  };
+  var dirty = false;
 
   var start = $("#mo-start");
   if (!start.value) {
@@ -192,50 +243,63 @@ document.addEventListener("DOMContentLoaded", function () {
     start.value = d0.getFullYear() + "-" + String(d0.getMonth() + 1).padStart(2, "0") + "-01";
   }
 
-  // returns { payments: [{p, int, total}], totalInterest, months, first, last, paidOff }
-  function amortize(P, annualRate, years, extra, method) {
-    var n = years * 12;
-    var r = annualRate / 100 / 12;
-    var payments = [];
-    var balance = P;
-    var totalInterest = 0;
-    var months = 0;
-    var guard = 0;
+  // parts: [{kind:"comm"|"fund", P, r}]  (r in percent)
+  function runSchedule(parts, years, extra, method) {
+    var n = Math.max(1, Math.round(years * 12));
+    var st = parts.filter(function (p) { return p.P > 0; }).map(function (p) {
+      var r = p.r / 100 / 12;
+      var pay = method === "installment"
+        ? (r > 0 ? p.P * r * Math.pow(1 + r, n) / (Math.pow(1 + r, n) - 1) : p.P / n)
+        : 0;
+      return { kind: p.kind, r: r, bal: p.P, pay: pay, slice: p.P / n };
+    });
+    // extra payments attack the commercial portion first — it costs more
+    var order = st.slice().sort(function (a, b) {
+      return (a.kind === "comm" ? 0 : 1) - (b.kind === "comm" ? 0 : 1);
+    });
+    var rows = [], totalInterest = 0, months = 0, guard = 0, stuck = false;
 
-    if (method === "principal") {
-      var slice = P / n;
-      while (balance > 0.005 && guard < n * 2) {
-        var interestP = balance * r;
-        var principalP = Math.min(slice + extra, balance);
-        balance -= principalP;
-        totalInterest += interestP;
-        months++;
-        payments.push({ p: principalP, int: interestP, total: principalP + interestP });
-        if (++guard > n * 2) break;
-      }
-    } else {
-      var payment = r > 0
-        ? P * r * Math.pow(1 + r, n) / (Math.pow(1 + r, n) - 1)
-        : P / n;
-      while (balance > 0.005 && guard < n * 2) {
-        var interestI = balance * r;
-        var principalI = Math.min(payment + extra - interestI, balance);
-        balance -= principalI;
-        totalInterest += interestI;
-        months++;
-        payments.push({ p: principalI, int: interestI, total: principalI + interestI });
-        if (payment + extra <= interestI) break;
-        if (++guard > n * 2) break;
-      }
+    while (guard++ < n * 2) {
+      if (!st.some(function (s) { return s.bal > 0.005; })) break;
+      var principal = st.map(function (s) {
+        if (s.bal <= 0.005) return 0;
+        var p = method === "installment" ? s.pay - s.bal * s.r : s.slice;
+        return Math.max(0, Math.min(p, s.bal));
+      });
+      var rest = extra;
+      order.forEach(function (s) {
+        if (rest <= 0) return;
+        var i = st.indexOf(s);
+        if (st[i].bal <= 0.005) return;
+        var room = st[i].bal - principal[i];
+        if (room <= 0) return;
+        var add = Math.min(rest, room);
+        principal[i] += add;
+        rest -= add;
+      });
+      var row = { fundP: 0, fundI: 0, commP: 0, commI: 0, total: 0, bal: 0 };
+      st.forEach(function (s, i) {
+        if (s.bal <= 0.005) return;
+        var interest = s.bal * s.r;
+        if (method === "installment" && s.pay <= interest) stuck = true;
+        s.bal -= principal[i];
+        totalInterest += interest;
+        if (s.kind === "comm") { row.commP += principal[i]; row.commI += interest; }
+        else { row.fundP += principal[i]; row.fundI += interest; }
+        row.total += principal[i] + interest;
+      });
+      row.bal = st.reduce(function (sum, s) { return sum + Math.max(0, s.bal); }, 0);
+      rows.push(row);
+      months++;
+      if (stuck) break;
     }
-
     return {
-      payments: payments,
+      rows: rows,
       totalInterest: totalInterest,
       months: months,
-      first: payments.length ? payments[0].total : 0,
-      last: payments.length ? payments[payments.length - 1].total : 0,
-      paidOff: balance <= 0.005
+      first: rows.length ? rows[0].total : 0,
+      last: rows.length ? rows[rows.length - 1].total : 0,
+      paidOff: !stuck && st.every(function (s) { return s.bal <= 0.005; })
     };
   }
 
@@ -249,37 +313,73 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!$("#mo-start").value) return "—";
     var parts = $("#mo-start").value.split("-");
     var d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1 + months, 1);
-    var months_EN = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-    if (window.ezI18N && window.ezI18N.lang === "zh") {
-      return d.getFullYear() + " 年 " + (d.getMonth() + 1) + " 月";
-    }
-    return months_EN[d.getMonth()] + " " + d.getFullYear();
+    var en = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    if (isZh()) return d.getFullYear() + " 年 " + (d.getMonth() + 1) + " 月";
+    return en[d.getMonth()] + " " + d.getFullYear();
   }
 
   var METHOD_LABELS = {
     installment: { payment: "Monthly payment", col: "Principal", note: "Early payments are mostly interest — that is how amortization works. The extra-payment scenario above shows what accelerating the principal does over the full term." },
     principal: { payment: "First payment", col: "Principal slice", note: "Equal principal pays a fixed principal slice every month, so the total payment declines as the balance shrinks." }
   };
+  var METHOD_HINTS = {
+    installment: "Every payment is the same amount.",
+    principal: "Fixed principal each month; payments decline."
+  };
+
+  function type() { return isZh() ? $("#mo-type").value : "comm"; }
+
+  function readParts() {
+    var t = type();
+    if (t === "combo") {
+      return [
+        { kind: "fund", P: Math.max(0, parseFloat($("#mo-fund-amount").value) || 0), r: Math.max(0, parseFloat($("#mo-fund-rate").value) || 0) },
+        { kind: "comm", P: Math.max(0, parseFloat($("#mo-comm-amount").value) || 0), r: Math.max(0, parseFloat($("#mo-comm-rate").value) || 0) }
+      ];
+    }
+    return [{
+      kind: t === "fund" ? "fund" : "comm",
+      P: Math.max(0, parseFloat($("#mo-amount").value) || 0),
+      r: Math.max(0, parseFloat($("#mo-rate").value) || 0)
+    }];
+  }
+
+  function renderHead(combo, method) {
+    var cells = combo
+      ? ["#", "公积金本金", "公积金利息", "商贷本金", "商贷利息", "当期合计", "剩余本金"]
+      : ["#", ezT(METHOD_LABELS[method].col), ezT("Interest"), ezT("Total payment"), ezT("Balance")];
+    $("#mo-head").innerHTML = "<tr>" + cells.map(function (c) {
+      return '<th class="num">' + c + "</th>";
+    }).join("") + "</tr>";
+  }
 
   function recalc() {
-    var P = Math.max(0, parseFloat($("#mo-amount").value) || 0);
-    var rate = Math.max(0, parseFloat($("#mo-rate").value) || 0);
+    var parts = readParts();
+    var total = parts.reduce(function (s, p) { return s + p.P; }, 0);
+    if (total <= 0) return;
     var years = Math.max(1, parseFloat($("#mo-years").value) || 1);
     var extra = Math.max(0, parseFloat($("#mo-extra").value) || 0);
     var method = $("#mo-method").value;
-    if (P <= 0) return;
+    var combo = type() === "combo";
 
-    var base = amortize(P, rate, years, 0, method);
-    var withExtra = amortize(P, rate, years, extra, method);
+    var base = runSchedule(parts, years, 0, method);
+    var withExtra = runSchedule(parts, years, extra, method);
 
     $("#mo-payment-label").textContent = ezT(METHOD_LABELS[method].payment);
-    $("#mo-col-p").textContent = ezT(METHOD_LABELS[method].col);
     $("#mo-table-note").textContent = ezT(METHOD_LABELS[method].note);
     $("#mo-payment").textContent = money(base.first);
     $("#mo-interest").textContent = money(withExtra.totalInterest);
-    $("#mo-total").textContent = money(P + withExtra.totalInterest);
+    $("#mo-total").textContent = money(total + withExtra.totalInterest);
     $("#mo-payoff").textContent = withExtra.paidOff ? payoffLabel(withExtra.months) : ezT("Never — payment does not cover interest");
     $("#mo-payoff-date").textContent = withExtra.paidOff ? payoffDate(withExtra.months) : "—";
+
+    var split = $("#mo-split");
+    if (combo && base.rows.length) {
+      var r0 = base.rows[0];
+      split.textContent = "公积金 " + money(r0.fundP + r0.fundI) + " · 商贷 " + money(r0.commP + r0.commI);
+    } else {
+      split.textContent = "";
+    }
 
     var lastStat = $("#mo-last-stat");
     if (method === "principal") {
@@ -298,32 +398,109 @@ document.addEventListener("DOMContentLoaded", function () {
       extraStats.style.display = "none";
     }
 
-    $("#mo-rows").innerHTML = base.payments.slice(0, 12).map(function (row, i) {
-      return "<tr><td class=\"num\">" + (i + 1) + "</td><td class=\"num\">" + money(row.p) +
-        "</td><td class=\"num\">" + money(row.int) + "</td><td class=\"num\">" + money(row.total) +
-        "</td><td class=\"num\">" + money(P - base.payments.slice(0, i + 1).reduce(function (s, x) { return s + x.p; }, 0)) + "</td></tr>";
+    renderHead(combo, method);
+    $("#mo-rows").innerHTML = base.rows.slice(0, 12).map(function (row, i) {
+      var n = '<td class="num">' + (i + 1) + "</td>";
+      if (combo) {
+        return "<tr>" + n + '<td class="num">' + money(row.fundP) + "</td>" +
+          '<td class="num">' + money(row.fundI) + "</td>" +
+          '<td class="num">' + money(row.commP) + "</td>" +
+          '<td class="num">' + money(row.commI) + "</td>" +
+          '<td class="num">' + money(row.total) + "</td>" +
+          '<td class="num">' + money(row.bal) + "</td></tr>";
+      }
+      return "<tr>" + n + '<td class="num">' + money(row.fundP + row.commP) + "</td>" +
+        '<td class="num">' + money(row.fundI + row.commI) + "</td>" +
+        '<td class="num">' + money(row.total) + "</td>" +
+        '<td class="num">' + money(row.bal) + "</td></tr>";
     }).join("");
   }
 
-  var METHOD_HINTS = {
-    installment: "Every payment is the same amount.",
-    principal: "Fixed principal each month; payments decline."
-  };
-  function syncMethod() {
-    $("#mo-method-hint").textContent = ezT(METHOD_HINTS[$("#mo-method").value]);
+  function syncVisibility() {
+    var zh = isZh();
+    var t = type();
+    $("#mo-type-field").hidden = !zh;
+    $("#mo-combo-row").hidden = !(zh && t === "combo");
+    $("#mo-single-row").hidden = zh && t === "combo";
+
+    var amountLabel = $("#mo-amount-label");
+    var rateLabel = $("#mo-rate-label");
+    var rateHint = $("#mo-rate-hint");
+    if (zh) {
+      if (t === "fund") {
+        amountLabel.textContent = "公积金贷款金额";
+        rateLabel.textContent = "公积金利率";
+        rateHint.textContent = "5 年以上首套 2.60%，二套 3.075%；5 年（含）以下首套 2.10%。";
+      } else {
+        amountLabel.textContent = "贷款金额";
+        rateLabel.textContent = "年利率";
+        rateHint.textContent = "5 年期以上 LPR 3.50% − 30BP = 3.20%，各城市可上下浮动。";
+      }
+    }
+    $("#mo-extra-hint").textContent = zh
+      ? (t === "combo" ? "可选。组合贷时优先冲抵商贷（利率更高），还清后再冲抵公积金。" : "可选。在月供之外额外还款，会缩短还款年限。")
+      : "Optional — applied on top of the required payment; shortens the term.";
   }
 
-  var t = null;
-  function schedule() { clearTimeout(t); t = setTimeout(recalc, 150); }
-  ["mo-amount", "mo-rate", "mo-years", "mo-extra"].forEach(function (id) {
-    $("#" + id).addEventListener("input", schedule);
-  });
-  $("#mo-method").addEventListener("change", function () { syncMethod(); recalc(); });
+  function applyDefaults() {
+    var d = DEFAULTS[isZh() ? "zh" : "en"];
+    $("#mo-amount").value = d.amount;
+    $("#mo-rate").value = d.rate;
+    $("#mo-years").value = d.years;
+    if (d.fund) {
+      $("#mo-fund-amount").value = d.fund;
+      $("#mo-fund-rate").value = d.fundRate;
+      $("#mo-comm-amount").value = d.comm;
+      $("#mo-comm-rate").value = d.commRate;
+    }
+    if (isZh()) $("#mo-type").value = "comm";
+  }
 
-  applyCurrency();
-  syncMethod();
-  recalc();
-  window.addEventListener("ez:i18n", function () { applyCurrency(); syncMethod(); recalc(); });
+  function applyCurrency() {
+    document.querySelectorAll(".mo-cur").forEach(function (el) { el.textContent = cur(); });
+  }
+
+  var tmr = null;
+  function schedule() { clearTimeout(tmr); tmr = setTimeout(recalc, 150); }
+
+  function markDirty() { dirty = true; }
+
+  $("#mo-method").addEventListener("change", function () {
+    $("#mo-method-hint").textContent = ezT(METHOD_HINTS[$("#mo-method").value]);
+    markDirty(); recalc();
+  });
+  $("#mo-type").addEventListener("change", function () {
+    var t = $("#mo-type").value;
+    if (t === "fund") { $("#mo-amount").value = 600000; $("#mo-rate").value = 2.6; }
+    if (t === "comm") { $("#mo-amount").value = 1000000; $("#mo-rate").value = 3.2; }
+    syncVisibility(); markDirty(); recalc();
+  });
+  ["#mo-amount", "#mo-rate", "#mo-years", "#mo-extra", "#mo-fund-amount", "#mo-fund-rate", "#mo-comm-amount", "#mo-comm-rate"].forEach(function (sel) {
+    var el = $(sel);
+    if (!el) return;
+    el.addEventListener("input", function () { markDirty(); schedule(); });
+    el.addEventListener("change", function () { markDirty(); schedule(); });
+  });
+  $("#mo-start").addEventListener("change", recalc);
+
+  function init() {
+    applyCurrency();
+    if (!dirty) applyDefaults();
+    $("#mo-method-hint").textContent = ezT(METHOD_HINTS[$("#mo-method").value]);
+    syncVisibility();
+    recalc();
+  }
+
+  window.addEventListener("ez:i18n", function () {
+    applyCurrency();
+    if (!dirty) applyDefaults();
+    $("#mo-method-hint").textContent = ezT(METHOD_HINTS[$("#mo-method").value]);
+    syncVisibility();
+    recalc();
+  });
+
+  init();
+  setTimeout(init, 400);
 });
 </script>
 </body>

@@ -24,6 +24,9 @@
 
 * { box-sizing: border-box; }
 
+/* The hidden attribute must beat layout rules like .field-row{display:flex} */
+[hidden] { display: none !important; }
+
 body {
   margin: 0;
   font-family: var(--sans);

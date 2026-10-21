@@ -331,7 +331,9 @@ console.log("\n== self-host-vs-api.html ==");
 console.log("\n== mortgage-calculator.html ==");
 {
   const { win, doc } = await load("tools/mortgage-calculator.html");
-  check("monthly payment ~$2,528", /^\$2,?52\d\.\d\d$/.test($("#mo-payment", doc).textContent), $("#mo-payment", doc).textContent);
+  check("US default is 400k @ 7.4%", $("#mo-amount", doc).value === "400000" && $("#mo-rate", doc).value === "7.4");
+  check("monthly payment $2,769.52", /^\$2,769\.52$/.test($("#mo-payment", doc).textContent), $("#mo-payment", doc).textContent);
+  check("no provident-fund selector in English", $("#mo-type-field", doc).hidden === true);
   check("total interest set", /^\$/.test($("#mo-interest", doc).textContent), $("#mo-interest", doc).textContent);
   check("payoff 30 years", /30 years/.test($("#mo-payoff", doc).textContent), $("#mo-payoff", doc).textContent);
   check("12 amortization rows", $$(doc, "#mo-rows tr").length === 12);
@@ -373,8 +375,51 @@ console.log("\n== mortgage bilingual currency ==");
   const { doc } = await load("tools/mortgage-calculator.html?lang=zh");
   await sleep(400);
   check("zh uses RMB symbol", /^¥/.test($("#mo-payment", doc).textContent), $("#mo-payment", doc).textContent);
-  check("zh prefix symbol", $("#mo-cur", doc).textContent === "¥");
+  check("zh prefix symbol", $$(doc, ".mo-cur").every((el) => el.textContent === "¥"));
   check("zh method options", /等额本息/.test($("#mo-method", doc).textContent));
+  check("zh defaults to 100万 @ 3.2%", $("#mo-amount", doc).value === "1000000" && $("#mo-rate", doc).value === "3.2",
+    $("#mo-amount", doc).value + " / " + $("#mo-rate", doc).value);
+  check("commercial payment ¥4,324.67", /^¥4,324\.67$/.test($("#mo-payment", doc).textContent), $("#mo-payment", doc).textContent);
+  check("provident-fund selector visible in Chinese", $("#mo-type-field", doc).hidden === false);
+}
+
+console.log("\n== mortgage provident fund and combined loans (zh) ==");
+{
+  const { win, doc } = await load("tools/mortgage-calculator.html?lang=zh");
+  await sleep(400);
+
+  // pure provident fund loan
+  const type = $("#mo-type", doc);
+  type.value = "fund";
+  type.dispatchEvent(new win.Event("change", { bubbles: true }));
+  await sleep(300);
+  check("fund switch sets the 2.6% rate", $("#mo-rate", doc).value === "2.6", $("#mo-rate", doc).value);
+  check("fund amount label", /公积金贷款金额/.test($("#mo-amount-label", doc).textContent), $("#mo-amount-label", doc).textContent);
+  check("fund payment ¥2,402.04", /^¥2,402\.04$/.test($("#mo-payment", doc).textContent), $("#mo-payment", doc).textContent);
+
+  // combined loan: two portions, itemised per payment
+  type.value = "combo";
+  type.dispatchEvent(new win.Event("change", { bubbles: true }));
+  await sleep(300);
+  check("combo hides the single-amount row", $("#mo-single-row", doc).hidden === true);
+  check("combo shows both amount rows", $("#mo-combo-row", doc).hidden === false);
+  const head = $$(doc, "#mo-head th").map((th) => th.textContent.trim());
+  check("combo table has 7 columns", head.length === 7, String(head.length));
+  check("combo head itemises fund and commercial", /公积金本金/.test(head[1]) && /商贷本金/.test(head[3]), head.join("|"));
+  check("combo payment is the sum of both portions", /^¥4,131\.91$/.test($("#mo-payment", doc).textContent), $("#mo-payment", doc).textContent);
+  check("combo shows the per-portion split", /公积金 ¥2,402\.04/.test($("#mo-split", doc).textContent) && /商贷 ¥1,729\.87/.test($("#mo-split", doc).textContent), $("#mo-split", doc).textContent);
+
+  const cells = [...$$(doc, "#mo-rows tr")[0].children].map((td) => td.textContent);
+  check("first row itemises both portions", cells.length === 7 && /^¥1,102\.04$/.test(cells[1]) && /^¥663\.20$/.test(cells[3]), cells.join(" | "));
+  check("first row interest matches each rate", /^¥1,300\.00$/.test(cells[2]) && /^¥1,066\.67$/.test(cells[4]), cells.join(" | "));
+
+  // extra payments attack the commercial portion first
+  setInput(win, $("#mo-extra", doc), "3000");
+  await sleep(300);
+  check("extra payment shows savings", $("#mo-extra-stats", doc).style.display !== "none" && /^¥[\d,]+\.\d\d$/.test($("#mo-saved", doc).textContent), $("#mo-saved", doc).textContent);
+  setInput(win, $("#mo-extra", doc), "0");
+  await sleep(300);
+  check("combo returns to the base payment", /^¥4,131\.91$/.test($("#mo-payment", doc).textContent), $("#mo-payment", doc).textContent);
 }
 
 console.log("\n== image-compressor.html ==");

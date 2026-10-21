@@ -2,7 +2,7 @@
 window.I18N_DICTS = window.I18N_DICTS || [];
 window.I18N_DICTS.push({
   "Mortgage & loan calculator": "房贷与贷款计算器",
-  "Work out the monthly payment, total interest and payoff date for any fixed-rate loan — in either repayment method. Equal installment keeps every payment the same; equal principal pays a fixed slice of principal each month, so payments start high and shrink. Extra-payment scenarios included. Runs entirely in your browser.": "计算任意固定利率贷款的月供、总利息与还清时间——两种还款方式任选。等额本息每期还款额相同；等额本金每月偿还固定本金，月供前高后低。支持多还场景测算。全部在浏览器本地运行。",
+  "el:Work out the monthly payment, total interest and payoff date for any fixed-rate loan — in either repayment method. Equal installment keeps every payment the same; equal principal pays a fixed slice of principal each month, so payments start high and shrink. Loans split across two rates (China's 公积金 + 商贷 combined loan) are itemised per payment. Runs entirely in your browser.": "计算固定利率贷款的月供、总利息与还清时间——支持商业贷款、公积金贷款与组合贷，两种还款方式任选。等额本息每期还款额相同；等额本金每月偿还固定本金，月供前高后低。组合贷会逐期分别列出公积金与商贷的本金和利息。全部在浏览器本地运行。",
   "Loan calculator": "贷款计算器",
   "Repayment method": "还款方式",
   "Equal installment (等额本息)": "等额本息",
@@ -49,6 +49,8 @@ window.I18N_DICTS.push({
   "Equal principal, almost always — its total interest is typically 15–25% lower because the outstanding balance falls from day one. The cost is a higher first payment: roughly 1.3–1.5× the equal-installment payment on a 30-year loan. Run both here with the same numbers and compare the total-interest figures directly.": "几乎总是等额本金——因为余额从第一天就下降，总利息通常低 15–25%。代价是首月月供更高：30 年期贷款约为等额本息的 1.3–1.5 倍。用同样的数字在这里分别运行两种方式，直接比较总利息即可。",
   "Are the numbers exact?": "数字准确吗？",
   "Yes for fixed-rate loans — the formulas are exact and rounding is applied only to the displayed cents. Variable-rate loans require a schedule per rate period.": "固定利率贷款是准确的——公式精确，仅在显示分位时四舍五入。浮动利率贷款需要按每个利率期分段计算。",
+  "Does this handle China's housing provident fund (公积金) and combined loans?": "支持公积金贷款和组合贷吗？",
+  "Yes, in the Chinese version of this page. Pick 公积金贷款 for a single fund loan, or 组合贷 to enter the fund and commercial portions separately — each with its own rate and term. The amortization table then lists fund principal and interest beside commercial principal and interest for every payment, because the two portions amortize independently. Extra payments are applied to the commercial portion first, since it carries the higher rate.": "支持（中文版）。选「公积金贷款」是纯公积金贷款；选「组合贷」可以分别填写公积金和商贷的金额与利率，两部分各自独立摊还。摊还表会逐期把公积金的本金、利息与商贷的本金、利息并排列出，因为两笔贷款的余额是分开下降的。额外还款优先冲抵利率更高的商贷，还清后再冲抵公积金。",
   "Can I use this for car loans or student loans?": "可以用于车贷或助学贷款吗？",
   "Absolutely — any fixed-rate installment loan works. Just enter the amount, rate and term in years. (Some Chinese auto loans use equal principal with a shorter term; both methods are supported.)": "完全可以——任何固定利率分期贷款都适用。输入金额、利率和年限即可。（国内部分车贷采用期限较短的等额本金，两种方式都支持。）"
 });
