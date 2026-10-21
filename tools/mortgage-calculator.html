@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mortgage &amp; Loan Calculator — Amortization, Equal Principal | ezaiops tools</title>
-<meta name="description" content="Calculate monthly payments, total interest and payoff dates for any fixed-rate loan — equal installment (等额本息) or equal principal (等额本金), plus China's 公积金 and 组合贷 split-rate loans with each portion itemised per payment. Runs locally.">
+<meta name="description" content="Calculate monthly payments, total interest and payoff dates for any fixed-rate loan — equal installment or equal principal, plus split-rate loans (such as a housing provident fund plus a commercial mortgage) with each portion itemised per payment. Runs locally.">
 <link rel="canonical" href="https://tools.ezaiops.com/tools/mortgage-calculator.html">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Mortgage &amp; Loan Calculator">
 <meta property="og:description" content="Equal installment and equal principal loans, amortization and extra-payment scenarios.">
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
-<link rel="stylesheet" href="/assets/style.css?v=20261022a">
+<link rel="stylesheet" href="/assets/style.css?v=20261022b">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -40,15 +40,15 @@
 <main class="wrap tool-page">
   <nav class="crumbs"><a href="/">Home</a> / Tools / <a href="/tools/mortgage-calculator.html">Loan calculator</a><a class="main-site-link" href="https://ezaiops.com/en/">ezaiops.com ↗</a></nav>
   <h1>Mortgage &amp; loan calculator</h1>
-  <p class="lead">Work out the monthly payment, total interest and payoff date for any fixed-rate loan — in either repayment method. <strong>Equal installment</strong> keeps every payment the same; <strong>equal principal</strong> pays a fixed slice of principal each month, so payments start high and shrink. Loans split across two rates (China's 公积金 + 商贷 combined loan) are itemised per payment. Runs entirely in your browser.</p>
+  <p class="lead">Work out the monthly payment, total interest and payoff date for any fixed-rate loan — in either repayment method. <strong>Equal installment</strong> keeps every payment the same; <strong>equal principal</strong> pays a fixed slice of principal each month, so payments start high and shrink. Loans split across two rates — such as a housing provident fund plus a commercial mortgage — are itemised per payment. Runs entirely in your browser.</p>
 
   <section class="panel">
     <div class="field-row">
       <div class="field">
         <label class="field-label" for="mo-method">Repayment method</label>
         <select id="mo-method">
-          <option value="installment" selected>Equal installment (等额本息)</option>
-          <option value="principal">Equal principal (等额本金)</option>
+          <option value="installment" selected>Equal installment</option>
+          <option value="principal">Equal principal</option>
         </select>
         <div class="hint" id="mo-method-hint">Every payment is the same amount.</div>
       </div>
@@ -142,8 +142,8 @@
 
   <section class="prose">
     <h2>Equal installment vs equal principal</h2>
-    <p><strong>Equal installment (等额本息)</strong> uses the standard amortization formula <code>M = P × r × (1+r)ⁿ ÷ ((1+r)ⁿ − 1)</code>: P is the principal, r the monthly rate (annual ÷ 12), n the number of payments. Every payment is identical; each one covers that month's interest first and shrinks the balance slowly at first, then faster. <strong>Total interest is higher</strong> than equal principal, but the early payments are lower — easier on cash flow.</p>
-    <p><strong>Equal principal (等额本金)</strong> pays a fixed <code>P ÷ n</code> of principal every month plus interest on whatever balance remains. The first payment is the largest (full principal slice plus interest on the whole loan); each subsequent payment is smaller. <strong>Total interest is lower</strong> — often 15–25% less — because the balance drops immediately, but you need the income to absorb the higher early payments.</p>
+    <p><strong>Equal installment</strong> uses the standard amortization formula <code>M = P × r × (1+r)ⁿ ÷ ((1+r)ⁿ − 1)</code>: P is the principal, r the monthly rate (annual ÷ 12), n the number of payments. Every payment is identical; each one covers that month's interest first and shrinks the balance slowly at first, then faster. <strong>Total interest is higher</strong> than equal principal, but the early payments are lower — easier on cash flow.</p>
+    <p><strong>Equal principal</strong> pays a fixed <code>P ÷ n</code> of principal every month plus interest on whatever balance remains. The first payment is the largest (full principal slice plus interest on the whole loan); each subsequent payment is smaller. <strong>Total interest is lower</strong> — often 15–25% less — because the balance drops immediately, but you need the income to absorb the higher early payments.</p>
     <p>Which is better? Equal principal wins if your income comfortably covers the early payments and you plan to hold the loan long-term. Equal installment wins if cash flow is tight or you expect to invest the difference at a return above the loan rate. An extra payment is pure principal in both methods, so it compounds either way.</p>
 
     <h2>Frequently asked questions</h2>
@@ -164,8 +164,8 @@
       <div class="faq-body">Absolutely — any fixed-rate installment loan works. Just enter the amount, rate and term in years. (Some Chinese auto loans use equal principal with a shorter term; both methods are supported.)</div>
     </details>
     <details class="faq">
-      <summary>Does this handle China's housing provident fund (公积金) and combined loans?</summary>
-      <div class="faq-body">Yes, in the Chinese version of this page. Pick 公积金贷款 for a single fund loan, or 组合贷 to enter the fund and commercial portions separately — each with its own rate and term. The amortization table then lists fund principal and interest beside commercial principal and interest for every payment, because the two portions amortize independently. Extra payments are applied to the commercial portion first, since it carries the higher rate.</div>
+      <summary>Does this handle a housing provident fund or a split-rate loan?</summary>
+      <div class="faq-body">The English page calculates a single fixed-rate loan. The Chinese version adds a housing provident fund loan type and combined loans, where the fund and commercial portions carry different rates and are entered separately; the amortization table then lists fund principal and interest beside commercial principal and interest for every payment, because the two portions amortize independently. Extra payments go to the commercial portion first, since it carries the higher rate.</div>
     </details>
   </section>
 </main>
@@ -208,7 +208,7 @@
   </div>
 </footer>
 
-<script src="/assets/common.js?v=20261022a" defer></script>
+<script src="/assets/common.js?v=20261022b" defer></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   "use strict";
