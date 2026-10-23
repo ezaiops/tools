@@ -21,23 +21,23 @@
       "name": "How much does Mistral Large 3 cost per 1M tokens?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Mistral Large 3: $0.5 per 1M input tokens, $1.5 per 1M output tokens."
+        "text": "$0.5 per 1M input tokens, $1.5 per 1M output tokens"
       }
     },
     {
       "@type": "Question",
-      "name": "Is the Mistral Large 3 context window charged at a flat rate?",
+      "name": "Does the Mistral Large 3 context window cost extra?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "The maximum context window is charged at a flat per-token rate with no length tier. Large context open-weight alternative"
+        "text": "The published context window is charged at a flat per-token rate. Large context open-weight alternative"
       }
     },
     {
       "@type": "Question",
-      "name": "How can I reduce my Mistral Large 3 bill?",
+      "name": "What is the cheapest way to run Mistral Large 3 at scale?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Use the batch API for a 50% discount, reuse a stable prompt prefix to get cache-hit rates (often around 0.1x the input price), cap max output tokens, and route classification or extraction tasks to a cheaper model tier."
+        "text": "Keep a stable prompt prefix so it caches, cap output length, schedule asynchronous work into off-peak windows where the provider prices by time, and move the easy 80% of traffic to a lower tier."
       }
     }
   ]
@@ -63,7 +63,7 @@
 
   <h1>Mistral Large 3 API pricing: cost per 1M tokens</h1>
   <p class="lead">Mistral Large 3 currently costs <strong>$0.5 per 1M input tokens</strong> and
-  <strong>$1.5 per 1M output tokens</strong> through the Mistral API. Large context open-weight alternative
+  <strong>$1.5 per 1M output tokens</strong> through the Mistral API. Large context open-weight alternative.
   Prices below were verified against official pricing documentation on 2026-10-18.</p>
 
   <section class="panel">
@@ -116,25 +116,16 @@
   </section>
 
   <section class="prose">
-    <h2>How to think about Mistral Large 3 pricing</h2>
-    <p>Output tokens bill at 3.0× the input rate, which is the number that decides whether a
-    workload is affordable: summarization and classification are input-heavy, while agents,
-    chain-of-thought reasoning and long-form drafting are output-heavy. Before comparing
-    headline prices, measure the real token mix from your own logs, then apply the blended
-    formula <code>(input share × input price) + (output share × output price)</code>.</p>
-    <p>Three discounts stack on top of list prices on most providers: a 50% batch-API discount for
-    asynchronous workloads, cache-hit pricing that can drop cached input to around 0.1× the base
-    rate, and right-sizing — routing simple steps to a mini or flash-class model instead of the
-    flagship is usually the largest single saving available.</p>
+    <h2>How to think about Mistral Large 3 pricing</h2><p>Output tokens bill at 3.0× the input rate, which is the number that decides whether a workload is affordable: summarization and classification are input-heavy, while agents, chain-of-thought reasoning and long-form drafting are output-heavy. Before comparing headline prices, measure the real token mix from your own logs, then apply the blended formula <code>(input share × input price) + (output share × output price)</code>.</p><p>Beyond the headline rate, three levers usually decide a real bill: batch discounts where the provider offers one, cache hits on a stable prompt prefix, and right-sizing — routing simple steps to a mini or flash-class model instead of the flagship. Not every provider offers all three, so confirm which apply rather than assuming them.</p>
 
     <h2>Frequently asked questions</h2>
     <details class="faq"><summary>How much does Mistral Large 3 cost per 1M tokens?</summary>
-      <div class="faq-body">$0.5 per 1M input and $1.5 per 1M output tokens.</div></details>
+      <div class="faq-body">$0.5 per 1M input tokens, $1.5 per 1M output tokens</div></details>
     <details class="faq"><summary>Does the Mistral Large 3 context window cost extra?</summary>
-      <div class="faq-body">The published context window is charged at a flat per-token rate; Large context open-weight alternative</div></details>
+      <div class="faq-body">The published context window is charged at a flat per-token rate. Large context open-weight alternative</div></details>
     <details class="faq"><summary>What is the cheapest way to run Mistral Large 3 at scale?</summary>
-      <div class="faq-body">Batch async jobs for the 50% discount, keep a stable prefix so it
-      caches, cap output length, and move the easy 80% of traffic to a lower tier.</div></details>
+      <div class="faq-body">Keep a stable prompt prefix so it caches, cap output length, schedule asynchronous work into off-peak windows where the provider prices by time, and move the easy 80% of traffic to a lower tier.</div></details>
+    
   </section>
 
 <div class="ad-slot">

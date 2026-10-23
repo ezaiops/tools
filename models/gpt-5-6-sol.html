@@ -21,23 +21,23 @@
       "name": "How much does GPT-5.6 Sol cost per 1M tokens?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "GPT-5.6 Sol: $4 per 1M input tokens, $20 per 1M output tokens."
+        "text": "$4 per 1M input tokens, $20 per 1M output tokens"
       }
     },
     {
       "@type": "Question",
-      "name": "Is the GPT-5.6 Sol context window charged at a flat rate?",
+      "name": "Does the GPT-5.6 Sol context window cost extra?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "The maximum context window is charged at a flat per-token rate with no length tier. Previous-generation flagship. Promotional $4/$20 in effect through at least 2026-11-21 (list $5/$30); long-context requests bill $8/$30"
+        "text": "The published context window is charged at a flat per-token rate. Previous-generation flagship. Promotional $4/$20 in effect through at least 2026-11-21 (list $5/$30); long-context requests bill $8/$30"
       }
     },
     {
       "@type": "Question",
-      "name": "How can I reduce my GPT-5.6 Sol bill?",
+      "name": "What is the cheapest way to run GPT-5.6 Sol at scale?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Use the batch API for a 50% discount, reuse a stable prompt prefix to get cache-hit rates (often around 0.1x the input price), cap max output tokens, and route classification or extraction tasks to a cheaper model tier."
+        "text": "Keep a stable prompt prefix so it caches, cap output length, schedule asynchronous work into off-peak windows where the provider prices by time, and move the easy 80% of traffic to a lower tier."
       }
     }
   ]
@@ -63,7 +63,7 @@
 
   <h1>GPT-5.6 Sol API pricing: cost per 1M tokens</h1>
   <p class="lead">GPT-5.6 Sol currently costs <strong>$4 per 1M input tokens</strong> and
-  <strong>$20 per 1M output tokens</strong> through the OpenAI API. Previous-generation flagship. Promotional $4/$20 in effect through at least 2026-11-21 (list $5/$30); long-context requests bill $8/$30
+  <strong>$20 per 1M output tokens</strong> through the OpenAI API. Previous-generation flagship. Promotional $4/$20 in effect through at least 2026-11-21 (list $5/$30); long-context requests bill $8/$30.
   Prices below were verified against official pricing documentation on 2026-10-18.</p>
 
   <section class="panel">
@@ -116,25 +116,16 @@
   </section>
 
   <section class="prose">
-    <h2>How to think about GPT-5.6 Sol pricing</h2>
-    <p>Output tokens bill at 5.0× the input rate, which is the number that decides whether a
-    workload is affordable: summarization and classification are input-heavy, while agents,
-    chain-of-thought reasoning and long-form drafting are output-heavy. Before comparing
-    headline prices, measure the real token mix from your own logs, then apply the blended
-    formula <code>(input share × input price) + (output share × output price)</code>.</p>
-    <p>Three discounts stack on top of list prices on most providers: a 50% batch-API discount for
-    asynchronous workloads, cache-hit pricing that can drop cached input to around 0.1× the base
-    rate, and right-sizing — routing simple steps to a mini or flash-class model instead of the
-    flagship is usually the largest single saving available.</p>
+    <h2>How to think about GPT-5.6 Sol pricing</h2><p>Output tokens bill at 5.0× the input rate, which is the number that decides whether a workload is affordable: summarization and classification are input-heavy, while agents, chain-of-thought reasoning and long-form drafting are output-heavy. Before comparing headline prices, measure the real token mix from your own logs, then apply the blended formula <code>(input share × input price) + (output share × output price)</code>.</p><p>Beyond the headline rate, three levers usually decide a real bill: batch discounts where the provider offers one, cache hits on a stable prompt prefix, and right-sizing — routing simple steps to a mini or flash-class model instead of the flagship. Not every provider offers all three, so confirm which apply rather than assuming them.</p>
 
     <h2>Frequently asked questions</h2>
     <details class="faq"><summary>How much does GPT-5.6 Sol cost per 1M tokens?</summary>
-      <div class="faq-body">$4 per 1M input and $20 per 1M output tokens.</div></details>
+      <div class="faq-body">$4 per 1M input tokens, $20 per 1M output tokens</div></details>
     <details class="faq"><summary>Does the GPT-5.6 Sol context window cost extra?</summary>
-      <div class="faq-body">The published context window is charged at a flat per-token rate; Previous-generation flagship. Promotional $4/$20 in effect through at least 2026-11-21 (list $5/$30); long-context requests bill $8/$30</div></details>
+      <div class="faq-body">The published context window is charged at a flat per-token rate. Previous-generation flagship. Promotional $4/$20 in effect through at least 2026-11-21 (list $5/$30); long-context requests bill $8/$30</div></details>
     <details class="faq"><summary>What is the cheapest way to run GPT-5.6 Sol at scale?</summary>
-      <div class="faq-body">Batch async jobs for the 50% discount, keep a stable prefix so it
-      caches, cap output length, and move the easy 80% of traffic to a lower tier.</div></details>
+      <div class="faq-body">Keep a stable prompt prefix so it caches, cap output length, schedule asynchronous work into off-peak windows where the provider prices by time, and move the easy 80% of traffic to a lower tier.</div></details>
+    
   </section>
 
 <div class="ad-slot">

@@ -21,23 +21,23 @@
       "name": "How much does Grok 4.3 cost per 1M tokens?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Grok 4.3: $1.25 per 1M input tokens, $2.5 per 1M output tokens."
+        "text": "$1.25 per 1M input tokens, $2.5 per 1M output tokens"
       }
     },
     {
       "@type": "Question",
-      "name": "Is the Grok 4.3 context window charged at a flat rate?",
+      "name": "Does the Grok 4.3 context window cost extra?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Context window: not published. Prompts under 200K tokens $1.25/$2.50; at 200K+ $2.50/$5.00. Output is only 2x input"
+        "text": "Long prompts above 200,000 tokens switch to the higher tier ($2.5 in / $5 out). Below that the rate is flat."
       }
     },
     {
       "@type": "Question",
-      "name": "How can I reduce my Grok 4.3 bill?",
+      "name": "What is the cheapest way to run Grok 4.3 at scale?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Use the batch API for a 50% discount, reuse a stable prompt prefix to get cache-hit rates (often around 0.1x the input price), cap max output tokens, and route classification or extraction tasks to a cheaper model tier."
+        "text": "Keep a stable prompt prefix so it caches, cap output length, schedule asynchronous work into off-peak windows where the provider prices by time, and move the easy 80% of traffic to a lower tier."
       }
     }
   ]
@@ -63,7 +63,7 @@
 
   <h1>Grok 4.3 API pricing: cost per 1M tokens</h1>
   <p class="lead">Grok 4.3 currently costs <strong>$1.25 per 1M input tokens</strong> and
-  <strong>$2.5 per 1M output tokens</strong> through the xAI API. Prompts under 200K tokens $1.25/$2.50; at 200K+ $2.50/$5.00. Output is only 2x input
+  <strong>$2.5 per 1M output tokens</strong> through the xAI API. Prompts under 200K tokens $1.25/$2.50; at 200K+ $2.50/$5.00. Output is only 2x input.
   Prices below were verified against official pricing documentation on 2026-10-18.</p>
 
   <section class="panel">
@@ -116,25 +116,16 @@
   </section>
 
   <section class="prose">
-    <h2>How to think about Grok 4.3 pricing</h2>
-    <p>Output tokens bill at 2.0× the input rate, which is the number that decides whether a
-    workload is affordable: summarization and classification are input-heavy, while agents,
-    chain-of-thought reasoning and long-form drafting are output-heavy. Before comparing
-    headline prices, measure the real token mix from your own logs, then apply the blended
-    formula <code>(input share × input price) + (output share × output price)</code>.</p>
-    <p>Three discounts stack on top of list prices on most providers: a 50% batch-API discount for
-    asynchronous workloads, cache-hit pricing that can drop cached input to around 0.1× the base
-    rate, and right-sizing — routing simple steps to a mini or flash-class model instead of the
-    flagship is usually the largest single saving available.</p>
+    <h2>How to think about Grok 4.3 pricing</h2><p>Output tokens bill at 2.0× the input rate, which is the number that decides whether a workload is affordable: summarization and classification are input-heavy, while agents, chain-of-thought reasoning and long-form drafting are output-heavy. Before comparing headline prices, measure the real token mix from your own logs, then apply the blended formula <code>(input share × input price) + (output share × output price)</code>.</p><p>Beyond the headline rate, three levers usually decide a real bill: batch discounts where the provider offers one, cache hits on a stable prompt prefix, and right-sizing — routing simple steps to a mini or flash-class model instead of the flagship. Not every provider offers all three, so confirm which apply rather than assuming them.</p>
 
     <h2>Frequently asked questions</h2>
     <details class="faq"><summary>How much does Grok 4.3 cost per 1M tokens?</summary>
-      <div class="faq-body">$1.25 per 1M input and $2.5 per 1M output tokens.</div></details>
+      <div class="faq-body">$1.25 per 1M input tokens, $2.5 per 1M output tokens</div></details>
     <details class="faq"><summary>Does the Grok 4.3 context window cost extra?</summary>
       <div class="faq-body">Long prompts above 200,000 tokens switch to the higher tier ($2.5 in / $5 out). Below that the rate is flat.</div></details>
     <details class="faq"><summary>What is the cheapest way to run Grok 4.3 at scale?</summary>
-      <div class="faq-body">Batch async jobs for the 50% discount, keep a stable prefix so it
-      caches, cap output length, and move the easy 80% of traffic to a lower tier.</div></details>
+      <div class="faq-body">Keep a stable prompt prefix so it caches, cap output length, schedule asynchronous work into off-peak windows where the provider prices by time, and move the easy 80% of traffic to a lower tier.</div></details>
+    
   </section>
 
 <div class="ad-slot">

@@ -269,7 +269,83 @@
         "peak_days": "Mon-Fri",
         "window_label": "Weekday peak (UTC 01:00-04:00 and 06:00-10:00)"
       },
-      "note": "Off-peak rates shown. Weekday peak doubles to $1.32/$3.96. Text-only (no vision), 1M context, up to 384K output"
+      "note": "Off-peak rates shown. Weekday peak doubles to $1.32/$3.96. Text-only (no vision), 1M context, up to 384K output",
+      "detail": {
+        "verified": "2026-10-24",
+        "sibling": "deepseek-v4-1-flash",
+        "tables": [
+          {
+            "title": "Cost per workload: off-peak vs weekday peak",
+            "head": ["Workload", "Input tokens", "Output tokens", "Off-peak", "Peak"],
+            "rows": [
+              ["Single summarization call", "1M", "100K", "$0.86", "$1.72"],
+              ["Long document pass, no cache reuse", "1M", "20K", "$0.70", "$1.40"],
+              ["Cached agent loop, one turn", "50K (45K cache hit)", "5K", "$0.014", "$0.028"],
+              ["That loop, 20 turns/day for 30 days", "30M", "3M", "$8.51", "$17.03"]
+            ],
+            "note": "Computed from the rates above. The cached loop assumes 90% of input hits cache; the same loop without caching bills $25.74 a month off-peak."
+          },
+          {
+            "title": "DeepSeek V4 Pro vs V4.1 Flash",
+            "head": ["", "V4 Pro", "V4.1 Flash"],
+            "rows": [
+              ["Input / 1M (off-peak)", "$0.66", "$0.15"],
+              ["Output / 1M (off-peak)", "$1.98", "$0.60"],
+              ["Cache hit / 1M", "$0.022", "$0.003"],
+              ["Context / max output", "1M / 384K", "1M / 384K"],
+              ["Image input", "Not supported", "Supported"],
+              ["Concurrency limit", "500", "2,500"],
+              ["Model version", "V4-Pro-0813", "V4.1-Flash-1017"]
+            ]
+          }
+        ],
+        "sections": [
+          {
+            "h2": "What DeepSeek V4 Pro actually costs in October 2026",
+            "paras": [
+              "$0.66 per 1M tokens is the off-peak rate, not the list price. DeepSeek publishes peak rates and halves them outside two weekday windows: 01:00-04:00 and 06:00-10:00 UTC. That is seven hours a day, five days a week, about 21% of the calendar. The other 79% bills at the rates above, and Chinese public holidays count as off-peak all day.",
+              "Cache hits are the widest lever here. A cache hit costs $0.022 per 1M tokens against $0.66 for a miss, a 30x difference. An agent that resends the same long system prompt pays full price for it once and almost nothing afterwards, which is why the worked example below drops from $25.74 to $8.51 a month.",
+              "There is no batch-API discount for this model. DeepSeek does not publish one, so the 50% asynchronous saving that OpenAI, Anthropic and Google offer has no equivalent here. Time-of-day pricing replaces it, and it is worth the same 50% if your jobs can wait for an off-peak window."
+            ]
+          },
+          {
+            "h2": "V4 Pro or V4.1 Flash: what the price gap buys",
+            "paras": [
+              "V4 Pro costs 4.4x more on input and 3.3x more on output than V4.1 Flash. Two non-price differences decide the call: V4 Pro is text-only while Flash accepts images, and V4 Pro's concurrency limit is 500 against Flash's 2,500, which matters when you fan out hundreds of parallel requests.",
+              "Route by task shape rather than by model rank. Extraction, classification, image input and short chat belong on Flash; long-horizon reasoning where a wrong answer is expensive justifies Pro. Sending every request to Pro at 4.4x the input rate is rarely the right default."
+            ]
+          },
+          {
+            "h2": "The hidden cost: Search and Fetch billing starts 1 November 2026",
+            "paras": [
+              "DeepSeek bills its Search and Fetch APIs per request at $0.75 per 1,000 successful calls, and those calls are free until 00:00 Beijing time on 1 November 2026. From that date retrieval becomes a separate line item, so a search-heavy agent pays twice: once for tokens and once for lookups.",
+              "Worked example: five search calls per turn, 20 turns a day, is 3,000 calls a month, or $2.25. That is about 26% on top of the $8.51 token bill above. For retrieval-heavy workloads the search line can exceed inference, and no token calculator will show it."
+            ]
+          }
+        ],
+        "faq": [
+          {
+            "q": "How much does DeepSeek V4 Pro cost per 1M tokens?",
+            "a": "$0.66 per 1M input tokens and $1.98 per 1M output tokens at off-peak rates. Weekday peak (01:00-04:00 and 06:00-10:00 UTC) doubles both, to $1.32 and $3.96. Cached input bills at $0.022 per 1M."
+          },
+          {
+            "q": "Is DeepSeek V4 Pro cheaper at night?",
+            "a": "Yes. Off-peak rates are half the peak rates. Peak covers seven hours per weekday, so about 79% of the week bills at the lower rate; weekends and Chinese public holidays are off-peak all day."
+          },
+          {
+            "q": "Does DeepSeek V4 Pro have a batch API discount?",
+            "a": "No. DeepSeek does not publish a batch discount for this model, so the 50% asynchronous saving offered by OpenAI, Anthropic and Google has no equivalent here. Off-peak pricing and cache hits are the available levers."
+          },
+          {
+            "q": "Should I use V4 Pro or V4.1 Flash?",
+            "a": "Flash for extraction, classification, image input and high-concurrency fan-out: it is 4.4x cheaper on input and 3.3x cheaper on output, accepts images, and allows 2,500 concurrent requests against 500. Use V4 Pro when reasoning depth is worth the premium."
+          },
+          {
+            "q": "What does DeepSeek charge for Search and Fetch?",
+            "a": "$0.75 per 1,000 successful requests, free until 00:00 Beijing time on 1 November 2026. After that, retrieval is billed separately from tokens and can add around 26% to a search-heavy agent's bill."
+          }
+        ]
+      }
     },
     {
       "id": "glm-5-3",

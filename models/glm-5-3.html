@@ -21,23 +21,23 @@
       "name": "How much does GLM-5.3 cost per 1M tokens?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "GLM-5.3: $1.4 per 1M input tokens, $4.4 per 1M output tokens. Cached input is billed at $0.26 per 1M tokens where caching is supported."
+        "text": "$1.4 per 1M input tokens, $4.4 per 1M output tokens Cached input is billed at $0.26 per 1M tokens where caching is supported."
       }
     },
     {
       "@type": "Question",
-      "name": "Is the GLM-5.3 context window charged at a flat rate?",
+      "name": "Does the GLM-5.3 context window cost extra?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "The 1M context window is charged at a flat per-token rate with no length tier. Pay-as-you-go pricing now live"
+        "text": "The published context window is charged at a flat per-token rate. Pay-as-you-go pricing now live"
       }
     },
     {
       "@type": "Question",
-      "name": "How can I reduce my GLM-5.3 bill?",
+      "name": "What is the cheapest way to run GLM-5.3 at scale?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Use the batch API for a 50% discount, reuse a stable prompt prefix to get cache-hit rates (often around 0.1x the input price), cap max output tokens, and route classification or extraction tasks to a cheaper model tier."
+        "text": "Keep a stable prompt prefix so it caches; cached input runs at $0.26 per 1M, cap output length, schedule asynchronous work into off-peak windows where the provider prices by time, and move the easy 80% of traffic to a lower tier."
       }
     }
   ]
@@ -63,7 +63,7 @@
 
   <h1>GLM-5.3 API pricing: cost per 1M tokens</h1>
   <p class="lead">GLM-5.3 currently costs <strong>$1.4 per 1M input tokens</strong> and
-  <strong>$4.4 per 1M output tokens</strong> through the Z.AI API. Pay-as-you-go pricing now live
+  <strong>$4.4 per 1M output tokens</strong> through the Z.AI API. Pay-as-you-go pricing now live.
   Prices below were verified against official pricing documentation on 2026-10-18.</p>
 
   <section class="panel">
@@ -116,25 +116,16 @@
   </section>
 
   <section class="prose">
-    <h2>How to think about GLM-5.3 pricing</h2>
-    <p>Output tokens bill at 3.1× the input rate, which is the number that decides whether a
-    workload is affordable: summarization and classification are input-heavy, while agents,
-    chain-of-thought reasoning and long-form drafting are output-heavy. Before comparing
-    headline prices, measure the real token mix from your own logs, then apply the blended
-    formula <code>(input share × input price) + (output share × output price)</code>.</p>
-    <p>Three discounts stack on top of list prices on most providers: a 50% batch-API discount for
-    asynchronous workloads, cache-hit pricing that can drop cached input to around 0.1× the base
-    rate — and Claude-class cache writes cost 1.25×–2× the input rate, and right-sizing — routing simple steps to a mini or flash-class model instead of the
-    flagship is usually the largest single saving available.</p>
+    <h2>How to think about GLM-5.3 pricing</h2><p>Output tokens bill at 3.1× the input rate, which is the number that decides whether a workload is affordable: summarization and classification are input-heavy, while agents, chain-of-thought reasoning and long-form drafting are output-heavy. Before comparing headline prices, measure the real token mix from your own logs, then apply the blended formula <code>(input share × input price) + (output share × output price)</code>.</p><p>Beyond the headline rate, three levers usually decide a real bill: batch discounts where the provider offers one, cache hits on a stable prompt prefix, and right-sizing — routing simple steps to a mini or flash-class model instead of the flagship. Not every provider offers all three, so confirm which apply rather than assuming them. A cache hit bills at $0.26 against $1.4 for a miss, so a reused prefix is the cheapest tokens you will ever buy.</p>
 
     <h2>Frequently asked questions</h2>
     <details class="faq"><summary>How much does GLM-5.3 cost per 1M tokens?</summary>
-      <div class="faq-body">$1.4 per 1M input and $4.4 per 1M output tokens; cached input runs at $0.26 per 1M.</div></details>
+      <div class="faq-body">$1.4 per 1M input tokens, $4.4 per 1M output tokens Cached input is billed at $0.26 per 1M tokens where caching is supported.</div></details>
     <details class="faq"><summary>Does the GLM-5.3 context window cost extra?</summary>
-      <div class="faq-body">The published context window is charged at a flat per-token rate; Pay-as-you-go pricing now live</div></details>
+      <div class="faq-body">The published context window is charged at a flat per-token rate. Pay-as-you-go pricing now live</div></details>
     <details class="faq"><summary>What is the cheapest way to run GLM-5.3 at scale?</summary>
-      <div class="faq-body">Batch async jobs for the 50% discount, keep a stable prefix so it
-      caches (Claude also charges a multi-tier cache write premium), cap output length, and move the easy 80% of traffic to a lower tier.</div></details>
+      <div class="faq-body">Keep a stable prompt prefix so it caches; cached input runs at $0.26 per 1M, cap output length, schedule asynchronous work into off-peak windows where the provider prices by time, and move the easy 80% of traffic to a lower tier.</div></details>
+    
   </section>
 
 <div class="ad-slot">

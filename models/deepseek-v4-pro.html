@@ -21,23 +21,39 @@
       "name": "How much does DeepSeek V4 Pro cost per 1M tokens?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "DeepSeek V4 Pro: $0.66 per 1M input tokens, $1.98 per 1M output tokens. Cached input is billed at $0.022 per 1M tokens where caching is supported. Time-based pricing: the listed rate is the off-peak rate; Weekday peak (UTC 01:00-04:00 and 06:00-10:00) the rate doubles to $1.32/$3.96."
+        "text": "$0.66 per 1M input tokens and $1.98 per 1M output tokens at off-peak rates. Weekday peak (01:00-04:00 and 06:00-10:00 UTC) doubles both, to $1.32 and $3.96. Cached input bills at $0.022 per 1M."
       }
     },
     {
       "@type": "Question",
-      "name": "Is the DeepSeek V4 Pro context window charged at a flat rate?",
+      "name": "Is DeepSeek V4 Pro cheaper at night?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "The 1M context window is charged at a flat per-token rate with no length tier. Off-peak rates shown. Weekday peak doubles to $1.32/$3.96. Text-only (no vision), 1M context, up to 384K output"
+        "text": "Yes. Off-peak rates are half the peak rates. Peak covers seven hours per weekday, so about 79% of the week bills at the lower rate; weekends and Chinese public holidays are off-peak all day."
       }
     },
     {
       "@type": "Question",
-      "name": "How can I reduce my DeepSeek V4 Pro bill?",
+      "name": "Does DeepSeek V4 Pro have a batch API discount?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Use the batch API for a 50% discount, reuse a stable prompt prefix to get cache-hit rates (often around 0.1x the input price), cap max output tokens, and route classification or extraction tasks to a cheaper model tier."
+        "text": "No. DeepSeek does not publish a batch discount for this model, so the 50% asynchronous saving offered by OpenAI, Anthropic and Google has no equivalent here. Off-peak pricing and cache hits are the available levers."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Should I use V4 Pro or V4.1 Flash?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Flash for extraction, classification, image input and high-concurrency fan-out: it is 4.4x cheaper on input and 3.3x cheaper on output, accepts images, and allows 2,500 concurrent requests against 500. Use V4 Pro when reasoning depth is worth the premium."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does DeepSeek charge for Search and Fetch?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "$0.75 per 1,000 successful requests, free until 00:00 Beijing time on 1 November 2026. After that, retrieval is billed separately from tokens and can add around 26% to a search-heavy agent's bill."
       }
     }
   ]
@@ -63,8 +79,8 @@
 
   <h1>DeepSeek V4 Pro API pricing: cost per 1M tokens</h1>
   <p class="lead">DeepSeek V4 Pro currently costs <strong>$0.66 per 1M input tokens</strong> (off-peak) and
-  <strong>$1.98 per 1M output tokens</strong> through the DeepSeek API. Off-peak rates shown. Weekday peak doubles to $1.32/$3.96. Text-only (no vision), 1M context, up to 384K output
-  Prices below were verified against official pricing documentation on 2026-10-18.</p>
+  <strong>$1.98 per 1M output tokens</strong> through the DeepSeek API. Off-peak rates shown. Weekday peak doubles to $1.32/$3.96. Text-only (no vision), 1M context, up to 384K output.
+  Prices below were verified against official pricing documentation on 2026-10-24.</p>
 
   <section class="panel">
     <div class="stats-grid">
@@ -77,7 +93,7 @@
     <table class="data">
       <thead><tr><th>Tier</th><th class="num">Input / 1M</th><th class="num">Output / 1M</th></tr></thead>
       <tbody>
-        <tr><td>Standard rate</td><td class="num">$0.66</td><td class="num">$1.98</td></tr>
+        
         <tr><td>Off-peak rate (default)</td><td class="num">$0.66</td><td class="num">$1.98</td></tr><tr><td>Weekday peak (UTC 01:00-04:00 and 06:00-10:00)</td><td class="num">$1.32</td><td class="num">$3.96</td></tr>
       </tbody>
     </table>
@@ -106,6 +122,23 @@
   </section>
 
   <section class="panel">
+    <h2 style="margin-top:0;font-size:16px">Cost per workload: off-peak vs weekday peak</h2>
+    <table class="data">
+      <thead><tr><th>Workload</th><th class="num">Input tokens</th><th class="num">Output tokens</th><th class="num">Off-peak</th><th class="num">Peak</th></tr></thead>
+      <tbody><tr><td>Single summarization call</td><td class="num">1M</td><td class="num">100K</td><td class="num">$0.86</td><td class="num">$1.72</td></tr><tr><td>Long document pass, no cache reuse</td><td class="num">1M</td><td class="num">20K</td><td class="num">$0.70</td><td class="num">$1.40</td></tr><tr><td>Cached agent loop, one turn</td><td class="num">50K (45K cache hit)</td><td class="num">5K</td><td class="num">$0.014</td><td class="num">$0.028</td></tr><tr><td>That loop, 20 turns/day for 30 days</td><td class="num">30M</td><td class="num">3M</td><td class="num">$8.51</td><td class="num">$17.03</td></tr></tbody>
+    </table>
+    <p class="note">Computed from the rates above. The cached loop assumes 90% of input hits cache; the same loop without caching bills $25.74 a month off-peak.</p>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0;font-size:16px">DeepSeek V4 Pro vs V4.1 Flash</h2>
+    <table class="data">
+      <thead><tr><th></th><th class="num">V4 Pro</th><th class="num">V4.1 Flash</th></tr></thead>
+      <tbody><tr><td>Input / 1M (off-peak)</td><td class="num">$0.66</td><td class="num">$0.15</td></tr><tr><td>Output / 1M (off-peak)</td><td class="num">$1.98</td><td class="num">$0.60</td></tr><tr><td>Cache hit / 1M</td><td class="num">$0.022</td><td class="num">$0.003</td></tr><tr><td>Context / max output</td><td class="num">1M / 384K</td><td class="num">1M / 384K</td></tr><tr><td>Image input</td><td class="num">Not supported</td><td class="num">Supported</td></tr><tr><td>Concurrency limit</td><td class="num">500</td><td class="num">2,500</td></tr><tr><td>Model version</td><td class="num">V4-Pro-0813</td><td class="num">V4.1-Flash-1017</td></tr></tbody>
+    </table>
+  </section>
+
+  <section class="panel">
     <h2 style="margin-top:0;font-size:16px">DeepSeek V4 Pro vs nearby models (blended at a 3:1 input:output ratio)</h2>
     <table class="data">
       <thead><tr><th>Model</th><th>Provider</th><th class="num">Input</th><th class="num">Output</th><th class="num">Cached in</th><th>Context</th></tr></thead>
@@ -113,28 +146,24 @@
     </table>
     <p class="note">The full 34-model comparison lives on the <a href="/models/index.html">pricing hub</a>,
     and the <a href="/tools/token-counter.html">token &amp; cost calculator</a> will price your actual prompt.</p>
+    <p class="note">Full breakdown: <a href="/models/deepseek-v4-1-flash.html">DeepSeek V4.1 Flash pricing</a>.</p>
   </section>
 
   <section class="prose">
-    <h2>How to think about DeepSeek V4 Pro pricing</h2>
-    <p>Output tokens bill at 3.0× the input rate, which is the number that decides whether a
-    workload is affordable: summarization and classification are input-heavy, while agents,
-    chain-of-thought reasoning and long-form drafting are output-heavy. Before comparing
-    headline prices, measure the real token mix from your own logs, then apply the blended
-    formula <code>(input share × input price) + (output share × output price)</code>.</p>
-    <p>Three discounts stack on top of list prices on most providers: a 50% batch-API discount for
-    asynchronous workloads, cache-hit pricing that can drop cached input to around 0.1× the base
-    rate — and Claude-class cache writes cost 1.25×–2× the input rate, and right-sizing — routing simple steps to a mini or flash-class model instead of the
-    flagship is usually the largest single saving available.</p>
+    <h2>What DeepSeek V4 Pro actually costs in October 2026</h2><p>$0.66 per 1M tokens is the off-peak rate, not the list price. DeepSeek publishes peak rates and halves them outside two weekday windows: 01:00-04:00 and 06:00-10:00 UTC. That is seven hours a day, five days a week, about 21% of the calendar. The other 79% bills at the rates above, and Chinese public holidays count as off-peak all day.</p><p>Cache hits are the widest lever here. A cache hit costs $0.022 per 1M tokens against $0.66 for a miss, a 30x difference. An agent that resends the same long system prompt pays full price for it once and almost nothing afterwards, which is why the worked example below drops from $25.74 to $8.51 a month.</p><p>There is no batch-API discount for this model. DeepSeek does not publish one, so the 50% asynchronous saving that OpenAI, Anthropic and Google offer has no equivalent here. Time-of-day pricing replaces it, and it is worth the same 50% if your jobs can wait for an off-peak window.</p><h2>V4 Pro or V4.1 Flash: what the price gap buys</h2><p>V4 Pro costs 4.4x more on input and 3.3x more on output than V4.1 Flash. Two non-price differences decide the call: V4 Pro is text-only while Flash accepts images, and V4 Pro's concurrency limit is 500 against Flash's 2,500, which matters when you fan out hundreds of parallel requests.</p><p>Route by task shape rather than by model rank. Extraction, classification, image input and short chat belong on Flash; long-horizon reasoning where a wrong answer is expensive justifies Pro. Sending every request to Pro at 4.4x the input rate is rarely the right default.</p><h2>The hidden cost: Search and Fetch billing starts 1 November 2026</h2><p>DeepSeek bills its Search and Fetch APIs per request at $0.75 per 1,000 successful calls, and those calls are free until 00:00 Beijing time on 1 November 2026. From that date retrieval becomes a separate line item, so a search-heavy agent pays twice: once for tokens and once for lookups.</p><p>Worked example: five search calls per turn, 20 turns a day, is 3,000 calls a month, or $2.25. That is about 26% on top of the $8.51 token bill above. For retrieval-heavy workloads the search line can exceed inference, and no token calculator will show it.</p>
 
     <h2>Frequently asked questions</h2>
     <details class="faq"><summary>How much does DeepSeek V4 Pro cost per 1M tokens?</summary>
-      <div class="faq-body">$0.66 per 1M input and $1.98 per 1M output tokens; cached input runs at $0.022 per 1M.</div></details>
-    <details class="faq"><summary>Does the DeepSeek V4 Pro context window cost extra?</summary>
-      <div class="faq-body">The published context window is charged at a flat per-token rate; Off-peak rates shown. Weekday peak doubles to $1.32/$3.96. Text-only (no vision), 1M context, up to 384K output</div></details>
-    <details class="faq"><summary>What is the cheapest way to run DeepSeek V4 Pro at scale?</summary>
-      <div class="faq-body">Batch async jobs for the 50% discount, keep a stable prefix so it
-      caches (Claude also charges a multi-tier cache write premium), cap output length, and move the easy 80% of traffic to a lower tier.</div></details>
+      <div class="faq-body">$0.66 per 1M input tokens and $1.98 per 1M output tokens at off-peak rates. Weekday peak (01:00-04:00 and 06:00-10:00 UTC) doubles both, to $1.32 and $3.96. Cached input bills at $0.022 per 1M.</div></details>
+    <details class="faq"><summary>Is DeepSeek V4 Pro cheaper at night?</summary>
+      <div class="faq-body">Yes. Off-peak rates are half the peak rates. Peak covers seven hours per weekday, so about 79% of the week bills at the lower rate; weekends and Chinese public holidays are off-peak all day.</div></details>
+    <details class="faq"><summary>Does DeepSeek V4 Pro have a batch API discount?</summary>
+      <div class="faq-body">No. DeepSeek does not publish a batch discount for this model, so the 50% asynchronous saving offered by OpenAI, Anthropic and Google has no equivalent here. Off-peak pricing and cache hits are the available levers.</div></details>
+    <details class="faq"><summary>Should I use V4 Pro or V4.1 Flash?</summary>
+      <div class="faq-body">Flash for extraction, classification, image input and high-concurrency fan-out: it is 4.4x cheaper on input and 3.3x cheaper on output, accepts images, and allows 2,500 concurrent requests against 500. Use V4 Pro when reasoning depth is worth the premium.</div></details>
+    <details class="faq"><summary>What does DeepSeek charge for Search and Fetch?</summary>
+      <div class="faq-body">$0.75 per 1,000 successful requests, free until 00:00 Beijing time on 1 November 2026. After that, retrieval is billed separately from tokens and can add around 26% to a search-heavy agent's bill.</div></details>
+    
   </section>
 
 <div class="ad-slot">
