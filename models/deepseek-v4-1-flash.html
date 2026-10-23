@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>DeepSeek V4.1 Flash API pricing in 2026: cost per 1M tokens | ezaiops tools</title>
-<meta name="description" content="DeepSeek V4.1 Flash costs $0.15 per 1M input tokens and $0.6 per 1M output tokens. Context window, caching rates, a quick cost calculator and comparisons with nearby models.">
+<meta name="description" content="DeepSeek V4.1 Flash costs $0.15 per 1M input tokens and $0.60 per 1M output tokens. Context window, caching rates, a quick cost calculator and comparisons with nearby models.">
 <link rel="canonical" href="https://tools.ezaiops.com/models/deepseek-v4-1-flash.html">
 <meta property="og:type" content="website">
 <meta property="og:title" content="DeepSeek V4.1 Flash API pricing in 2026: cost per 1M tokens | ezaiops tools">
-<meta property="og:description" content="DeepSeek V4.1 Flash costs $0.15 per 1M input tokens and $0.6 per 1M output tokens. Context window, caching rates, a quick cost calculator and comparisons with nearby models.">
+<meta property="og:description" content="DeepSeek V4.1 Flash costs $0.15 per 1M input tokens and $0.60 per 1M output tokens. Context window, caching rates, a quick cost calculator and comparisons with nearby models.">
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
 <link rel="stylesheet" href="/assets/style.css?v=20261022b">
 <script type="application/ld+json">
@@ -21,23 +21,39 @@
       "name": "How much does DeepSeek V4.1 Flash cost per 1M tokens?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "$0.15 per 1M input tokens, $0.6 per 1M output tokens Time-based pricing: the listed rate is the off-peak rate; Weekday peak (UTC 01:00-04:00 and 06:00-10:00) the rate doubles to $0.3/$1.2. Cached input is billed at $0.003 per 1M tokens where caching is supported."
+        "text": "$0.15 per 1M input tokens and $0.60 per 1M output tokens at off-peak rates. Weekday peak (01:00-04:00 and 06:00-10:00 UTC) doubles both, to $0.30 and $1.20. Cached input bills at $0.003 per 1M."
       }
     },
     {
       "@type": "Question",
-      "name": "Does the DeepSeek V4.1 Flash context window cost extra?",
+      "name": "Is DeepSeek V4.1 Flash cheaper at night?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "The published context window is charged at a flat per-token rate. 1017 snapshot released 2026-10-17: same price, but outputs run ~30% shorter so cost per task drops. Off-peak rates shown; weekday peak doubles to $0.30/$1.20. Multimodal, open weights, 1M context, 384K max output"
+        "text": "Yes. Off-peak rates are half the peak rates. Peak covers seven hours per weekday, so about 79% of the week bills at the lower rate; weekends and Chinese public holidays are off-peak all day."
       }
     },
     {
       "@type": "Question",
-      "name": "What is the cheapest way to run DeepSeek V4.1 Flash at scale?",
+      "name": "Should I use V4.1 Flash or V4 Pro?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Keep a stable prompt prefix so it caches; cached input runs at $0.003 per 1M, cap output length, schedule asynchronous work into off-peak windows where the provider prices by time, and move the easy 80% of traffic to a lower tier."
+        "text": "Flash for extraction, classification, image input and high-concurrency work: it is 4.4x cheaper on input and 3.3x cheaper on output, accepts images, and allows 2,500 concurrent requests against 500. Use V4 Pro when reasoning depth is worth the premium."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does DeepSeek V4.1 Flash accept image input?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Flash is multimodal while V4 Pro is text-only, which is often the deciding difference for document, screenshot and chart workloads."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What changed in the 1017 snapshot?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Same price, but outputs run about 30% shorter, so cost per completed task dropped. The model name is deepseek-flash; the retired deepseek-v4-flash aliases are served by this snapshot and billed at the Flash price."
       }
     }
   ]
@@ -63,13 +79,13 @@
 
   <h1>DeepSeek V4.1 Flash API pricing: cost per 1M tokens</h1>
   <p class="lead">DeepSeek V4.1 Flash currently costs <strong>$0.15 per 1M input tokens</strong> (off-peak) and
-  <strong>$0.6 per 1M output tokens</strong> through the DeepSeek API. 1017 snapshot released 2026-10-17: same price, but outputs run ~30% shorter so cost per task drops. Off-peak rates shown; weekday peak doubles to $0.30/$1.20. Multimodal, open weights, 1M context, 384K max output.
-  Prices below were verified against official pricing documentation on 2026-10-18.</p>
+  <strong>$0.60 per 1M output tokens</strong> through the DeepSeek API. 1017 snapshot released 2026-10-17: same price, but outputs run ~30% shorter so cost per task drops. Off-peak rates shown; weekday peak doubles to $0.30/$1.20. Multimodal, open weights, 1M context, 384K max output.
+  Prices below were verified against official pricing documentation on 2026-10-24.</p>
 
   <section class="panel">
     <div class="stats-grid">
       <div class="stat"><div class="k">Input / 1M tokens</div><div class="v">$0.15</div></div>
-      <div class="stat"><div class="k">Output / 1M tokens</div><div class="v">$0.6</div></div>
+      <div class="stat"><div class="k">Output / 1M tokens</div><div class="v">$0.60</div></div>
       <div class="stat"><div class="k">Output multiple</div><div class="v">4.0×</div></div>
       <div class="stat"><div class="k">Context window</div><div class="v">1M</div></div>
     </div>
@@ -78,7 +94,7 @@
       <thead><tr><th>Tier</th><th class="num">Input / 1M</th><th class="num">Output / 1M</th></tr></thead>
       <tbody>
         
-        <tr><td>Off-peak rate (default)</td><td class="num">$0.15</td><td class="num">$0.6</td></tr><tr><td>Weekday peak (UTC 01:00-04:00 and 06:00-10:00)</td><td class="num">$0.3</td><td class="num">$1.2</td></tr>
+        <tr><td>Off-peak rate (default)</td><td class="num">$0.15</td><td class="num">$0.60</td></tr><tr><td>Weekday peak (UTC 01:00-04:00 and 06:00-10:00)</td><td class="num">$0.30</td><td class="num">$1.20</td></tr>
       </tbody>
     </table>
     <dl class="kv-list"><dt>Cached input</dt><dd>$0.003</dd></dl>
@@ -106,25 +122,47 @@
   </section>
 
   <section class="panel">
+    <h2 style="margin-top:0;font-size:16px">DeepSeek V4.1 Flash vs V4 Pro</h2>
+    <table class="data">
+      <thead><tr><th></th><th>DeepSeek V4.1 Flash</th><th>DeepSeek V4 Pro</th></tr></thead>
+      <tbody><tr><td>Input / 1M (off-peak)</td><td class="num">$0.15</td><td class="num">$0.66</td></tr><tr><td>Output / 1M (off-peak)</td><td class="num">$0.60</td><td class="num">$1.98</td></tr><tr><td>Cache hit / 1M</td><td class="num">$0.003</td><td class="num">$0.022</td></tr><tr><td>Context window</td><td class="num">1M</td><td class="num">1M</td></tr><tr><td>Max output</td><td class="num">384K</td><td class="num">384K</td></tr><tr><td>Image input</td><td class="num">Supported</td><td class="num">Not supported</td></tr><tr><td>Concurrency limit</td><td class="num">2,500</td><td class="num">500</td></tr><tr><td>Model version</td><td class="num">V4.1-Flash-1017</td><td class="num">V4-Pro-0813</td></tr></tbody>
+    </table>
+    <p class="note">Full breakdown: <a href="/models/deepseek-v4-pro.html">DeepSeek V4 Pro pricing</a>.</p>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0;font-size:16px">Cost per workload: off-peak vs weekday peak</h2>
+    <table class="data">
+      <thead><tr><th>Workload</th><th class="num">Input tokens</th><th class="num">Output tokens</th><th class="num">Off-peak</th><th class="num">Peak</th></tr></thead>
+      <tbody><tr><td>Single summarization call</td><td class="num">1M</td><td class="num">100K</td><td class="num">$0.21</td><td class="num">$0.42</td></tr><tr><td>Long document pass, no cache reuse</td><td class="num">1M</td><td class="num">20K</td><td class="num">$0.16</td><td class="num">$0.32</td></tr><tr><td>Cached agent loop, one turn</td><td class="num">50K (45K cache hit)</td><td class="num">5K</td><td class="num">$0.004</td><td class="num">$0.008</td></tr><tr><td>That loop, 20 turns/day for 30 days</td><td class="num">30M</td><td class="num">3M</td><td class="num">$2.33</td><td class="num">$4.66</td></tr></tbody>
+    </table>
+    <p class="note">Computed from the rates above. The same loop without caching bills $6.30 a month off-peak, and $8.51 on V4 Pro.</p>
+  </section>
+
+  <section class="panel">
     <h2 style="margin-top:0;font-size:16px">DeepSeek V4.1 Flash vs nearby models (blended at a 3:1 input:output ratio)</h2>
     <table class="data">
       <thead><tr><th>Model</th><th>Provider</th><th class="num">Input</th><th class="num">Output</th><th class="num">Cached in</th><th>Context</th></tr></thead>
-      <tbody><tr><td><a href="/models/claude-haiku-5-5.html">Claude Haiku 5.5</a></td><td>Anthropic</td><td class="num">$0.1</td><td class="num">$0.5</td><td class="num">$0.01</td><td>1M</td></tr><tr><td><a href="/models/glm-5-3-flash.html">GLM-5.3 Flash</a></td><td>Z.AI</td><td class="num">$0.15</td><td class="num">$0.5</td><td class="num">$0.03</td><td>1M</td></tr><tr style="background:var(--accent-soft)"><td><strong>DeepSeek V4.1 Flash</strong></td><td>DeepSeek</td><td class="num">$0.15</td><td class="num">$0.6</td><td class="num">$0.003</td><td>1M</td></tr><tr><td><a href="/models/mistral-small-4.html">Mistral Small 4</a></td><td>Mistral</td><td class="num">$0.15</td><td class="num">$0.6</td><td class="num">$0.015</td><td>131K</td></tr><tr><td><a href="/models/gpt-5-6-luna.html">GPT-5.6 Luna</a></td><td>OpenAI</td><td class="num">$0.2</td><td class="num">$1.2</td><td class="num">—</td><td>—</td></tr></tbody>
+      <tbody><tr><td><a href="/models/claude-haiku-5-5.html">Claude Haiku 5.5</a></td><td>Anthropic</td><td class="num">$0.10</td><td class="num">$0.50</td><td class="num">$0.01</td><td>1M</td></tr><tr><td><a href="/models/glm-5-3-flash.html">GLM-5.3 Flash</a></td><td>Z.AI</td><td class="num">$0.15</td><td class="num">$0.50</td><td class="num">$0.03</td><td>1M</td></tr><tr style="background:var(--accent-soft)"><td><strong>DeepSeek V4.1 Flash</strong></td><td>DeepSeek</td><td class="num">$0.15</td><td class="num">$0.60</td><td class="num">$0.003</td><td>1M</td></tr><tr><td><a href="/models/mistral-small-4.html">Mistral Small 4</a></td><td>Mistral</td><td class="num">$0.15</td><td class="num">$0.60</td><td class="num">$0.015</td><td>131K</td></tr><tr><td><a href="/models/gpt-5-6-luna.html">GPT-5.6 Luna</a></td><td>OpenAI</td><td class="num">$0.20</td><td class="num">$1.20</td><td class="num">—</td><td>—</td></tr></tbody>
     </table>
     <p class="note">The full 34-model comparison lives on the <a href="/models/index.html">pricing hub</a>,
     and the <a href="/tools/token-counter.html">token &amp; cost calculator</a> will price your actual prompt.</p>
   </section>
 
   <section class="prose">
-    <h2>How to think about DeepSeek V4.1 Flash pricing</h2><p>Output tokens bill at 4.0× the input rate, which is the number that decides whether a workload is affordable: summarization and classification are input-heavy, while agents, chain-of-thought reasoning and long-form drafting are output-heavy. Before comparing headline prices, measure the real token mix from your own logs, then apply the blended formula <code>(input share × input price) + (output share × output price)</code>.</p><p>Beyond the headline rate, three levers usually decide a real bill: batch discounts where the provider offers one, cache hits on a stable prompt prefix, and right-sizing — routing simple steps to a mini or flash-class model instead of the flagship. Not every provider offers all three, so confirm which apply rather than assuming them. A cache hit bills at $0.003 against $0.15 for a miss, so a reused prefix is the cheapest tokens you will ever buy.</p>
+    <h2>What DeepSeek V4.1 Flash actually costs in October 2026</h2><p>$0.15 per 1M input and $0.60 per 1M output are off-peak rates. DeepSeek bills double during two weekday windows, 01:00-04:00 and 06:00-10:00 UTC, which cover seven hours a day, five days a week — about 21% of the calendar. Weekends and Chinese public holidays bill off-peak all day, so roughly 79% of the week sits at the rates on this page.</p><p>Cache hits cost $0.003 per 1M tokens, fifty times cheaper than a miss at $0.15. For an agent that resends the same system prompt most of the input never pays the full rate: the worked example below runs at $2.33 a month instead of $6.30.</p><p>The 1017 snapshot, released 2026-10-17, kept the price and cut output length by roughly 30%. Cost per finished task fell without a rate change, which is why per-token price is a poor proxy for cost per outcome.</p><h2>V4.1 Flash or V4 Pro: when the cheap tier is enough</h2><p>Flash is 4.4x cheaper on input and 3.3x cheaper on output than V4 Pro, and it wins on two things besides price: it accepts images, which Pro rejects, and it allows 2,500 concurrent requests against Pro's 500. For extraction, classification, vision and high-volume fan-out there is no reason to pay the premium.</p><p>Where Pro earns its price is long-horizon reasoning. If a wrong answer costs more than the tokens, the cheaper model is the expensive choice — the 3.7x gap on the cached loop above is worth paying when a retry chain costs an hour of engineering time.</p>
 
     <h2>Frequently asked questions</h2>
     <details class="faq"><summary>How much does DeepSeek V4.1 Flash cost per 1M tokens?</summary>
-      <div class="faq-body">$0.15 per 1M input tokens, $0.6 per 1M output tokens Time-based pricing: the listed rate is the off-peak rate; Weekday peak (UTC 01:00-04:00 and 06:00-10:00) the rate doubles to $0.3/$1.2. Cached input is billed at $0.003 per 1M tokens where caching is supported.</div></details>
-    <details class="faq"><summary>Does the DeepSeek V4.1 Flash context window cost extra?</summary>
-      <div class="faq-body">The published context window is charged at a flat per-token rate. 1017 snapshot released 2026-10-17: same price, but outputs run ~30% shorter so cost per task drops. Off-peak rates shown; weekday peak doubles to $0.30/$1.20. Multimodal, open weights, 1M context, 384K max output</div></details>
-    <details class="faq"><summary>What is the cheapest way to run DeepSeek V4.1 Flash at scale?</summary>
-      <div class="faq-body">Keep a stable prompt prefix so it caches; cached input runs at $0.003 per 1M, cap output length, schedule asynchronous work into off-peak windows where the provider prices by time, and move the easy 80% of traffic to a lower tier.</div></details>
+      <div class="faq-body">$0.15 per 1M input tokens and $0.60 per 1M output tokens at off-peak rates. Weekday peak (01:00-04:00 and 06:00-10:00 UTC) doubles both, to $0.30 and $1.20. Cached input bills at $0.003 per 1M.</div></details>
+    <details class="faq"><summary>Is DeepSeek V4.1 Flash cheaper at night?</summary>
+      <div class="faq-body">Yes. Off-peak rates are half the peak rates. Peak covers seven hours per weekday, so about 79% of the week bills at the lower rate; weekends and Chinese public holidays are off-peak all day.</div></details>
+    <details class="faq"><summary>Should I use V4.1 Flash or V4 Pro?</summary>
+      <div class="faq-body">Flash for extraction, classification, image input and high-concurrency work: it is 4.4x cheaper on input and 3.3x cheaper on output, accepts images, and allows 2,500 concurrent requests against 500. Use V4 Pro when reasoning depth is worth the premium.</div></details>
+    <details class="faq"><summary>Does DeepSeek V4.1 Flash accept image input?</summary>
+      <div class="faq-body">Yes. Flash is multimodal while V4 Pro is text-only, which is often the deciding difference for document, screenshot and chart workloads.</div></details>
+    <details class="faq"><summary>What changed in the 1017 snapshot?</summary>
+      <div class="faq-body">Same price, but outputs run about 30% shorter, so cost per completed task dropped. The model name is deepseek-flash; the retired deepseek-v4-flash aliases are served by this snapshot and billed at the Flash price.</div></details>
     
   </section>
 

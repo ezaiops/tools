@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>MiniMax M3 API pricing in 2026: cost per 1M tokens | ezaiops tools</title>
-<meta name="description" content="MiniMax M3 costs $0.3 per 1M input tokens and $1.2 per 1M output tokens. Context window, caching rates, a quick cost calculator and comparisons with nearby models.">
+<meta name="description" content="MiniMax M3 costs $0.30 per 1M input tokens and $1.20 per 1M output tokens. Context window, caching rates, a quick cost calculator and comparisons with nearby models.">
 <link rel="canonical" href="https://tools.ezaiops.com/models/minimax-m3.html">
 <meta property="og:type" content="website">
 <meta property="og:title" content="MiniMax M3 API pricing in 2026: cost per 1M tokens | ezaiops tools">
-<meta property="og:description" content="MiniMax M3 costs $0.3 per 1M input tokens and $1.2 per 1M output tokens. Context window, caching rates, a quick cost calculator and comparisons with nearby models.">
+<meta property="og:description" content="MiniMax M3 costs $0.30 per 1M input tokens and $1.20 per 1M output tokens. Context window, caching rates, a quick cost calculator and comparisons with nearby models.">
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
 <link rel="stylesheet" href="/assets/style.css?v=20261022b">
 <script type="application/ld+json">
@@ -21,7 +21,7 @@
       "name": "How much does MiniMax M3 cost per 1M tokens?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "$0.3 per 1M input tokens, $1.2 per 1M output tokens Cached input is billed at $0.06 per 1M tokens where caching is supported."
+        "text": "$0.30 per 1M input tokens, $1.20 per 1M output tokens Cached input is billed at $0.06 per 1M tokens where caching is supported."
       }
     },
     {
@@ -29,7 +29,7 @@
       "name": "Does the MiniMax M3 context window cost extra?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Long prompts above 512,000 tokens switch to the higher tier ($0.6 in / $2.4 out). Below that the rate is flat."
+        "text": "Long prompts above 512,000 tokens switch to the higher tier ($0.60 in / $2.40 out). Below that the rate is flat."
       }
     },
     {
@@ -62,14 +62,14 @@
   <nav class="crumbs"><a href="/">Home</a> / <a href="/models/index.html">LLM pricing</a> / MiniMax M3<a class="main-site-link" href="https://ezaiops.com/en/">ezaiops.com ↗</a></nav>
 
   <h1>MiniMax M3 API pricing: cost per 1M tokens</h1>
-  <p class="lead">MiniMax M3 currently costs <strong>$0.3 per 1M input tokens</strong> and
-  <strong>$1.2 per 1M output tokens</strong> through the MiniMax API. Above 512K tokens per request the rate is $0.60/$2.40.
+  <p class="lead">MiniMax M3 currently costs <strong>$0.30 per 1M input tokens</strong> and
+  <strong>$1.20 per 1M output tokens</strong> through the MiniMax API. Above 512K tokens per request the rate is $0.60/$2.40.
   Prices below were verified against official pricing documentation on 2026-10-18.</p>
 
   <section class="panel">
     <div class="stats-grid">
-      <div class="stat"><div class="k">Input / 1M tokens</div><div class="v">$0.3</div></div>
-      <div class="stat"><div class="k">Output / 1M tokens</div><div class="v">$1.2</div></div>
+      <div class="stat"><div class="k">Input / 1M tokens</div><div class="v">$0.30</div></div>
+      <div class="stat"><div class="k">Output / 1M tokens</div><div class="v">$1.20</div></div>
       <div class="stat"><div class="k">Output multiple</div><div class="v">4.0×</div></div>
       <div class="stat"><div class="k">Context window</div><div class="v">1M</div></div>
     </div>
@@ -77,8 +77,8 @@
     <table class="data">
       <thead><tr><th>Tier</th><th class="num">Input / 1M</th><th class="num">Output / 1M</th></tr></thead>
       <tbody>
-        <tr><td>Standard rate</td><td class="num">$0.3</td><td class="num">$1.2</td></tr>
-        <tr><td>Above 512,000 tokens per request</td><td class="num">$0.6</td><td class="num">$2.4</td></tr>
+        <tr><td>Standard rate</td><td class="num">$0.30</td><td class="num">$1.20</td></tr>
+        <tr><td>Above 512,000 tokens per request</td><td class="num">$0.60</td><td class="num">$2.40</td></tr>
       </tbody>
     </table>
     <dl class="kv-list"><dt>Cached input</dt><dd>$0.06</dd></dl>
@@ -109,20 +109,20 @@
     <h2 style="margin-top:0;font-size:16px">MiniMax M3 vs nearby models (blended at a 3:1 input:output ratio)</h2>
     <table class="data">
       <thead><tr><th>Model</th><th>Provider</th><th class="num">Input</th><th class="num">Output</th><th class="num">Cached in</th><th>Context</th></tr></thead>
-      <tbody><tr><td><a href="/models/mistral-small-4.html">Mistral Small 4</a></td><td>Mistral</td><td class="num">$0.15</td><td class="num">$0.6</td><td class="num">$0.015</td><td>131K</td></tr><tr><td><a href="/models/gpt-5-6-luna.html">GPT-5.6 Luna</a></td><td>OpenAI</td><td class="num">$0.2</td><td class="num">$1.2</td><td class="num">—</td><td>—</td></tr><tr style="background:var(--accent-soft)"><td><strong>MiniMax M3</strong></td><td>MiniMax</td><td class="num">$0.3</td><td class="num">$1.2</td><td class="num">$0.06</td><td>1M</td></tr><tr><td><a href="/models/mimo-v2-6-pro.html">MiMo V2.6 Pro</a></td><td>Xiaomi</td><td class="num">$0.435</td><td class="num">$0.87</td><td class="num">$0.0036</td><td>—</td></tr><tr><td><a href="/models/glm-5-3-flashx.html">GLM-5.3 FlashX</a></td><td>Z.AI</td><td class="num">$0.37</td><td class="num">$1.25</td><td class="num">$0.075</td><td>1M</td></tr></tbody>
+      <tbody><tr><td><a href="/models/mistral-small-4.html">Mistral Small 4</a></td><td>Mistral</td><td class="num">$0.15</td><td class="num">$0.60</td><td class="num">$0.015</td><td>131K</td></tr><tr><td><a href="/models/gpt-5-6-luna.html">GPT-5.6 Luna</a></td><td>OpenAI</td><td class="num">$0.20</td><td class="num">$1.20</td><td class="num">—</td><td>—</td></tr><tr style="background:var(--accent-soft)"><td><strong>MiniMax M3</strong></td><td>MiniMax</td><td class="num">$0.30</td><td class="num">$1.20</td><td class="num">$0.06</td><td>1M</td></tr><tr><td><a href="/models/mimo-v2-6-pro.html">MiMo V2.6 Pro</a></td><td>Xiaomi</td><td class="num">$0.435</td><td class="num">$0.87</td><td class="num">$0.0036</td><td>—</td></tr><tr><td><a href="/models/glm-5-3-flashx.html">GLM-5.3 FlashX</a></td><td>Z.AI</td><td class="num">$0.37</td><td class="num">$1.25</td><td class="num">$0.075</td><td>1M</td></tr></tbody>
     </table>
     <p class="note">The full 34-model comparison lives on the <a href="/models/index.html">pricing hub</a>,
     and the <a href="/tools/token-counter.html">token &amp; cost calculator</a> will price your actual prompt.</p>
   </section>
 
   <section class="prose">
-    <h2>How to think about MiniMax M3 pricing</h2><p>Output tokens bill at 4.0× the input rate, which is the number that decides whether a workload is affordable: summarization and classification are input-heavy, while agents, chain-of-thought reasoning and long-form drafting are output-heavy. Before comparing headline prices, measure the real token mix from your own logs, then apply the blended formula <code>(input share × input price) + (output share × output price)</code>.</p><p>Beyond the headline rate, three levers usually decide a real bill: batch discounts where the provider offers one, cache hits on a stable prompt prefix, and right-sizing — routing simple steps to a mini or flash-class model instead of the flagship. Not every provider offers all three, so confirm which apply rather than assuming them. A cache hit bills at $0.06 against $0.3 for a miss, so a reused prefix is the cheapest tokens you will ever buy.</p>
+    <h2>How to think about MiniMax M3 pricing</h2><p>Output tokens bill at 4.0× the input rate, which is the number that decides whether a workload is affordable: summarization and classification are input-heavy, while agents, chain-of-thought reasoning and long-form drafting are output-heavy. Before comparing headline prices, measure the real token mix from your own logs, then apply the blended formula <code>(input share × input price) + (output share × output price)</code>.</p><p>Beyond the headline rate, three levers usually decide a real bill: batch discounts where the provider offers one, cache hits on a stable prompt prefix, and right-sizing — routing simple steps to a mini or flash-class model instead of the flagship. Not every provider offers all three, so confirm which apply rather than assuming them. A cache hit bills at $0.06 against $0.30 for a miss, so a reused prefix is the cheapest tokens you will ever buy.</p>
 
     <h2>Frequently asked questions</h2>
     <details class="faq"><summary>How much does MiniMax M3 cost per 1M tokens?</summary>
-      <div class="faq-body">$0.3 per 1M input tokens, $1.2 per 1M output tokens Cached input is billed at $0.06 per 1M tokens where caching is supported.</div></details>
+      <div class="faq-body">$0.30 per 1M input tokens, $1.20 per 1M output tokens Cached input is billed at $0.06 per 1M tokens where caching is supported.</div></details>
     <details class="faq"><summary>Does the MiniMax M3 context window cost extra?</summary>
-      <div class="faq-body">Long prompts above 512,000 tokens switch to the higher tier ($0.6 in / $2.4 out). Below that the rate is flat.</div></details>
+      <div class="faq-body">Long prompts above 512,000 tokens switch to the higher tier ($0.60 in / $2.40 out). Below that the rate is flat.</div></details>
     <details class="faq"><summary>What is the cheapest way to run MiniMax M3 at scale?</summary>
       <div class="faq-body">Keep a stable prompt prefix so it caches; cached input runs at $0.06 per 1M, cap output length, schedule asynchronous work into off-peak windows where the provider prices by time, and move the easy 80% of traffic to a lower tier.</div></details>
     

@@ -5,7 +5,7 @@ import glob
 import json
 import os
 from gen_common import (ROOT, BASE, TODAY, UPDATED, MODELS, SOURCES, BY_ID,
-                        money, blended, esc, HEAD, CRUMBS, FOOT)
+                        COMPARISONS, money, blended, esc, HEAD, CRUMBS, FOOT)
 
 CALC_JS = """<script>
 document.addEventListener("DOMContentLoaded", function () {
@@ -129,6 +129,64 @@ def generic_faqs(m):
          "work into off-peak windows where the provider prices by time, and move the easy 80%% "
          "of traffic to a lower tier." % cache_clause),
     ]
+
+
+def short_title(own, other):
+    """'DeepSeek V4 Pro vs V4.1 Flash' — drop the shared provider prefix on the
+    second name so the heading does not repeat it."""
+    a, b = own["name"], other["name"]
+    if own["provider"] == other["provider"] and b.startswith(other["provider"]):
+        b = b[len(other["provider"]):].strip()
+    return "%s vs %s" % (a, b)
+
+
+def pair_panel(m):
+    """Render every curated comparison that involves this model, with the model
+    being viewed always in the first column. Prices come from the model records,
+    so the same table on the sibling's page cannot drift out of sync."""
+    blocks = []
+    for c in COMPARISONS:
+        ids = [i for i in c.get("models", []) if i in BY_ID]
+        if m["id"] not in ids or len(ids) < 2:
+            continue
+        other = BY_ID[next(i for i in ids if i != m["id"])]
+        suffix = " (off-peak)" if (m.get("time_pricing") or other.get("time_pricing")) else ""
+        rows = [
+            ("Input / 1M%s" % suffix, money(m["input"]), money(other["input"])),
+            ("Output / 1M%s" % suffix, money(m["output"]), money(other["output"])),
+        ]
+        if m.get("cached_input") or other.get("cached_input"):
+            rows.append(("Cache hit / 1M", money(m.get("cached_input")),
+                         money(other.get("cached_input"))))
+        if m.get("context") or other.get("context"):
+            rows.append(("Context window", m.get("context") or "—", other.get("context") or "—"))
+
+        # Non-price facts live on each model as `specs`; render the union so a key
+        # present on only one side still shows up, with a dash on the other.
+        keys = list((m.get("specs") or {}).keys())
+        for k in (other.get("specs") or {}):
+            if k not in keys:
+                keys.append(k)
+        for k in keys:
+            rows.append((k, (m.get("specs") or {}).get(k, "—"),
+                         (other.get("specs") or {}).get(k, "—")))
+
+        body = "".join(
+            "<tr><td>%s</td><td class=\"num\">%s</td><td class=\"num\">%s</td></tr>"
+            % (esc(label), esc(a), esc(b)) for label, a, b in rows)
+        blocks.append(
+            '  <section class="panel">\n'
+            '    <h2 style="margin-top:0;font-size:16px">%s</h2>\n'
+            '    <table class="data">\n'
+            '      <thead><tr><th></th><th>%s</th><th>%s</th></tr></thead>\n'
+            '      <tbody>%s</tbody>\n'
+            '    </table>\n'
+            '    <p class="note">Full breakdown: '
+            '<a href="/models/%s.html">%s pricing</a>.</p>\n'
+            '  </section>\n\n'
+            % (esc(short_title(m, other)), esc(m["name"]), esc(other["name"]), body,
+               other["id"], esc(other["name"])))
+    return "".join(blocks)
 
 
 def model_page(m):
@@ -258,7 +316,7 @@ def model_page(m):
     </div>
   </section>
 
-{detail_tables(detail)}  <section class="panel">
+{pair_panel(m)}{detail_tables(detail)}  <section class="panel">
     <h2 style="margin-top:0;font-size:16px">{esc(name)} vs nearby models (blended at a 3:1 input:output ratio)</h2>
     <table class="data">
       <thead><tr><th>Model</th><th>Provider</th><th class="num">Input</th><th class="num">Output</th><th class="num">Cached in</th><th>Context</th></tr></thead>

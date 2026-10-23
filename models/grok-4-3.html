@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Grok 4.3 API pricing in 2026: cost per 1M tokens | ezaiops tools</title>
-<meta name="description" content="Grok 4.3 costs $1.25 per 1M input tokens and $2.5 per 1M output tokens. Context window, caching rates, a quick cost calculator and comparisons with nearby models.">
+<meta name="description" content="Grok 4.3 costs $1.25 per 1M input tokens and $2.50 per 1M output tokens. Context window, caching rates, a quick cost calculator and comparisons with nearby models.">
 <link rel="canonical" href="https://tools.ezaiops.com/models/grok-4-3.html">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Grok 4.3 API pricing in 2026: cost per 1M tokens | ezaiops tools">
-<meta property="og:description" content="Grok 4.3 costs $1.25 per 1M input tokens and $2.5 per 1M output tokens. Context window, caching rates, a quick cost calculator and comparisons with nearby models.">
+<meta property="og:description" content="Grok 4.3 costs $1.25 per 1M input tokens and $2.50 per 1M output tokens. Context window, caching rates, a quick cost calculator and comparisons with nearby models.">
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
 <link rel="stylesheet" href="/assets/style.css?v=20261022b">
 <script type="application/ld+json">
@@ -21,7 +21,7 @@
       "name": "How much does Grok 4.3 cost per 1M tokens?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "$1.25 per 1M input tokens, $2.5 per 1M output tokens"
+        "text": "$1.25 per 1M input tokens, $2.50 per 1M output tokens"
       }
     },
     {
@@ -29,7 +29,7 @@
       "name": "Does the Grok 4.3 context window cost extra?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Long prompts above 200,000 tokens switch to the higher tier ($2.5 in / $5 out). Below that the rate is flat."
+        "text": "Long prompts above 200,000 tokens switch to the higher tier ($2.50 in / $5 out). Below that the rate is flat."
       }
     },
     {
@@ -63,13 +63,13 @@
 
   <h1>Grok 4.3 API pricing: cost per 1M tokens</h1>
   <p class="lead">Grok 4.3 currently costs <strong>$1.25 per 1M input tokens</strong> and
-  <strong>$2.5 per 1M output tokens</strong> through the xAI API. Prompts under 200K tokens $1.25/$2.50; at 200K+ $2.50/$5.00. Output is only 2x input.
+  <strong>$2.50 per 1M output tokens</strong> through the xAI API. Prompts under 200K tokens $1.25/$2.50; at 200K+ $2.50/$5.00. Output is only 2x input.
   Prices below were verified against official pricing documentation on 2026-10-18.</p>
 
   <section class="panel">
     <div class="stats-grid">
       <div class="stat"><div class="k">Input / 1M tokens</div><div class="v">$1.25</div></div>
-      <div class="stat"><div class="k">Output / 1M tokens</div><div class="v">$2.5</div></div>
+      <div class="stat"><div class="k">Output / 1M tokens</div><div class="v">$2.50</div></div>
       <div class="stat"><div class="k">Output multiple</div><div class="v">2.0×</div></div>
       <div class="stat"><div class="k">Context window</div><div class="v">—</div></div>
     </div>
@@ -77,8 +77,8 @@
     <table class="data">
       <thead><tr><th>Tier</th><th class="num">Input / 1M</th><th class="num">Output / 1M</th></tr></thead>
       <tbody>
-        <tr><td>Standard rate</td><td class="num">$1.25</td><td class="num">$2.5</td></tr>
-        <tr><td>Above 200,000 tokens per request</td><td class="num">$2.5</td><td class="num">$5</td></tr>
+        <tr><td>Standard rate</td><td class="num">$1.25</td><td class="num">$2.50</td></tr>
+        <tr><td>Above 200,000 tokens per request</td><td class="num">$2.50</td><td class="num">$5</td></tr>
       </tbody>
     </table>
     <dl class="kv-list"><dt>Cached input</dt><dd>not offered</dd></dl>
@@ -109,7 +109,7 @@
     <h2 style="margin-top:0;font-size:16px">Grok 4.3 vs nearby models (blended at a 3:1 input:output ratio)</h2>
     <table class="data">
       <thead><tr><th>Model</th><th>Provider</th><th class="num">Input</th><th class="num">Output</th><th class="num">Cached in</th><th>Context</th></tr></thead>
-      <tbody><tr><td><a href="/models/mistral-large-4.html">Mistral Large 4</a></td><td>Mistral</td><td class="num">$0.68</td><td class="num">$2.09</td><td class="num">$0.07</td><td>1M</td></tr><tr><td><a href="/models/gemini-3-8-flash.html">Gemini 3.8 Flash</a></td><td>Google</td><td class="num">$0.75</td><td class="num">$3.75</td><td class="num">$0.075</td><td>1.05M</td></tr><tr style="background:var(--accent-soft)"><td><strong>Grok 4.3</strong></td><td>xAI</td><td class="num">$1.25</td><td class="num">$2.5</td><td class="num">—</td><td>—</td></tr><tr><td><a href="/models/kimi-k2-7-code.html">Kimi K2.7 Code</a></td><td>Moonshot</td><td class="num">$0.95</td><td class="num">$4</td><td class="num">$0.19</td><td>262K</td></tr><tr><td><a href="/models/claude-haiku-4-5.html">Claude Haiku 4.5</a></td><td>Anthropic</td><td class="num">$1</td><td class="num">$5</td><td class="num">$0.1</td><td>200K</td></tr></tbody>
+      <tbody><tr><td><a href="/models/mistral-large-4.html">Mistral Large 4</a></td><td>Mistral</td><td class="num">$0.68</td><td class="num">$2.09</td><td class="num">$0.07</td><td>1M</td></tr><tr><td><a href="/models/gemini-3-8-flash.html">Gemini 3.8 Flash</a></td><td>Google</td><td class="num">$0.75</td><td class="num">$3.75</td><td class="num">$0.075</td><td>1.05M</td></tr><tr style="background:var(--accent-soft)"><td><strong>Grok 4.3</strong></td><td>xAI</td><td class="num">$1.25</td><td class="num">$2.50</td><td class="num">—</td><td>—</td></tr><tr><td><a href="/models/kimi-k2-7-code.html">Kimi K2.7 Code</a></td><td>Moonshot</td><td class="num">$0.95</td><td class="num">$4</td><td class="num">$0.19</td><td>262K</td></tr><tr><td><a href="/models/claude-haiku-4-5.html">Claude Haiku 4.5</a></td><td>Anthropic</td><td class="num">$1</td><td class="num">$5</td><td class="num">$0.10</td><td>200K</td></tr></tbody>
     </table>
     <p class="note">The full 34-model comparison lives on the <a href="/models/index.html">pricing hub</a>,
     and the <a href="/tools/token-counter.html">token &amp; cost calculator</a> will price your actual prompt.</p>
@@ -120,9 +120,9 @@
 
     <h2>Frequently asked questions</h2>
     <details class="faq"><summary>How much does Grok 4.3 cost per 1M tokens?</summary>
-      <div class="faq-body">$1.25 per 1M input tokens, $2.5 per 1M output tokens</div></details>
+      <div class="faq-body">$1.25 per 1M input tokens, $2.50 per 1M output tokens</div></details>
     <details class="faq"><summary>Does the Grok 4.3 context window cost extra?</summary>
-      <div class="faq-body">Long prompts above 200,000 tokens switch to the higher tier ($2.5 in / $5 out). Below that the rate is flat.</div></details>
+      <div class="faq-body">Long prompts above 200,000 tokens switch to the higher tier ($2.50 in / $5 out). Below that the rate is flat.</div></details>
     <details class="faq"><summary>What is the cheapest way to run Grok 4.3 at scale?</summary>
       <div class="faq-body">Keep a stable prompt prefix so it caches, cap output length, schedule asynchronous work into off-peak windows where the provider prices by time, and move the easy 80% of traffic to a lower tier.</div></details>
     

@@ -25,15 +25,22 @@ TODAY = datetime.date.today().isoformat()
 UPDATED = DATA.get("updated") or TODAY
 SOURCES = DATA.get("sources", [])
 BY_ID = {m["id"]: m for m in MODELS}
+# Curated head-to-head pairs. Defined once at the top level so both model pages
+# render the same numbers from the same source instead of two hand-kept copies.
+COMPARISONS = DATA.get("comparisons", [])
 
 
 def money(x):
+    """Prices read as prices: whole dollars stay bare ($5), anything with cents
+    keeps at least two decimals ($0.60 rather than $0.6), and sub-cent cache
+    rates keep the digits they need ($0.003)."""
     if x is None:
         return "—"
-    if float(x) == int(float(x)):
-        return "$" + str(int(float(x)))
-    s = ("%f" % float(x)).rstrip("0").rstrip(".")
-    return "$" + s
+    v = float(x)
+    if v == int(v):
+        return "$" + str(int(v))
+    whole, _, frac = ("%.4f" % v).rstrip("0").partition(".")
+    return "$%s.%s" % (whole, frac.ljust(2, "0"))
 
 
 def blended(m, out_ratio):

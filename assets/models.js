@@ -243,7 +243,98 @@ window.EZ_MODELS = {
         "peak_days": "Mon-Fri",
         "window_label": "Weekday peak (UTC 01:00-04:00 and 06:00-10:00)"
       },
-      "note": "1017 snapshot released 2026-10-17: same price, but outputs run ~30% shorter so cost per task drops. Off-peak rates shown; weekday peak doubles to $0.30/$1.20. Multimodal, open weights, 1M context, 384K max output"
+      "note": "1017 snapshot released 2026-10-17: same price, but outputs run ~30% shorter so cost per task drops. Off-peak rates shown; weekday peak doubles to $0.30/$1.20. Multimodal, open weights, 1M context, 384K max output",
+      "specs": {
+        "Max output": "384K",
+        "Image input": "Supported",
+        "Concurrency limit": "2,500",
+        "Model version": "V4.1-Flash-1017"
+      },
+      "detail": {
+        "verified": "2026-10-24",
+        "tables": [
+          {
+            "title": "Cost per workload: off-peak vs weekday peak",
+            "head": [
+              "Workload",
+              "Input tokens",
+              "Output tokens",
+              "Off-peak",
+              "Peak"
+            ],
+            "rows": [
+              [
+                "Single summarization call",
+                "1M",
+                "100K",
+                "$0.21",
+                "$0.42"
+              ],
+              [
+                "Long document pass, no cache reuse",
+                "1M",
+                "20K",
+                "$0.16",
+                "$0.32"
+              ],
+              [
+                "Cached agent loop, one turn",
+                "50K (45K cache hit)",
+                "5K",
+                "$0.004",
+                "$0.008"
+              ],
+              [
+                "That loop, 20 turns/day for 30 days",
+                "30M",
+                "3M",
+                "$2.33",
+                "$4.66"
+              ]
+            ],
+            "note": "Computed from the rates above. The same loop without caching bills $6.30 a month off-peak, and $8.51 on V4 Pro."
+          }
+        ],
+        "sections": [
+          {
+            "h2": "What DeepSeek V4.1 Flash actually costs in October 2026",
+            "paras": [
+              "$0.15 per 1M input and $0.60 per 1M output are off-peak rates. DeepSeek bills double during two weekday windows, 01:00-04:00 and 06:00-10:00 UTC, which cover seven hours a day, five days a week — about 21% of the calendar. Weekends and Chinese public holidays bill off-peak all day, so roughly 79% of the week sits at the rates on this page.",
+              "Cache hits cost $0.003 per 1M tokens, fifty times cheaper than a miss at $0.15. For an agent that resends the same system prompt most of the input never pays the full rate: the worked example below runs at $2.33 a month instead of $6.30.",
+              "The 1017 snapshot, released 2026-10-17, kept the price and cut output length by roughly 30%. Cost per finished task fell without a rate change, which is why per-token price is a poor proxy for cost per outcome."
+            ]
+          },
+          {
+            "h2": "V4.1 Flash or V4 Pro: when the cheap tier is enough",
+            "paras": [
+              "Flash is 4.4x cheaper on input and 3.3x cheaper on output than V4 Pro, and it wins on two things besides price: it accepts images, which Pro rejects, and it allows 2,500 concurrent requests against Pro's 500. For extraction, classification, vision and high-volume fan-out there is no reason to pay the premium.",
+              "Where Pro earns its price is long-horizon reasoning. If a wrong answer costs more than the tokens, the cheaper model is the expensive choice — the 3.7x gap on the cached loop above is worth paying when a retry chain costs an hour of engineering time."
+            ]
+          }
+        ],
+        "faq": [
+          {
+            "q": "How much does DeepSeek V4.1 Flash cost per 1M tokens?",
+            "a": "$0.15 per 1M input tokens and $0.60 per 1M output tokens at off-peak rates. Weekday peak (01:00-04:00 and 06:00-10:00 UTC) doubles both, to $0.30 and $1.20. Cached input bills at $0.003 per 1M."
+          },
+          {
+            "q": "Is DeepSeek V4.1 Flash cheaper at night?",
+            "a": "Yes. Off-peak rates are half the peak rates. Peak covers seven hours per weekday, so about 79% of the week bills at the lower rate; weekends and Chinese public holidays are off-peak all day."
+          },
+          {
+            "q": "Should I use V4.1 Flash or V4 Pro?",
+            "a": "Flash for extraction, classification, image input and high-concurrency work: it is 4.4x cheaper on input and 3.3x cheaper on output, accepts images, and allows 2,500 concurrent requests against 500. Use V4 Pro when reasoning depth is worth the premium."
+          },
+          {
+            "q": "Does DeepSeek V4.1 Flash accept image input?",
+            "a": "Yes. Flash is multimodal while V4 Pro is text-only, which is often the deciding difference for document, screenshot and chart workloads."
+          },
+          {
+            "q": "What changed in the 1017 snapshot?",
+            "a": "Same price, but outputs run about 30% shorter, so cost per completed task dropped. The model name is deepseek-flash; the retired deepseek-v4-flash aliases are served by this snapshot and billed at the Flash price."
+          }
+        ]
+      }
     },
     {
       "id": "deepseek-v4-pro",
@@ -270,9 +361,14 @@ window.EZ_MODELS = {
         "window_label": "Weekday peak (UTC 01:00-04:00 and 06:00-10:00)"
       },
       "note": "Off-peak rates shown. Weekday peak doubles to $1.32/$3.96. Text-only (no vision), 1M context, up to 384K output",
+      "specs": {
+        "Max output": "384K",
+        "Image input": "Not supported",
+        "Concurrency limit": "500",
+        "Model version": "V4-Pro-0813"
+      },
       "detail": {
         "verified": "2026-10-24",
-        "sibling": "deepseek-v4-1-flash",
         "tables": [
           {
             "title": "Cost per workload: off-peak vs weekday peak",
@@ -314,51 +410,6 @@ window.EZ_MODELS = {
               ]
             ],
             "note": "Computed from the rates above. The cached loop assumes 90% of input hits cache; the same loop without caching bills $25.74 a month off-peak."
-          },
-          {
-            "title": "DeepSeek V4 Pro vs V4.1 Flash",
-            "head": [
-              "",
-              "V4 Pro",
-              "V4.1 Flash"
-            ],
-            "rows": [
-              [
-                "Input / 1M (off-peak)",
-                "$0.66",
-                "$0.15"
-              ],
-              [
-                "Output / 1M (off-peak)",
-                "$1.98",
-                "$0.60"
-              ],
-              [
-                "Cache hit / 1M",
-                "$0.022",
-                "$0.003"
-              ],
-              [
-                "Context / max output",
-                "1M / 384K",
-                "1M / 384K"
-              ],
-              [
-                "Image input",
-                "Not supported",
-                "Supported"
-              ],
-              [
-                "Concurrency limit",
-                "500",
-                "2,500"
-              ],
-              [
-                "Model version",
-                "V4-Pro-0813",
-                "V4.1-Flash-1017"
-              ]
-            ]
           }
         ],
         "sections": [
