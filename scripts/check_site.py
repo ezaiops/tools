@@ -73,6 +73,20 @@ for page in pages:
         if not canon or not canon.group(1).endswith("/models/%s.html" % slug):
             problems.append("%s: canonical URL does not point at itself" % name)
 
+    # <dl> may only contain <dt>/<dd> (or a wrapping <div>). Table rows inside a
+    # definition list are silently flattened by browsers, which is how "Cached
+    # input$0.022" ended up rendered as one run of text on every model page.
+    for dl in re.findall(r"<dl[^>]*>(.*?)</dl>", text, re.S):
+        inner = dl.strip()
+        if not inner:
+            continue  # populated at runtime, e.g. #sn-results on the subnet page
+        stray = re.findall(r"<(tr|td|th|li|p)[ >]", inner)
+        if stray:
+            problems.append("%s: invalid <%s> inside <dl> — use <dt>/<dd>"
+                            % (name, stray[0]))
+        elif not re.search(r"<d[td][ >]", inner):
+            problems.append("%s: <dl> with no <dt>/<dd> children" % name)
+
 expected = [BASE + "/"]
 for page in pages:
     # The home page is listed once, as "/" — listing /index.html as well would ask

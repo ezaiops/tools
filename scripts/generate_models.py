@@ -162,9 +162,11 @@ def model_page(m):
                         "{:,}".format(m["tier_threshold"]),
                         money(m.get("input_high")), money(m.get("output_high"))))
 
-    cache_row = ("<tr><td>Cached input</td><td class=\"num\">%s</td></tr>"
+    # .kv-list is a two-column grid built on <dt>/<dd>; emitting table rows here
+    # produced invalid markup that browsers flatten into "Cached input$0.022".
+    cache_row = ("<dt>Cached input</dt><dd>%s</dd>"
                  % money(m["cached_input"])) if m.get("cached_input") else \
-                "<tr><td>Cached input</td><td>not offered</td></tr>"
+                "<dt>Cached input</dt><dd>not offered</dd>"
 
     # A time-priced model already renders "Off-peak (default)" and "Peak" rows.
     # Emitting a "Standard rate" row on top of those duplicated the same numbers.
