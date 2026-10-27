@@ -87,9 +87,10 @@ img { max-width: 100%; }
 .site-nav a { color: var(--muted); }
 .site-nav a:hover { color: var(--accent); text-decoration: none; }
 .lang-switch { display: inline-flex; gap: 2px; margin-left: 4px; border: 1px solid var(--border); border-radius: 999px; padding: 1px; }
-.lang-switch a { font-size: 12px; padding: 2px 9px; border-radius: 999px; color: var(--muted); line-height: 1.5; }
-.lang-switch a:hover { color: var(--accent); text-decoration: none; }
-.lang-switch a.active { background: var(--accent-soft); color: var(--accent-strong); }
+.lang-switch a, .lang-switch button { font-size: 12px; padding: 2px 9px; border-radius: 999px; color: var(--muted); line-height: 1.5; }
+.lang-switch button { font-family: inherit; background: none; border: 0; cursor: pointer; }
+.lang-switch a:hover, .lang-switch button:hover { color: var(--accent); text-decoration: none; }
+.lang-switch a.active, .lang-switch button.active { background: var(--accent-soft); color: var(--accent-strong); }
 
 /* ---------- hero ---------- */
 .hero { padding: 38px 0 24px; border-bottom: 1px solid var(--border); margin-bottom: 26px; }

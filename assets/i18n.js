@@ -131,11 +131,15 @@ var ASSET_V = "20261022b";
     if (!nav || nav.querySelector(".lang-switch")) return;
     var wrap = document.createElement("div");
     wrap.className = "lang-switch";
+    // Buttons, not links: an <a href="?lang=zh"> is crawlable and creates a
+    // ?lang= duplicate of every page in Search Console. A button keeps the
+    // deep link working (we still write ?lang= into the URL) without handing
+    // Googlebot an extra URL to fetch.
     wrap.innerHTML =
-      '<a href="?lang=zh" data-lang="zh"' + (lang === "zh" ? ' class="active" aria-current="page"' : "") + ">中文</a>" +
-      '<a href="?lang=en" data-lang="en"' + (lang === "en" ? ' class="active" aria-current="page"' : "") + ">EN</a>";
+      '<button type="button" data-lang="zh"' + (lang === "zh" ? ' class="active" aria-current="page"' : "") + ">中文</button>" +
+      '<button type="button" data-lang="en"' + (lang === "en" ? ' class="active" aria-current="page"' : "") + ">EN</button>";
     wrap.addEventListener("click", function (ev) {
-      var a = ev.target.closest ? ev.target.closest("a[data-lang]") : null;
+      var a = ev.target.closest ? ev.target.closest("[data-lang]") : null;
       if (!a) return;
       ev.preventDefault();
       var next = a.getAttribute("data-lang");

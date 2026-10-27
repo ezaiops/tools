@@ -222,7 +222,8 @@ console.log("\n== bilingual mode (?lang=zh) ==");
   check("html lang is zh-CN", doc.documentElement.getAttribute("lang") === "zh-CN",
     String(doc.documentElement.getAttribute("lang")));
   check("switcher injected", doc.querySelector(".lang-switch") !== null);
-  check("switcher marks zh active", /active/.test(doc.querySelector('.lang-switch a[data-lang="zh"]').className || ""));
+  check("switcher marks zh active", /active/.test((doc.querySelector('.lang-switch [data-lang="zh"]') || {}).className || ""));
+  check("switcher emits no crawlable ?lang= link", doc.querySelector('.lang-switch a[href*="lang="]') === null);
   check("nav translated", /工具/.test(doc.querySelector(".site-nav").textContent));
   check("footer translated", /输入内容|不会离开/.test(doc.querySelector(".site-footer").textContent));
   check("brand label translated", /工具/.test(doc.querySelector(".brand").textContent),
