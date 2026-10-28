@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Doubao Seed 2.0 Lite API pricing in 2026: cost per 1M tokens | ezaiops tools</title>
+<meta name="description" content="Doubao Seed 2.0 Lite costs $0.25 per 1M input tokens and $2 per 1M output tokens. Context window, caching rates, a quick cost calculator and comparisons with nearby models.">
+<link rel="canonical" href="https://tools.ezaiops.com/models/doubao-seed-2-0-lite.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Doubao Seed 2.0 Lite API pricing in 2026: cost per 1M tokens | ezaiops tools">
+<meta property="og:description" content="Doubao Seed 2.0 Lite costs $0.25 per 1M input tokens and $2 per 1M output tokens. Context window, caching rates, a quick cost calculator and comparisons with nearby models.">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/style.css?v=20261022b">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How much does Doubao Seed 2.0 Lite cost per 1M tokens?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "$0.25 per 1M input tokens, $2 per 1M output tokens Cached input is billed at $0.05 per 1M tokens where caching is supported."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does the Doubao Seed 2.0 Lite context window cost extra?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Long prompts above 131,072 tokens switch to the higher tier ($0.50 in / $4 out). Below that the rate is flat."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the cheapest way to run Doubao Seed 2.0 Lite at scale?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Keep a stable prompt prefix so it caches; cached input runs at $0.05 per 1M, cap output length, schedule asynchronous work into off-peak windows where the provider prices by time, and move the easy 80% of traffic to a lower tier."
+      }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/"><span class="logo">ez</span>ezaiops <small>tools</small></a>
+    <nav class="site-nav">
+      <a href="/">Tools</a>
+      <a href="/models/index.html">LLM pricing</a>
+      <a href="https://ezaiops.com/en/" title="ezaiops.com — AI agent observability &amp; LLMOps field notes (in English)">Blog</a>
+      <a href="https://github.com/ezaiops">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap tool-page">
+  <nav class="crumbs"><a href="/">Home</a> / <a href="/models/index.html">LLM pricing</a> / Doubao Seed 2.0 Lite<a class="main-site-link" href="https://ezaiops.com/en/">ezaiops.com ↗</a></nav>
+
+  <h1>Doubao Seed 2.0 Lite API pricing: cost per 1M tokens</h1>
+  <p class="lead">Doubao Seed 2.0 Lite currently costs <strong>$0.25 per 1M input tokens</strong> and
+  <strong>$2 per 1M output tokens</strong> through the ByteDance API. Half of Pro's input price for prompts up to 128K, doubling to $0.50/$4.00 past that. Accepts audio input at $3.75 per 1M tokens.
+  Prices below were verified against official pricing documentation on 2026-10-28.</p>
+
+  <section class="panel">
+    <div class="stats-grid">
+      <div class="stat"><div class="k">Input / 1M tokens</div><div class="v">$0.25</div></div>
+      <div class="stat"><div class="k">Output / 1M tokens</div><div class="v">$2</div></div>
+      <div class="stat"><div class="k">Output multiple</div><div class="v">8.0×</div></div>
+      <div class="stat"><div class="k">Context window</div><div class="v">256K</div></div>
+    </div>
+
+    <table class="data">
+      <thead><tr><th>Tier</th><th class="num">Input / 1M</th><th class="num">Output / 1M</th></tr></thead>
+      <tbody>
+        <tr><td>Standard rate</td><td class="num">$0.25</td><td class="num">$2</td></tr>
+        <tr><td>Above 131,072 tokens per request</td><td class="num">$0.50</td><td class="num">$4</td></tr>
+      </tbody>
+    </table>
+    <dl class="kv-list"><dt>Cached input</dt><dd>$0.05</dd></dl>
+    <p class="note">Verify current rates on the ByteDance pricing page before committing budget —
+    providers adjust prices frequently, and long-context or caching discounts may not show up
+    in the headline numbers.</p>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0;font-size:16px">Quick cost calculator for Doubao Seed 2.0 Lite</h2>
+    <div class="field-row">
+      <div class="field">
+        <label class="field-label" for="mc-in">Input tokens</label>
+        <input type="number" id="mc-in" class="mono" value="1000000" min="0">
+      </div>
+      <div class="field">
+        <label class="field-label" for="mc-out">Output tokens</label>
+        <input type="number" id="mc-out" class="mono" value="100000" min="0">
+      </div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat"><div class="k">One request (this volume)</div><div class="v" id="mc-cost">—</div></div>
+      <div class="stat"><div class="k">× 1,000 such requests</div><div class="v" id="mc-1k">—</div></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0;font-size:16px">Doubao Seed 2.0 Lite vs Doubao Seed 2.0 Pro</h2>
+    <table class="data">
+      <thead><tr><th></th><th>Doubao Seed 2.0 Lite</th><th>Doubao Seed 2.0 Pro</th></tr></thead>
+      <tbody><tr><td>Input / 1M</td><td class="num">$0.25</td><td class="num">$0.50</td></tr><tr><td>Output / 1M</td><td class="num">$2</td><td class="num">$3</td></tr><tr><td>Cache hit / 1M</td><td class="num">$0.05</td><td class="num">$0.10</td></tr><tr><td>Context window</td><td class="num">256K</td><td class="num">256K</td></tr><tr><td>Model ID</td><td class="num">seed-2-0-lite-260428</td><td class="num">seed-2-0-pro-260328</td></tr><tr><td>Tier break</td><td class="num">128K</td><td class="num">128K</td></tr><tr><td>Audio input</td><td class="num">$3.75 / 1M</td><td class="num">—</td></tr><tr><td>Cache storage</td><td class="num">—</td><td class="num">$0.0083 / 1M-hour</td></tr></tbody>
+    </table>
+    <p class="note">Full breakdown: <a href="/models/doubao-seed-2-0-pro.html">Doubao Seed 2.0 Pro pricing</a>.</p>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0;font-size:16px">Doubao Seed 2.0 Lite vs nearby models (blended at a 3:1 input:output ratio)</h2>
+    <table class="data">
+      <thead><tr><th>Model</th><th>Provider</th><th class="num">Input</th><th class="num">Output</th><th class="num">Cached in</th><th>Context</th></tr></thead>
+      <tbody><tr><td><a href="/models/mimo-v2-6-pro.html">MiMo V2.6 Pro</a></td><td>Xiaomi</td><td class="num">$0.435</td><td class="num">$0.87</td><td class="num">$0.0036</td><td>—</td></tr><tr><td><a href="/models/glm-5-3-flashx.html">GLM-5.3 FlashX</a></td><td>Z.AI</td><td class="num">$0.37</td><td class="num">$1.25</td><td class="num">$0.075</td><td>1M</td></tr><tr style="background:var(--accent-soft)"><td><strong>Doubao Seed 2.0 Lite</strong></td><td>ByteDance</td><td class="num">$0.25</td><td class="num">$2</td><td class="num">$0.05</td><td>256K</td></tr><tr><td><a href="/models/mistral-large-3.html">Mistral Large 3</a></td><td>Mistral</td><td class="num">$0.50</td><td class="num">$1.50</td><td class="num">—</td><td>—</td></tr><tr><td><a href="/models/gemini-3-5-flash-lite.html">Gemini 3.5 Flash-Lite</a></td><td>Google</td><td class="num">$0.30</td><td class="num">$2.50</td><td class="num">$0.03</td><td>1.05M</td></tr></tbody>
+    </table>
+    <p class="note">The full 43-model comparison lives on the <a href="/models/index.html">pricing hub</a>,
+    and the <a href="/tools/token-counter.html">token &amp; cost calculator</a> will price your actual prompt.</p>
+  </section>
+
+  <section class="prose">
+    <h2>How to think about Doubao Seed 2.0 Lite pricing</h2><p>Output tokens bill at 8.0× the input rate, which is the number that decides whether a workload is affordable: summarization and classification are input-heavy, while agents, chain-of-thought reasoning and long-form drafting are output-heavy. Before comparing headline prices, measure the real token mix from your own logs, then apply the blended formula <code>(input share × input price) + (output share × output price)</code>.</p><p>Beyond the headline rate, three levers usually decide a real bill: batch discounts where the provider offers one, cache hits on a stable prompt prefix, and right-sizing — routing simple steps to a mini or flash-class model instead of the flagship. Not every provider offers all three, so confirm which apply rather than assuming them. A cache hit bills at $0.05 against $0.25 for a miss, so a reused prefix is the cheapest tokens you will ever buy.</p>
+
+    <h2>Frequently asked questions</h2>
+    <details class="faq"><summary>How much does Doubao Seed 2.0 Lite cost per 1M tokens?</summary>
+      <div class="faq-body">$0.25 per 1M input tokens, $2 per 1M output tokens Cached input is billed at $0.05 per 1M tokens where caching is supported.</div></details>
+    <details class="faq"><summary>Does the Doubao Seed 2.0 Lite context window cost extra?</summary>
+      <div class="faq-body">Long prompts above 131,072 tokens switch to the higher tier ($0.50 in / $4 out). Below that the rate is flat.</div></details>
+    <details class="faq"><summary>What is the cheapest way to run Doubao Seed 2.0 Lite at scale?</summary>
+      <div class="faq-body">Keep a stable prompt prefix so it caches; cached input runs at $0.05 per 1M, cap output length, schedule asynchronous work into off-peak windows where the provider prices by time, and move the easy 80% of traffic to a lower tier.</div></details>
+    
+  </section>
+
+<div class="ad-slot">
+  <strong>Ad slot</strong>
+  Google AdSense placeholder — activated once the site is approved and has steady traffic.
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h4>Popular tools</h4>
+        <ul>
+          <li><a href="/tools/token-counter.html">LLM token &amp; cost calculator</a></li>
+          <li><a href="/tools/json-formatter.html">JSON formatter</a></li>
+          <li><a href="/tools/regex-tester.html">Regex tester</a></li>
+          <li><a href="/tools/cron-explainer.html">Cron explainer</a></li>
+          <li><a href="/tools/encode-decode.html">Base64 / URL / hash</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>LLM pricing</h4>
+        <ul>
+          <li><a href="/models/index.html">All models</a></li>
+          <li><a href="/models/gpt-5-6-sol.html">GPT-5.6 Sol pricing</a></li>
+          <li><a href="/models/claude-opus-5.html">Claude Opus 5 pricing</a></li>
+          <li><a href="/models/gemini-3-1-pro.html">Gemini 3.1 Pro pricing</a></li>
+          <li><a href="/models/deepseek-v4-1-flash.html">DeepSeek V4.1 Flash pricing</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>More</h4>
+        <ul>
+          <li><a href="https://ezaiops.com/en/">ezaiops.com</a></li>
+          <li><a href="/about.html">About</a></li>
+          <li><a href="/contact.html">Contact</a></li>
+          <li><a href="/privacy.html">Privacy policy</a></li>
+          <li><a href="https://github.com/ezaiops">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">&copy; <span data-year>2026</span> ezaiops &middot; your input never leaves your browser</div>
+  </div>
+</footer>
+
+<script src="/assets/common.js?v=20261022b" defer></script>
+<script src="/assets/models.js?v=20261022b" defer></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var models = (window.EZ_MODELS || {}).models || [];
+  var me = null;
+  for (var i = 0; i < models.length; i++) if (models[i].id === "doubao-seed-2-0-lite") me = models[i];
+  if (!me) return;
+  var inEl = document.getElementById("mc-in");
+  var outEl = document.getElementById("mc-out");
+  function fmt(n) {
+    if (n <= 0) return "$0";
+    if (n < 0.000001) return "<$0.000001";
+    var d = n < 0.01 ? 6 : n < 1 ? 4 : 2;
+    return "$" + n.toFixed(d);
+  }
+  function recalc() {
+    var ti = Math.max(0, parseFloat(inEl.value || "0") || 0);
+    var to = Math.max(0, parseFloat(outEl.value || "0") || 0);
+    document.getElementById("mc-cost").textContent = fmt(ti * me.input / 1e6 + to * me.output / 1e6);
+    document.getElementById("mc-1k").textContent = fmt((ti * me.input / 1e6 + to * me.output / 1e6) * 1000);
+  }
+  inEl.addEventListener("input", recalc);
+  outEl.addEventListener("input", recalc);
+  recalc();
+});
+</script>
+
+</body>
+</html>

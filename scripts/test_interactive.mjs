@@ -844,6 +844,16 @@ console.log("\n== models: October 2026 release wave ==");
   const qfText = qflash.doc.body.textContent;
   check("qwen3.8 flash price", /\$0\.113 per 1M input/.test(qfText) && /\$0\.382 per 1M output/.test(qfText));
 
+  const dturbo = await load("models/doubao-seed-2-1-turbo.html");
+  const dText = dturbo.doc.body.textContent;
+  check("doubao 2.1 turbo price", /\$0\.50 per 1M input/.test(dText) && /\$2\.50 per 1M output/.test(dText));
+  check("doubao 2.1 turbo is flat-rate", /One flat rate/.test(dText) && /no long-context tier/i.test(dText));
+
+  const dpro = await load("models/doubao-seed-2-0-pro.html");
+  const dpText = dpro.doc.body.textContent;
+  check("doubao 2.0 pro tier break shown", /131,072/.test(dpText) && /\$6/.test(dpText));
+  check("doubao 2.0 pro cache rate", /\$0\.10/.test(dpText));
+
 
   const tc = await load("tools/token-counter.html");
   await sleep(400);

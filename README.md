@@ -9,7 +9,7 @@ AI & DevOps micro-tools that run entirely in the browser. Pure static site — n
 | Path | What |
 |---|---|
 | `index.html` | Tool hub / landing page |
-| `tools/token-counter.html` | LLM token counter + cost calculator (39 models, official BPE tokenizer via CDN with heuristic fallback) |
+| `tools/token-counter.html` | LLM token counter + cost calculator (43 models, official BPE tokenizer via CDN with heuristic fallback) |
 | `tools/json-formatter.html` | Format / minify / validate JSON with error line+column |
 | `tools/regex-tester.html` | Live JS regex tester: highlighting, capture groups, replacement preview |
 | `tools/cron-explainer.html` | Cron → plain English + next 10 runs in local timezone |

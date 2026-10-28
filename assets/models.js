@@ -1117,6 +1117,236 @@ window.EZ_MODELS = {
           }
         ]
       }
+    },
+    {
+      "id": "doubao-seed-2-1-turbo",
+      "name": "Doubao Seed 2.1 Turbo",
+      "provider": "ByteDance",
+      "input": 0.5,
+      "output": 2.5,
+      "cached_input": 0.1,
+      "context": "256K",
+      "note": "One flat rate across the whole 256K window — no long-context tier, unlike the Seed 2.0 family. Cache hits bill at $0.10 and cache storage at $0.0083 per 1M tokens per hour",
+      "specs": {
+        "Model ID": "dola-seed-2-1-turbo",
+        "Cache storage": "$0.0083 / 1M-hour"
+      },
+      "detail": {
+        "verified": "2026-10-28",
+        "tables": [
+          {
+            "title": "Turbo against the Seed 2.0 tiers it sits between",
+            "head": [
+              "Model",
+              "Input / 1M",
+              "Output / 1M",
+              "Tier break",
+              "Context"
+            ],
+            "rows": [
+              [
+                "Doubao Seed 2.1 Turbo",
+                "$0.50",
+                "$2.50",
+                "none",
+                "256K"
+              ],
+              [
+                "Doubao Seed 2.0 Pro",
+                "$0.50",
+                "$3.00",
+                "128K",
+                "256K"
+              ],
+              [
+                "Doubao Seed 2.0 Lite",
+                "$0.25",
+                "$2.00",
+                "128K",
+                "256K"
+              ],
+              [
+                "Doubao Seed 2.0 Mini",
+                "$0.10",
+                "$0.40",
+                "128K",
+                "256K"
+              ]
+            ],
+            "note": "BytePlus ModelArk standard-inference rates on 2026-10-28. Above the tier break, Seed 2.0 prices double for the whole request."
+          }
+        ],
+        "sections": [
+          {
+            "h2": "What Doubao Seed 2.1 Turbo costs",
+            "paras": [
+              "$0.50 per 1M input tokens and $2.50 per 1M output tokens, flat from 1 token to 256K. That flat structure is the whole point: Seed 2.0 Pro charges the same $0.50 on input but doubles it to $1.00 once a prompt passes 128K, so Turbo is the only model in the family where a 200K-token document costs the same per token as a short question.",
+              "Cache hits bill at $0.10 — a fifth of the input rate — and BytePlus adds a cache storage fee of $0.0083 per 1M tokens per hour, which is the number most comparisons leave out. A 200K prefix held in cache for a day costs $0.04 in storage alone, trivial for a hot agent loop and wasteful for a prefix you touch once.",
+              "Flex processing runs at roughly 50% of these rates with implicit caching only, and Batch inference is priced separately. Both are worth checking before you commit to the standard rate."
+            ]
+          },
+          {
+            "h2": "The international catalogue lags the Chinese one",
+            "paras": [
+              "Volcengine (the China platform) already lists doubao-seed-2.1-pro at CNY 12 in and CNY 60 out, roughly twice Turbo, and a doubao-seed-evolving model with no international equivalent. ModelArk carries Turbo and the Seed 2.0 family but not 2.1 Pro.",
+              "That gap matters if you are planning on a model you have only seen announced in Chinese. Confirm the model ID exists on the platform you will actually call before designing around it."
+            ]
+          }
+        ],
+        "faq": [
+          {
+            "q": "How much does Doubao Seed 2.1 Turbo cost per 1M tokens?",
+            "a": "$0.50 per 1M input tokens and $2.50 per 1M output tokens on BytePlus ModelArk, with cached input at $0.10 per 1M. The rate is flat across the full 256K context window."
+          },
+          {
+            "q": "Is there a long-context surcharge on Doubao Seed 2.1 Turbo?",
+            "a": "No. Unlike the Seed 2.0 family, which doubles its rates above 128K tokens per request, Turbo bills the same $0.50/$2.50 at 250K tokens as at 250."
+          },
+          {
+            "q": "Does BytePlus charge for cache storage?",
+            "a": "Yes. Cached tokens cost $0.0083 per 1M tokens per hour on top of the $0.10 cache-hit rate, so long-lived prefixes carry a holding cost that pure per-token comparisons miss."
+          },
+          {
+            "q": "Can I use Doubao Seed 2.1 Pro internationally?",
+            "a": "Not yet on ModelArk as of 2026-10-28. Volcengine lists doubao-seed-2.1-pro at CNY 12/60 per 1M, but the international catalogue stops at Turbo and the Seed 2.0 family."
+          }
+        ]
+      }
+    },
+    {
+      "id": "doubao-seed-2-0-pro",
+      "name": "Doubao Seed 2.0 Pro",
+      "provider": "ByteDance",
+      "input": 0.5,
+      "output": 3.0,
+      "cached_input": 0.1,
+      "context": "256K",
+      "tier_threshold": 131072,
+      "input_high": 1.0,
+      "output_high": 6.0,
+      "note": "Prompts up to 128K bill at $0.50/$3.00; past 128K the whole request bills at $1.00/$6.00. Cache hits are $0.10, and batch or flex processing halves both rates",
+      "specs": {
+        "Model ID": "seed-2-0-pro-260328",
+        "Tier break": "128K",
+        "Cache storage": "$0.0083 / 1M-hour"
+      },
+      "detail": {
+        "verified": "2026-10-28",
+        "tables": [
+          {
+            "title": "What crossing 128K costs on a 10K-output request",
+            "head": [
+              "Input tokens",
+              "Tier applied",
+              "Input cost",
+              "Output cost",
+              "Total"
+            ],
+            "rows": [
+              [
+                "100K",
+                "base",
+                "$0.050",
+                "$0.030",
+                "$0.080"
+              ],
+              [
+                "128K",
+                "base",
+                "$0.064",
+                "$0.030",
+                "$0.094"
+              ],
+              [
+                "130K",
+                "long",
+                "$0.130",
+                "$0.060",
+                "$0.190"
+              ],
+              [
+                "200K",
+                "long",
+                "$0.200",
+                "$0.060",
+                "$0.260"
+              ]
+            ],
+            "note": "Two thousand extra tokens past the break doubles the bill. Trimming a prompt from 130K to 128K saves $0.096 on every call."
+          }
+        ],
+        "sections": [
+          {
+            "h2": "What Doubao Seed 2.0 Pro costs",
+            "paras": [
+              "$0.50 per 1M input tokens and $3.00 per 1M output tokens for prompts up to 128K, then $1.00/$6.00 for anything longer — and the higher tier applies to every token in the request, not just the excess. This is the same cliff structure OpenAI, Google and xAI use, and it punishes long prompts far more than the headline rate suggests.",
+              "The cliff is unusually steep here because the multiplier is a clean 2x on both sides. A request at 130K tokens costs 2.02x what the same request costs at 128K, which makes chunking a document into two 65K halves strictly cheaper than sending it whole.",
+              "Cache hits bill at $0.10 and carry a $0.0083 per 1M-hour storage fee. Flex processing halves input and output while keeping the cached rate, and Batch inference is priced separately — both worth pricing against the standard rate before you pick one."
+            ]
+          },
+          {
+            "h2": "Pro, Turbo or Lite",
+            "paras": [
+              "Pro and Turbo share a $0.50 input price, so the difference is output ($3.00 against $2.50) and the tier break that Turbo does not have. For prompts under 128K, Pro costs 20% more per output token; for prompts over 128K, Turbo is half price and the comparison stops being close.",
+              "Lite at $0.25/$2.00 is the middle tier and the one to check first for extraction and classification work: half of Pro's input price for prompts under 128K, with the same 256K window. Mini at $0.10/$0.40 undercuts everything else in this table on output."
+            ]
+          }
+        ],
+        "faq": [
+          {
+            "q": "How much does Doubao Seed 2.0 Pro cost per 1M tokens?",
+            "a": "$0.50 per 1M input tokens and $3.00 per 1M output tokens for prompts up to 128K, with cached input at $0.10. Prompts above 128K bill at $1.00/$6.00 for the whole request."
+          },
+          {
+            "q": "Does the long-context tier apply to the whole request?",
+            "a": "Yes. Once a prompt passes 128K tokens, every input and output token in that request bills at $1.00/$6.00. A 130K-token request costs 2.02x the same request at 128K."
+          },
+          {
+            "q": "Is Doubao Seed 2.0 Pro cheaper with batch processing?",
+            "a": "Yes. Flex processing runs at roughly 50% of the standard input and output rates while keeping the $0.10 cached rate, and Batch inference is priced separately at about half. Both are worth checking before committing to standard rates."
+          },
+          {
+            "q": "What is the difference between Seed 2.0 Pro and Seed 2.1 Turbo?",
+            "a": "Same $0.50 input price, but Turbo outputs at $2.50 against Pro's $3.00 and has no long-context tier at all — Turbo bills a flat rate to 256K. Above 128K tokens Turbo is half the price of Pro."
+          }
+        ]
+      }
+    },
+    {
+      "id": "doubao-seed-2-0-lite",
+      "name": "Doubao Seed 2.0 Lite",
+      "provider": "ByteDance",
+      "input": 0.25,
+      "output": 2.0,
+      "cached_input": 0.05,
+      "context": "256K",
+      "tier_threshold": 131072,
+      "input_high": 0.5,
+      "output_high": 4.0,
+      "note": "Half of Pro's input price for prompts up to 128K, doubling to $0.50/$4.00 past that. Accepts audio input at $3.75 per 1M tokens",
+      "specs": {
+        "Model ID": "seed-2-0-lite-260428",
+        "Tier break": "128K",
+        "Audio input": "$3.75 / 1M"
+      }
+    },
+    {
+      "id": "doubao-seed-2-0-mini",
+      "name": "Doubao Seed 2.0 Mini",
+      "provider": "ByteDance",
+      "input": 0.1,
+      "output": 0.4,
+      "cached_input": 0.02,
+      "context": "256K",
+      "tier_threshold": 131072,
+      "input_high": 0.2,
+      "output_high": 0.8,
+      "note": "Output at $0.40 per 1M is the cheapest in the Seed family and undercuts GPT-6 Luna's $0.50, doubling to $0.20/$0.80 past 128K tokens. Audio input bills at $1.50 per 1M",
+      "specs": {
+        "Model ID": "seed-2-0-mini-260428",
+        "Tier break": "128K",
+        "Audio input": "$1.50 / 1M"
+      }
     }
   ],
   "sources": [
@@ -1130,6 +1360,7 @@ window.EZ_MODELS = {
     "https://platform.minimaxi.com/docs/price",
     "https://platform.xiaomimimo.com/docs/en-US/price/pay-as-you-go",
     "https://mistral.ai/pricing/api",
-    "https://www.alibabacloud.com/help/en/model-studio/models"
+    "https://www.alibabacloud.com/help/en/model-studio/models",
+    "https://docs.byteplus.com/en/docs/modelark/model-pricing"
   ]
 };
