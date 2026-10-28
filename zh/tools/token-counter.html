@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-zh-static="1"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LLM 分词与成本计算器 — 单次、每日、每月</title>
+<meta name="description" content="统计 prompt 的 token 数，并按 43 个模型估算单次、每日、每月 API 成本，自动计入 Batch 五折与缓存折扣。">
+<link rel="canonical" href="https://tools.ezaiops.com/zh/tools/token-counter.html">
+<link rel="alternate" hreflang="zh-CN" href="https://tools.ezaiops.com/zh/tools/token-counter.html">
+<link rel="alternate" hreflang="en" href="https://tools.ezaiops.com/tools/token-counter.html">
+<link rel="alternate" hreflang="x-default" href="https://tools.ezaiops.com/tools/token-counter.html">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="LLM 分词与成本计算器 — 单次、每日、每月">
+<meta property="og:description" content="统计 prompt 的 token 数，并按 43 个模型估算单次、每日、每月 API 成本，自动计入 Batch 五折与缓存折扣。">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/style.css?v=20261028b">
+<script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "LLM Token Counter & Cost Calculator",
+  "url": "https://tools.ezaiops.com/zh/tools/token-counter.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}</script>
+
+
+
+<script src="/assets/i18n.js?v=20261028b"></script><script src="/assets/i18n/common.js?v=20261028b"></script><script src="/assets/i18n/tools/token-counter.js?v=20261028b"></script><meta property="og:locale" content="zh_CN"></head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/zh/"><span class="logo">ez</span>ezaiops <small>工具</small></a>
+    <nav class="site-nav">
+      <a href="/zh/">工具</a>
+      <a href="/models/index.html">模型价格</a>
+      <a href="https://ezaiops.com/" title="ezaiops.com — AI Agent 可观测性与 LLMOps 实战笔记（中文）">博客</a>
+      <a href="https://github.com/ezaiops">GitHub</a>
+    <div class="lang-switch"><a href="/zh/tools/token-counter.html" hreflang="zh-CN" class="active" aria-current="page">中文</a><a href="/tools/token-counter.html?lang=en" hreflang="en">EN</a></div></nav>
+  </div>
+</header>
+
+<main class="wrap tool-page">
+  <nav class="crumbs"><a href="/zh/">首页</a> / 工具 / <a href="/zh/tools/token-counter.html">分词与成本</a><a class="main-site-link" href="https://ezaiops.com/">ezaiops.com ↗</a></nav>
+  <h1>LLM 分词与成本计算器</h1>
+  <p class="lead">粘贴一段 prompt，即可统计词元数量，并核算 43 个模型的单次、每日、每月成本——自动应用 Batch 五折与 prompt 缓存折扣。分词在本地用官方 GPT 分词器完成，你的文本不会离开页面。</p>
+
+  <section class="panel">
+    <label class="field-label" for="tc-input">Prompt 或文本</label>
+    <textarea id="tc-input" class="mono" rows="8" placeholder="Paste your prompt here…"></textarea>
+    <div class="btn-row">
+      <button class="btn small" id="tc-sample" type="button">加载示例 prompt</button>
+      <button class="btn small" id="tc-clear" type="button">清空</button>
+      <span class="badge amber" id="tc-token-mode">近似分词器（离线）</span>
+    </div>
+
+    <div class="field-row" style="margin-top:14px">
+      <div class="field">
+        <label class="field-label" for="tc-model">模型</label>
+        <select id="tc-model"><optgroup label="Alibaba"><option value="qwen3-8-max">Qwen3.8 Max  $1.65 in / $4.95 out</option><option value="qwen3-8-flash">Qwen3.8 Flash  $0.113 in / $0.382 out</option></optgroup><optgroup label="Anthropic"><option value="claude-fable-5-1">Claude Fable 5.1  $10 in / $50 out</option><option value="claude-opus-5-5">Claude Opus 5.5  $4 in / $20 out</option><option value="claude-opus-5">Claude Opus 5  $5 in / $25 out</option><option value="claude-sonnet-5-5">Claude Sonnet 5.5  $2 in / $10 out</option><option value="claude-sonnet-5">Claude Sonnet 5  $2 in / $10 out</option><option value="claude-haiku-4-5">Claude Haiku 4.5  $1 in / $5 out</option><option value="claude-haiku-5-5">Claude Haiku 5.5  $0.1 in / $0.5 out</option></optgroup><optgroup label="ByteDance"><option value="doubao-seed-2-1-turbo">Doubao Seed 2.1 Turbo  $0.5 in / $2.5 out</option><option value="doubao-seed-2-0-pro">Doubao Seed 2.0 Pro  $0.5 in / $3 out</option><option value="doubao-seed-2-0-lite">Doubao Seed 2.0 Lite  $0.25 in / $2 out</option><option value="doubao-seed-2-0-mini">Doubao Seed 2.0 Mini  $0.1 in / $0.4 out</option></optgroup><optgroup label="DeepSeek"><option value="deepseek-v4-1-flash">DeepSeek V4.1 Flash  $0.15 in / $0.6 out</option><option value="deepseek-v4-pro">DeepSeek V4 Pro  $0.66 in / $1.98 out</option></optgroup><optgroup label="Google"><option value="gemini-4-argon">Gemini 4 Argon  $2 in / $10 out</option><option value="gemini-3-1-pro">Gemini 3.1 Pro  $2 in / $12 out</option><option value="gemini-3-8-flash">Gemini 3.8 Flash  $0.75 in / $3.75 out</option><option value="gemini-3-5-flash-lite">Gemini 3.5 Flash-Lite  $0.3 in / $2.5 out</option></optgroup><optgroup label="MiniMax"><option value="minimax-m3-1-flash">MiniMax M3.1 Flash  $0.15 in / $0.6 out</option><option value="minimax-m3">MiniMax M3  $0.3 in / $1.2 out</option></optgroup><optgroup label="Mistral"><option value="mistral-medium-3-5">Mistral Medium 3.5  $1.5 in / $7.5 out</option><option value="mistral-large-4">Mistral Large 4  $0.68 in / $2.09 out</option><option value="mistral-large-3">Mistral Large 3  $0.5 in / $1.5 out</option><option value="mistral-small-4">Mistral Small 4  $0.15 in / $0.6 out</option></optgroup><optgroup label="Moonshot"><option value="kimi-k3">Kimi K3  $3 in / $15 out</option><option value="kimi-k2-7-code">Kimi K2.7 Code  $0.95 in / $4 out</option><option value="kimi-k3-1-pro">Kimi K3.1 Pro  $2 in / $10 out</option></optgroup><optgroup label="OpenAI"><option value="gpt-6-astra">GPT-6 Astra  $10 in / $50 out</option><option value="gpt-6-1-sol">GPT-6.1 Sol  $2 in / $10 out</option><option value="gpt-6-1-terra">GPT-6.1 Terra  $1 in / $5 out</option><option value="gpt-6-luna">GPT-6 Luna  $0.1 in / $0.5 out</option><option value="gpt-5-6-sol">GPT-5.6 Sol  $4 in / $20 out</option><option value="gpt-5-6-terra">GPT-5.6 Terra  $2 in / $12 out</option><option value="gpt-5-6-luna">GPT-5.6 Luna  $0.2 in / $1.2 out</option></optgroup><optgroup label="Xiaomi"><option value="mimo-v2-6-pro">MiMo V2.6 Pro  $0.435 in / $0.87 out</option><option value="mimo-v2-6-flash">MiMo V2.6 Flash  $0.14 in / $0.28 out</option></optgroup><optgroup label="Z.AI"><option value="glm-5-3">GLM-5.3  $1.4 in / $4.4 out</option><option value="glm-5-3-flash">GLM-5.3 Flash  $0.15 in / $0.5 out</option><option value="glm-5-3-flashx">GLM-5.3 FlashX  $0.37 in / $1.25 out</option></optgroup><optgroup label="xAI"><option value="grok-4-7">Grok 4.7  $2 in / $6 out</option><option value="grok-4-5">Grok 4.5  $2 in / $6 out</option><option value="grok-4-3">Grok 4.3  $1.25 in / $2.5 out</option></optgroup></select>
+        <div class="hint">价格单位：每百万 token，更新于 <span id="tc-updated">2026-10-28</span>.</div>
+      </div>
+      <div class="field">
+        <label class="field-label" for="tc-output-tokens">预期输出 tokens</label>
+        <input type="number" id="tc-output-tokens" min="0" step="1" value="500">
+        <div class="hint">可选——只为输入计价则填 0。</div>
+      </div>
+    </div>
+    <div class="check-row" style="margin-top:10px">
+      <label><input type="checkbox" id="tc-compare" checked=""> 对比所有模型处理这段文本的成本</label>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat"><div class="k">词元</div><div class="v" id="tc-tokens">0</div></div>
+      <div class="stat"><div class="k">字符</div><div class="v" id="tc-chars">0</div></div>
+      <div class="stat"><div class="k">单词</div><div class="v" id="tc-words">0</div></div>
+      <div class="stat"><div class="k">单次请求预估成本</div><div class="v" id="tc-cost">$0.002475 <small>@ Qwen3.8 Max</small></div></div>
+      <div class="stat"><div class="k">每千次请求成本</div><div class="v" id="tc-cost-1k">$2.48</div></div>
+    </div>
+
+    <dl class="kv-list">
+      <dt>所选模型</dt><dd id="tc-sel-model">Qwen3.8 Max (Alibaba)</dd>
+      <dt>输入价</dt><dd id="tc-sel-input">$1.65</dd>
+      <dt>输出价</dt><dd id="tc-sel-output">$4.95</dd>
+      <dt>缓存输入价</dt><dd id="tc-sel-cached">$0.206</dd>
+      <dt>分时计价</dt><dd id="tc-sel-time">—</dd>
+      <dt>上下文窗口</dt><dd id="tc-sel-context">1M</dd>
+    </dl>
+
+    <table class="data" id="tc-compare-wrap">
+      <thead><tr><th>#</th><th>模型</th><th>Provider</th><th class="num">输入成本</th><th class="num">输出成本</th><th class="num">合计</th></tr></thead>
+      <tbody id="tc-compare-body"><tr><td>1</td><td>MiMo V2.6 Flash</td><td>Xiaomi</td><td class="num">$0</td><td class="num">$0.000140</td><td class="num"><strong>$0.000140</strong></td></tr><tr><td>2</td><td>Qwen3.8 Flash</td><td>Alibaba</td><td class="num">$0</td><td class="num">$0.000191</td><td class="num"><strong>$0.000191</strong></td></tr><tr><td>3</td><td>Doubao Seed 2.0 Mini</td><td>ByteDance</td><td class="num">$0</td><td class="num">$0.000200</td><td class="num"><strong>$0.000200</strong></td></tr><tr><td>4</td><td>GPT-6 Luna</td><td>OpenAI</td><td class="num">$0</td><td class="num">$0.000250</td><td class="num"><strong>$0.000250</strong></td></tr><tr><td>5</td><td>Claude Haiku 5.5</td><td>Anthropic</td><td class="num">$0</td><td class="num">$0.000250</td><td class="num"><strong>$0.000250</strong></td></tr><tr><td>6</td><td>GLM-5.3 Flash</td><td>Z.AI</td><td class="num">$0</td><td class="num">$0.000250</td><td class="num"><strong>$0.000250</strong></td></tr><tr><td>7</td><td>DeepSeek V4.1 Flash</td><td>DeepSeek</td><td class="num">$0</td><td class="num">$0.000300</td><td class="num"><strong>$0.000300</strong></td></tr><tr><td>8</td><td>MiniMax M3.1 Flash</td><td>MiniMax</td><td class="num">$0</td><td class="num">$0.000300</td><td class="num"><strong>$0.000300</strong></td></tr></tbody>
+    </table>
+    <p class="note">OpenAI GPT 系列模型的计数使用官方 cl100k_base / o200k_base 字节对编码。其他厂商分词方式不同，计数为接近的近似值。分层计价模型（GPT-6 Astra、Gemini 3.1 Pro、Grok 4.x、MiniMax M3）显示标准档价格；长上下文档位、缓存折扣与 Batch 优惠见各<a href="/models/index.html">价格页</a>。</p>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin:0 0 12px;font-size:16px">月度成本投射</h2>
+    <p class="note" style="margin:0 0 12px">把生产用量建模：每次请求 token 数 × 每日请求量，含 Batch 与缓存折扣。这个数字决定你的账单。</p>
+
+    <div class="field-row">
+      <div class="field">
+        <label class="field-label" for="mc-in">每次请求输入 tokens</label>
+        <input type="number" id="mc-in" class="mono" min="0" step="1" value="1500">
+      </div>
+      <div class="field">
+        <label class="field-label" for="mc-out">每次请求输出 tokens</label>
+        <input type="number" id="mc-out" class="mono" min="0" step="1" value="500">
+      </div>
+      <div class="field">
+        <label class="field-label" for="mc-req">每日请求数</label>
+        <input type="number" id="mc-req" class="mono" min="0" step="1" value="10000">
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <span style="font-size:13px;color:var(--muted);align-self:center">预设：</span>
+      <button class="btn small" data-preset="chat" type="button">聊天机器人</button>
+      <button class="btn small" data-preset="rag" type="button">RAG 流水线</button>
+      <button class="btn small" data-preset="code" type="button">代码助手</button>
+      <button class="btn small" data-preset="batch" type="button">批处理</button>
+      <button class="btn small" id="mc-from-text" type="button">使用上方文本的词计数</button>
+    </div>
+
+    <div class="field-row" style="margin-top:12px">
+      <div class="field">
+        <label class="field-label">折扣</label>
+        <div class="check-row">
+          <label><input type="checkbox" id="mc-batch"> Batch API（五折，异步）</label>
+        </div>
+      </div>
+      <div class="field">
+        <label class="field-label" for="mc-cache">缓存命中率： <strong id="mc-cache-val">0%</strong></label>
+        <input type="range" id="mc-cache" min="0" max="90" step="5" value="0" style="width:100%">
+        <div class="hint">输入 token 中按缓存价计费的占比。</div>
+      </div>
+    </div>
+
+    <pre class="code-out error hidden" id="mc-warn" style="margin-top:12px"></pre>
+
+    <div class="stats-grid">
+      <div class="stat"><div class="k">单次成本</div><div class="v" id="mc-cost-req">$0.004950</div></div>
+      <div class="stat"><div class="k">每日成本</div><div class="v" id="mc-cost-day">$49.50</div></div>
+      <div class="stat"><div class="k">每月成本（30 天）</div><div class="v" id="mc-cost-month">$1485.00</div></div>
+      <div class="stat"><div class="k">每年成本</div><div class="v" id="mc-cost-year">$18067.50</div></div>
+    </div>
+    <p class="note hidden" id="mc-time-note"></p>
+
+    <h3 style="font-size:14px;margin:18px 0 0">各模型在此用量下的成本</h3>
+    <table class="data">
+      <thead><tr><th>#</th><th>模型</th><th>Provider</th><th class="num">单次</th><th class="num">每月</th></tr></thead>
+      <tbody id="mc-rows"><tr><td>1</td><td>MiMo V2.6 Flash</td><td>Xiaomi</td><td class="num">$0.000350</td><td class="num"><strong>$105.00</strong></td></tr><tr><td>2</td><td>Doubao Seed 2.0 Mini</td><td>ByteDance</td><td class="num">$0.000350</td><td class="num"><strong>$105.00</strong></td></tr><tr><td>3</td><td>Qwen3.8 Flash</td><td>Alibaba</td><td class="num">$0.000360</td><td class="num"><strong>$108.15</strong></td></tr><tr><td>4</td><td>GPT-6 Luna</td><td>OpenAI</td><td class="num">$0.000400</td><td class="num"><strong>$120.00</strong></td></tr><tr><td>5</td><td>Claude Haiku 5.5</td><td>Anthropic</td><td class="num">$0.000400</td><td class="num"><strong>$120.00</strong></td></tr><tr><td>6</td><td>GLM-5.3 Flash</td><td>Z.AI</td><td class="num">$0.000475</td><td class="num"><strong>$142.50</strong></td></tr><tr><td>7</td><td>DeepSeek V4.1 Flash</td><td>DeepSeek</td><td class="num">$0.000525</td><td class="num"><strong>$157.50</strong></td></tr><tr><td>8</td><td>MiniMax M3.1 Flash</td><td>MiniMax</td><td class="num">$0.000525</td><td class="num"><strong>$157.50</strong></td></tr><tr><td>9</td><td>Mistral Small 4</td><td>Mistral</td><td class="num">$0.000525</td><td class="num"><strong>$157.50</strong></td></tr><tr><td>10</td><td>GPT-5.6 Luna</td><td>OpenAI</td><td class="num">$0.000900</td><td class="num"><strong>$270.00</strong></td></tr><tr><td>11</td><td>MiniMax M3</td><td>MiniMax</td><td class="num">$0.001050</td><td class="num"><strong>$315.00</strong></td></tr><tr><td>12</td><td>MiMo V2.6 Pro</td><td>Xiaomi</td><td class="num">$0.001087</td><td class="num"><strong>$326.25</strong></td></tr><tr><td>13</td><td>GLM-5.3 FlashX</td><td>Z.AI</td><td class="num">$0.001180</td><td class="num"><strong>$354.00</strong></td></tr><tr><td>14</td><td>Doubao Seed 2.0 Lite</td><td>ByteDance</td><td class="num">$0.001375</td><td class="num"><strong>$412.50</strong></td></tr><tr><td>15</td><td>Mistral Large 3</td><td>Mistral</td><td class="num">$0.001500</td><td class="num"><strong>$450.00</strong></td></tr><tr><td>16</td><td>Gemini 3.5 Flash-Lite</td><td>Google</td><td class="num">$0.001700</td><td class="num"><strong>$510.00</strong></td></tr><tr><td>17</td><td>DeepSeek V4 Pro</td><td>DeepSeek</td><td class="num">$0.001980</td><td class="num"><strong>$594.00</strong></td></tr><tr><td>18</td><td>Doubao Seed 2.1 Turbo</td><td>ByteDance</td><td class="num">$0.002000</td><td class="num"><strong>$600.00</strong></td></tr><tr><td>19</td><td>Mistral Large 4</td><td>Mistral</td><td class="num">$0.002065</td><td class="num"><strong>$619.50</strong></td></tr><tr><td>20</td><td>Doubao Seed 2.0 Pro</td><td>ByteDance</td><td class="num">$0.002250</td><td class="num"><strong>$675.00</strong></td></tr><tr><td>21</td><td>Gemini 3.8 Flash</td><td>Google</td><td class="num">$0.003000</td><td class="num"><strong>$900.00</strong></td></tr><tr><td>22</td><td>Grok 4.3</td><td>xAI</td><td class="num">$0.003125</td><td class="num"><strong>$937.50</strong></td></tr><tr><td>23</td><td>Kimi K2.7 Code</td><td>Moonshot</td><td class="num">$0.003425</td><td class="num"><strong>$1027.50</strong></td></tr><tr><td>24</td><td>GPT-6.1 Terra</td><td>OpenAI</td><td class="num">$0.004000</td><td class="num"><strong>$1200.00</strong></td></tr><tr><td>25</td><td>Claude Haiku 4.5</td><td>Anthropic</td><td class="num">$0.004000</td><td class="num"><strong>$1200.00</strong></td></tr><tr><td>26</td><td>GLM-5.3</td><td>Z.AI</td><td class="num">$0.004300</td><td class="num"><strong>$1290.00</strong></td></tr><tr style="background:var(--accent-soft)"><td>27</td><td>Qwen3.8 Max</td><td>Alibaba</td><td class="num">$0.004950</td><td class="num"><strong>$1485.00</strong></td></tr><tr><td>28</td><td>Grok 4.7</td><td>xAI</td><td class="num">$0.006000</td><td class="num"><strong>$1800.00</strong></td></tr><tr><td>29</td><td>Grok 4.5</td><td>xAI</td><td class="num">$0.006000</td><td class="num"><strong>$1800.00</strong></td></tr><tr><td>30</td><td>Mistral Medium 3.5</td><td>Mistral</td><td class="num">$0.006000</td><td class="num"><strong>$1800.00</strong></td></tr><tr><td>31</td><td>GPT-6.1 Sol</td><td>OpenAI</td><td class="num">$0.008000</td><td class="num"><strong>$2400.00</strong></td></tr><tr><td>32</td><td>Claude Sonnet 5.5</td><td>Anthropic</td><td class="num">$0.008000</td><td class="num"><strong>$2400.00</strong></td></tr><tr><td>33</td><td>Claude Sonnet 5</td><td>Anthropic</td><td class="num">$0.008000</td><td class="num"><strong>$2400.00</strong></td></tr><tr><td>34</td><td>Gemini 4 Argon</td><td>Google</td><td class="num">$0.008000</td><td class="num"><strong>$2400.00</strong></td></tr><tr><td>35</td><td>Kimi K3.1 Pro</td><td>Moonshot</td><td class="num">$0.008000</td><td class="num"><strong>$2400.00</strong></td></tr><tr><td>36</td><td>GPT-5.6 Terra</td><td>OpenAI</td><td class="num">$0.009000</td><td class="num"><strong>$2700.00</strong></td></tr><tr><td>37</td><td>Gemini 3.1 Pro</td><td>Google</td><td class="num">$0.009000</td><td class="num"><strong>$2700.00</strong></td></tr><tr><td>38</td><td>Kimi K3</td><td>Moonshot</td><td class="num">$0.0120</td><td class="num"><strong>$3600.00</strong></td></tr><tr><td>39</td><td>GPT-5.6 Sol</td><td>OpenAI</td><td class="num">$0.0160</td><td class="num"><strong>$4800.00</strong></td></tr><tr><td>40</td><td>Claude Opus 5.5</td><td>Anthropic</td><td class="num">$0.0160</td><td class="num"><strong>$4800.00</strong></td></tr><tr><td>41</td><td>Claude Opus 5</td><td>Anthropic</td><td class="num">$0.0200</td><td class="num"><strong>$6000.00</strong></td></tr><tr><td>42</td><td>GPT-6 Astra</td><td>OpenAI</td><td class="num">$0.0400</td><td class="num"><strong>$12000.00</strong></td></tr><tr><td>43</td><td>Claude Fable 5.1</td><td>Anthropic</td><td class="num">$0.0400</td><td class="num"><strong>$12000.00</strong></td></tr></tbody>
+    </table>
+
+    <div class="btn-row">
+      <button class="btn small" id="mc-share" type="button">复制分享链接</button>
+      <button class="btn small" id="mc-csv" type="button">下载 CSV</button>
+    </div>
+    <input type="text" id="mc-share-url" class="mono" readonly="" style="margin-top:8px;font-size:12px" aria-label="Shareable link">
+    <p class="note">Batch 五折适用于 OpenAI、Anthropic 和 Google 的 Batch API；缓存输入价使用各厂商公布的缓存读取价，且 Batch 折扣先于缓存混合计算。长上下文档位（如 GPT-6 Astra 超过 272K tokens/请求）会在投射中自动切换。分时计价模型（DeepSeek V4.1 Flash）按当前生效费率计算——每月成本同时给出全闲时与全峰时的区间。</p>
+  </section>
+
+  <div class="ad-slot">
+    <strong>广告位</strong>
+    Google AdSense 占位——网站通过审批并有稳定流量后启用。
+  </div>
+
+  <section class="prose">
+    <h2>成本是怎么算的</h2>
+    <p>所有厂商都按 token 计费。文本先转换为词元——GPT 系列使用与 OpenAI 生产环境相同的字节对编码分词器，计数与 API 回报一致。成本 = <code>(输入 tokens ÷ 1,000,000) × 输入价 + (输出 tokens ÷ 1,000,000) × 输出价</code>，取各厂商目录价。月度投射 = 单次成本 × 每日请求量 × 30 天。</p>
+    <p>真实账单由两个失真主导：输出 token 按输入价的 2–8 倍计费；agent 和思维链负载输出占比高。真正能砍账单的三个杠杆：Batch API（通常五折）、prompt 缓存（命中价约为输入基础价的 10%——对重复语料的 RAG 是决定性因素）、以及选对模型档位——把 80% 的简单流量分流到 mini 或 flash 档，通常是最大的单项节省。</p>
+
+    <h2>降低 LLM 账单的技巧</h2>
+    <ul>
+      <li><strong>Batch API 五折。</strong>OpenAI、Anthropic 和 Google 都对异步批量负载的输入输出价格减半——适合夜间富化或批量分类。</li>
+      <li><strong>prompt 缓存。</strong>Anthropic Claude 的缓存命中可把输入成本降到基准的约 10%；Gemini 上下文缓存对重复上下文通常省 80–90%。</li>
+      <li><strong>选对模型档位。</strong>路由、抽取或摘要类任务，Luna/Haiku/Flash 级调用通常比旗舰便宜 5–20 倍——决定前先用上表测算切换效果。</li>
+      <li><strong>控制输出长度。</strong>设置 max-token 上限；失控的补全是意外账单最常见的来源。</li>
+    </ul>
+
+    <h2>常见问题</h2>
+    <details class="faq">
+      <summary>分词数量准确吗？</summary>
+      <div class="faq-body">OpenAI GPT 系列模型精确（cl100k_base / o200k_base）。Claude、Gemini、Grok 和 DeepSeek 为接近的近似值——这些厂商使用不同的分词器，且并未全部公开。</div>
+    </details>
+    <details class="faq">
+      <summary>我的 prompt 会离开浏览器吗？</summary>
+      <div class="faq-body">不会。分词与成本计算都在你设备的 JavaScript 中进行，工具不会用你的内容发任何网络请求。</div>
+    </details>
+    <details class="faq">
+      <summary>月度估算是怎么算的？</summary>
+      <div class="faq-body">单次成本 × 每日请求量 × 30。单次成本使用你输入的输入/输出 token 数；启用 Batch 时两侧价格同时减半，缓存命中率按模型缓存价混入输入价。每次请求的 token 数超过厂商阈值时，长上下文档位自动切换。</div>
+    </details>
+    <details class="faq">
+      <summary>这些是官方价格吗？</summary>
+      <div class="faq-body">表中数据编译自各厂商官方定价文档，并与聚合站交叉核对。价格变动频繁——重大预算决策前请以厂商官方信息为准。</div>
+    </details>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h4>常用工具</h4>
+        <ul>
+          <li><a href="/zh/tools/token-counter.html">LLM 分词与成本计算器</a></li>
+          <li><a href="/zh/tools/json-formatter.html">JSON 工具</a></li>
+          <li><a href="/zh/tools/regex-tester.html">正则测试</a></li>
+          <li><a href="/zh/tools/cron-explainer.html">Cron 解释</a></li>
+          <li><a href="/zh/tools/encode-decode.html">Base64 / URL / 哈希</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>模型价格</h4>
+        <ul>
+          <li><a href="/models/index.html">全部模型</a></li>
+          <li><a href="/models/gpt-6-astra.html">GPT-6 Astra 价格</a></li>
+          <li><a href="/models/claude-fable-5-1.html">Claude Fable 5.1 价格</a></li>
+          <li><a href="/models/gemini-3-8-flash.html">Gemini 3.8 Flash 价格</a></li>
+          <li><a href="/models/deepseek-v4-1-flash.html">DeepSeek V4.1 Flash 价格</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>更多</h4>
+        <ul>
+          <li><a href="https://ezaiops.com/">ezaiops.com</a></li>
+          <li><a href="/zh/about.html">关于</a></li>
+          <li><a href="/zh/contact.html">联系</a></li>
+          <li><a href="/zh/privacy.html">隐私政策</a></li>
+          <li><a href="https://github.com/ezaiops">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">© 2026 ezaiops · 输入内容不会离开你的浏览器</div>
+  </div>
+</footer>
+
+<script src="/assets/common.js?v=20261028b" defer=""></script>
+<script src="/assets/models.js?v=20261028b" defer=""></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  function ezT(k) { return window.ezI18N ? window.ezI18N.t(k) : k; }
+  function ezTf(k) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    if (window.ezI18N) return window.ezI18N.tf.apply(window.ezI18N, [k].concat(args));
+    return k.replace(/%s/g, function () { return String(args.shift()); });
+  }
+  function esc(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+  var data = window.EZ_MODELS || { models: [], updated: "" };
+  var models = data.models || [];
+
+  var input = $("#tc-input");
+  var modelSel = $("#tc-model");
+  var outTokens = $("#tc-output-tokens");
+  var compareCb = $("#tc-compare");
+  var tbody = $("#tc-compare-body");
+  var compareTable = $("#tc-compare-wrap");
+
+  if (data.updated) $("#tc-updated").textContent = data.updated;
+
+  var groups = {};
+  models.forEach(function (m) { (groups[m.provider] = groups[m.provider] || []).push(m); });
+  Object.keys(groups).sort().forEach(function (p) {
+    var opt = document.createElement("optgroup");
+    opt.label = p;
+    groups[p].forEach(function (m) {
+      var o = document.createElement("option");
+      o.value = m.id;
+      o.textContent = m.name + "  $" + fmtPrice(m.input) + " in / $" + fmtPrice(m.output) + " out";
+      opt.appendChild(o);
+    });
+    modelSel.appendChild(opt);
+  });
+  try {
+    var saved = localStorage.getItem("ez-tc-model");
+    if (saved && models.some(function (m) { return m.id === saved; })) modelSel.value = saved;
+  } catch (e) { /* storage unavailable */ }
+  if (!modelSel.value && models.length) modelSel.value = models[0].id;
+
+  var tokState = 0; // 0 idle, 1 loading, 2 ok, 3 failed
+  var encoder = null;
+  function loadTokenizer() {
+    if (tokState !== 0) return;
+    tokState = 1;
+    try {
+      Promise.resolve(import("https://esm.sh/gpt-tokenizer")).then(function (m) {
+        if (m && typeof m.encode === "function") { encoder = m.encode; tokState = 2; } else { tokState = 3; }
+        update();
+      }).catch(function () { tokState = 3; update(); });
+    } catch (e) { tokState = 3; update(); }
+  }
+  function heuristic(text) {
+    var cjk = 0, other = 0;
+    for (var i = 0; i < text.length; i++) {
+      var c = text.charCodeAt(i);
+      if ((c >= 0x4e00 && c <= 0x9fff) || (c >= 0x3000 && c <= 0x303f) || (c >= 0xff00 && c <= 0xffef)) cjk++;
+      else other++;
+    }
+    return cjk + Math.ceil(other / 4);
+  }
+  function countTokens(text) {
+    if (encoder) { try { return encoder(text).length; } catch (e) { /* fall through */ } }
+    return heuristic(text);
+  }
+  function fmtPrice(n) { return n >= 1 ? String(n) : String(Math.round(n * 1000) / 1000); }
+  function money(n) {
+    if (!isFinite(n) || n <= 0) return "$0";
+    if (n < 0.000001) return "<$0.000001";
+    var d = n < 0.01 ? 6 : n < 1 ? 4 : 2;
+    return "$" + n.toFixed(d);
+  }
+  function currentModel() {
+    for (var i = 0; i < models.length; i++) if (models[i].id === modelSel.value) return models[i];
+    return models[0] || null;
+  }
+  function timeMultiplier(m, now) {
+    if (!m || !m.time_pricing || m.time_pricing.type !== "peak_offpeak") return 1;
+    var day = now.getUTCDay();
+    var mins = now.getUTCHours() * 60 + now.getUTCMinutes();
+    var wins = m.time_pricing.peak_windows_utc || [];
+    var peak = day >= 1 && day <= 5 && wins.some(function (w) { return mins >= w[0] && mins < w[1]; });
+    return peak ? (m.time_pricing.peak_multiplier || 2) : 1;
+  }
+  function timeLabel(m, mult) {
+    if (!m || !m.time_pricing) return "—";
+    var win = m.time_pricing.window_label || "peak windows";
+    return mult > 1
+      ? ezTf("Peak rate active now (%s×) — %s", mult, win)
+      : ezTf("Off-peak rate active — %s bills at %s×", win, m.time_pricing.peak_multiplier || 2);
+  }
+  function rateFor(mm, now) {
+    var mult = timeMultiplier(mm, now);
+    return { i: mm.input * mult, o: mm.output * mult };
+  }
+  function num(el, fallback) {
+    var v = parseInt(el.value, 10);
+    return isFinite(v) && v >= 0 ? v : (fallback || 0);
+  }
+
+  // ---------- text-based single-request panel ----------
+  var timer = null;
+  function schedule() { clearTimeout(timer); timer = setTimeout(update, 200); }
+  function update() {
+    var text = input.value;
+    var t = countTokens(text);
+    var m = currentModel();
+    var now = new Date();
+    var mult = timeMultiplier(m, now);
+    var outN = num(outTokens, 0);
+    var outCost = m ? outN * m.output * mult / 1e6 : 0;
+    var total = (m ? t * m.input * mult / 1e6 : 0) + outCost;
+
+    $("#tc-tokens").textContent = t.toLocaleString();
+    $("#tc-chars").textContent = text.length.toLocaleString();
+    $("#tc-words").textContent = text.trim() ? text.trim().split(/\s+/).length.toLocaleString() : "0";
+    $("#tc-cost").innerHTML = money(total) + (m ? " <small>@ " + esc(m.name) + "</small>" : "");
+    $("#tc-cost-1k").textContent = money(total * 1000);
+
+    var mode = $("#tc-token-mode");
+    if (tokState === 2) { mode.textContent = ezT("exact BPE tokenizer"); mode.className = "badge green"; }
+    else if (tokState === 3) { mode.textContent = ezT("approx. tokenizer (offline)"); mode.className = "badge amber"; }
+    else { mode.textContent = ezT("loading tokenizer…"); mode.className = "badge amber"; }
+
+    if (m) {
+      $("#tc-sel-model").textContent = m.name + " (" + m.provider + ")";
+      $("#tc-sel-input").textContent = "$" + fmtPrice(m.input * mult);
+      $("#tc-sel-output").textContent = "$" + fmtPrice(m.output * mult);
+      $("#tc-sel-cached").textContent = m.cached_input != null ? "$" + fmtPrice(m.cached_input * mult) : "—";
+      $("#tc-sel-context").textContent = m.context || "—";
+      $("#tc-sel-time").textContent = timeLabel(m, mult);
+    }
+
+    if (compareCb.checked && models.length) {
+      function modelCost(mm) {
+        var r = rateFor(mm, now);
+        return t * r.i / 1e6 + outN * r.o / 1e6;
+      }
+      var rows = models.slice().sort(function (a, b) { return modelCost(a) - modelCost(b); }).slice(0, 8);
+      tbody.innerHTML = rows.map(function (mm, i) {
+        var sel = mm === m;
+        var r = rateFor(mm, now);
+        var inC = t * r.i / 1e6, outC = outN * r.o / 1e6;
+        return "<tr" + (sel ? ' style="background:var(--accent-soft)"' : "") + "><td>" + (i + 1) + "</td><td>" + esc(mm.name) +
+          "</td><td>" + esc(mm.provider) + "</td><td class=\"num\">" + money(inC) +
+          "</td><td class=\"num\">" + money(outC) + "</td><td class=\"num\"><strong>" + money(inC + outC) + "</strong></td></tr>";
+      }).join("");
+      compareTable.classList.remove("hidden");
+    } else {
+      compareTable.classList.add("hidden");
+    }
+  }
+
+  var SAMPLE = "You are a routing agent for a customer support pipeline.\n\nGiven the ticket below, classify the intent, extract the order ID if present, and draft a one-paragraph reply.\n\nTicket: Hi, my order #45821 arrived damaged and the support page keeps timing out. I need a replacement and a refund for the shipping fee. This is the third email I've sent.\n\nRespond as JSON: {\"intent\": ..., \"order_id\": ..., \"reply\": ...}";
+
+  input.addEventListener("input", schedule);
+  outTokens.addEventListener("input", schedule);
+  modelSel.addEventListener("change", function () {
+    try { localStorage.setItem("ez-tc-model", modelSel.value); } catch (e) { /* ignore */ }
+    update(); recalcMonthly();
+  });
+  compareCb.addEventListener("change", update);
+  $("#tc-clear").addEventListener("click", function () { input.value = ""; update(); input.focus(); });
+  $("#tc-sample").addEventListener("click", function () { input.value = SAMPLE; update(); });
+
+  // ---------- monthly projection panel ----------
+  var mcIn = $("#mc-in"), mcOut = $("#mc-out"), mcReq = $("#mc-req");
+  var mcBatch = $("#mc-batch"), mcCache = $("#mc-cache"), mcWarn = $("#mc-warn");
+
+  function rates(m, tokensIn, multOverride) {
+    var tier = m.tier_threshold && tokensIn > m.tier_threshold &&
+      m.input_high != null && m.output_high != null;
+    var pin = tier ? m.input_high : m.input;
+    var pout = tier ? m.output_high : m.output;
+    if (mcBatch.checked) { pin /= 2; pout /= 2; }
+    var mult = multOverride != null ? multOverride : timeMultiplier(m, new Date());
+    return { pin: pin * mult, pout: pout * mult, tier: tier };
+  }
+  function effInputPrice(m, r) {
+    var ratio = parseInt(mcCache.value, 10) / 100;
+    if (m.cached_input == null || ratio <= 0) return r.pin;
+    return (1 - ratio) * r.pin + ratio * m.cached_input;
+  }
+  function reqCost(m, multOverride) {
+    var ti = num(mcIn, 0), to = num(mcOut, 0);
+    var r = rates(m, ti, multOverride);
+    return (ti * effInputPrice(m, r) + to * r.pout) / 1e6;
+  }
+
+  function recalcMonthly() {
+    var m = currentModel();
+    var reqs = num(mcReq, 0);
+    var cost = reqCost(m);
+    $("#mc-cost-req").textContent = money(cost);
+    $("#mc-cost-day").textContent = money(cost * reqs);
+    $("#mc-cost-month").textContent = money(cost * reqs * 30);
+    $("#mc-cost-year").textContent = money(cost * reqs * 365);
+    $("#mc-cache-val").textContent = mcCache.value + "%";
+
+    var ti = num(mcIn, 0);
+    if (m && m.tier_threshold && ti > m.tier_threshold) {
+      mcWarn.textContent = ezTf("Note: %s bills requests above %s tokens at its long-context tier — the projection uses that higher rate.",
+        m.name, m.tier_threshold.toLocaleString());
+      mcWarn.classList.remove("hidden");
+    } else {
+      mcWarn.classList.add("hidden");
+    }
+
+    var tpNote = $("#mc-time-note");
+    if (m && m.time_pricing && m.time_pricing.type === "peak_offpeak") {
+      var peakMult = m.time_pricing.peak_multiplier || 2;
+      tpNote.textContent = ezTf("Time-based pricing: this projection uses the rate in effect right now. A month entirely off-peak costs %s; entirely peak costs %s.",
+        money(reqCost(m, 1) * reqs * 30), money(reqCost(m, peakMult) * reqs * 30));
+      tpNote.classList.remove("hidden");
+    } else {
+      tpNote.classList.add("hidden");
+    }
+
+    var rows = models.slice().sort(function (a, b) { return reqCost(a) - reqCost(b); });
+    $("#mc-rows").innerHTML = rows.map(function (mm, i) {
+      var c = reqCost(mm);
+      return "<tr" + (mm === m ? ' style="background:var(--accent-soft)"' : "") + "><td>" + (i + 1) +
+        "</td><td>" + esc(mm.name) + "</td><td>" + esc(mm.provider) +
+        "</td><td class=\"num\">" + money(c) + "</td><td class=\"num\"><strong>" + money(c * reqs * 30) + "</strong></td></tr>";
+    }).join("");
+
+    buildShareUrl();
+  }
+
+  var mTimer = null;
+  function scheduleMonthly() { clearTimeout(mTimer); mTimer = setTimeout(recalcMonthly, 150); }
+  [mcIn, mcOut, mcReq].forEach(function (el) { el.addEventListener("input", scheduleMonthly); });
+  mcBatch.addEventListener("change", recalcMonthly);
+  mcCache.addEventListener("input", scheduleMonthly);
+
+  var PRESETS = {
+    chat: { i: 1500, o: 500, r: 10000 },
+    rag: { i: 3000, o: 500, r: 5000 },
+    code: { i: 2000, o: 1000, r: 2000 },
+    batch: { i: 1000, o: 200, r: 100000 }
+  };
+  document.querySelectorAll("[data-preset]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var p = PRESETS[b.getAttribute("data-preset")];
+      mcIn.value = p.i; mcOut.value = p.o; mcReq.value = p.r;
+      if (b.getAttribute("data-preset") === "batch") mcBatch.checked = true;
+      recalcMonthly();
+    });
+  });
+  $("#mc-from-text").addEventListener("click", function () {
+    mcIn.value = String(countTokens(input.value));
+    mcOut.value = outTokens.value || "0";
+    recalcMonthly();
+  });
+
+  function buildShareUrl() {
+    var params = [];
+    params.push("m=" + encodeURIComponent(modelSel.value));
+    params.push("i=" + num(mcIn, 0));
+    params.push("o=" + num(mcOut, 0));
+    params.push("r=" + num(mcReq, 0));
+    if (mcBatch.checked) params.push("b=1");
+    params.push("c=" + mcCache.value);
+    var urlLang = null;
+    try { urlLang = new URLSearchParams(location.search).get("lang"); } catch (e) { /* file:// */ }
+    if (urlLang === "zh" || (window.ezI18N && window.ezI18N.lang === "zh")) params.push("lang=zh");
+    var url = location.origin + location.pathname + "?" + params.join("&");
+    $("#mc-share-url").value = url;
+    try { history.replaceState(null, "", "?" + params.join("&")); } catch (e) { /* file:// etc. */ }
+    return url;
+  }
+  $("#mc-share").addEventListener("click", function () {
+    window.ezTools.copy(buildShareUrl());
+  });
+  $("#mc-csv").addEventListener("click", function () {
+    var reqs = num(mcReq, 0);
+    var lines = ["model,provider,per_request_usd,per_month_usd"];
+    models.forEach(function (mm) {
+      var c = reqCost(mm);
+      lines.push('"' + mm.name + '","' + mm.provider + '",' + c.toFixed(6) + "," + (c * reqs * 30).toFixed(2));
+    });
+    try {
+      var blob = new Blob([lines.join("\n")], { type: "text/csv" });
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "llm-cost-estimate.csv";
+      a.click();
+      URL.revokeObjectURL(a.href);
+    } catch (e) {
+      window.ezTools.toast("Download not supported in this browser — use Copy share link");
+    }
+  });
+
+  function prefillFromUrl() {
+    var q;
+    try { q = new URLSearchParams(location.search); } catch (e) { return; }
+    if (!q.get("m") && !q.get("r")) return;
+    if (q.get("m") && models.some(function (m) { return m.id === q.get("m"); })) modelSel.value = q.get("m");
+    if (q.get("i")) mcIn.value = q.get("i");
+    if (q.get("o")) mcOut.value = q.get("o");
+    if (q.get("r")) mcReq.value = q.get("r");
+    if (q.get("b") === "1") mcBatch.checked = true;
+    if (q.get("c")) mcCache.value = q.get("c");
+  }
+
+  prefillFromUrl();
+  update();
+  recalcMonthly();
+  loadTokenizer();
+  window.addEventListener("ez:i18n", function () { update(); recalcMonthly(); });
+});
+</script>
+
+</body></html>

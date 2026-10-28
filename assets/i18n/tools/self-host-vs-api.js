@@ -48,5 +48,7 @@ window.I18N_DICTS.push({
   "What throughput should I assume?": "吞吐该假设多少？",
   "A single 4090 serving an 8B model with vLLM does roughly 2,000–4,000 output tok/s; a 70B model on 2×A100 is in the 5,000–15,000 range for short contexts. Long contexts and batching change both numbers — measure with your own workload.": "单张 4090 用 vLLM 跑 8B 模型，输出约 2,000–4,000 tok/s；70B 模型在 2×A100 上、短上下文时约 5,000–15,000 tok/s。长上下文和批处理会改变这两个数字——用你自己的负载实测。",
   "Does this include engineering time?": "这包含工程师人力成本吗？",
-  "No — only compute. Running your own inference stack means ops work (deployment, monitoring, upgrades, on-call). As a rule of thumb, add a full-time engineer's amortized cost if you go self-hosted; the calculator's verdict assumes you already have that capacity.": "不包含——只算算力。自建推理栈意味着运维工作（部署、监控、升级、值班）。经验法则：如果自托管，加上一名全职工程师的摊销成本；本计算器的结论假设你已有这部分人力。"
+  "No — only compute. Running your own inference stack means ops work (deployment, monitoring, upgrades, on-call). As a rule of thumb, add a full-time engineer's amortized cost if you go self-hosted; the calculator's verdict assumes you already have that capacity.": "不包含——只算算力。自建推理栈意味着运维工作（部署、监控、升级、值班）。经验法则：如果自托管，加上一名全职工程师的摊销成本；本计算器的结论假设你已有这部分人力。",
+
+    "el:API pricing is convenient but not always cheapest. Enter your monthly token volume and GPU assumptions to find the break-even point — the workload size where renting a GPU and running an open model (vLLM, SGLang, llama.cpp) beats paying per token. List prices from our pricing table, verified 2026-10-13.": "调 API 方便，但不一定最便宜。输入每月 token 用量和 GPU 假设，算出盈亏平衡点——也就是从哪个用量开始，租 GPU 跑开源模型（vLLM、SGLang、llama.cpp）比按 token 付费更划算。价格取自我们的<a href=\"/models/index.html\">模型价格表</a>，核实日期 2026-10-13。"
 });

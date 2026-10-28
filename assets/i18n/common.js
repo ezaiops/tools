@@ -41,5 +41,10 @@ window.I18N_DICTS.push({
   "Ad slot": "广告位",
   "Google AdSense placeholder — activated once the site is approved and has steady traffic.": "Google AdSense 占位——网站通过审批并有稳定流量后启用。",
   "Frequently asked questions": "常见问题",
-  "Copied to clipboard": "已复制到剪贴板"
+  "Copied to clipboard": "已复制到剪贴板",
+
+    "/ Tools /": "/ 工具 /",
+  "GPT-5.6 Sol pricing": "GPT-5.6 Sol 价格",
+  "Claude Opus 5 pricing": "Claude Opus 5 价格",
+  "Gemini 3.1 Pro pricing": "Gemini 3.1 Pro 价格"
 });

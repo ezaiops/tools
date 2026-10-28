@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-zh-static="1"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JSON 格式化与校验 — 美化、压缩、错误定位</title>
+<meta name="description" content="格式化、美化、压缩并校验 JSON，出错时给出精确行列位置。同时显示体积、键数量与嵌套深度。">
+<link rel="canonical" href="https://tools.ezaiops.com/zh/tools/json-formatter.html">
+<link rel="alternate" hreflang="zh-CN" href="https://tools.ezaiops.com/zh/tools/json-formatter.html">
+<link rel="alternate" hreflang="en" href="https://tools.ezaiops.com/tools/json-formatter.html">
+<link rel="alternate" hreflang="x-default" href="https://tools.ezaiops.com/tools/json-formatter.html">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="JSON 格式化与校验 — 美化、压缩、错误定位">
+<meta property="og:description" content="格式化、美化、压缩并校验 JSON，出错时给出精确行列位置。同时显示体积、键数量与嵌套深度。">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/style.css?v=20261028b">
+<script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "JSON Formatter & Validator",
+  "url": "https://tools.ezaiops.com/zh/tools/json-formatter.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}</script>
+
+
+
+<script src="/assets/i18n.js?v=20261028b"></script><script src="/assets/i18n/common.js?v=20261028b"></script><script src="/assets/i18n/tools/json-formatter.js?v=20261028b"></script><meta property="og:locale" content="zh_CN"></head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/zh/"><span class="logo">ez</span>ezaiops <small>工具</small></a>
+    <nav class="site-nav">
+      <a href="/zh/">工具</a>
+      <a href="/models/index.html">模型价格</a>
+      <a href="https://ezaiops.com/" title="ezaiops.com — AI Agent 可观测性与 LLMOps 实战笔记（中文）">博客</a>
+      <a href="https://github.com/ezaiops">GitHub</a>
+    <div class="lang-switch"><a href="/zh/tools/json-formatter.html" hreflang="zh-CN" class="active" aria-current="page">中文</a><a href="/tools/json-formatter.html?lang=en" hreflang="en">EN</a></div></nav>
+  </div>
+</header>
+
+<main class="wrap wide tool-page">
+  <nav class="crumbs"><a href="/zh/">首页</a> / 工具 / <a href="/zh/tools/json-formatter.html">JSON 工具</a><a class="main-site-link" href="https://ezaiops.com/">ezaiops.com ↗</a></nav>
+  <h1>JSON 格式化与校验</h1>
+  <p class="lead">粘贴 JSON，用规范的缩进格式化、压缩以便传输，或进行校验——并给出第一处语法错误的精确行列。全部本地运行，大型 API 报文也不会离开页面。</p>
+
+  <section class="workbench">
+    <div class="pane">
+      <div class="pane-head">
+        <span class="pane-title">输入</span>
+        <span class="pane-actions">
+          <button class="btn small" id="jf-sample" type="button">示例</button>
+          <button class="btn small" id="jf-clear" type="button">清空</button>
+        </span>
+      </div>
+      <textarea id="jf-input" class="mono" rows="16" placeholder="{&quot;hello&quot;: &quot;world&quot;, &quot;items&quot;: [1, 2, 3]}" spellcheck="false"></textarea>
+      <div class="pane-foot">
+        <label class="inline-field">缩进
+          <select id="jf-indent">
+            <option value="2">2 空格</option>
+            <option value="4" selected="">4 空格</option>
+            <option value="tab">制表符</option>
+          </select>
+        </label>
+        <div class="btn-row">
+          <button class="btn small primary" id="jf-format" type="button">格式化</button>
+          <button class="btn small" id="jf-minify" type="button">压缩</button>
+          <button class="btn small" id="jf-validate" type="button">校验</button>
+        </div>
+      </div>
+    </div>
+    <div class="pane">
+      <div class="pane-head">
+        <span class="pane-title">输出</span>
+        <span class="pane-actions">
+          <button class="btn small" id="jf-copy" type="button" data-copy-target="#jf-out">复制</button>
+        </span>
+      </div>
+      <pre class="code-out placeholder" id="jf-out">Formatted JSON appears here.</pre>
+      <pre class="code-out error hidden" id="jf-err"></pre>
+      <p class="note hidden" id="jf-warn"></p>
+      <p class="note" id="jf-meta"></p>
+    </div>
+  </section>
+
+  <div class="ad-slot">
+    <strong>广告位</strong>
+    Google AdSense 占位——网站通过审批并有稳定流量后启用。
+  </div>
+
+  <section class="prose">
+    <h2>这个 JSON 格式化工具能做什么</h2>
+    <p>格式化（也称美化）用一致的缩进重新序列化文档，让深层嵌套的 API 响应变得可读。压缩则相反——去掉所有非必需空白，适合在线传输负载或嵌入配置文件。</p>
+    <p>校验严格按照 JSON 规范（RFC 8259）解析文档，并报告第一处问题的精确位置：行号、列号以及解析器本身的报错。这一个位置通常就足以定位尾随逗号、未转义引号或括号不匹配。</p>
+
+    <h2>常见 JSON 错误及含义</h2>
+    <ul>
+      <li><strong>尾随逗号</strong>——<code>{"a": 1,}</code> 是无效 JSON，尽管在 JavaScript 对象中合法。</li>
+      <li><strong>单引号</strong>——JSON 字符串必须用双引号，<code>{'a': 1}</code> 会报错。</li>
+      <li><strong>注释</strong>——严格 JSON 不允许 <code>//</code> 和 <code>/* */</code>（配置里需要注释就用 JSONC）。</li>
+      <li><strong>未加引号的键</strong>——<code>{a: 1}</code> 会失败，键必须是字符串。</li>
+      <li><strong>NaN / Infinity / undefined</strong>——JSON 中都不存在，请用 <code>null</code> 或字符串。</li>
+    </ul>
+
+    <h2>常见问题</h2>
+    <details class="faq">
+      <summary>有大小限制吗？</summary>
+      <div class="faq-body">唯一限制是你浏览器的内存。几 MB 的文档也能瞬间格式化，因为一切都发生在你的设备上，没有上传环节。</div>
+    </details>
+    <details class="faq">
+      <summary>我的 JSON 会被上传吗？</summary>
+      <div class="faq-body">不会。解析、格式化和校验都由浏览器内置的 <code>JSON.parse</code> / <code>JSON.stringify</code> 完成，不会有任何传输。</div>
+    </details>
+    <details class="faq">
+      <summary>为什么格式化后键的顺序变了？</summary>
+      <div class="faq-body">不会——<code>JSON.stringify</code> 保持插入顺序。如果顺序变了，说明输入里有重复键，解析器保留了最后一次出现的值，与 <code>JSON.parse</code> 的行为一致。</div>
+    </details>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h4>常用工具</h4>
+        <ul>
+          <li><a href="/zh/tools/token-counter.html">LLM 分词与成本计算器</a></li>
+          <li><a href="/zh/tools/json-formatter.html">JSON 工具</a></li>
+          <li><a href="/zh/tools/regex-tester.html">正则测试</a></li>
+          <li><a href="/zh/tools/cron-explainer.html">Cron 解释</a></li>
+          <li><a href="/zh/tools/encode-decode.html">Base64 / URL / 哈希</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>模型价格</h4>
+        <ul>
+          <li><a href="/models/index.html">全部模型</a></li>
+          <li><a href="/models/gpt-5-6-sol.html">GPT-5.6 Sol 价格</a></li>
+          <li><a href="/models/claude-opus-5.html">Claude Opus 5 价格</a></li>
+          <li><a href="/models/gemini-3-1-pro.html">Gemini 3.1 Pro 价格</a></li>
+          <li><a href="/models/deepseek-v4-1-flash.html">DeepSeek V4.1 Flash 价格</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>更多</h4>
+        <ul>
+          <li><a href="https://ezaiops.com/">ezaiops.com</a></li>
+          <li><a href="/zh/about.html">关于</a></li>
+          <li><a href="/zh/contact.html">联系</a></li>
+          <li><a href="/zh/privacy.html">隐私政策</a></li>
+          <li><a href="https://github.com/ezaiops">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">© 2026 ezaiops · 输入内容不会离开你的浏览器</div>
+  </div>
+</footer>
+
+<script src="/assets/common.js?v=20261028b" defer=""></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  function ezT(k) { return window.ezI18N ? window.ezI18N.t(k) : k; }
+  function ezTf(k) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    if (window.ezI18N) return window.ezI18N.tf.apply(window.ezI18N, [k].concat(args));
+    return k.replace(/%s/g, function () { return String(args.shift()); });
+  }
+  var input = $("#jf-input"), out = $("#jf-out"), err = $("#jf-err"), meta = $("#jf-meta");
+
+  function indentValue() {
+    var v = $("#jf-indent").value;
+    return v === "tab" ? "\t" : parseInt(v, 10);
+  }
+  var OUT_HINT = "Formatted JSON appears here.";
+  function hideAll() { out.classList.add("hidden"); err.classList.add("hidden"); }
+  function resetOut() {
+    hideAll();
+    out.classList.remove("hidden");
+    out.classList.add("placeholder");
+    out.textContent = OUT_HINT;
+    meta.textContent = "";
+  }
+  function showOut(text) {
+    hideAll();
+    out.textContent = text;
+    out.classList.remove("hidden");
+    out.classList.remove("placeholder");
+  }
+  function showErr(text) {
+    hideAll();
+    err.textContent = text;
+    err.classList.remove("hidden");
+  }
+  function stats(txt, value) {
+    var bytes = 0;
+    try { bytes = new TextEncoder().encode(txt).length; } catch (e) { bytes = txt.length; }
+    meta.textContent = "Output: " + bytes + " bytes · " + countKeys(value) + " keys · depth " + depth(value);
+  }
+  function countKeys(v) {
+    if (Array.isArray(v)) return v.reduce(function (n, x) { return n + countKeys(x); }, 0);
+    if (v && typeof v === "object") return Object.keys(v).length + Object.keys(v).reduce(function (n, k) { return n + countKeys(v[k]); }, 0);
+    return 0;
+  }
+  function depth(v) {
+    if (Array.isArray(v)) return 1 + v.reduce(function (m, x) { return Math.max(m, depth(x)); }, 0);
+    if (v && typeof v === "object") return 1 + Object.keys(v).reduce(function (m, k) { return Math.max(m, depth(v[k])); }, 0);
+    return 0;
+  }
+  function parse(txt) {
+    try {
+      var v = JSON.parse(txt);
+      return { ok: true, value: v };
+    } catch (e) {
+      var msg = e && e.message ? e.message : String(e);
+      var line = 1, col = 1;
+      var m = /position (\d+)/.exec(msg);
+      if (m) {
+        var upto = txt.slice(0, parseInt(m[1], 10));
+        var lines = upto.split("\n");
+        line = lines.length;
+        col = lines[lines.length - 1].length + 1;
+      }
+      return { ok: false, msg: msg, line: line, col: col };
+    }
+  }
+
+  // JSON.parse turns literals beyond +/-1.8e308 into Infinity, and JSON.stringify
+  // silently writes Infinity as null — a quiet value change the user must be told about.
+  function findOverflow(v, path, hits) {
+    if (typeof v === "number" && !isFinite(v)) { hits.push(path); return hits; }
+    if (Array.isArray(v)) { v.forEach(function (x, i) { findOverflow(x, path + "[" + i + "]", hits); }); return hits; }
+    if (v && typeof v === "object") { Object.keys(v).forEach(function (k) { findOverflow(v[k], path + "." + k, hits); }); return hits; }
+    return hits;
+  }
+  function warn(txt, value) {
+    var warnEl = $("#jf-warn");
+    var msgs = [];
+    var hits = findOverflow(value, "$", []);
+    if (hits.length) {
+      msgs.push(ezTf("%s number(s) (%s) exceed JavaScript's range and were written as null.",
+        hits.length, hits.slice(0, 3).join(", ") + (hits.length > 3 ? ", …" : "")));
+    }
+    var longNum = /-?\d{16,}/.exec(txt);
+    if (longNum) {
+      msgs.push(ezTf("Integers longer than 15 digits (e.g. %s…) lose precision — JSON numbers are IEEE-754 doubles. Keep IDs as strings.",
+        longNum[0].slice(0, 18)));
+    }
+    if (msgs.length) {
+      warnEl.textContent = ezT("Heads up: ") + msgs.join(" ");
+      warnEl.classList.remove("hidden");
+    } else {
+      warnEl.classList.add("hidden");
+      warnEl.textContent = "";
+    }
+  }
+
+  $("#jf-format").addEventListener("click", function () {
+    var r = parse(input.value);
+    if (!r.ok) { showErr(r.msg + "\n(at line " + r.line + ", column " + r.col + ")"); meta.textContent = ""; $("#jf-warn").classList.add("hidden"); return; }
+    var s = JSON.stringify(r.value, null, indentValue());
+    showOut(s);
+    stats(s, r.value);
+    warn(input.value, r.value);
+  });
+  $("#jf-minify").addEventListener("click", function () {
+    var r = parse(input.value);
+    if (!r.ok) { showErr(r.msg + "\n(at line " + r.line + ", column " + r.col + ")"); meta.textContent = ""; $("#jf-warn").classList.add("hidden"); return; }
+    var s = JSON.stringify(r.value);
+    showOut(s);
+    stats(s, r.value);
+    warn(input.value, r.value);
+  });
+  $("#jf-validate").addEventListener("click", function () {
+    var r = parse(input.value);
+    if (r.ok) {
+      showOut("Valid JSON ✔\n" + JSON.stringify(r.value, null, indentValue()));
+      stats(input.value, r.value);
+      warn(input.value, r.value);
+    } else {
+      showErr(r.msg + "\n(at line " + r.line + ", column " + r.col + ")");
+      meta.textContent = "";
+      $("#jf-warn").classList.add("hidden");
+    }
+  });
+  var SAMPLE = "{\n  \"name\": \"ezaiops-tools\",\n  \"version\": 2,\n  \"private\": true,\n  \"scripts\": { \"dev\": \"python -m http.server\", \"deploy\": \"cf pages deploy .\" },\n  \"tools\": [\"token-counter\", \"json-formatter\", \"regex-tester\"],\n  \"features\": { \"clientSide\": true, \"signup\": false },\n  \"stars\": 0\n}";
+  $("#jf-sample").addEventListener("click", function () { input.value = SAMPLE; showOut(""); meta.textContent = "Sample loaded — press Format."; $("#jf-warn").classList.add("hidden"); });
+  $("#jf-clear").addEventListener("click", function () { input.value = ""; hideAll(); meta.textContent = ""; $("#jf-warn").classList.add("hidden"); });
+});
+</script>
+
+
+</body></html>

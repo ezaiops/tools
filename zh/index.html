@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-zh-static="1"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ezaiops 工具 — AI 与 DevOps 在线工具箱</title>
+<meta name="description" content="18 款纯浏览器运行的 AI 与 DevOps 工具：LLM 分词与成本计算器、JSON 格式化、正则测试、Cron 解释、JWT 调试、子网计算等。无需注册，数据不出本地。">
+<link rel="canonical" href="https://tools.ezaiops.com/zh/">
+<link rel="alternate" hreflang="zh-CN" href="https://tools.ezaiops.com/zh/">
+<link rel="alternate" hreflang="en" href="https://tools.ezaiops.com/">
+<link rel="alternate" hreflang="x-default" href="https://tools.ezaiops.com/">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="ezaiops 工具 — AI 与 DevOps 在线工具箱">
+<meta property="og:description" content="18 款纯浏览器运行的 AI 与 DevOps 工具：LLM 分词与成本计算器、JSON 格式化、正则测试、Cron 解释、JWT 调试、子网计算等。无需注册，数据不出本地。">
+<meta property="og:url" content="https://tools.ezaiops.com/">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/style.css?v=20261028b">
+<script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "ezaiops tools",
+  "url": "https://tools.ezaiops.com/zh/"
+}</script>
+
+
+
+<script src="/assets/i18n.js?v=20261028b"></script><script src="/assets/i18n/common.js?v=20261028b"></script><script src="/assets/i18n/hub.js?v=20261028b"></script><meta property="og:locale" content="zh_CN"></head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/zh/"><span class="logo">ez</span>ezaiops <small>工具</small></a>
+    <nav class="site-nav">
+      <a href="/zh/">工具</a>
+      <a href="/models/index.html">模型价格</a>
+      <a href="https://ezaiops.com/">博客</a>
+      <a href="https://github.com/ezaiops">GitHub</a>
+    <div class="lang-switch"><a href="/zh/" hreflang="zh-CN" class="active" aria-current="page">中文</a><a href="/index.html?lang=en" hreflang="en">EN</a></div></nav>
+  </div>
+</header>
+
+<main class="wrap wide">
+  <section class="hero">
+    <h1>AI 与 DevOps 的日常工具</h1>
+    <p class="hero-sub">这里是 ezaiops 的工具箱：算 LLM 成本、格式化 JSON、看懂 Cron、算子网、处理文件和图片。挑一个直接用。</p>
+    <div class="tool-search">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+      <input id="tool-search" type="search" placeholder="搜索工具…" autocomplete="off" aria-label="Search tools">
+      <kbd>/</kbd>
+    </div>
+  </section>
+
+  <div id="tool-groups">
+  <!-- TOOLS-GRID:START -->
+  <section class="tool-group" data-group="ai">
+    <h2 class="group-title">AI 与 LLM</h2>
+    <div class="tool-grid">
+      <a class="tool-card-item" href="/zh/tools/token-counter.html" data-name="llm token &amp; cost calculator count tokens and price a prompt across 43 models — per request, day and month, with cache and batch discounts. ai"><span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="5.5"></circle><path d="M18.2 11.4A5.5 5.5 0 1 1 11.4 18.2"></path><path d="M8 6.8v4.4M6.2 9h3.6"></path></svg></span><span class="tool-card-body"><span class="tool-card-title">LLM 分词与成本计算器</span><span class="tool-card-desc">跨 43 个模型统计 token 并估算成本——单次、每日、每月，含缓存与 Batch 折扣。</span></span></a>
+      <a class="tool-card-item" href="/zh/tools/self-host-vs-api.html" data-name="self-hosted vs api break-even find the monthly volume where renting a gpu beats per-token api pricing. ai"><span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="3.5" width="19" height="7" rx="2"></rect><rect x="2.5" y="13.5" width="19" height="7" rx="2"></rect><path d="M6 7h.01M6 17h.01"></path></svg></span><span class="tool-card-body"><span class="tool-card-title">自托管 vs API 盈亏平衡</span><span class="tool-card-desc">算出每月用量达到多少时，租 GPU 比按 token 付 API 更划算。</span></span></a>
+    </div>
+  </section>
+  <section class="tool-group" data-group="text">
+    <h2 class="group-title">文本与数据</h2>
+    <div class="tool-grid">
+      <a class="tool-card-item" href="/zh/tools/json-formatter.html" data-name="json formatter &amp; validator format, minify and validate json, with the exact line and column of the first error. text"><span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 3H7a2 2 0 0 0-2 2v4a2 2 0 0 1-2 2 2 2 0 0 1 2 2v4a2 2 0 0 0 2 2h1.5"></path><path d="M15.5 3H17a2 2 0 0 1 2 2v4a2 2 0 0 0 2 2 2 2 0 0 0-2 2v4a2 2 0 0 1-2 2h-1.5"></path></svg></span><span class="tool-card-body"><span class="tool-card-title">JSON 格式化与校验</span><span class="tool-card-desc">格式化、压缩与校验 JSON，并精确定位第一个错误的行列。</span></span></a>
+      <a class="tool-card-item" href="/zh/tools/regex-tester.html" data-name="regex tester test javascript regex against live text, with capture groups and replacement preview. text"><span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="M20.5 20.5 15.6 15.6"></path><path d="M7.5 10.5h6M10.5 7.5v6"></path></svg></span><span class="tool-card-body"><span class="tool-card-title">正则测试器</span><span class="tool-card-desc">对文本实时测试 JavaScript 正则，查看捕获分组与替换预览。</span></span></a>
+      <a class="tool-card-item" href="/zh/tools/encode-decode.html" data-name="base64 / url / hash base64, url encoding, html entities and sha hashes — computed locally. text"><span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h15l-3.5-3.5M21 16H6l3.5 3.5"></path></svg></span><span class="tool-card-body"><span class="tool-card-title">Base64 / URL / 哈希</span><span class="tool-card-desc">Base64、URL 编码、HTML 实体与 SHA 哈希，全部本地计算。</span></span></a>
+      <a class="tool-card-item" href="/zh/tools/meta-tag-generator.html" data-name="meta tag &amp; og generator title, description, open graph and twitter tags with a live social preview. text"><span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4 12.6 21.4a2 2 0 0 1-2.8 0L2.6 14.2a2 2 0 0 1-.6-1.4V4a2 2 0 0 1 2-2h8.8a2 2 0 0 1 1.4.6l6.4 6.4a2 2 0 0 1 0 2.8z"></path><circle cx="7.5" cy="7.5" r="1.4"></circle></svg></span><span class="tool-card-body"><span class="tool-card-title">Meta 标签与 OG 生成器</span><span class="tool-card-desc">生成 title、description、Open Graph 与 Twitter 标签，附社交预览。</span></span></a>
+      <a class="tool-card-item" href="/zh/tools/diff-checker.html" data-name="text diff checker line and word diff for two blocks of text, side by side or inline. text"><span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v18M18 3v18"></path><path d="M2.5 8h7M2.5 16h7M14.5 8h7M14.5 16h7"></path></svg></span><span class="tool-card-body"><span class="tool-card-title">文本差异对比</span><span class="tool-card-desc">两段文本的行级与词级差异对比，支持并排与行内两种视图。</span></span></a>
+    </div>
+  </section>
+  <section class="tool-group" data-group="time">
+    <h2 class="group-title">时间与调度</h2>
+    <div class="tool-grid">
+      <a class="tool-card-item" href="/zh/tools/cron-explainer.html" data-name="cron expression explainer turn any cron expression into plain english and the next runs in your timezone. time"><span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16.5" rx="2"></rect><path d="M3 9.5h18M8 2.5v4M16 2.5v4"></path><path d="M9 14h.01M12 14h.01M15 14h.01M9 17h.01M12 17h.01"></path></svg></span><span class="tool-card-body"><span class="tool-card-title">Cron 表达式解释器</span><span class="tool-card-desc">把任意 cron 表达式翻译成人话，并按你的时区列出接下来的运行时间。</span></span></a>
+      <a class="tool-card-item" href="/zh/tools/timestamp-converter.html" data-name="unix timestamp converter convert between unix epoch, iso 8601 and local time, with a live clock. time"><span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 6.5V12l3.5 2"></path></svg></span><span class="tool-card-body"><span class="tool-card-title">Unix 时间戳转换器</span><span class="tool-card-desc">Unix 时间戳、ISO 8601 与本地时间互转，附带实时时钟。</span></span></a>
+      <a class="tool-card-item" href="/zh/tools/cron-generator.html" data-name="cron schedule builder pick days and times visually and get the cron expression — the reverse. time"><span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16.5" rx="2"></rect><path d="M3 9.5h18M8 2.5v4M16 2.5v4M12 13v5M9.5 15.5h5"></path></svg></span><span class="tool-card-body"><span class="tool-card-title">Cron 可视化排程器</span><span class="tool-card-desc">可视化选择日期与时间，直接生成 cron 表达式——解释器的反向工具。</span></span></a>
+    </div>
+  </section>
+  <section class="tool-group" data-group="net">
+    <h2 class="group-title">网络与安全</h2>
+    <div class="tool-grid">
+      <a class="tool-card-item" href="/zh/tools/password-generator.html" data-name="password &amp; uuid generator strong passwords, memorable passphrases and v4 uuids with entropy scoring. net"><span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2.5"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path><path d="M12 14.5v2.5"></path></svg></span><span class="tool-card-body"><span class="tool-card-title">密码与 UUID 生成器</span><span class="tool-card-desc">生成强密码、可记忆短语与 v4 UUID，并给出熵值评估。</span></span></a>
+      <a class="tool-card-item" href="/zh/tools/subnet-calculator.html" data-name="subnet &amp; cidr calculator network, broadcast and host range for any ipv4 cidr block, plus the binary view. net"><span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.5" r="2.2"></circle><circle cx="4.8" cy="19" r="2.2"></circle><circle cx="19.2" cy="19" r="2.2"></circle><path d="M12 6.7v5.6M12 12.3 6.4 16.9M12 12.3l5.6 4.6"></path></svg></span><span class="tool-card-body"><span class="tool-card-title">子网与 CIDR 计算器</span><span class="tool-card-desc">任意 IPv4 CIDR 块的网络地址、广播地址与可用主机范围，附二进制分解。</span></span></a>
+      <a class="tool-card-item" href="/zh/tools/jwt-debugger.html" data-name="jwt debugger decode jwt header, payload and expiry, and verify hs256 signatures locally. net"><span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15.5" r="4.5"></circle><path d="M11.2 12.3 20 3.5M16.5 7l2.2 2.2M13.8 9.7l2.2 2.2"></path></svg></span><span class="tool-card-body"><span class="tool-card-title">JWT 调试器</span><span class="tool-card-desc">本地解码 JWT 头、载荷与过期时间，并校验 HS256 签名。</span></span></a>
+    </div>
+  </section>
+  <section class="tool-group" data-group="files">
+    <h2 class="group-title">文件与媒体</h2>
+    <div class="tool-grid">
+      <a class="tool-card-item" href="/zh/tools/image-compressor.html" data-name="image compressor &amp; converter compress jpg/png and convert to webp in the browser — nothing is uploaded. files"><span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3.5" width="18" height="17" rx="2.5"></rect><circle cx="8.5" cy="9" r="1.6"></circle><path d="m21 15.5-4.5-4.5L5.5 20.5"></path></svg></span><span class="tool-card-body"><span class="tool-card-title">图片压缩与格式转换</span><span class="tool-card-desc">在浏览器内压缩 JPG/PNG 并转换为 WebP——不上传任何文件。</span></span></a>
+      <a class="tool-card-item" href="/zh/tools/pdf-tools.html" data-name="pdf merge &amp; split merge, split and reorder pdf pages locally with pdf-lib. files"><span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2.5H6.5a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V8z"></path><path d="M14 2.5V8h5.5"></path><path d="M8.5 13h7M8.5 16.5h4.5"></path></svg></span><span class="tool-card-body"><span class="tool-card-title">PDF 合并与拆分</span><span class="tool-card-desc">用 pdf-lib 在本地合并、拆分与重排 PDF 页面。</span></span></a>
+      <a class="tool-card-item" href="/zh/tools/qr-generator.html" data-name="qr code generator generate qr codes as svg or png with four error-correction levels. files"><span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.2"></rect><rect x="14" y="3" width="7" height="7" rx="1.2"></rect><rect x="3" y="14" width="7" height="7" rx="1.2"></rect><path d="M14 14h3.5v3.5H14zM20.5 14h.5M14 20.5h3.5M20.5 20.5h.5"></path></svg></span><span class="tool-card-body"><span class="tool-card-title">二维码生成器</span><span class="tool-card-desc">生成 SVG 或 PNG 二维码，支持四档纠错等级。</span></span></a>
+    </div>
+  </section>
+  <section class="tool-group" data-group="calc">
+    <h2 class="group-title">计算器</h2>
+    <div class="tool-grid">
+      <a class="tool-card-item" href="/zh/tools/mortgage-calculator.html" data-name="mortgage &amp; loan calculator monthly payment, amortization schedule and extra-payment payoff scenarios. calc"><span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19.5 4.5 4.5 19.5"></path><circle cx="7.5" cy="7.5" r="2.6"></circle><circle cx="16.5" cy="16.5" r="2.6"></circle></svg></span><span class="tool-card-body"><span class="tool-card-title">房贷与贷款计算器</span><span class="tool-card-desc">月供、还款计划表与提前还款场景测算。</span></span></a>
+      <a class="tool-card-item" href="/zh/tools/unit-converter.html" data-name="unit converter length, weight, temperature, area, speed and data size, including gib vs gb. calc"><span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18M7.5 7.5 3 12l4.5 4.5M16.5 7.5 21 12l-4.5 4.5"></path></svg></span><span class="tool-card-body"><span class="tool-card-title">单位换算</span><span class="tool-card-desc">长度、重量、温度、面积、速度与数据大小换算，区分 GiB 与 GB。</span></span></a>
+    </div>
+  </section>
+  <!-- TOOLS-GRID:END -->
+  </div>
+  <p class="search-empty" id="search-empty" hidden="">没有匹配的工具。试试 “json”、“cron” 或 “token”。</p>
+
+  <section class="pricing-strip">
+    <div>
+      <h2>逐模型 LLM API 价格</h2>
+      <p>43 个模型的每百万 token 输入/输出价格、上下文窗口、缓存费率与峰谷时段——每个页面都标注了最近核实日期。</p>
+    </div>
+    <a class="btn primary" href="/models/index.html">浏览价格</a>
+  </section>
+
+  <div class="ad-slot">
+    <strong>广告位</strong>
+    Google AdSense 占位——网站通过审批并有稳定流量后启用。
+  </div>
+
+  <section class="prose">
+    <h2>这些工具为什么存在</h2>
+    <p>大多数“免费”在线工具会把你的内容上传到服务器、给简单操作套上付费墙，或者先糊一层广告。这些工具完全在你的浏览器里运行，JSON 报文、prompt 草稿或密码都不会离开页面——除了你自己的 CPU，没什么好等的。价格页会按厂商官方文档重新核对，每页都标注核实日期。</p>
+    <p>由 <a href="https://ezaiops.com/">ezaiops</a> 维护，我们在那里撰写 AI Agent 可观测性与生产级 LLM 运维的实战内容。更多介绍见<a href="/zh/about.html">关于页</a>。</p>
+
+    <h2>常见问题</h2>
+    <details class="faq">
+      <summary>这些工具会把我的数据发送到别处吗？</summary>
+      <div class="faq-body">不会。本站所有工具都在你的浏览器中本地运行。你粘贴的任何内容都不会被上传、记录或存储。</div>
+    </details>
+    <details class="faq">
+      <summary>LLM 分词数量准确吗？</summary>
+      <div class="faq-body">对于 OpenAI GPT 系列模型，计数器使用官方 cl100k/o200k 字节对编码分词器。其他厂商的分词方式不同且并非全部公开，因此数量是接近的近似值——请当作估算看待，账单以各厂商用量控制台为准。</div>
+    </details>
+    <details class="faq">
+      <summary>模型价格数据来自哪里？</summary>
+      <div class="faq-body">价格收集自各厂商官方定价文档（OpenAI、Anthropic、Google、DeepSeek、xAI、Z.AI、Moonshot、MiniMax、小米、Mistral），并与聚合站交叉核对。每个价格页都标注了最近核实日期。厂商调价频繁，重大决策前请以官方页面为准。</div>
+    </details>
+    <details class="faq">
+      <summary>这些工具可以用于商业项目吗？</summary>
+      <div class="faq-body">可以。没有授权费用，也不要求署名。生成结果归你所有。</div>
+    </details>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h4>常用工具</h4>
+        <ul>
+          <li><a href="/zh/tools/token-counter.html">LLM 分词与成本计算器</a></li>
+          <li><a href="/zh/tools/json-formatter.html">JSON 工具</a></li>
+          <li><a href="/zh/tools/regex-tester.html">正则测试器</a></li>
+          <li><a href="/zh/tools/cron-explainer.html">Cron 解释</a></li>
+          <li><a href="/zh/tools/encode-decode.html">Base64 / URL / 哈希</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>模型价格</h4>
+        <ul>
+          <li><a href="/models/index.html">全部模型</a></li>
+          <li><a href="/models/gpt-5-6-sol.html">GPT-5.6 Sol 价格</a></li>
+          <li><a href="/models/claude-opus-5.html">Claude Opus 5 价格</a></li>
+          <li><a href="/models/gemini-3-1-pro.html">Gemini 3.1 Pro 价格</a></li>
+          <li><a href="/models/deepseek-v4-1-flash.html">DeepSeek V4.1 Flash 价格</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>更多</h4>
+        <ul>
+          <li><a href="https://ezaiops.com/">ezaiops.com</a></li>
+          <li><a href="/zh/about.html">关于</a></li>
+          <li><a href="/zh/contact.html">联系</a></li>
+          <li><a href="/zh/privacy.html">隐私政策</a></li>
+          <li><a href="https://github.com/ezaiops">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">© 2026 ezaiops · 输入内容不会离开你的浏览器</div>
+  </div>
+</footer>
+
+<script src="/assets/common.js?v=20261028b" defer=""></script>
+<script>
+(function () {
+  "use strict";
+  var input = document.getElementById("tool-search");
+  var empty = document.getElementById("search-empty");
+  if (!input) return;
+  var cards = [].slice.call(document.querySelectorAll("#tool-groups .tool-card-item"));
+  var groups = [].slice.call(document.querySelectorAll("#tool-groups .tool-group"));
+
+  function apply() {
+    var q = input.value.trim().toLowerCase();
+    var shown = 0;
+    cards.forEach(function (c) {
+      var hit = !q || (c.getAttribute("data-name") || "").indexOf(q) !== -1;
+      c.hidden = !hit;
+      if (hit) shown++;
+    });
+    groups.forEach(function (g) {
+      g.hidden = !g.querySelector(".tool-card-item:not([hidden])");
+    });
+    empty.hidden = shown !== 0;
+  }
+
+  input.addEventListener("input", apply);
+  document.addEventListener("keydown", function (ev) {
+    if (ev.key === "/" && document.activeElement !== input &&
+        !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.nodeName)) {
+      ev.preventDefault();
+      input.focus();
+    } else if (ev.key === "Escape" && document.activeElement === input) {
+      input.value = "";
+      apply();
+      input.blur();
+    }
+  });
+})();
+</script>
+
+
+</body></html>

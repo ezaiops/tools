@@ -42,5 +42,7 @@ window.I18N_DICTS.push({
   "What does \"exclude look-alikes\" do?": "「排除易混字符」是做什么的？",
   "Yes. The tool uses crypto.getRandomValues(), a cryptographic pseudo-random generator (the same primitive used to generate TLS keys), not Math.random(), which is predictable and unsuitable for secrets.": "够。工具使用 crypto.getRandomValues()——密码学伪随机生成器（生成 TLS 密钥的同款原语），而不是可预测、不适合机密场景的 Math.random()。",
   "Entirely in your browser, on your device. Nothing is transmitted, logged or stored — closing the tab destroys the values, so copy them before you do.": "完全在你的浏览器和设备上生成。没有任何传输、记录或存储——关掉标签页值就没了，所以走之前先复制。",
-  "el:It removes characters that are easy to confuse when reading a password aloud or from a screenshot: l I 1 | O 0 o and similar pairs.": "移除那些在口头读出或看截图时容易混淆的字符：<code>l I 1 | O 0 o</code> 等相似配对。"
+  "el:It removes characters that are easy to confuse when reading a password aloud or from a screenshot: l I 1 | O 0 o and similar pairs.": "移除那些在口头读出或看截图时容易混淆的字符：<code>l I 1 | O 0 o</code> 等相似配对。",
+
+    "el:Generate cryptographically random passwords, memorable passphrases and RFC 4122 v4 UUIDs — in bulk, locally, with a live strength estimate. Uses the browser's crypto.getRandomValues, the same generator class behind TLS keys.": "生成密码学级别的随机密码、易记短语和 RFC 4122 v4 UUID，支持批量生成，本地运行并实时评估强度。使用浏览器的 <code>crypto.getRandomValues</code>——与 TLS 密钥同一级别的随机源。"
 });

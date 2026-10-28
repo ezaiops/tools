@@ -48,12 +48,19 @@ for page in pages:
     if len(h1) != 1:
         problems.append("%s: expected exactly 1 <h1>, found %d" % (name, len(h1)))
 
+    is_zh = name.startswith("zh/")
+    # Chinese carries more meaning per character, so the floor is lower than the
+    # English one. Both still have to clear a minimum to be useful in a SERP.
+    min_desc = 30 if is_zh else 40
     desc = re.search(r'<meta name="description" content="([^"]*)"', text)
-    if not desc or len(desc.group(1)) < 40:
+    if not desc or len(desc.group(1)) < min_desc:
         problems.append("%s: missing or too short meta description" % name)
 
-    if "<html lang=\"en\">" not in text:
-        problems.append("%s: missing <html lang=\"en\">" % name)
+    want_lang = "zh-CN" if is_zh else "en"
+    # Match the attribute, not the exact tag: the /zh/ pages carry extra
+    # attributes on <html> (data-zh-static).
+    if not re.search(r'<html[^>]*\blang="%s"' % want_lang, text):
+        problems.append('%s: missing <html lang="%s">' % (name, want_lang))
 
     text_no_scripts = re.sub(r"<script.*?</script>", "", text, flags=re.S)
     for href in re.findall(r'(?:href|src)="([^"]+)"', text_no_scripts):
@@ -89,11 +96,15 @@ for page in pages:
 
 expected = [BASE + "/"]
 for page in pages:
-    # The home page is listed once, as "/" — listing /index.html as well would ask
-    # crawlers to index the same page under two URLs.
-    if rel(page) in ("index.html", "404.html"):
+    # Each home page is listed once, as a directory URL — listing /index.html as
+    # well would ask crawlers to index the same page under two URLs.
+    r = rel(page)
+    if r == "zh/index.html":
+        expected.append(BASE + "/zh/")
         continue
-    expected.append(BASE + "/" + rel(page))
+    if r in ("index.html", "404.html"):
+        continue
+    expected.append(BASE + "/" + r)
 
 sitemap_path = os.path.join(ROOT, "sitemap.xml")
 if not os.path.exists(sitemap_path):

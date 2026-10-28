@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-zh-static="1"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>二维码生成器 — 导出 SVG 与 PNG</title>
+<meta name="description" content="把链接或文本生成二维码，支持选择容错等级，导出 SVG 或 PNG。浏览器本地渲染，内容不外传。">
+<link rel="canonical" href="https://tools.ezaiops.com/zh/tools/qr-generator.html">
+<link rel="alternate" hreflang="zh-CN" href="https://tools.ezaiops.com/zh/tools/qr-generator.html">
+<link rel="alternate" hreflang="en" href="https://tools.ezaiops.com/tools/qr-generator.html">
+<link rel="alternate" hreflang="x-default" href="https://tools.ezaiops.com/tools/qr-generator.html">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="二维码生成器 — 导出 SVG 与 PNG">
+<meta property="og:description" content="把链接或文本生成二维码，支持选择容错等级，导出 SVG 或 PNG。浏览器本地渲染，内容不外传。">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/style.css?v=20261028b">
+<script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "QR Code Generator",
+  "url": "https://tools.ezaiops.com/zh/tools/qr-generator.html",
+  "applicationCategory": "UtilityApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}</script>
+
+
+
+<script src="/assets/i18n.js?v=20261028b"></script><script src="/assets/i18n/common.js?v=20261028b"></script><script src="/assets/i18n/tools/qr-generator.js?v=20261028b"></script><meta property="og:locale" content="zh_CN"></head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/zh/"><span class="logo">ez</span>ezaiops <small>工具</small></a>
+    <nav class="site-nav">
+      <a href="/zh/">工具</a>
+      <a href="/models/index.html">模型价格</a>
+      <a href="https://ezaiops.com/" title="ezaiops.com — AI Agent 可观测性与 LLMOps 实战笔记（中文）">博客</a>
+      <a href="https://github.com/ezaiops">GitHub</a>
+    <div class="lang-switch"><a href="/zh/tools/qr-generator.html" hreflang="zh-CN" class="active" aria-current="page">中文</a><a href="/tools/qr-generator.html?lang=en" hreflang="en">EN</a></div></nav>
+  </div>
+</header>
+
+<main class="wrap tool-page">
+  <nav class="crumbs"><a href="/zh/">首页</a> / 工具 / <a href="/zh/tools/qr-generator.html">二维码</a><a class="main-site-link" href="https://ezaiops.com/">ezaiops.com ↗</a></nav>
+  <h1>二维码生成器</h1>
+  <p class="lead">把任意链接或文本变成二维码，输出 SVG（任意尺寸都清晰）或 PNG。二维码在你的浏览器中生成——内容不会发往任何二维码服务，这正是它和那些可追踪的「免费」生成器的区别。</p>
+
+  <section class="panel">
+    <div class="field-row">
+      <div class="field">
+        <label class="field-label" for="qr-text">链接或文本</label>
+        <input type="text" id="qr-text" class="mono" value="https://tools.ezaiops.com" placeholder="https://…">
+      </div>
+      <div class="field">
+        <label class="field-label" for="qr-ec">纠错等级</label>
+        <select id="qr-ec">
+          <option value="L" selected="">L——可恢复 7%</option>
+          <option value="M">M——可恢复 15%</option>
+          <option value="Q">Q——可恢复 25%</option>
+          <option value="H">H——可恢复 30%</option>
+        </select>
+      </div>
+      <div class="field">
+        <label class="field-label" for="qr-size">尺寸（像素）</label>
+        <input type="number" id="qr-size" min="64" max="1024" step="32" value="256">
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn primary" id="qr-gen" type="button">生成</button>
+      <button class="btn" id="qr-png" type="button">下载 PNG</button>
+      <button class="btn" id="qr-svg" type="button">下载 SVG</button>
+    </div>
+    <p class="note" id="qr-note"></p>
+
+    <div id="qr-output" style="margin-top:14px;text-align:center"></div>
+  </section>
+
+  <div class="ad-slot">
+    <strong>广告位</strong>
+    Google AdSense 占位——网站通过审批并有稳定流量后启用。
+  </div>
+
+  <section class="prose">
+    <h2>如何选择纠错等级</h2>
+    <p>二维码自带冗余：等级越高，即使部分区域脏污、印刷不清或被 logo 遮挡，扫码器仍能恢复。代价是同样内容需要更大（更密）的码图。</p>
+    <ul>
+      <li><strong>L (7%)</strong> — smallest code, clean digital displays or screens.</li>
+      <li><strong>M (15%)</strong> — the everyday default; good for posters and packaging.</li>
+      <li><strong>Q (25%)</strong> — outdoor signage, anything that might get scuffed.</li>
+      <li><strong>H (30%)</strong> — overlaid logos, industrial environments, codes that will take abuse.</li>
+    </ul>
+    <p>The generator library (<code>qrcode-generator</code>) is loaded from a CDN on first use; if it cannot load, the page tells you instead of failing silently. Once loaded, everything runs offline.</p>
+
+    <h2>常见问题</h2>
+    <details class="faq">
+      <summary>二维码会过期或追踪扫描吗？</summary>
+      <div class="faq-body">不会。二维码只是你文本的一张图——没有跳转服务参与，因此不会过期、不会被追踪。因为中间没有服务器，扫描计数也无从谈起。</div>
+    </details>
+    <details class="faq">
+      <summary>用 SVG 还是 PNG？</summary>
+      <div class="faq-body">需要打印或缩放的场景用 SVG——任意尺寸都锐利，且体积很小。需要聊天软件或 CMS 上传位图时用 PNG。</div>
+    </details>
+    <details class="faq">
+      <summary>可以在中间放 logo 吗？</summary>
+      <div class="faq-body">本工具不直接支持，但选 Q 或 H 纠错等级，然后在任意编辑器里把小 logo 贴到中心即可——冗余足以吸收它。</div>
+    </details>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h4>常用工具</h4>
+        <ul>
+          <li><a href="/zh/tools/token-counter.html">LLM 分词与成本计算器</a></li>
+          <li><a href="/zh/tools/json-formatter.html">JSON 工具</a></li>
+          <li><a href="/zh/tools/regex-tester.html">正则测试</a></li>
+          <li><a href="/zh/tools/cron-explainer.html">Cron 解释</a></li>
+          <li><a href="/zh/tools/encode-decode.html">Base64 / URL / 哈希</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>模型价格</h4>
+        <ul>
+          <li><a href="/models/index.html">全部模型</a></li>
+          <li><a href="/models/gpt-6-astra.html">GPT-6 Astra 价格</a></li>
+          <li><a href="/models/claude-fable-5-1.html">Claude Fable 5.1 价格</a></li>
+          <li><a href="/models/gemini-3-8-flash.html">Gemini 3.8 Flash 价格</a></li>
+          <li><a href="/models/deepseek-v4-1-flash.html">DeepSeek V4.1 Flash 价格</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>更多</h4>
+        <ul>
+          <li><a href="https://ezaiops.com/">ezaiops.com</a></li>
+          <li><a href="/zh/about.html">关于</a></li>
+          <li><a href="/zh/contact.html">联系</a></li>
+          <li><a href="/zh/privacy.html">隐私政策</a></li>
+          <li><a href="https://github.com/ezaiops">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">© 2026 ezaiops · 输入内容不会离开你的浏览器</div>
+  </div>
+</footer>
+
+<script src="/assets/common.js?v=20261028b" defer=""></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  function ezT(k) { return window.ezI18N ? window.ezI18N.t(k) : k; }
+
+  var note = $("#qr-note");
+  var qrLib = null;
+  var loading = null;
+  var svgMarkup = null;
+
+  function loadLib() {
+    if (qrLib) return Promise.resolve(qrLib);
+    if (loading) return loading;
+    note.textContent = ezT("Loading the QR encoder…");
+    loading = import("https://esm.sh/qrcode-generator@1.4.4").then(function (m) {
+      qrLib = m.default || m;
+      note.textContent = "";
+      return qrLib;
+    }).catch(function () {
+      note.textContent = ezT("Could not load the QR encoder (network blocked?). Try again on a normal connection.");
+      loading = null;
+      throw new Error("qr lib unavailable");
+    });
+    return loading;
+  }
+
+  function generate() {
+    var text = $("#qr-text").value.trim();
+    if (!text) { note.textContent = ezT("Enter a link or text first."); return; }
+    loadLib().then(function (lib) {
+      var ec = $("#qr-ec").value;
+      var size = Math.max(64, Math.min(1024, parseInt($("#qr-size").value, 10) || 256));
+      var qr = lib(0, ec);
+      qr.addData(text);
+      qr.make();
+      svgMarkup = qr.createSvgTag({ cellSize: Math.max(2, Math.floor(size / qr.getModuleCount())), margin: 2, scalable: true });
+      $("#qr-output").innerHTML = svgMarkup;
+      var svg = $("#qr-output").querySelector("svg");
+      if (svg) { svg.style.maxWidth = "100%"; svg.style.height = "auto"; }
+      note.textContent = ezT("Done — download as PNG or SVG.");
+    }).catch(function () { /* note already set */ });
+  }
+
+  function download(name, blob) {
+    try {
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = name;
+      a.click();
+      URL.revokeObjectURL(a.href);
+    } catch (e) {
+      note.textContent = ezT("Download not supported in this browser.");
+    }
+  }
+
+  $("#qr-gen").addEventListener("click", generate);
+  $("#qr-text").addEventListener("keydown", function (e) { if (e.key === "Enter") generate(); });
+
+  $("#qr-svg").addEventListener("click", function () {
+    if (!svgMarkup) { note.textContent = ezT("Generate a code first."); return; }
+    download("qr-code.svg", new Blob([svgMarkup], { type: "image/svg+xml" }));
+  });
+
+  $("#qr-png").addEventListener("click", function () {
+    if (!svgMarkup) { note.textContent = ezT("Generate a code first."); return; }
+    var size = Math.max(64, Math.min(1024, parseInt($("#qr-size").value, 10) || 256));
+    var img = new Image();
+    var svgUrl = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgMarkup)));
+    img.onload = function () {
+      var canvas = document.createElement("canvas");
+      canvas.width = size;
+      canvas.height = size;
+      var ctx = canvas.getContext("2d");
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, size, size);
+      ctx.drawImage(img, 0, 0, size, size);
+      canvas.toBlob(function (blob) {
+        if (blob) download("qr-code.png", blob);
+        else note.textContent = ezT("PNG export failed — use SVG instead.");
+      }, "image/png");
+    };
+    img.onerror = function () { note.textContent = ezT("PNG export failed — use SVG instead."); };
+    img.src = svgUrl;
+  });
+
+  window.addEventListener("ez:i18n", function () {
+    note.textContent = svgMarkup ? ezT("Done — download as PNG or SVG.") : "";
+  });
+});
+</script>
+
+
+</body></html>

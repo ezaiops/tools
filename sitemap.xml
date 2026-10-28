@@ -2,26 +2,48 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://tools.ezaiops.com/</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
   <url><loc>https://tools.ezaiops.com/about.html</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
-  <url><loc>https://tools.ezaiops.com/contact.html</loc><lastmod>2026-10-22</lastmod><changefreq>monthly</changefreq></url>
-  <url><loc>https://tools.ezaiops.com/privacy.html</loc><lastmod>2026-10-22</lastmod><changefreq>monthly</changefreq></url>
-  <url><loc>https://tools.ezaiops.com/tools/cron-explainer.html</loc><lastmod>2026-10-22</lastmod><changefreq>monthly</changefreq></url>
-  <url><loc>https://tools.ezaiops.com/tools/cron-generator.html</loc><lastmod>2026-10-22</lastmod><changefreq>monthly</changefreq></url>
-  <url><loc>https://tools.ezaiops.com/tools/diff-checker.html</loc><lastmod>2026-10-22</lastmod><changefreq>monthly</changefreq></url>
-  <url><loc>https://tools.ezaiops.com/tools/encode-decode.html</loc><lastmod>2026-10-22</lastmod><changefreq>monthly</changefreq></url>
-  <url><loc>https://tools.ezaiops.com/tools/image-compressor.html</loc><lastmod>2026-10-22</lastmod><changefreq>monthly</changefreq></url>
-  <url><loc>https://tools.ezaiops.com/tools/json-formatter.html</loc><lastmod>2026-10-22</lastmod><changefreq>monthly</changefreq></url>
-  <url><loc>https://tools.ezaiops.com/tools/jwt-debugger.html</loc><lastmod>2026-10-22</lastmod><changefreq>monthly</changefreq></url>
-  <url><loc>https://tools.ezaiops.com/tools/meta-tag-generator.html</loc><lastmod>2026-10-22</lastmod><changefreq>monthly</changefreq></url>
-  <url><loc>https://tools.ezaiops.com/tools/mortgage-calculator.html</loc><lastmod>2026-10-22</lastmod><changefreq>monthly</changefreq></url>
-  <url><loc>https://tools.ezaiops.com/tools/password-generator.html</loc><lastmod>2026-10-22</lastmod><changefreq>monthly</changefreq></url>
-  <url><loc>https://tools.ezaiops.com/tools/pdf-tools.html</loc><lastmod>2026-10-22</lastmod><changefreq>monthly</changefreq></url>
-  <url><loc>https://tools.ezaiops.com/tools/qr-generator.html</loc><lastmod>2026-10-22</lastmod><changefreq>monthly</changefreq></url>
-  <url><loc>https://tools.ezaiops.com/tools/regex-tester.html</loc><lastmod>2026-10-22</lastmod><changefreq>monthly</changefreq></url>
-  <url><loc>https://tools.ezaiops.com/tools/self-host-vs-api.html</loc><lastmod>2026-10-22</lastmod><changefreq>monthly</changefreq></url>
-  <url><loc>https://tools.ezaiops.com/tools/subnet-calculator.html</loc><lastmod>2026-10-22</lastmod><changefreq>monthly</changefreq></url>
-  <url><loc>https://tools.ezaiops.com/tools/timestamp-converter.html</loc><lastmod>2026-10-22</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://tools.ezaiops.com/contact.html</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://tools.ezaiops.com/privacy.html</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://tools.ezaiops.com/tools/cron-explainer.html</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://tools.ezaiops.com/tools/cron-generator.html</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://tools.ezaiops.com/tools/diff-checker.html</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://tools.ezaiops.com/tools/encode-decode.html</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://tools.ezaiops.com/tools/image-compressor.html</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://tools.ezaiops.com/tools/json-formatter.html</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://tools.ezaiops.com/tools/jwt-debugger.html</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://tools.ezaiops.com/tools/meta-tag-generator.html</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://tools.ezaiops.com/tools/mortgage-calculator.html</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://tools.ezaiops.com/tools/password-generator.html</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://tools.ezaiops.com/tools/pdf-tools.html</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://tools.ezaiops.com/tools/qr-generator.html</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://tools.ezaiops.com/tools/regex-tester.html</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://tools.ezaiops.com/tools/self-host-vs-api.html</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://tools.ezaiops.com/tools/subnet-calculator.html</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://tools.ezaiops.com/tools/timestamp-converter.html</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
   <url><loc>https://tools.ezaiops.com/tools/token-counter.html</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
-  <url><loc>https://tools.ezaiops.com/tools/unit-converter.html</loc><lastmod>2026-10-22</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://tools.ezaiops.com/tools/unit-converter.html</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://tools.ezaiops.com/zh/</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://tools.ezaiops.com/zh/about.html</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://tools.ezaiops.com/zh/contact.html</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://tools.ezaiops.com/zh/privacy.html</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://tools.ezaiops.com/zh/tools/cron-explainer.html</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://tools.ezaiops.com/zh/tools/cron-generator.html</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://tools.ezaiops.com/zh/tools/diff-checker.html</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://tools.ezaiops.com/zh/tools/encode-decode.html</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://tools.ezaiops.com/zh/tools/image-compressor.html</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://tools.ezaiops.com/zh/tools/json-formatter.html</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://tools.ezaiops.com/zh/tools/jwt-debugger.html</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://tools.ezaiops.com/zh/tools/meta-tag-generator.html</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://tools.ezaiops.com/zh/tools/mortgage-calculator.html</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://tools.ezaiops.com/zh/tools/password-generator.html</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://tools.ezaiops.com/zh/tools/pdf-tools.html</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://tools.ezaiops.com/zh/tools/qr-generator.html</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://tools.ezaiops.com/zh/tools/regex-tester.html</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://tools.ezaiops.com/zh/tools/self-host-vs-api.html</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://tools.ezaiops.com/zh/tools/subnet-calculator.html</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://tools.ezaiops.com/zh/tools/timestamp-converter.html</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://tools.ezaiops.com/zh/tools/token-counter.html</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://tools.ezaiops.com/zh/tools/unit-converter.html</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
   <url><loc>https://tools.ezaiops.com/models/gpt-6-astra.html</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
   <url><loc>https://tools.ezaiops.com/models/gpt-6-1-sol.html</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>
   <url><loc>https://tools.ezaiops.com/models/gpt-6-1-terra.html</loc><lastmod>2026-10-28</lastmod><changefreq>monthly</changefreq></url>

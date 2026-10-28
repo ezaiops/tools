@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-zh-static="1"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>自建推理 vs 调用 API 盈亏平衡计算器</title>
+<meta name="description" content="输入每月 token 用量，算出租 GPU 自建推理何时比调用 LLM API 更便宜，给出盈亏平衡点与月度成本对比。">
+<link rel="canonical" href="https://tools.ezaiops.com/zh/tools/self-host-vs-api.html">
+<link rel="alternate" hreflang="zh-CN" href="https://tools.ezaiops.com/zh/tools/self-host-vs-api.html">
+<link rel="alternate" hreflang="en" href="https://tools.ezaiops.com/tools/self-host-vs-api.html">
+<link rel="alternate" hreflang="x-default" href="https://tools.ezaiops.com/tools/self-host-vs-api.html">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="自建推理 vs 调用 API 盈亏平衡计算器">
+<meta property="og:description" content="输入每月 token 用量，算出租 GPU 自建推理何时比调用 LLM API 更便宜，给出盈亏平衡点与月度成本对比。">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/style.css?v=20261028b">
+<script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Self-Hosted vs API Break-Even Calculator",
+  "url": "https://tools.ezaiops.com/zh/tools/self-host-vs-api.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}</script>
+
+
+
+<script src="/assets/i18n.js?v=20261028b"></script><script src="/assets/i18n/common.js?v=20261028b"></script><script src="/assets/i18n/tools/self-host-vs-api.js?v=20261028b"></script><meta property="og:locale" content="zh_CN"></head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/zh/"><span class="logo">ez</span>ezaiops <small>工具</small></a>
+    <nav class="site-nav">
+      <a href="/zh/">工具</a>
+      <a href="/models/index.html">模型价格</a>
+      <a href="https://ezaiops.com/" title="ezaiops.com — AI Agent 可观测性与 LLMOps 实战笔记（中文）">博客</a>
+      <a href="https://github.com/ezaiops">GitHub</a>
+    <div class="lang-switch"><a href="/zh/tools/self-host-vs-api.html" hreflang="zh-CN" class="active" aria-current="page">中文</a><a href="/tools/self-host-vs-api.html?lang=en" hreflang="en">EN</a></div></nav>
+  </div>
+</header>
+
+<main class="wrap tool-page">
+  <nav class="crumbs"><a href="/zh/">首页</a> / 工具 / <a href="/zh/tools/self-host-vs-api.html">自托管 vs API</a><a class="main-site-link" href="https://ezaiops.com/">ezaiops.com ↗</a></nav>
+  <h1>自托管 vs API 盈亏平衡</h1>
+  <p class="lead">调 API 方便，但不一定最便宜。输入每月 token 用量和 GPU 假设，算出盈亏平衡点——也就是从哪个用量开始，租 GPU 跑开源模型（vLLM、SGLang、llama.cpp）比按 token 付费更划算。价格取自我们的<a href="/models/index.html">模型价格表</a>，核实日期 2026-10-13。</p>
+
+  <section class="panel">
+    <div class="field-row">
+      <div class="field">
+        <label class="field-label" for="sh-in">每月输入 tokens</label>
+        <input type="number" id="sh-in" class="mono" min="0" step="1000000" value="2000000000">
+        <div class="hint">prompt、系统消息、上下文。</div>
+      </div>
+      <div class="field">
+        <label class="field-label" for="sh-out">每月输出 tokens</label>
+        <input type="number" id="sh-out" class="mono" min="0" step="1000000" value="200000000">
+        <div class="hint">补全部分。通常为输入量的 5–20%。</div>
+      </div>
+      <div class="field">
+        <label class="field-label" for="sh-model">对比的 API 模型</label>
+        <select id="sh-model"><option value="gpt-6-astra">GPT-6 Astra — $10/$50</option><option value="gpt-6-1-sol">GPT-6.1 Sol — $2/$10</option><option value="gpt-6-1-terra">GPT-6.1 Terra — $1/$5</option><option value="gpt-6-luna">GPT-6 Luna — $0.1/$0.5</option><option value="gpt-5-6-sol">GPT-5.6 Sol — $4/$20</option><option value="gpt-5-6-terra">GPT-5.6 Terra — $2/$12</option><option value="gpt-5-6-luna">GPT-5.6 Luna — $0.2/$1.2</option><option value="claude-fable-5-1">Claude Fable 5.1 — $10/$50</option><option value="claude-opus-5-5">Claude Opus 5.5 — $4/$20</option><option value="claude-opus-5">Claude Opus 5 — $5/$25</option><option value="claude-sonnet-5-5">Claude Sonnet 5.5 — $2/$10</option><option value="claude-sonnet-5">Claude Sonnet 5 — $2/$10</option><option value="claude-haiku-4-5">Claude Haiku 4.5 — $1/$5</option><option value="claude-haiku-5-5">Claude Haiku 5.5 — $0.1/$0.5</option><option value="gemini-4-argon">Gemini 4 Argon — $2/$10</option><option value="gemini-3-1-pro">Gemini 3.1 Pro — $2/$12</option><option value="gemini-3-8-flash">Gemini 3.8 Flash — $0.75/$3.75</option><option value="gemini-3-5-flash-lite">Gemini 3.5 Flash-Lite — $0.3/$2.5</option><option value="grok-4-7">Grok 4.7 — $2/$6</option><option value="grok-4-5">Grok 4.5 — $2/$6</option><option value="grok-4-3">Grok 4.3 — $1.25/$2.5</option><option value="deepseek-v4-1-flash">DeepSeek V4.1 Flash — $0.15/$0.6</option><option value="deepseek-v4-pro">DeepSeek V4 Pro — $0.66/$1.98</option><option value="glm-5-3">GLM-5.3 — $1.4/$4.4</option><option value="glm-5-3-flash">GLM-5.3 Flash — $0.15/$0.5</option><option value="glm-5-3-flashx">GLM-5.3 FlashX — $0.37/$1.25</option><option value="kimi-k3">Kimi K3 — $3/$15</option><option value="kimi-k2-7-code">Kimi K2.7 Code — $0.95/$4</option><option value="kimi-k3-1-pro">Kimi K3.1 Pro — $2/$10</option><option value="minimax-m3-1-flash">MiniMax M3.1 Flash — $0.15/$0.6</option><option value="minimax-m3">MiniMax M3 — $0.3/$1.2</option><option value="mimo-v2-6-pro">MiMo V2.6 Pro — $0.435/$0.87</option><option value="mimo-v2-6-flash">MiMo V2.6 Flash — $0.14/$0.28</option><option value="mistral-medium-3-5">Mistral Medium 3.5 — $1.5/$7.5</option><option value="mistral-large-4">Mistral Large 4 — $0.68/$2.09</option><option value="mistral-large-3">Mistral Large 3 — $0.5/$1.5</option><option value="mistral-small-4">Mistral Small 4 — $0.15/$0.6</option><option value="qwen3-8-max">Qwen3.8 Max — $1.65/$4.95</option><option value="qwen3-8-flash">Qwen3.8 Flash — $0.113/$0.382</option><option value="doubao-seed-2-1-turbo">Doubao Seed 2.1 Turbo — $0.5/$2.5</option><option value="doubao-seed-2-0-pro">Doubao Seed 2.0 Pro — $0.5/$3</option><option value="doubao-seed-2-0-lite">Doubao Seed 2.0 Lite — $0.25/$2</option><option value="doubao-seed-2-0-mini">Doubao Seed 2.0 Mini — $0.1/$0.4</option></select>
+      </div>
+    </div>
+    <div class="field-row" style="margin-top:12px">
+      <div class="field">
+        <label class="field-label" for="sh-gpu">GPU 每小时费率</label>
+        <select id="sh-gpu">
+          <option value="0.35" selected="">消费级 4090 — $0.35/小时</option>
+          <option value="0.8">L4 / A10 — $0.80/小时</option>
+          <option value="1.5">A100 40GB — $1.50/小时</option>
+          <option value="2.5">H100 80GB — $2.50/小时</option>
+          <option value="custom">自定义…</option>
+        </select>
+      </div>
+      <div class="field">
+        <label class="field-label" for="sh-throughput">输出吞吐</label>
+        <select id="sh-throughput">
+          <option value="3000" selected="">3,000 tok/s——单张 4090，8B 模型</option>
+          <option value="6000">6,000 tok/s——4090 / L4，更大模型</option>
+          <option value="15000">15,000 tok/s——A100，70B（2 卡）</option>
+          <option value="custom">自定义…</option>
+        </select>
+        <div class="hint">你的推理栈的合计生成速度。</div>
+      </div>
+      <div class="field">
+        <label class="field-label" for="sh-util">运行时长假设</label>
+        <select id="sh-util">
+          <option value="24" selected="">24×7——常开</option>
+          <option value="12">每天 12 小时——夜间缩容到零</option>
+          <option value="4">每天 4 小时——仅批处理</option>
+        </select>
+      </div>
+    </div>
+    <div class="hidden" id="sh-custom-row" style="margin-top:12px">
+      <div class="field-row">
+        <div class="field">
+          <label class="field-label" for="sh-gpu-custom">GPU 费率（$/小时）</label>
+          <input type="number" id="sh-gpu-custom" class="mono" min="0" step="0.05" value="1.1">
+        </div>
+        <div class="field">
+          <label class="field-label" for="sh-tp-custom">吞吐（tok/s）</label>
+          <input type="number" id="sh-tp-custom" class="mono" min="1" step="500" value="3000">
+        </div>
+      </div>
+    </div>
+
+    <div class="stats-grid" style="margin-top:16px">
+      <div class="stat"><div class="k">API 月成本</div><div class="v" id="sh-api-cost">$30,000</div></div>
+      <div class="stat"><div class="k">自托管月成本</div><div class="v" id="sh-gpu-cost">$252.00</div></div>
+      <div class="stat"><div class="k">盈亏平衡输出 tokens</div><div class="v" id="sh-breakeven" style="font-size:15px">任意用量——固定 GPU 成本已低于 API 单输入部分的成本</div></div>
+      <div class="stat"><div class="k">结论</div><div class="v" id="sh-verdict" style="font-size:15px">自托管更划算</div></div>
+    </div>
+    <pre class="code-out error hidden" id="sh-cap-warn" style="margin-top:12px"></pre>
+    <p class="note" id="sh-note">在此用量下，GPU 每月省 $29,748。保留 API 作为突发兜底——用量一旦回落，优势会迅速收窄。</p>
+  </section>
+
+  <div class="ad-slot">
+    <strong>广告位</strong>
+    Google AdSense 占位——网站通过审批并有稳定流量后启用。
+  </div>
+
+  <section class="prose">
+    <h2>盈亏平衡怎么算</h2>
+    <p>自托管的成本近似固定（GPU 小时 × 费率），每个 token 的边际成本接近于零；API 则是纯边际成本（tokens × 单价）。盈亏平衡点是两条成本线的交点：</p>
+    <p class="mono" style="font-size:13px">盈亏平衡 tokens = GPU 月成本 ÷ API 每 token 单价</p>
+    <p>The catch is <strong>utilization</strong>: a 24×7 GPU burns money whether or not requests arrive, so below the break-even you are strictly worse off, and near it you carry ops risk (SLA, upgrades, security patches) that an API absorbs. Above it — typically hundreds of millions of tokens per month — the GPU wins, often by 3–10×. For most teams the honest answer is: start on the API, move the stable high-volume slice to self-hosting once it clearly exceeds break-even, and keep the API as the burst fallback.</p>
+    <p>Model quality is the other half of the equation — this tool compares <em>cost</em> only. A 70B open model is not a GPT-6-class model; the fair comparison is usually an open model against a cheaper API tier (see the <a href="/models/index.html">pricing table</a>).</p>
+
+    <h2>常见问题</h2>
+    <details class="faq">
+      <summary>GPU 费率现实吗？</summary>
+      <div class="faq-body">这是单卡按需租用的典型云价格（RunPod、Lambda、Vast.ai 一类）。预留或竞价实例更低，企业按需更高。用「自定义…」设置你自己的价格。</div>
+    </details>
+    <details class="faq">
+      <summary>吞吐该假设多少？</summary>
+      <div class="faq-body">单张 4090 用 vLLM 跑 8B 模型，输出约 2,000–4,000 tok/s；70B 模型在 2×A100 上、短上下文时约 5,000–15,000 tok/s。长上下文和批处理会改变这两个数字——用你自己的负载实测。</div>
+    </details>
+    <details class="faq">
+      <summary>这包含工程师人力成本吗？</summary>
+      <div class="faq-body">不包含——只算算力。自建推理栈意味着运维工作（部署、监控、升级、值班）。经验法则：如果自托管，加上一名全职工程师的摊销成本；本计算器的结论假设你已有这部分人力。</div>
+    </details>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h4>常用工具</h4>
+        <ul>
+          <li><a href="/zh/tools/token-counter.html">LLM 分词与成本计算器</a></li>
+          <li><a href="/zh/tools/json-formatter.html">JSON 工具</a></li>
+          <li><a href="/zh/tools/regex-tester.html">正则测试</a></li>
+          <li><a href="/zh/tools/cron-explainer.html">Cron 解释</a></li>
+          <li><a href="/zh/tools/encode-decode.html">Base64 / URL / 哈希</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>模型价格</h4>
+        <ul>
+          <li><a href="/models/index.html">全部模型</a></li>
+          <li><a href="/models/gpt-6-astra.html">GPT-6 Astra 价格</a></li>
+          <li><a href="/models/claude-fable-5-1.html">Claude Fable 5.1 价格</a></li>
+          <li><a href="/models/gemini-3-8-flash.html">Gemini 3.8 Flash 价格</a></li>
+          <li><a href="/models/deepseek-v4-1-flash.html">DeepSeek V4.1 Flash 价格</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>更多</h4>
+        <ul>
+          <li><a href="https://ezaiops.com/">ezaiops.com</a></li>
+          <li><a href="/zh/about.html">关于</a></li>
+          <li><a href="/zh/contact.html">联系</a></li>
+          <li><a href="/zh/privacy.html">隐私政策</a></li>
+          <li><a href="https://github.com/ezaiops">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">© 2026 ezaiops · 输入内容不会离开你的浏览器</div>
+  </div>
+</footer>
+
+<script src="/assets/common.js?v=20261028b" defer=""></script>
+<script src="/assets/models.js?v=20261028b" defer=""></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  function ezT(k) { return window.ezI18N ? window.ezI18N.t(k) : k; }
+  function ezTf(k) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    if (window.ezI18N) return window.ezI18N.tf.apply(window.ezI18N, [k].concat(args));
+    return k.replace(/%s/g, function () { return String(args.shift()); });
+  }
+  function money(n) {
+    if (!isFinite(n) || n <= 0) return "$0";
+    if (n >= 1000) return "$" + Math.round(n).toLocaleString();
+    return "$" + n.toFixed(2);
+  }
+  function bigNum(n) {
+    if (n >= 1e12) return (n / 1e12).toFixed(1) + "T";
+    if (n >= 1e9) return (n / 1e9).toFixed(1) + "B";
+    if (n >= 1e6) return (n / 1e6).toFixed(1) + "M";
+    if (n >= 1e3) return (n / 1e3).toFixed(1) + "K";
+    return String(Math.round(n));
+  }
+
+  var models = (window.EZ_MODELS || {}).models || [];
+  var sel = $("#sh-model");
+  models.forEach(function (m) {
+    var o = document.createElement("option");
+    o.value = m.id;
+    o.textContent = m.name + " — $" + m.input + "/$" + m.output;
+    sel.appendChild(o);
+  });
+  if (models.length) sel.value = models[0].id;
+
+  var gpuSel = $("#sh-gpu"), tpSel = $("#sh-throughput"), utilSel = $("#sh-util");
+  var customRow = $("#sh-custom-row");
+  function syncCustom() {
+    customRow.classList.toggle("hidden", gpuSel.value !== "custom" && tpSel.value !== "custom");
+  }
+
+  function rates() {
+    var gpu = gpuSel.value === "custom" ? Math.max(0, parseFloat($("#sh-gpu-custom").value) || 0) : parseFloat(gpuSel.value);
+    var tp = tpSel.value === "custom" ? Math.max(1, parseFloat($("#sh-tp-custom").value) || 1) : parseFloat(tpSel.value);
+    var hours = parseFloat(utilSel.value);
+    return { gpu: gpu, tp: tp, hours: hours * 30 };
+  }
+
+  function currentModel() {
+    for (var i = 0; i < models.length; i++) if (models[i].id === sel.value) return models[i];
+    return null;
+  }
+
+  function recalc() {
+    var m = currentModel();
+    var ti = Math.max(0, parseFloat($("#sh-in").value) || 0);
+    var to = Math.max(0, parseFloat($("#sh-out").value) || 0);
+    var r = rates();
+    if (!m || ti + to <= 0) {
+      $("#sh-api-cost").textContent = "—";
+      $("#sh-gpu-cost").textContent = "—";
+      $("#sh-breakeven").textContent = "—";
+      $("#sh-verdict").textContent = "—";
+      $("#sh-note").textContent = "";
+      return;
+    }
+    var apiCost = (ti * m.input + to * m.output) / 1e6;
+    // GPU cost is FIXED by uptime: you pay for the machine whether or not it is busy.
+    // throughput decides how many machines you need: if one GPU cannot generate the
+    // volume within the available hours, the projection must buy more of them.
+    var requiredHours = r.tp > 0 ? to / r.tp / 3600 : 0;
+    var gpusNeeded = Math.max(1, Math.ceil(requiredHours / r.hours));
+    var gpuFixed = gpusNeeded * r.gpu * r.hours;
+
+    $("#sh-api-cost").textContent = money(apiCost);
+    $("#sh-gpu-cost").textContent = money(gpuFixed);
+
+    var capWarn = $("#sh-cap-warn");
+    if (gpusNeeded > 1) {
+      capWarn.textContent = ezTf("Capacity: this workload needs about %s GPU-hours per month for generation, and the selected uptime provides %s per GPU — the projection assumes %s GPUs (%s/month). Raise the throughput assumption if your stack is faster.",
+        bigNum(requiredHours), bigNum(r.hours), gpusNeeded, money(gpuFixed));
+      capWarn.classList.remove("hidden");
+    } else {
+      capWarn.classList.add("hidden");
+    }
+
+    // break-even: output tokens where API cost equals the fixed GPU cost, input volume held constant
+    var inputApiCost = ti * m.input / 1e6;
+    var perOutToken = m.output / 1e6;
+    var beTokens = perOutToken > 0 ? (gpuFixed - inputApiCost) / perOutToken : Infinity;
+    if (beTokens > 0 && isFinite(beTokens)) {
+      $("#sh-breakeven").textContent = ezTf("%s output tokens/month", bigNum(beTokens));
+    } else if (isFinite(beTokens)) {
+      $("#sh-breakeven").textContent = ezT("Any volume — the fixed GPU cost sits below the API's input cost alone");
+    } else {
+      $("#sh-breakeven").textContent = ezT("Never — the API output price is $0");
+    }
+
+    var verdict, note;
+    if (apiCost < gpuFixed) {
+      verdict = ezT("API is cheaper");
+      note = ezTf("At this volume the API saves %s/month. The GPU only wins above the break-even shown above.", money(gpuFixed - apiCost));
+    } else {
+      verdict = ezT("Self-hosting wins");
+      note = ezTf("At this volume the GPU saves %s/month. Keep the API as a burst fallback — the margin narrows fast if volume drops.", money(apiCost - gpuFixed));
+    }
+    $("#sh-verdict").textContent = verdict;
+    $("#sh-note").textContent = note;
+  }
+
+  var t = null;
+  function schedule() { clearTimeout(t); t = setTimeout(recalc, 150); }
+  [$("#sh-in"), $("#sh-out"), $("#sh-gpu-custom"), $("#sh-tp-custom")].forEach(function (el) {
+    el.addEventListener("input", schedule);
+  });
+  [sel, gpuSel, tpSel, utilSel].forEach(function (el) {
+    el.addEventListener("change", function () { syncCustom(); recalc(); });
+  });
+
+  syncCustom();
+  recalc();
+  window.addEventListener("ez:i18n", recalc);
+});
+</script>
+
+
+</body></html>

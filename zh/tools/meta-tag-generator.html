@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-zh-static="1"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meta 标签与 Open Graph 生成器 — 带预览</title>
+<meta name="description" content="生成 title、description、canonical、Open Graph 与 Twitter 卡片标签，实时预览 Google 搜索结果与社交分享效果。">
+<link rel="canonical" href="https://tools.ezaiops.com/zh/tools/meta-tag-generator.html">
+<link rel="alternate" hreflang="zh-CN" href="https://tools.ezaiops.com/zh/tools/meta-tag-generator.html">
+<link rel="alternate" hreflang="en" href="https://tools.ezaiops.com/tools/meta-tag-generator.html">
+<link rel="alternate" hreflang="x-default" href="https://tools.ezaiops.com/tools/meta-tag-generator.html">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Meta 标签与 Open Graph 生成器 — 带预览">
+<meta property="og:description" content="生成 title、description、canonical、Open Graph 与 Twitter 卡片标签，实时预览 Google 搜索结果与社交分享效果。">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/style.css?v=20261028b">
+<script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Meta Tag & Open Graph Generator",
+  "url": "https://tools.ezaiops.com/zh/tools/meta-tag-generator.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}</script>
+
+
+
+<script src="/assets/i18n.js?v=20261028b"></script><script src="/assets/i18n/common.js?v=20261028b"></script><script src="/assets/i18n/tools/meta-tag-generator.js?v=20261028b"></script><meta property="og:locale" content="zh_CN"></head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/zh/"><span class="logo">ez</span>ezaiops <small>工具</small></a>
+    <nav class="site-nav">
+      <a href="/zh/">工具</a>
+      <a href="/models/index.html">模型价格</a>
+      <a href="https://ezaiops.com/" title="ezaiops.com — AI Agent 可观测性与 LLMOps 实战笔记（中文）">博客</a>
+      <a href="https://github.com/ezaiops">GitHub</a>
+    <div class="lang-switch"><a href="/zh/tools/meta-tag-generator.html" hreflang="zh-CN" class="active" aria-current="page">中文</a><a href="/tools/meta-tag-generator.html?lang=en" hreflang="en">EN</a></div></nav>
+  </div>
+</header>
+
+<main class="wrap tool-page">
+  <nav class="crumbs"><a href="/zh/">首页</a> / 工具 / <a href="/zh/tools/meta-tag-generator.html">Meta 标签</a><a class="main-site-link" href="https://ezaiops.com/">ezaiops.com ↗</a></nav>
+  <h1>Meta tag &amp; Open Graph generator</h1>
+  <p class="lead">填写字段，把生成的标签粘进页面的 <code>&lt;head&gt;</code>，同时实时预览页面在 Google 搜索结果和社交聊天中的呈现——让第一印象一次到位。</p>
+
+  <section class="panel">
+    <div class="field-row">
+      <div class="field">
+        <label class="field-label" for="mt-title">页面标题 <span class="badge green" id="mt-title-count">42/60</span></label>
+        <input type="text" id="mt-title" maxlength="80" value="ezaiops tools — Free AI &amp; DevOps utilities">
+      </div>
+      <div class="field">
+        <label class="field-label" for="mt-desc">描述 <span class="badge green" id="mt-desc-count">101/160</span></label>
+        <input type="text" id="mt-desc" maxlength="220" value="Free browser-based tools for AI and DevOps work: token counting, JSON, regex, cron, hashing and more.">
+      </div>
+    </div>
+    <div class="field-row" style="margin-top:12px">
+      <div class="field">
+        <label class="field-label" for="mt-url">规范 URL</label>
+        <input type="url" id="mt-url" class="mono" value="https://tools.ezaiops.com/">
+      </div>
+      <div class="field">
+        <label class="field-label" for="mt-image">社交图片 URL（1200×630）</label>
+        <input type="url" id="mt-image" class="mono" value="">
+      </div>
+    </div>
+    <div class="field-row" style="margin-top:12px">
+      <div class="field">
+        <label class="field-label" for="mt-site">站点名</label>
+        <input type="text" id="mt-site" value="ezaiops tools">
+      </div>
+      <div class="field">
+        <label class="field-label" for="mt-type">OG 类型</label>
+        <select id="mt-type">
+          <option value="website" selected="">website</option>
+          <option value="article">article</option>
+          <option value="product">product</option>
+        </select>
+      </div>
+      <div class="field">
+        <label class="field-label" for="mt-twitter">@handle（可选）</label>
+        <input type="text" id="mt-twitter" class="mono" value="@ezaiops">
+      </div>
+    </div>
+
+    <div class="tool-grid" style="margin-top:18px">
+      <div class="panel" style="background:#fff">
+        <label class="field-label">Google 搜索结果预览</label>
+        <div style="border:1px solid var(--border);border-radius:8px;padding:12px;background:#fff">
+          <div style="font-size:12px;color:#5f6364;margin-bottom:2px" id="mt-prev-url">https://tools.ezaiops.com/</div>
+          <div style="font-size:17px;color:#1a0dab;line-height:1.3;margin-bottom:4px" id="mt-prev-title">ezaiops tools — Free AI &amp; DevOps utilities</div>
+          <div style="font-size:13px;color:#4d5156" id="mt-prev-desc">Free browser-based tools for AI and DevOps work: token counting, JSON, regex, cron, hashing and more.</div>
+        </div>
+        <p class="note" id="mt-serp-note">Heads up: no og:image — social shares will show a plain link.</p>
+      </div>
+      <div class="panel" style="background:#fff">
+        <label class="field-label">社交卡片预览</label>
+        <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;background:#fff">
+          <div id="mt-prev-image" style="height:110px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px">1200 × 630 image</div>
+          <div style="padding:10px 12px">
+            <div style="font-size:12px;color:var(--muted)" id="mt-prev-domain">tools.ezaiops.com</div>
+            <div style="font-weight:500;font-size:14px;margin-top:2px" id="mt-prev-ogtitle">ezaiops tools — Free AI &amp; DevOps utilities</div>
+            <div style="font-size:12.5px;color:var(--muted);margin-top:2px" id="mt-prev-ogdesc">Free browser-based tools for AI and DevOps work: token counting, JSON, regex, cron,…</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn small" id="mt-copy" type="button" data-copy-target="#mt-code">复制标签</button>
+      <button class="btn small" id="mt-fill" type="button">填入本页的值</button>
+    </div>
+    <label class="field-label" for="mt-code" style="margin-top:14px">生成的标签</label>
+    <textarea id="mt-code" class="mono" rows="12" readonly="" spellcheck="false"></textarea>
+  </section>
+
+  <div class="ad-slot">
+    <strong>广告位</strong>
+    Google AdSense 占位——网站通过审批并有稳定流量后启用。
+  </div>
+
+  <section class="prose">
+    <h2>每个标签的作用</h2>
+    <ul>
+      <li><strong>&lt;title&gt;</strong>——搜索结果里的蓝色标题，也是浏览器标签名。控制在约 60 字符以内。</li>
+      <li><strong>meta description</strong>——标题下方的灰色摘要。它不直接影响排名，但决定点击率。建议 140–160 字符。</li>
+      <li><strong>link rel="canonical"</strong>——当同一内容可通过多个 URL 访问时（utm 参数、http/https、结尾斜杠），告诉爬虫哪个是唯一权威地址。</li>
+      <li><strong>Open Graph（og:*）</strong>——别人分享你的链接时，WhatsApp、Slack、iMessage 和 Facebook 展示的内容。缺少 og:image 会得到一个难看且不可信的纯链接预览。</li>
+      <li><strong>Twitter/X 卡片</strong>——同样思路用于 X，<code>summary_large_image</code> 会生成大图卡片。</li>
+    </ul>
+
+    <h2>常见问题</h2>
+    <details class="faq">
+      <summary>meta keywords 还有用吗？</summary>
+      <div class="faq-body">没用。Google 几十年前就把 keywords 标签排除在排名因素之外，浪费字符；Bing 甚至表示可能把它当作垃圾信号。别写。</div>
+    </details>
+    <details class="faq">
+      <summary>为什么 Google 显示的描述和我写的不一样？</summary>
+      <div class="faq-body">当 Google 认为页面正文中某个与查询更匹配的片段更好时，它会在多数查询下重写描述。但还是该写好描述——品牌词和导航查询它仍然使用你的版本。</div>
+    </details>
+    <details class="faq">
+      <summary>图片需要放在哪里？</summary>
+      <div class="faq-body">任何可爬取的绝对 https URL 即可——放自己的 CDN 或静态主机最好，控制权在你。1200×630 是通用安全尺寸。</div>
+    </details>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h4>常用工具</h4>
+        <ul>
+          <li><a href="/zh/tools/token-counter.html">LLM 分词与成本计算器</a></li>
+          <li><a href="/zh/tools/json-formatter.html">JSON 工具</a></li>
+          <li><a href="/zh/tools/regex-tester.html">正则测试</a></li>
+          <li><a href="/zh/tools/cron-explainer.html">Cron 解释</a></li>
+          <li><a href="/zh/tools/encode-decode.html">Base64 / URL / 哈希</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>模型价格</h4>
+        <ul>
+          <li><a href="/models/index.html">全部模型</a></li>
+          <li><a href="/models/gpt-5-6-sol.html">GPT-5.6 Sol 价格</a></li>
+          <li><a href="/models/claude-opus-5.html">Claude Opus 5 价格</a></li>
+          <li><a href="/models/gemini-3-1-pro.html">Gemini 3.1 Pro 价格</a></li>
+          <li><a href="/models/deepseek-v4-1-flash.html">DeepSeek V4.1 Flash 价格</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>更多</h4>
+        <ul>
+          <li><a href="https://ezaiops.com/">ezaiops.com</a></li>
+          <li><a href="/zh/about.html">关于</a></li>
+          <li><a href="/zh/contact.html">联系</a></li>
+          <li><a href="/zh/privacy.html">隐私政策</a></li>
+          <li><a href="https://github.com/ezaiops">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">© 2026 ezaiops · 输入内容不会离开你的浏览器</div>
+  </div>
+</footer>
+
+<script src="/assets/common.js?v=20261028b" defer=""></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  function esc(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+  function truncate(s, n) {
+    return s.length > n ? s.slice(0, n - 1).replace(/\s+\S*$/, "") + "…" : s;
+  }
+  function domain(url) {
+    try { return new URL(url).hostname.replace(/^www\./, ""); } catch (e) { return url; }
+  }
+
+  function render() {
+    var title = $("#mt-title").value.trim();
+    var desc = $("#mt-desc").value.trim();
+    var url = $("#mt-url").value.trim();
+    var image = $("#mt-image").value.trim();
+    var site = $("#mt-site").value.trim();
+    var type = $("#mt-type").value;
+    var tw = $("#mt-twitter").value.trim();
+
+    var tc = $("#mt-title-count");
+    tc.textContent = title.length + "/60";
+    tc.className = "badge " + (title.length <= 60 ? "green" : "amber");
+    var dc = $("#mt-desc-count");
+    dc.textContent = desc.length + "/160";
+    dc.className = "badge " + (desc.length <= 160 ? "green" : "amber");
+
+    $("#mt-prev-url").textContent = url || "(no URL)";
+    $("#mt-prev-title").textContent = truncate(title || "(no title)", 60);
+    $("#mt-prev-desc").textContent = truncate(desc || "(no description)", 160);
+    $("#mt-prev-ogtitle").textContent = truncate(title || "(no title)", 48);
+    $("#mt-prev-ogdesc").textContent = truncate(desc || "(no description)", 90);
+    $("#mt-prev-domain").textContent = domain(url || "https://example.com");
+    var imgBox = $("#mt-prev-image");
+    if (image) {
+      imgBox.innerHTML = "";
+      imgBox.style.background = "none";
+      var im = document.createElement("img");
+      im.src = image;
+      im.alt = "social preview";
+      im.style.cssText = "width:100%;height:110px;object-fit:cover";
+      im.onerror = function () {
+        imgBox.style.background = "var(--surface-2)";
+        imgBox.textContent = "image failed to load";
+      };
+      imgBox.appendChild(im);
+    } else {
+      imgBox.style.background = "var(--surface-2)";
+      imgBox.textContent = "1200 × 630 image";
+    }
+
+    var lines = [];
+    lines.push("<title>" + esc(title) + "</title>");
+    if (desc) lines.push('<meta name="description" content="' + esc(desc) + '">');
+    if (url) lines.push('<link rel="canonical" href="' + esc(url) + '">');
+    lines.push('<meta property="og:type" content="' + esc(type) + '">');
+    if (title) lines.push('<meta property="og:title" content="' + esc(title) + '">');
+    if (desc) lines.push('<meta property="og:description" content="' + esc(desc) + '">');
+    if (url) lines.push('<meta property="og:url" content="' + esc(url) + '">');
+    if (image) lines.push('<meta property="og:image" content="' + esc(image) + '">');
+    if (site) lines.push('<meta property="og:site_name" content="' + esc(site) + '">');
+    lines.push('<meta name="twitter:card" content="' + (image ? "summary_large_image" : "summary") + '">');
+    if (title) lines.push('<meta name="twitter:title" content="' + esc(title) + '">');
+    if (desc) lines.push('<meta name="twitter:description" content="' + esc(desc) + '">');
+    if (image) lines.push('<meta name="twitter:image" content="' + esc(image) + '">');
+    if (tw) lines.push('<meta name="twitter:site" content="' + esc(tw) + '">');
+    $("#mt-code").value = lines.join("\n");
+
+    var issues = [];
+    if (title.length > 60) issues.push("title will be truncated in search results");
+    if (desc.length > 160) issues.push("description will be truncated");
+    if (desc.length > 0 && desc.length < 70) issues.push("description is short — 140–160 chars earns more clicks");
+    if (!image) issues.push("no og:image — social shares will show a plain link");
+    if (url && url.indexOf("http") !== 0) issues.push("canonical URL should be absolute (https://)");
+    $("#mt-serp-note").textContent = issues.length ? "Heads up: " + issues.join("; ") + "." : "";
+  }
+
+  ["mt-title", "mt-desc", "mt-url", "mt-image", "mt-site", "mt-type", "mt-twitter"].forEach(function (id) {
+    $("#" + id).addEventListener("input", render);
+    $("#" + id).addEventListener("change", render);
+  });
+
+  $("#mt-fill").addEventListener("click", function () {
+    $("#mt-title").value = document.title;
+    var m = document.querySelector('meta[name="description"]');
+    $("#mt-desc").value = m ? m.getAttribute("content") : "";
+    $("#mt-url").value = location.href;
+    render();
+  });
+
+  render();
+});
+</script>
+
+
+</body></html>

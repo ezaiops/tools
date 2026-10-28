@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-zh-static="1"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>正则表达式测试器 — JavaScript 实时匹配</title>
+<meta name="description" content="在实时文本上测试 JavaScript 正则表达式，高亮匹配结果，显示捕获组，并预览替换效果。">
+<link rel="canonical" href="https://tools.ezaiops.com/zh/tools/regex-tester.html">
+<link rel="alternate" hreflang="zh-CN" href="https://tools.ezaiops.com/zh/tools/regex-tester.html">
+<link rel="alternate" hreflang="en" href="https://tools.ezaiops.com/tools/regex-tester.html">
+<link rel="alternate" hreflang="x-default" href="https://tools.ezaiops.com/tools/regex-tester.html">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="正则表达式测试器 — JavaScript 实时匹配">
+<meta property="og:description" content="在实时文本上测试 JavaScript 正则表达式，高亮匹配结果，显示捕获组，并预览替换效果。">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/style.css?v=20261028b">
+<script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Regex Tester",
+  "url": "https://tools.ezaiops.com/zh/tools/regex-tester.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}</script>
+
+
+
+<script src="/assets/i18n.js?v=20261028b"></script><script src="/assets/i18n/common.js?v=20261028b"></script><script src="/assets/i18n/tools/regex-tester.js?v=20261028b"></script><meta property="og:locale" content="zh_CN"></head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/zh/"><span class="logo">ez</span>ezaiops <small>工具</small></a>
+    <nav class="site-nav">
+      <a href="/zh/">工具</a>
+      <a href="/models/index.html">模型价格</a>
+      <a href="https://ezaiops.com/" title="ezaiops.com — AI Agent 可观测性与 LLMOps 实战笔记（中文）">博客</a>
+      <a href="https://github.com/ezaiops">GitHub</a>
+    <div class="lang-switch"><a href="/zh/tools/regex-tester.html" hreflang="zh-CN" class="active" aria-current="page">中文</a><a href="/tools/regex-tester.html?lang=en" hreflang="en">EN</a></div></nav>
+  </div>
+</header>
+
+<main class="wrap tool-page">
+  <nav class="crumbs"><a href="/zh/">首页</a> / 工具 / <a href="/zh/tools/regex-tester.html">正则测试</a><a class="main-site-link" href="https://ezaiops.com/">ezaiops.com ↗</a></nav>
+  <h1>正则测试</h1>
+  <p class="lead">在实时文本上测试 JavaScript 正则表达式。输入时即高亮匹配，逐个列出捕获组，替换预览显示 <code>String.replace()</code> 的真实结果。</p>
+
+  <section class="panel">
+    <div class="field-row">
+      <div class="field">
+        <label class="field-label" for="rt-pattern">模式</label>
+        <input type="text" id="rt-pattern" class="mono" value="\b\w+@\w+\.\w+\b" spellcheck="false">
+      </div>
+      <div class="field">
+        <label class="field-label">标志</label>
+        <div class="check-row">
+          <label><input type="checkbox" id="rt-g" checked=""> g</label>
+          <label><input type="checkbox" id="rt-i"> i</label>
+          <label><input type="checkbox" id="rt-m"> m</label>
+          <label><input type="checkbox" id="rt-s"> s</label>
+          <label><input type="checkbox" id="rt-d"> d</label>
+        </div>
+      </div>
+    </div>
+
+    <label class="field-label" for="rt-text" style="margin-top:14px">测试文本</label>
+    <textarea id="rt-text" class="mono" rows="6" spellcheck="false">Ping me at ops@ezaiops.com or backup+alerts@ezaiops.io.
+Not-an-email: broken@, @missing, spaces in@address.</textarea>
+
+    <div class="field-row" style="margin-top:14px">
+      <div class="field">
+        <label class="field-label" for="rt-replace">替换文本（支持 $1、$2 …）</label>
+        <input type="text" id="rt-replace" class="mono" value="[$1]" spellcheck="false">
+      </div>
+    </div>
+
+    <pre class="code-out error hidden" id="rt-err"></pre>
+
+    <div class="stats-grid">
+      <div class="stat"><div class="k">匹配数</div><div class="v" id="rt-count">2</div></div>
+      <div class="stat"><div class="k">捕获组</div><div class="v" id="rt-groups">0</div></div>
+      <div class="stat"><div class="k">标志</div><div class="v" id="rt-flags">g</div></div>
+    </div>
+
+    <h3 style="font-size:14px;margin:18px 0 0">匹配高亮</h3>
+    <pre class="code-out" id="rt-highlight">Ping me at <mark>ops@ezaiops.com</mark> or backup+<mark>alerts@ezaiops.io</mark>.
+Not-an-email: broken@, @missing, spaces in@address.</pre>
+
+    <h3 style="font-size:14px;margin:18px 0 0">替换预览</h3>
+    <pre class="code-out" id="rt-replace-out">Ping me at [$1] or backup+[$1].
+Not-an-email: broken@, @missing, spaces in@address.</pre>
+
+    <h3 style="font-size:14px;margin:18px 0 0">匹配详情</h3>
+    <table class="data">
+      <thead><tr><th>#</th><th>匹配</th><th>位置</th><th>分组</th></tr></thead>
+      <tbody id="rt-rows"><tr><td>1</td><td class="mono">ops@ezaiops.com</td><td class="num">11</td><td class="mono">—</td></tr><tr><td>2</td><td class="mono">alerts@ezaiops.io</td><td class="num">37</td><td class="mono">—</td></tr></tbody>
+    </table>
+  </section>
+
+  <div class="ad-slot">
+    <strong>广告位</strong>
+    Google AdSense 占位——网站通过审批并有稳定流量后启用。
+  </div>
+
+  <section class="prose">
+    <h2>JavaScript 正则速查</h2>
+    <table class="data">
+      <thead><tr><th>模式</th><th>含义</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">\d \D</td><td>数字 / 非数字</td></tr>
+        <tr><td class="mono">\w \W</td><td>单词字符（字母、数字、_）/ 非单词字符</td></tr>
+        <tr><td class="mono">\s \S</td><td>空白 / 非空白</td></tr>
+        <tr><td class="mono">[a-z] [^a-z]</td><td>字符范围 / 排除集</td></tr>
+        <tr><td class="mono">a+ a* a?</td><td>一次或多次 / 零次或多次 / 可选</td></tr>
+        <tr><td class="mono">a{2,4}</td><td>重复 2 到 4 次</td></tr>
+        <tr><td class="mono">(...)</td><td>捕获组</td></tr>
+        <tr><td class="mono">(?:...)</td><td>非捕获组</td></tr>
+        <tr><td class="mono">(?&lt;name&gt;...)</td><td>命名捕获组</td></tr>
+        <tr><td class="mono">a|b</td><td>二选一</td></tr>
+        <tr><td class="mono">^ $</td><td>字符串开头 / 结尾（带 m 标志时为每行）</td></tr>
+        <tr><td class="mono">\b \B</td><td>单词边界 / 非边界</td></tr>
+      </tbody>
+    </table>
+
+    <h2>常见问题</h2>
+    <details class="faq">
+      <summary>用的是哪种正则风格？</summary>
+      <div class="faq-body">ECMAScript（JavaScript）风格，与你浏览器中 <code>new RegExp()</code> 的实现完全一致。Python、PCRE 和 Go 的正则在命名分组、独占量词等细节上与此不同。</div>
+    </details>
+    <details class="faq">
+      <summary>为什么我的正则会卡死页面？</summary>
+      <div class="faq-body">灾难性回溯——像 <code>(a+)+b</code> 这样的嵌套量词，在长的不匹配输入上可能耗时指数级增长。改用原子分组写法，或让子模式更具体。</div>
+    </details>
+    <details class="faq">
+      <summary>s 标志有什么用？</summary>
+      <div class="faq-body">它让 <code>.</code> 也能匹配换行符。d 标志会附加匹配索引，详情表在有该标志时会使用。</div>
+    </details>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h4>常用工具</h4>
+        <ul>
+          <li><a href="/zh/tools/token-counter.html">LLM 分词与成本计算器</a></li>
+          <li><a href="/zh/tools/json-formatter.html">JSON 工具</a></li>
+          <li><a href="/zh/tools/regex-tester.html">正则测试</a></li>
+          <li><a href="/zh/tools/cron-explainer.html">Cron 解释</a></li>
+          <li><a href="/zh/tools/encode-decode.html">Base64 / URL / 哈希</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>模型价格</h4>
+        <ul>
+          <li><a href="/models/index.html">全部模型</a></li>
+          <li><a href="/models/gpt-5-6-sol.html">GPT-5.6 Sol 价格</a></li>
+          <li><a href="/models/claude-opus-5.html">Claude Opus 5 价格</a></li>
+          <li><a href="/models/gemini-3-1-pro.html">Gemini 3.1 Pro 价格</a></li>
+          <li><a href="/models/deepseek-v4-1-flash.html">DeepSeek V4.1 Flash 价格</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>更多</h4>
+        <ul>
+          <li><a href="https://ezaiops.com/">ezaiops.com</a></li>
+          <li><a href="/zh/about.html">关于</a></li>
+          <li><a href="/zh/contact.html">联系</a></li>
+          <li><a href="/zh/privacy.html">隐私政策</a></li>
+          <li><a href="https://github.com/ezaiops">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">© 2026 ezaiops · 输入内容不会离开你的浏览器</div>
+  </div>
+</footer>
+
+<script src="/assets/common.js?v=20261028b" defer=""></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  function ezT(k) { return window.ezI18N ? window.ezI18N.t(k) : k; }
+  function esc(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+  var pattern = $("#rt-pattern"), text = $("#rt-text"), repl = $("#rt-replace");
+  var err = $("#rt-err"), hi = $("#rt-highlight"), rows = $("#rt-rows");
+  var flags = ["rt-g", "rt-i", "rt-m", "rt-s", "rt-d"];
+
+  var FLAG_IDS = { "rt-g": "g", "rt-i": "i", "rt-m": "m", "rt-s": "s", "rt-d": "d" };
+
+  function currentFlags() {
+    return Object.keys(FLAG_IDS)
+      .filter(function (id) { return $("#" + id).checked; })
+      .map(function (id) { return FLAG_IDS[id]; })
+      .join("");
+  }
+
+  function run() {
+    err.classList.add("hidden");
+    var f = currentFlags();
+    $("#rt-flags").textContent = f || "(none)";
+    var re;
+    try {
+      re = new RegExp(pattern.value, f);
+    } catch (e) {
+      err.textContent = ezT("Invalid pattern: ") + e.message;
+      err.classList.remove("hidden");
+      return;
+    }
+    var s = text.value;
+    var matches = [];
+    if (re.global || re.sticky) {
+      var m;
+      var guard = 0;
+      while ((m = re.exec(s)) !== null) {
+        matches.push(m);
+        if (m.index === re.lastIndex) re.lastIndex++;
+        if (++guard > 100000) break;
+      }
+    } else {
+      var one = re.exec(s);
+      if (one) matches.push(one);
+    }
+
+    $("#rt-count").textContent = String(matches.length);
+    $("#rt-groups").textContent = String(matches.reduce(function (n, m) {
+      return n + (m.length - 1);
+    }, 0));
+
+    hi.innerHTML = esc(s) || "—";
+    if (matches.length) {
+      var html = "";
+      var last = 0;
+      matches.forEach(function (m) {
+        html += esc(s.slice(last, m.index)) + "<mark>" + esc(m[0]) + "</mark>";
+        last = m.index + m[0].length;
+      });
+      html += esc(s.slice(last));
+      hi.innerHTML = html;
+    }
+
+    try {
+      $("#rt-replace-out").textContent = s.replace(re, repl.value || "");
+    } catch (e) {
+      $("#rt-replace-out").textContent = "(replacement failed: " + e.message + ")";
+    }
+
+    rows.innerHTML = matches.slice(0, 200).map(function (m, i) {
+      var groups = [];
+      for (var g = 1; g < m.length; g++) {
+        groups.push("$" + g + "=" + (m[g] === undefined ? "undefined" : JSON.stringify(m[g])));
+      }
+      if (m.groups) {
+        Object.keys(m.groups).forEach(function (k) {
+          groups.push(k + "=" + JSON.stringify(m.groups[k]));
+        });
+      }
+      return "<tr><td>" + (i + 1) + "</td><td class=\"mono\">" + esc(m[0]) + "</td><td class=\"num\">" + m.index +
+        "</td><td class=\"mono\">" + esc(groups.join(" ") || "—") + "</td></tr>";
+    }).join("") || ("<tr><td colspan=\"4\">" + ezT("No matches") + "</td></tr>");
+  }
+
+  [pattern, text, repl].forEach(function (el) { el.addEventListener("input", run); });
+  flags.forEach(function (id) { $("#" + id).addEventListener("change", run); });
+  run();
+});
+</script>
+
+
+</body></html>

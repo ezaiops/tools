@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-zh-static="1"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>子网与 CIDR 计算器 — IPv4 网络计算</title>
+<meta name="description" content="计算 IPv4 子网：网络地址、广播地址、可用主机范围、点分/十六进制/二进制掩码、通配符与主机数量。">
+<link rel="canonical" href="https://tools.ezaiops.com/zh/tools/subnet-calculator.html">
+<link rel="alternate" hreflang="zh-CN" href="https://tools.ezaiops.com/zh/tools/subnet-calculator.html">
+<link rel="alternate" hreflang="en" href="https://tools.ezaiops.com/tools/subnet-calculator.html">
+<link rel="alternate" hreflang="x-default" href="https://tools.ezaiops.com/tools/subnet-calculator.html">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="子网与 CIDR 计算器 — IPv4 网络计算">
+<meta property="og:description" content="计算 IPv4 子网：网络地址、广播地址、可用主机范围、点分/十六进制/二进制掩码、通配符与主机数量。">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/style.css?v=20261028b">
+<script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Subnet & CIDR Calculator",
+  "url": "https://tools.ezaiops.com/zh/tools/subnet-calculator.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}</script>
+
+
+
+<script src="/assets/i18n.js?v=20261028b"></script><script src="/assets/i18n/common.js?v=20261028b"></script><script src="/assets/i18n/tools/subnet-calculator.js?v=20261028b"></script><meta property="og:locale" content="zh_CN"></head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/zh/"><span class="logo">ez</span>ezaiops <small>工具</small></a>
+    <nav class="site-nav">
+      <a href="/zh/">工具</a>
+      <a href="/models/index.html">模型价格</a>
+      <a href="https://ezaiops.com/" title="ezaiops.com — AI Agent 可观测性与 LLMOps 实战笔记（中文）">博客</a>
+      <a href="https://github.com/ezaiops">GitHub</a>
+    <div class="lang-switch"><a href="/zh/tools/subnet-calculator.html" hreflang="zh-CN" class="active" aria-current="page">中文</a><a href="/tools/subnet-calculator.html?lang=en" hreflang="en">EN</a></div></nav>
+  </div>
+</header>
+
+<main class="wrap tool-page">
+  <nav class="crumbs"><a href="/zh/">首页</a> / 工具 / <a href="/zh/tools/subnet-calculator.html">子网计算器</a><a class="main-site-link" href="https://ezaiops.com/">ezaiops.com ↗</a></nav>
+  <h1>子网与 CIDR 计算器</h1>
+  <p class="lead">输入任意 IPv4 地址和前缀长度，得到网络地址、广播地址、可用主机范围、各种记法的掩码和二进制分解——规划 VLAN、防火墙规则或云安全组时需要的网络计算。</p>
+
+  <section class="panel">
+    <div class="field-row">
+      <div class="field">
+        <label class="field-label" for="sn-input">IPv4 地址 / CIDR</label>
+        <input type="text" id="sn-input" class="mono" value="192.168.1.37/26" placeholder="192.168.1.37/26">
+      </div>
+      <div class="field">
+        <label class="field-label" for="sn-prefix">前缀</label>
+        <select id="sn-prefix" style="width:auto"><option value="8">/8</option><option value="9">/9</option><option value="10">/10</option><option value="11">/11</option><option value="12">/12</option><option value="13">/13</option><option value="14">/14</option><option value="15">/15</option><option value="16">/16</option><option value="17">/17</option><option value="18">/18</option><option value="19">/19</option><option value="20">/20</option><option value="21">/21</option><option value="22">/22</option><option value="23">/23</option><option value="24">/24</option><option value="25">/25</option><option value="26">/26</option><option value="27">/27</option><option value="28">/28</option><option value="29">/29</option><option value="30">/30</option><option value="31">/31</option><option value="32">/32</option></select>
+      </div>
+      <div class="field">
+        <button class="btn primary" id="sn-calc" type="button" style="width:100%">计算</button>
+      </div>
+    </div>
+    <div class="btn-row">
+      <span style="font-size:13px;color:var(--muted);align-self:center">快捷：</span>
+      <button class="btn small" data-sn="10.0.0.5/8" type="button">10.0.0.5/8</button>
+      <button class="btn small" data-sn="172.16.31.200/22" type="button">172.16.31.200/22</button>
+      <button class="btn small" data-sn="203.0.113.42/30" type="button">203.0.113.42/30</button>
+      <button class="btn small" data-sn="198.51.100.0/29" type="button">198.51.100.0/29</button>
+    </div>
+    <pre class="code-out error hidden" id="sn-err" style="margin-top:12px"></pre>
+
+    <dl class="kv-list" id="sn-results" style="margin-top:14px"><dt>IP address</dt><dd class="mono">192.168.1.37  (3232235813)</dd><dt>Network address</dt><dd class="mono">192.168.1.0/26</dd><dt>Broadcast address</dt><dd class="mono">192.168.1.63</dd><dt>Usable host range</dt><dd class="mono">192.168.1.1 – 192.168.1.62</dd><dt>Subnet mask</dt><dd class="mono">255.255.255.192  (0xffffffc0)</dd><dt>Wildcard mask</dt><dd class="mono">0.0.0.63</dd><dt>Total addresses</dt><dd class="mono">64</dd><dt>Usable hosts</dt><dd class="mono">62</dd><dt>Address class</dt><dd class="mono">C (small networks)</dd><dt>Private range</dt><dd class="mono">Yes — 192.168.0.0/16 (private)</dd></dl>
+
+    <h3 style="font-size:14px;margin:18px 0 0">二进制分解</h3>
+    <table class="data">
+      <thead><tr><th></th><th class="mono">Octet 1</th><th class="mono">Octet 2</th><th class="mono">Octet 3</th><th class="mono">Octet 4</th></tr></thead>
+      <tbody id="sn-binary"><tr><td>Address</td><td class="mono">1100 0000</td><td class="mono">1010 1000</td><td class="mono">0000 0001</td><td class="mono">0010 0101</td></tr><tr><td>Mask</td><td class="mono">1111 1111</td><td class="mono">1111 1111</td><td class="mono">1111 1111</td><td class="mono">1100 0000</td></tr><tr><td>Network</td><td class="mono">1100 0000</td><td class="mono">1010 1000</td><td class="mono">0000 0001</td><td class="mono">0000 0000</td></tr></tbody>
+    </table>
+
+    <h3 style="font-size:14px;margin:18px 0 0">常用前缀长度</h3>
+    <table class="data">
+      <thead><tr><th class="num">前缀</th><th class="mono">子网掩码</th><th class="num">总地址数</th><th class="num">可用主机数</th></tr></thead>
+      <tbody id="sn-table"><tr><td class="num">/24</td><td class="mono">255.255.255.0</td><td class="num">256</td><td class="num">254</td></tr><tr><td class="num">/25</td><td class="mono">255.255.255.128</td><td class="num">128</td><td class="num">126</td></tr><tr style="background:var(--accent-soft)"><td class="num">/26</td><td class="mono">255.255.255.192</td><td class="num">64</td><td class="num">62</td></tr><tr><td class="num">/27</td><td class="mono">255.255.255.224</td><td class="num">32</td><td class="num">30</td></tr><tr><td class="num">/28</td><td class="mono">255.255.255.240</td><td class="num">16</td><td class="num">14</td></tr><tr><td class="num">/29</td><td class="mono">255.255.255.248</td><td class="num">8</td><td class="num">6</td></tr><tr><td class="num">/30</td><td class="mono">255.255.255.252</td><td class="num">4</td><td class="num">2</td></tr></tbody>
+    </table>
+  </section>
+
+  <div class="ad-slot">
+    <strong>广告位</strong>
+    Google AdSense 占位——网站通过审批并有稳定流量后启用。
+  </div>
+
+  <section class="prose">
+    <h2>子网计算原理</h2>
+    <p>An IPv4 address is 32 bits, written as four octets. The prefix length — the number after the slash — says how many leading bits belong to the network. The <strong>network address</strong> keeps those bits and zeroes the rest; the <strong>broadcast address</strong> sets all host bits to 1. Hosts between them (minus the two reserved ends) are assignable, so a <code>/24</code> gives 254 usable addresses, a <code>/30</code> gives 2 — the classic point-to-point link.</p>
+    <p>Two details trip people up: usable hosts is <code>2^(32-prefix) − 2</code>, except for <code>/31</code> (RFC 3021, both addresses usable on point-to-point links) and <code>/32</code> (a single host). And a host address like <code>192.168.1.37/26</code> is <em>inside</em> the network <code>192.168.1.0/26</code> — the calculator always shows the network the address belongs to.</p>
+
+    <h2>常见问题</h2>
+    <details class="faq">
+      <summary>为什么 /31 和 /32 不减两个主机？</summary>
+      <div class="faq-body">它们是特例：/31 由 RFC 3021 定义，用于两个地址都可用的点对点链路；/32 是单主机路由（环回或主机防火墙条目）。其余都遵循 2^(32−前缀) − 2。</div>
+    </details>
+    <details class="faq">
+      <summary>支持 IPv6 吗？</summary>
+      <div class="faq-body">不支持——IPv6 使用 128 位地址，前缀计算方式不同。本工具仅支持 IPv4。</div>
+    </details>
+    <details class="faq">
+      <summary>我的地址会被发送出去吗？</summary>
+      <div class="faq-body">不会。所有计算都在你的浏览器中用 JavaScript 整数运算完成，没有任何传输。</div>
+    </details>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h4>常用工具</h4>
+        <ul>
+          <li><a href="/zh/tools/token-counter.html">LLM 分词与成本计算器</a></li>
+          <li><a href="/zh/tools/json-formatter.html">JSON 工具</a></li>
+          <li><a href="/zh/tools/regex-tester.html">正则测试</a></li>
+          <li><a href="/zh/tools/cron-explainer.html">Cron 解释</a></li>
+          <li><a href="/zh/tools/encode-decode.html">Base64 / URL / 哈希</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>模型价格</h4>
+        <ul>
+          <li><a href="/models/index.html">全部模型</a></li>
+          <li><a href="/models/gpt-6-astra.html">GPT-6 Astra 价格</a></li>
+          <li><a href="/models/claude-fable-5-1.html">Claude Fable 5.1 价格</a></li>
+          <li><a href="/models/gemini-3-8-flash.html">Gemini 3.8 Flash 价格</a></li>
+          <li><a href="/models/deepseek-v4-1-flash.html">DeepSeek V4.1 Flash 价格</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>更多</h4>
+        <ul>
+          <li><a href="https://ezaiops.com/">ezaiops.com</a></li>
+          <li><a href="/zh/about.html">关于</a></li>
+          <li><a href="/zh/contact.html">联系</a></li>
+          <li><a href="/zh/privacy.html">隐私政策</a></li>
+          <li><a href="https://github.com/ezaiops">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">© 2026 ezaiops · 输入内容不会离开你的浏览器</div>
+  </div>
+</footer>
+
+<script src="/assets/common.js?v=20261028b" defer=""></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  function ezT(k) { return window.ezI18N ? window.ezI18N.t(k) : k; }
+
+  var prefixSel = $("#sn-prefix");
+  for (var p = 8; p <= 32; p++) {
+    var o = document.createElement("option");
+    o.value = String(p);
+    o.textContent = "/" + p;
+    prefixSel.appendChild(o);
+  }
+
+  function ipToInt(ip) {
+    var parts = ip.split(".");
+    if (parts.length !== 4) return null;
+    var n = 0;
+    for (var i = 0; i < 4; i++) {
+      var oct = Number(parts[i]);
+      if (!isFinite(oct) || oct < 0 || oct > 255 || String(oct) !== parts[i].trim()) return null;
+      n = n * 256 + oct;
+    }
+    return n;
+  }
+  function intToIp(n) {
+    return [(n >>> 24) & 255, (n >>> 16) & 255, (n >>> 8) & 255, n & 255].join(".");
+  }
+  function maskOf(prefix) {
+    return prefix === 0 ? 0 : (0xFFFFFFFF << (32 - prefix)) >>> 0;
+  }
+  function toBin(n) {
+    var s = "";
+    for (var i = 31; i >= 0; i--) s += (n >>> i) & 1;
+    return s;
+  }
+  function hex32(n) {
+    return "0x" + ("00000000" + (n >>> 0).toString(16)).slice(-8);
+  }
+  function classOf(first) {
+    if (first < 128) return "A (large networks)";
+    if (first < 192) return "B (medium networks)";
+    if (first < 224) return "C (small networks)";
+    if (first < 240) return "D (multicast)";
+    return "E (reserved)";
+  }
+  function privateOf(first, second) {
+    if (first === 10) return "Yes — 10.0.0.0/8 (private)";
+    if (first === 172 && second >= 16 && second <= 31) return "Yes — 172.16.0.0/12 (private)";
+    if (first === 192 && second === 168) return "Yes — 192.168.0.0/16 (private)";
+    if (first === 127) return "Loopback — 127.0.0.0/8";
+    if (first === 169 && second === 254) return "Link-local — 169.254.0.0/16";
+    return "No — public";
+  }
+
+  function calculate() {
+    var raw = $("#sn-input").value.trim();
+    var err = $("#sn-err");
+    var m = raw.match(/^(\d{1,3}(?:\.\d{1,3}){3})\s*\/?\s*(\d{1,2})?$/);
+    if (!m) {
+      err.textContent = ezT("Enter an IPv4 address like 192.168.1.37/26");
+      err.classList.remove("hidden");
+      return;
+    }
+    var ip = ipToInt(m[1]);
+    var prefix = m[2] != null ? parseInt(m[2], 10) : parseInt(prefixSel.value, 10);
+    if (ip == null || isNaN(prefix) || prefix < 0 || prefix > 32) {
+      err.textContent = ezT("Invalid address or prefix. Address needs four octets 0-255, prefix 0-32.");
+      err.classList.remove("hidden");
+      return;
+    }
+    err.classList.add("hidden");
+
+    var mask = maskOf(prefix);
+    var network = (ip & mask) >>> 0;
+    var wildcard = (~mask) >>> 0;
+    var broadcast = (network | wildcard) >>> 0;
+    var total = Math.pow(2, 32 - prefix);
+    var usable = prefix >= 31 ? (prefix === 32 ? 1 : 2) : total - 2;
+    var firstHost = prefix >= 31 ? network : (network + 1) >>> 0;
+    var lastHost = prefix >= 31 ? broadcast : (broadcast - 1) >>> 0;
+
+    var rows = [
+      ["IP address", intToIp(ip) + "  (" + (ip >>> 0).toString(10) + ")"],
+      ["Network address", intToIp(network) + "/" + prefix],
+      ["Broadcast address", intToIp(broadcast)],
+      ["Usable host range", intToIp(firstHost) + " – " + intToIp(lastHost)],
+      ["Subnet mask", intToIp(mask) + "  (" + hex32(mask) + ")"],
+      ["Wildcard mask", intToIp(wildcard)],
+      ["Total addresses", total.toLocaleString()],
+      ["Usable hosts", usable.toLocaleString()],
+      ["Address class", classOf((ip >>> 24) & 255)],
+      ["Private range", privateOf((ip >>> 24) & 255, (ip >>> 16) & 255)]
+    ];
+    $("#sn-results").innerHTML = rows.map(function (r) {
+      return "<dt>" + r[0] + "</dt><dd class=\"mono\">" + r[1] + "</dd>";
+    }).join("");
+
+    var binRows = [
+      ["Address", toBin(ip)],
+      ["Mask", toBin(mask)],
+      ["Network", toBin(network)]
+    ];
+    $("#sn-binary").innerHTML = binRows.map(function (r) {
+      var cells = r[1].match(/.{8}/g).map(function (oct) {
+        return "<td class=\"mono\">" + oct.replace(/(\d{4})(\d{4})/, "$1 $2") + "</td>";
+      }).join("");
+      return "<tr><td>" + r[0] + "</td>" + cells + "</tr>";
+    }).join("");
+
+    var trows = [];
+    [24, 25, 26, 27, 28, 29, 30].forEach(function (pp) {
+      var tot = Math.pow(2, 32 - pp);
+      var us = tot - 2;
+      var sel = pp === prefix ? ' style="background:var(--accent-soft)"' : "";
+      trows.push("<tr" + sel + "><td class=\"num\">/" + pp + "</td><td class=\"mono\">" + intToIp(maskOf(pp)) +
+        "</td><td class=\"num\">" + tot.toLocaleString() + "</td><td class=\"num\">" + us.toLocaleString() + "</td></tr>");
+    });
+    $("#sn-table").innerHTML = trows.join("");
+  }
+
+  $("#sn-calc").addEventListener("click", calculate);
+  $("#sn-input").addEventListener("keydown", function (e) { if (e.key === "Enter") calculate(); });
+  document.querySelectorAll("[data-sn]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      $("#sn-input").value = b.getAttribute("data-sn");
+      calculate();
+    });
+  });
+
+  calculate();
+  window.addEventListener("ez:i18n", calculate);
+});
+</script>
+
+
+</body></html>

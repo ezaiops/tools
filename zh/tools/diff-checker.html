@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-zh-static="1"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>文本对比工具 — 逐行与字符级差异高亮</title>
+<meta name="description" content="粘贴两段文本，逐行和字符级高亮差异。完全在浏览器本地比对，内容不会上传。">
+<link rel="canonical" href="https://tools.ezaiops.com/zh/tools/diff-checker.html">
+<link rel="alternate" hreflang="zh-CN" href="https://tools.ezaiops.com/zh/tools/diff-checker.html">
+<link rel="alternate" hreflang="en" href="https://tools.ezaiops.com/tools/diff-checker.html">
+<link rel="alternate" hreflang="x-default" href="https://tools.ezaiops.com/tools/diff-checker.html">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="文本对比工具 — 逐行与字符级差异高亮">
+<meta property="og:description" content="粘贴两段文本，逐行和字符级高亮差异。完全在浏览器本地比对，内容不会上传。">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/style.css?v=20261028b">
+<script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Text Diff Checker",
+  "url": "https://tools.ezaiops.com/zh/tools/diff-checker.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}</script>
+
+
+
+<script src="/assets/i18n.js?v=20261028b"></script><script src="/assets/i18n/common.js?v=20261028b"></script><script src="/assets/i18n/tools/diff-checker.js?v=20261028b"></script><meta property="og:locale" content="zh_CN"></head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/zh/"><span class="logo">ez</span>ezaiops <small>工具</small></a>
+    <nav class="site-nav">
+      <a href="/zh/">工具</a>
+      <a href="/models/index.html">模型价格</a>
+      <a href="https://ezaiops.com/" title="ezaiops.com — AI Agent 可观测性与 LLMOps 实战笔记（中文）">博客</a>
+      <a href="https://github.com/ezaiops">GitHub</a>
+    <div class="lang-switch"><a href="/zh/tools/diff-checker.html" hreflang="zh-CN" class="active" aria-current="page">中文</a><a href="/tools/diff-checker.html?lang=en" hreflang="en">EN</a></div></nav>
+  </div>
+</header>
+
+<main class="wrap tool-page">
+  <nav class="crumbs"><a href="/zh/">首页</a> / 工具 / <a href="/zh/tools/diff-checker.html">差异对比</a><a class="main-site-link" href="https://ezaiops.com/">ezaiops.com ↗</a></nav>
+  <h1>文本差异对比</h1>
+  <p class="lead">粘贴两段文本，看清到底改了什么——逐行对比，修改行内的变化单词会高亮。紧凑的 Myers diff 在本地运行；不上传任何内容。</p>
+
+  <section class="panel">
+    <div class="field-row">
+      <div class="field">
+        <label class="field-label" for="df-a">原文</label>
+        <textarea id="df-a" class="mono" rows="10">The quick brown fox
+jumps over the lazy dog
+Pack my box with five
+dozen liquor jugs</textarea>
+      </div>
+      <div class="field">
+        <label class="field-label" for="df-b">修改后</label>
+        <textarea id="df-b" class="mono" rows="10">The quick brown cat
+jumps over the lazy dog
+Pack my box with five
+dozen jugs of liquor</textarea>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn primary" id="df-run" type="button">对比</button>
+      <button class="btn small" id="df-swap" type="button">交换两侧</button>
+      <label style="font-size:13px;color:var(--muted);display:flex;gap:6px;align-items:center"><input type="checkbox" id="df-inline" checked=""> 高亮变化的单词</label>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat"><div class="k">新增行</div><div class="v" id="df-added" style="color:var(--green)">0</div></div>
+      <div class="stat"><div class="k">删除行</div><div class="v" id="df-removed" style="color:var(--red)">0</div></div>
+      <div class="stat"><div class="k">修改行</div><div class="v" id="df-changed" style="color:var(--amber)">2</div></div>
+      <div class="stat"><div class="k">总行数</div><div class="v" id="df-total">4</div></div>
+    </div>
+
+    <div id="df-output" style="margin-top:14px"><div class="df-row df-del"><div class="df-gutter">−1</div><div class="df-text">The quick brown fox</div></div><div class="df-row df-add"><div class="df-gutter">+1</div><div class="df-text">The quick brown <span class="df-word-del">fox</span><span class="df-word-add">cat</span></div></div><div class="df-row"><div class="df-gutter">2</div><div class="df-text">jumps over the lazy dog</div></div><div class="df-row"><div class="df-gutter">3</div><div class="df-text">Pack my box with five</div></div><div class="df-row df-del"><div class="df-gutter">−4</div><div class="df-text">dozen liquor jugs</div></div><div class="df-row df-add"><div class="df-gutter">+4</div><div class="df-text">dozen <span class="df-word-del">liquor</span><span class="df-word-del"> </span>jugs<span class="df-word-add"> </span><span class="df-word-add">of</span><span class="df-word-add"> </span><span class="df-word-add">liquor</span></div></div></div>
+  </section>
+
+  <div class="ad-slot">
+    <strong>广告位</strong>
+    Google AdSense 占位——网站通过审批并有稳定流量后启用。
+  </div>
+
+  <section class="prose">
+    <h2>差异是怎么算的</h2>
+    <p>Line differences come from the Myers O(ND) algorithm — the same family that powers <code>git diff</code>. It finds the shortest edit script (insertions and deletions) between the two line sequences. Modified lines are then paired up and a word-level Myers pass highlights the changed words inside them, which is what makes small edits readable at a glance.</p>
+    <p>一切都在你设备的 JavaScript 中运行。实际表现接近线性，最坏情况是平方级——粘贴几千行没问题，粘贴整个代码库就不行了。</p>
+
+    <h2>常见问题</h2>
+    <details class="faq">
+      <summary>这和 git diff 有什么区别？</summary>
+      <div class="faq-body">行级算法相同，但 git 还会应用启发式规则（差异块头、函数上下文、空白处理）。比较两个任意文本块——邮件、配置文件、草稿——这个工具更快。</div>
+    </details>
+    <details class="faq">
+      <summary>会忽略空白吗？</summary>
+      <div class="faq-body">不会——行尾空格也算差异。想要忽略空白的比较，先自行去除两侧空白。</div>
+    </details>
+    <details class="faq">
+      <summary>文本会被上传吗？</summary>
+      <div class="faq-body">不会。差异在你的浏览器中计算，页面从不传输内容。</div>
+    </details>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h4>常用工具</h4>
+        <ul>
+          <li><a href="/zh/tools/token-counter.html">LLM 分词与成本计算器</a></li>
+          <li><a href="/zh/tools/json-formatter.html">JSON 工具</a></li>
+          <li><a href="/zh/tools/regex-tester.html">正则测试</a></li>
+          <li><a href="/zh/tools/cron-explainer.html">Cron 解释</a></li>
+          <li><a href="/zh/tools/encode-decode.html">Base64 / URL / 哈希</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>模型价格</h4>
+        <ul>
+          <li><a href="/models/index.html">全部模型</a></li>
+          <li><a href="/models/gpt-6-astra.html">GPT-6 Astra 价格</a></li>
+          <li><a href="/models/claude-fable-5-1.html">Claude Fable 5.1 价格</a></li>
+          <li><a href="/models/gemini-3-8-flash.html">Gemini 3.8 Flash 价格</a></li>
+          <li><a href="/models/deepseek-v4-1-flash.html">DeepSeek V4.1 Flash 价格</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>更多</h4>
+        <ul>
+          <li><a href="https://ezaiops.com/">ezaiops.com</a></li>
+          <li><a href="/zh/about.html">关于</a></li>
+          <li><a href="/zh/contact.html">联系</a></li>
+          <li><a href="/zh/privacy.html">隐私政策</a></li>
+          <li><a href="https://github.com/ezaiops">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">© 2026 ezaiops · 输入内容不会离开你的浏览器</div>
+  </div>
+</footer>
+
+<script src="/assets/common.js?v=20261028b" defer=""></script>
+<style>
+.df-row { display: flex; font-family: var(--mono); font-size: 13px; line-height: 1.5; }
+.df-gutter { flex: 0 0 44px; text-align: right; padding: 1px 8px; color: var(--muted); user-select: none; border-right: 1px solid var(--border); }
+.df-text { flex: 1; padding: 1px 10px; white-space: pre-wrap; word-break: break-all; }
+.df-add { background: var(--green-soft); }
+.df-del { background: var(--red-soft); }
+.df-add .df-text { color: var(--green); }
+.df-del .df-text { color: var(--red); }
+.df-chg { background: var(--amber-soft); }
+.df-word-add { background: #bbf7d0; border-radius: 3px; padding: 0 1px; }
+.df-word-del { background: #fecaca; border-radius: 3px; padding: 0 1px; text-decoration: line-through; }
+.df-empty { color: var(--muted); }
+</style>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+
+  // Myers O(ND) line diff — returns ops: [{type: 'same'|'add'|'del', a?: line, b?: line}]
+  function myers(a, b) {
+    var n = a.length, m = b.length, max = n + m;
+    if (max === 0) return [];
+    var v = {};
+    var trace = [];
+    for (var d = 0; d <= max; d++) {
+      trace.push(Object.assign({}, v));
+      for (var k = -d; k <= d; k += 2) {
+        var x;
+        if (k === -d || (k !== d && (v[k - 1] || 0) < (v[k + 1] || 0))) x = v[k + 1] || 0;
+        else x = (v[k - 1] || 0) + 1;
+        var y = x - k;
+        while (x < n && y < m && a[x] === b[y]) { x++; y++; }
+        v[k] = x;
+        if (x >= n && y >= m) return backtrack(trace, a, b, d);
+      }
+    }
+    return [];
+  }
+  function backtrack(trace, a, b, d) {
+    var ops = [];
+    var x = a.length, y = b.length;
+    for (var dd = d; dd > 0; dd--) {
+      var v = trace[dd];
+      var k = x - y;
+      var prevK;
+      if (k === -dd || (k !== dd && (v[k - 1] || 0) < (v[k + 1] || 0))) prevK = k + 1;
+      else prevK = k - 1;
+      var prevX = v[prevK] || 0;
+      var prevY = prevX - prevK;
+      while (x > prevX && y > prevY) {
+        ops.unshift({ type: "same", a: a[x - 1], b: b[y - 1] });
+        x--; y--;
+      }
+      if (dd > 0) {
+        if (x === prevX) ops.unshift({ type: "add", b: b[y - 1] });
+        else ops.unshift({ type: "del", a: a[x - 1] });
+      }
+      x = prevX; y = prevY;
+    }
+    while (x > 0 && y > 0) {
+      ops.unshift({ type: "same", a: a[x - 1], b: b[y - 1] });
+      x--; y--;
+    }
+    return ops;
+  }
+
+  // word-level diff for a pair of modified lines
+  function wordDiff(aLine, bLine) {
+    var aw = aLine.split(/(\s+)/), bw = bLine.split(/(\s+)/);
+    var ops = myers(aw.filter(function (w) { return w !== ""; }), bw.filter(function (w) { return w !== ""; }));
+    var html = "";
+    ops.forEach(function (op) {
+      if (op.type === "del") html += '<span class="df-word-del">' + esc(op.a) + "</span>";
+      else if (op.type === "add") html += '<span class="df-word-add">' + esc(op.b) + "</span>";
+      else html += esc(op.b);
+    });
+    return html;
+  }
+  function esc(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  function pairChanges(ops) {
+    // group consecutive del/add into change pairs; empty lines never pair (they are pure del/add)
+    var rows = [];
+    var i = 0;
+    while (i < ops.length) {
+      if (ops[i].type === "same") { rows.push({ type: "same", text: ops[i].a }); i++; continue; }
+      var dels = [], adds = [];
+      while (i < ops.length && ops[i].type === "del") { dels.push(ops[i].a); i++; }
+      while (i < ops.length && ops[i].type === "add") { adds.push(ops[i].b); i++; }
+      dels = dels.filter(function (l) { return l !== ""; });
+      adds = adds.filter(function (l) { return l !== ""; });
+      var len = Math.max(dels.length, adds.length);
+      for (var j = 0; j < len; j++) {
+        if (j < dels.length && j < adds.length) rows.push({ type: "chg", del: dels[j], add: adds[j] });
+        else if (j < dels.length) rows.push({ type: "del", text: dels[j] });
+        else rows.push({ type: "add", text: adds[j] });
+      }
+    }
+    return rows;
+  }
+
+  function render() {
+    var aRaw = $("#df-a").value;
+    var bRaw = $("#df-b").value;
+    if (!aRaw.trim() && !bRaw.trim()) {
+      $("#df-added").textContent = "0";
+      $("#df-removed").textContent = "0";
+      $("#df-changed").textContent = "0";
+      $("#df-total").textContent = "0";
+      $("#df-output").innerHTML = '<div class="df-row"><div class="df-gutter"></div><div class="df-text df-empty">(both sides empty)</div></div>';
+      return;
+    }
+    var a = aRaw.replace(/\n$/, "").split("\n");
+    var b = bRaw.replace(/\n$/, "").split("\n");
+    var ops = myers(a, b);
+    var rows = pairChanges(ops);
+    var added = 0, removed = 0, changed = 0;
+    rows.forEach(function (r) {
+      if (r.type === "add") added++;
+      if (r.type === "del") removed++;
+      if (r.type === "chg") changed++;
+    });
+    $("#df-added").textContent = String(added);
+    $("#df-removed").textContent = String(removed);
+    $("#df-changed").textContent = String(changed);
+    $("#df-total").textContent = String(Math.max(a.length, b.length));
+
+    var inline = $("#df-inline").checked;
+    var html = "";
+    rows.forEach(function (r, idx) {
+      var n = String(idx + 1);
+      if (r.type === "same") {
+        html += '<div class="df-row"><div class="df-gutter">' + n + '</div><div class="df-text">' + esc(r.text) + "</div></div>";
+      } else if (r.type === "add") {
+        html += '<div class="df-row df-add"><div class="df-gutter">+' + n + '</div><div class="df-text">' + esc(r.text) + "</div></div>";
+      } else if (r.type === "del") {
+        html += '<div class="df-row df-del"><div class="df-gutter">−' + n + '</div><div class="df-text">' + esc(r.text) + "</div></div>";
+      } else {
+        html += '<div class="df-row df-del"><div class="df-gutter">−' + n + '</div><div class="df-text">' + esc(r.del) + "</div></div>";
+        html += '<div class="df-row df-add"><div class="df-gutter">+' + n + '</div><div class="df-text">' +
+          (inline ? wordDiff(r.del, r.add) : esc(r.add)) + "</div></div>";
+      }
+    });
+    if (!rows.length) {
+      html = '<div class="df-row"><div class="df-gutter"></div><div class="df-text df-empty">(both sides empty)</div></div>';
+    }
+    $("#df-output").innerHTML = html;
+  }
+
+  $("#df-run").addEventListener("click", render);
+  $("#df-swap").addEventListener("click", function () {
+    var t = $("#df-a").value;
+    $("#df-a").value = $("#df-b").value;
+    $("#df-b").value = t;
+    render();
+  });
+  $("#df-inline").addEventListener("change", render);
+  var t = null;
+  function schedule() { clearTimeout(t); t = setTimeout(render, 300); }
+  $("#df-a").addEventListener("input", schedule);
+  $("#df-b").addEventListener("input", schedule);
+
+  render();
+});
+</script>
+
+
+</body></html>

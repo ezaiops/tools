@@ -37,5 +37,7 @@ window.I18N_DICTS.push({
   "Why is the merged file bigger than the sum of its parts?": "为什么合并后的文件比各部分之和还大？",
   "It shouldn't be by much — pdf-lib copies pages without recompression, so sizes are roughly additive. If a file balloons, it likely embedded a font that was already duplicated across sources.": "通常不会大多少——pdf-lib 复制页面时不重新压缩，体积大致可加。如果文件异常膨胀，很可能是嵌入了跨文件重复的字体。",
   "Can I rotate, reorder or delete pages?": "可以旋转、重排或删除页面吗？",
-  "Not in this version — merge and extract only. Reordering is possible by extracting ranges in the order you want them and merging the results.": "当前版本不行——只有合并和提取。重排可以这样做：按想要的顺序提取各范围，再合并结果。"
+  "Not in this version — merge and extract only. Reordering is possible by extracting ranges in the order you want them and merging the results.": "当前版本不行——只有合并和提取。重排可以这样做：按想要的顺序提取各范围，再合并结果。",
+
+    "el:Combine several PDFs into one file, or pull selected page ranges out of a PDF — locally, with pdf-lib. Your documents are read in the browser and never uploaded, which matters for anything confidential.": "把多个 PDF 合成一个文件，或从 PDF 里抽取指定页码范围——本地完成，基于 <code>pdf-lib</code>。文档在浏览器里读取、从不上传，处理机密文件才放心。"
 });

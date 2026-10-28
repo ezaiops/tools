@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-zh-static="1"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>图片压缩与格式转换 — JPG/PNG 转 WebP</title>
+<meta name="description" content="用 canvas 在浏览器本地压缩 JPG/PNG 并转成 WebP，带质量滑块与压缩前后体积对比，图片不上传服务器。">
+<link rel="canonical" href="https://tools.ezaiops.com/zh/tools/image-compressor.html">
+<link rel="alternate" hreflang="zh-CN" href="https://tools.ezaiops.com/zh/tools/image-compressor.html">
+<link rel="alternate" hreflang="en" href="https://tools.ezaiops.com/tools/image-compressor.html">
+<link rel="alternate" hreflang="x-default" href="https://tools.ezaiops.com/tools/image-compressor.html">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="图片压缩与格式转换 — JPG/PNG 转 WebP">
+<meta property="og:description" content="用 canvas 在浏览器本地压缩 JPG/PNG 并转成 WebP，带质量滑块与压缩前后体积对比，图片不上传服务器。">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/style.css?v=20261028b">
+<script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Image Compressor & Converter",
+  "url": "https://tools.ezaiops.com/zh/tools/image-compressor.html",
+  "applicationCategory": "MultimediaApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}</script>
+
+
+
+<script src="/assets/i18n.js?v=20261028b"></script><script src="/assets/i18n/common.js?v=20261028b"></script><script src="/assets/i18n/tools/image-compressor.js?v=20261028b"></script><meta property="og:locale" content="zh_CN"></head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/zh/"><span class="logo">ez</span>ezaiops <small>工具</small></a>
+    <nav class="site-nav">
+      <a href="/zh/">工具</a>
+      <a href="/models/index.html">模型价格</a>
+      <a href="https://ezaiops.com/" title="ezaiops.com — AI Agent 可观测性与 LLMOps 实战笔记（中文）">博客</a>
+      <a href="https://github.com/ezaiops">GitHub</a>
+    <div class="lang-switch"><a href="/zh/tools/image-compressor.html" hreflang="zh-CN" class="active" aria-current="page">中文</a><a href="/tools/image-compressor.html?lang=en" hreflang="en">EN</a></div></nav>
+  </div>
+</header>
+
+<main class="wrap tool-page">
+  <nav class="crumbs"><a href="/zh/">首页</a> / 工具 / <a href="/zh/tools/image-compressor.html">图片压缩</a><a class="main-site-link" href="https://ezaiops.com/">ezaiops.com ↗</a></nav>
+  <h1>图片压缩与格式转换</h1>
+  <p class="lead">拖入 JPG 或 PNG，调节质量，下载更小的文件——或直接转换为 WebP。全部通过 canvas API 在浏览器中完成：图片不会上传到任何地方，涉及隐私内容时这点很重要。</p>
+
+  <section class="panel">
+    <div class="field-row">
+      <div class="field">
+        <label class="field-label" for="ic-file">图片文件</label>
+        <input type="file" id="ic-file" accept="image/jpeg,image/png,image/webp">
+        <div class="hint">JPG, PNG or WebP. One file at a time — the first selected file is used.</div>
+      </div>
+      <div class="field">
+        <label class="field-label" for="ic-format">输出格式</label>
+        <select id="ic-format">
+          <option value="webp" selected="">WebP（最小）</option>
+          <option value="jpeg">JPEG</option>
+          <option value="png">PNG（无损）</option>
+        </select>
+      </div>
+      <div class="field">
+        <label class="field-label" for="ic-quality">质量： <strong id="ic-quality-val">80%</strong></label>
+        <input type="range" id="ic-quality" min="10" max="100" step="5" value="80" style="width:100%">
+      </div>
+    </div>
+    <div class="field-row" style="margin-top:12px">
+      <div class="field">
+        <label class="field-label" for="ic-scale">缩放</label>
+        <select id="ic-scale">
+          <option value="1" selected="">原始尺寸</option>
+          <option value="0.75">75%</option>
+          <option value="0.5">50%</option>
+          <option value="0.25">25%</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn primary" id="ic-run" type="button" disabled="">压缩</button>
+      <button class="btn" id="ic-download" type="button" disabled="">下载</button>
+    </div>
+
+    <div class="stats-grid" style="margin-top:14px">
+      <div class="stat"><div class="k">原始尺寸</div><div class="v" id="ic-before">—</div></div>
+      <div class="stat"><div class="k">压缩后大小</div><div class="v" id="ic-after">—</div></div>
+      <div class="stat"><div class="k">节省</div><div class="v" id="ic-saved">—</div></div>
+      <div class="stat"><div class="k">尺寸</div><div class="v" id="ic-dims" style="font-size:15px">—</div></div>
+    </div>
+    <div id="ic-preview" style="margin-top:14px"></div>
+    <p class="note" id="ic-note"></p>
+  </section>
+
+  <div class="ad-slot">
+    <strong>广告位</strong>
+    Google AdSense 占位——网站通过审批并有稳定流量后启用。
+  </div>
+
+  <section class="prose">
+    <h2>这个工具实际做什么</h2>
+    <p>Your file is read with <code>FileReader</code> into an <code>&lt;img&gt;</code>, drawn onto a <code>&lt;canvas&gt;</code> (which is where resizing happens), and re-encoded with <code>canvas.toBlob()</code> at the quality you chose. That is the same encode/decode path the browser itself uses — there is no magic, and no server.</p>
+    <ul>
+      <li><strong>WebP</strong> typically gives 25–40% smaller files than JPEG at equivalent quality, and supports transparency that JPEG cannot. Supported by all current browsers.</li>
+      <li><strong>JPEG</strong> is the universal fallback; quality 80 is the sweet spot for photos.</li>
+      <li><strong>PNG</strong> is lossless — re-encoding an already-PNG file rarely shrinks it unless you resize or drop to 8-bit colors, which this tool does not do.</li>
+    </ul>
+    <p>最好的结果来自尽可能大的原图：canvas 里缩小比放大小文件更清晰，4000px 拍摄的照片压到 25% 通常比 1000px 原图压到 25% 看起来更好。</p>
+
+    <h2>常见问题</h2>
+    <details class="faq">
+      <summary>有文件大小限制吗？</summary>
+      <div class="faq-body">实际限制是设备内存。桌面端 20–30 MB 以内的文件都没问题；超大图片（100 MB 以上）在手机上可能失败。</div>
+    </details>
+    <details class="faq">
+      <summary>质量 80 画质会差吗？</summary>
+      <div class="faq-body">对照片来说几乎看不出。缩略图和社交预览用 60–70；含文字或精细线条的图保持 90 以上。</div>
+    </details>
+    <details class="faq">
+      <summary>我的图片会传到哪去？</summary>
+      <div class="faq-body">哪也不去。文件选择、canvas 和下载全部在本地完成；页面不会用你的图片数据发任何网络请求。</div>
+    </details>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h4>常用工具</h4>
+        <ul>
+          <li><a href="/zh/tools/token-counter.html">LLM 分词与成本计算器</a></li>
+          <li><a href="/zh/tools/json-formatter.html">JSON 工具</a></li>
+          <li><a href="/zh/tools/regex-tester.html">正则测试</a></li>
+          <li><a href="/zh/tools/cron-explainer.html">Cron 解释</a></li>
+          <li><a href="/zh/tools/encode-decode.html">Base64 / URL / 哈希</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>模型价格</h4>
+        <ul>
+          <li><a href="/models/index.html">全部模型</a></li>
+          <li><a href="/models/gpt-6-astra.html">GPT-6 Astra 价格</a></li>
+          <li><a href="/models/claude-fable-5-1.html">Claude Fable 5.1 价格</a></li>
+          <li><a href="/models/gemini-3-8-flash.html">Gemini 3.8 Flash 价格</a></li>
+          <li><a href="/models/deepseek-v4-1-flash.html">DeepSeek V4.1 Flash 价格</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>更多</h4>
+        <ul>
+          <li><a href="https://ezaiops.com/">ezaiops.com</a></li>
+          <li><a href="/zh/about.html">关于</a></li>
+          <li><a href="/zh/contact.html">联系</a></li>
+          <li><a href="/zh/privacy.html">隐私政策</a></li>
+          <li><a href="https://github.com/ezaiops">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">© 2026 ezaiops · 输入内容不会离开你的浏览器</div>
+  </div>
+</footer>
+
+<script src="/assets/common.js?v=20261028b" defer=""></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  function ezT(k) { return window.ezI18N ? window.ezI18N.t(k) : k; }
+
+  var fileInput = $("#ic-file");
+  var quality = $("#ic-quality"), qualityVal = $("#ic-quality-val");
+  var formatSel = $("#ic-format"), scaleSel = $("#ic-scale");
+  var runBtn = $("#ic-run"), dlBtn = $("#ic-download");
+  var note = $("#ic-note");
+  var currentBlob = null, currentName = "image";
+
+  function fmtSize(bytes) {
+    if (bytes < 1024) return bytes + " B";
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
+    return (bytes / 1024 / 1024).toFixed(2) + " MB";
+  }
+
+  quality.addEventListener("input", function () { qualityVal.textContent = quality.value + "%"; });
+  fileInput.addEventListener("change", function () {
+    var f = fileInput.files && fileInput.files[0];
+    runBtn.disabled = !f;
+    dlBtn.disabled = true;
+    note.textContent = f ? ezT("Ready — press Compress.") : "";
+    $("#ic-before").textContent = f ? fmtSize(f.size) : "—";
+    $("#ic-after").textContent = "—";
+    $("#ic-saved").textContent = "—";
+    $("#ic-dims").textContent = "—";
+    $("#ic-preview").innerHTML = "";
+  });
+
+  runBtn.addEventListener("click", function () {
+    var f = fileInput.files && fileInput.files[0];
+    if (!f) return;
+    currentName = f.name.replace(/\.[^.]+$/, "");
+    var reader = new FileReader();
+    reader.onload = function () {
+      var img = new Image();
+      img.onload = function () {
+        var scale = parseFloat(scaleSel.value);
+        var w = Math.max(1, Math.round(img.width * scale));
+        var h = Math.max(1, Math.round(img.height * scale));
+        var canvas = document.createElement("canvas");
+        canvas.width = w;
+        canvas.height = h;
+        var ctx = canvas.getContext("2d");
+        if (formatSel.value === "jpeg") {
+          ctx.fillStyle = "#ffffff";
+          ctx.fillRect(0, 0, w, h);
+        }
+        ctx.drawImage(img, 0, 0, w, h);
+        var q = parseInt(quality.value, 10) / 100;
+        var mime = formatSel.value === "webp" ? "image/webp" : formatSel.value === "jpeg" ? "image/jpeg" : "image/png";
+        canvas.toBlob(function (blob) {
+          if (!blob) {
+            note.textContent = ezT("This browser could not encode that format — try WebP or JPEG.");
+            return;
+          }
+          currentBlob = blob;
+          var pct = f.size > 0 ? Math.round((1 - blob.size / f.size) * 100) : 0;
+          $("#ic-after").textContent = fmtSize(blob.size);
+          $("#ic-saved").textContent = (pct >= 0 ? pct + "% smaller" : Math.abs(pct) + "% larger");
+          $("#ic-dims").textContent = img.width + "×" + img.height + " → " + w + "×" + h;
+          dlBtn.disabled = false;
+          note.textContent = blob.size >= f.size
+            ? ezT("The re-encode is larger than the original — try a lower quality or a smaller resize.")
+            : ezT("Done — press Download.");
+          var url = URL.createObjectURL(blob);
+          $("#ic-preview").innerHTML = '<img src="' + url + '" alt="preview" style="max-width:100%;max-height:280px;border:1px solid var(--border);border-radius:8px">';
+        }, mime, q);
+      };
+      img.onerror = function () { note.textContent = ezT("Could not read that image file."); };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(f);
+  });
+
+  dlBtn.addEventListener("click", function () {
+    if (!currentBlob) return;
+    try {
+      var ext = formatSel.value === "jpeg" ? "jpg" : formatSel.value;
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(currentBlob);
+      a.download = currentName + "-compressed." + ext;
+      a.click();
+      URL.revokeObjectURL(a.href);
+    } catch (e) {
+      note.textContent = ezT("Download not supported in this browser.");
+    }
+  });
+
+  window.addEventListener("ez:i18n", function () {
+    note.textContent = fileInput.files && fileInput.files[0] ? ezT("Ready — press Compress.") : "";
+  });
+});
+</script>
+
+
+</body></html>

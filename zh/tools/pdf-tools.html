@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-zh-static="1"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PDF 合并与拆分 — 浏览器本地处理</title>
+<meta name="description" content="把多个 PDF 合并成一个，或按页码范围拆分出新文件。基于 pdf-lib 在浏览器本地完成，文件不上传。">
+<link rel="canonical" href="https://tools.ezaiops.com/zh/tools/pdf-tools.html">
+<link rel="alternate" hreflang="zh-CN" href="https://tools.ezaiops.com/zh/tools/pdf-tools.html">
+<link rel="alternate" hreflang="en" href="https://tools.ezaiops.com/tools/pdf-tools.html">
+<link rel="alternate" hreflang="x-default" href="https://tools.ezaiops.com/tools/pdf-tools.html">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="PDF 合并与拆分 — 浏览器本地处理">
+<meta property="og:description" content="把多个 PDF 合并成一个，或按页码范围拆分出新文件。基于 pdf-lib 在浏览器本地完成，文件不上传。">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/style.css?v=20261028b">
+<script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "PDF Merge & Split",
+  "url": "https://tools.ezaiops.com/zh/tools/pdf-tools.html",
+  "applicationCategory": "UtilityApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}</script>
+
+
+
+<script src="/assets/i18n.js?v=20261028b"></script><script src="/assets/i18n/common.js?v=20261028b"></script><script src="/assets/i18n/tools/pdf-tools.js?v=20261028b"></script><meta property="og:locale" content="zh_CN"></head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/zh/"><span class="logo">ez</span>ezaiops <small>工具</small></a>
+    <nav class="site-nav">
+      <a href="/zh/">工具</a>
+      <a href="/models/index.html">模型价格</a>
+      <a href="https://ezaiops.com/" title="ezaiops.com — AI Agent 可观测性与 LLMOps 实战笔记（中文）">博客</a>
+      <a href="https://github.com/ezaiops">GitHub</a>
+    <div class="lang-switch"><a href="/zh/tools/pdf-tools.html" hreflang="zh-CN" class="active" aria-current="page">中文</a><a href="/tools/pdf-tools.html?lang=en" hreflang="en">EN</a></div></nav>
+  </div>
+</header>
+
+<main class="wrap tool-page">
+  <nav class="crumbs"><a href="/zh/">首页</a> / 工具 / <a href="/zh/tools/pdf-tools.html">PDF 工具</a><a class="main-site-link" href="https://ezaiops.com/">ezaiops.com ↗</a></nav>
+  <h1>PDF 合并与拆分</h1>
+  <p class="lead">把多个 PDF 合成一个文件，或从 PDF 里抽取指定页码范围——本地完成，基于 <code>pdf-lib</code>。文档在浏览器里读取、从不上传，处理机密文件才放心。</p>
+
+  <section class="panel">
+    <div class="btn-row" style="margin-top:0">
+      <button class="btn small primary" data-pdftab="merge" type="button">合并 PDF</button>
+      <button class="btn small" data-pdftab="split" type="button">提取页面</button>
+    </div>
+
+    <div id="pdf-panel-merge" style="margin-top:14px">
+      <label class="field-label" for="pdf-files">PDF 文件（按顺序）</label>
+      <input type="file" id="pdf-files" accept="application/pdf" multiple="">
+      <div class="hint">按列表顺序合并——多数浏览器按字母序排列，建议命名为 01-、02-…</div>
+      <div class="btn-row">
+        <button class="btn primary" id="pdf-merge" type="button">合并为一个 PDF</button>
+      </div>
+      <p class="note" id="pdf-merge-note"></p>
+    </div>
+
+    <div id="pdf-panel-split" class="hidden" style="margin-top:14px">
+      <div class="field-row">
+        <div class="field">
+          <label class="field-label" for="pdf-one">源 PDF</label>
+          <input type="file" id="pdf-one" accept="application/pdf">
+        </div>
+        <div class="field">
+          <label class="field-label" for="pdf-range">要提取的页面</label>
+          <input type="text" id="pdf-range" class="mono" placeholder="1-3, 7, 10-12">
+          <div class="hint">从 1 开始，逗号分隔的范围。</div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn primary" id="pdf-split" type="button">提取页面</button>
+      </div>
+      <p class="note" id="pdf-split-note"></p>
+    </div>
+
+    <div class="stats-grid" style="margin-top:14px">
+      <div class="stat"><div class="k">输出页数</div><div class="v" id="pdf-pages">—</div></div>
+      <div class="stat"><div class="k">输出大小</div><div class="v" id="pdf-size">—</div></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn" id="pdf-download" type="button" disabled="">下载结果</button>
+    </div>
+  </section>
+
+  <div class="ad-slot">
+    <strong>广告位</strong>
+    Google AdSense 占位——网站通过审批并有稳定流量后启用。
+  </div>
+
+  <section class="prose">
+    <h2>什么在本地运行</h2>
+    <p>The whole operation uses <code>pdf-lib</code>, a pure-JavaScript PDF library loaded from a CDN on first use. Your files are read with <code>FileReader</code>, assembled or trimmed in memory, and written back with <code>URL.createObjectURL</code>. No server ever sees the bytes — and no size or rate limits, because there is nothing to meter.</p>
+    <ul>
+      <li><strong>Merge</strong> concatenates full documents in the order you list them. Bookmarks and form fields from the sources are not preserved.</li>
+      <li><strong>提取</strong> copies the selected pages into a new document. Pages stay exactly as they were — text, images and vector content included.</li>
+      <li>加密的 PDF 需要先移除密码才能在这里处理。</li>
+    </ul>
+
+    <h2>常见问题</h2>
+    <details class="faq">
+      <summary>有文件大小限制吗？</summary>
+      <div class="faq-body">只受设备内存限制。桌面端几十 MB 的文件都没问题；手机浏览器在总计约 50–100 MB 时开始吃力。</div>
+    </details>
+    <details class="faq">
+      <summary>为什么合并后的文件比各部分之和还大？</summary>
+      <div class="faq-body">通常不会大多少——pdf-lib 复制页面时不重新压缩，体积大致可加。如果文件异常膨胀，很可能是嵌入了跨文件重复的字体。</div>
+    </details>
+    <details class="faq">
+      <summary>可以旋转、重排或删除页面吗？</summary>
+      <div class="faq-body">当前版本不行——只有合并和提取。重排可以这样做：按想要的顺序提取各范围，再合并结果。</div>
+    </details>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h4>常用工具</h4>
+        <ul>
+          <li><a href="/zh/tools/token-counter.html">LLM 分词与成本计算器</a></li>
+          <li><a href="/zh/tools/json-formatter.html">JSON 工具</a></li>
+          <li><a href="/zh/tools/regex-tester.html">正则测试</a></li>
+          <li><a href="/zh/tools/cron-explainer.html">Cron 解释</a></li>
+          <li><a href="/zh/tools/encode-decode.html">Base64 / URL / 哈希</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>模型价格</h4>
+        <ul>
+          <li><a href="/models/index.html">全部模型</a></li>
+          <li><a href="/models/gpt-6-astra.html">GPT-6 Astra 价格</a></li>
+          <li><a href="/models/claude-fable-5-1.html">Claude Fable 5.1 价格</a></li>
+          <li><a href="/models/gemini-3-8-flash.html">Gemini 3.8 Flash 价格</a></li>
+          <li><a href="/models/deepseek-v4-1-flash.html">DeepSeek V4.1 Flash 价格</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>更多</h4>
+        <ul>
+          <li><a href="https://ezaiops.com/">ezaiops.com</a></li>
+          <li><a href="/zh/about.html">关于</a></li>
+          <li><a href="/zh/contact.html">联系</a></li>
+          <li><a href="/zh/privacy.html">隐私政策</a></li>
+          <li><a href="https://github.com/ezaiops">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">© 2026 ezaiops · 输入内容不会离开你的浏览器</div>
+  </div>
+</footer>
+
+<script src="/assets/common.js?v=20261028b" defer=""></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  function ezT(k) { return window.ezI18N ? window.ezI18N.t(k) : k; }
+
+  var pdfLib = null;
+  var loading = null;
+  var outBlob = null;
+
+  function loadLib() {
+    if (pdfLib) return Promise.resolve(pdfLib);
+    if (loading) return loading;
+    loading = import("https://esm.sh/pdf-lib@1.17.1").then(function (m) {
+      pdfLib = m;
+      return pdfLib;
+    }).catch(function () {
+      loading = null;
+      throw new Error("pdf-lib unavailable");
+    });
+    return loading;
+  }
+  function withLib(noteEl, fn) {
+    noteEl.textContent = ezT("Loading the PDF engine…");
+    loadLib().then(fn).catch(function () {
+      noteEl.textContent = ezT("Could not load the PDF engine (network blocked?). Try again on a normal connection.");
+    });
+  }
+  function fmtSize(bytes) {
+    if (bytes < 1024) return bytes + " B";
+    if (bytes < 1048576) return (bytes / 1024).toFixed(1) + " KB";
+    return (bytes / 1048576).toFixed(2) + " MB";
+  }
+  function readFile(file) {
+    return new Promise(function (resolve, reject) {
+      var r = new FileReader();
+      r.onload = function () { resolve(new Uint8Array(r.result)); };
+      r.onerror = reject;
+      r.readAsArrayBuffer(file);
+    });
+  }
+  function parseRanges(str, max) {
+    var out = [];
+    str.split(",").forEach(function (part) {
+      part = part.trim();
+      if (!part) return;
+      var m = part.match(/^(\d+)\s*-\s*(\d+)$/);
+      if (m) {
+        var a = parseInt(m[1], 10), b = parseInt(m[2], 10);
+        if (a < 1 || b > max || a > b) throw new Error(ezT("Page range %s is out of bounds (1–%s)"));
+        for (var i = a; i <= b; i++) out.push(i - 1);
+      } else {
+        var n = parseInt(part, 10);
+        if (!isFinite(n) || n < 1 || n > max) throw new Error(ezT("Page %s is out of bounds (1–%s)"));
+        out.push(n - 1);
+      }
+    });
+    if (!out.length) throw new Error(ezT("No valid pages selected"));
+    return out;
+  }
+  function finish(blob, pages) {
+    outBlob = blob;
+    $("#pdf-pages").textContent = String(pages);
+    $("#pdf-size").textContent = fmtSize(blob.size);
+    $("#pdf-download").disabled = false;
+  }
+
+  document.querySelectorAll("[data-pdftab]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      document.querySelectorAll("[data-pdftab]").forEach(function (x) {
+        x.classList.toggle("primary", x === b);
+      });
+      $("#pdf-panel-merge").classList.toggle("hidden", b.getAttribute("data-pdftab") !== "merge");
+      $("#pdf-panel-split").classList.toggle("hidden", b.getAttribute("data-pdftab") !== "split");
+    });
+  });
+
+  $("#pdf-merge").addEventListener("click", function () {
+    var files = $("#pdf-files").files;
+    var note = $("#pdf-merge-note");
+    if (!files || files.length < 1) { note.textContent = ezT("Choose at least one PDF."); return; }
+    withLib(note, function () {
+      return Promise.all(Array.prototype.map.call(files, readFile)).then(function (buffers) {
+        return pdfLib.PDFDocument.create().then(function (doc) {
+          return buffers.reduce(function (chain, bytes) {
+            return chain.then(function () {
+              return pdfLib.PDFDocument.load(bytes).then(function (src) {
+                return doc.copyPages(src, src.getPageIndices());
+              }).then(function (pages) {
+                pages.forEach(function (p) { doc.addPage(p); });
+              });
+            });
+          }, Promise.resolve()).then(function () { return doc.save(); });
+        });
+      }).then(function (bytes) {
+        finish(new Blob([bytes], { type: "application/pdf" }), files.reduce(function (n, f) { return n; }, 0) || 0);
+        note.textContent = ezT("Merged — press Download.");
+      });
+    });
+  });
+
+  $("#pdf-split").addEventListener("click", function () {
+    var file = $("#pdf-one").files && $("#pdf-one").files[0];
+    var note = $("#pdf-split-note");
+    if (!file) { note.textContent = ezT("Choose a source PDF."); return; }
+    withLib(note, function () {
+      return readFile(file).then(function (bytes) {
+        return pdfLib.PDFDocument.load(bytes);
+      }).then(function (src) {
+        var indices = parseRanges($("#pdf-range").value, src.getPageCount());
+        return pdfLib.PDFDocument.create().then(function (doc) {
+          return doc.copyPages(src, indices).then(function (pages) {
+            pages.forEach(function (p) { doc.addPage(p); });
+            return doc.save();
+          }).then(function (bytes) {
+            finish(new Blob([bytes], { type: "application/pdf" }), indices.length);
+            note.textContent = ezT("Extracted — press Download.");
+          });
+        });
+      }).catch(function (e) {
+        note.textContent = e && e.message ? e.message : ezT("Could not process that PDF (encrypted or damaged?).");
+      });
+    });
+  });
+
+  $("#pdf-download").addEventListener("click", function () {
+    if (!outBlob) return;
+    try {
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(outBlob);
+      a.download = "ezaiops-pdf.pdf";
+      a.click();
+      URL.revokeObjectURL(a.href);
+    } catch (e) {
+      note.textContent = ezT("Download not supported in this browser.");
+    }
+  });
+});
+</script>
+
+
+</body></html>

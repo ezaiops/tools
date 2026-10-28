@@ -63,5 +63,7 @@ window.I18N_DICTS.push({
   "Why does my weekday schedule also fire on the 1st?": "为什么我的工作日排程也会在 1 日触发？",
   "Because you restricted both the day-of-month and day-of-week fields. Cron ORs them together. Set day-of-month back to \"Every day\" and the weekday restriction will apply alone.": "因为你同时限制了日和周两个字段，cron 会把它们「或」在一起。把「日」字段改回「每天」，星期限制就会单独生效。",
   "Is the generated expression valid on Linux and macOS?": "生成的表达式在 Linux 和 macOS 上都有效吗？",
-  "Yes — both use Vixie cron, the same dialect this builder targets. Systemd timers and Kubernetes CronJobs also accept standard expressions.": "有效——两者都使用 Vixie cron，正是本工具的目标方言。systemd timer 和 Kubernetes CronJob 也接受标准表达式。"
+  "Yes — both use Vixie cron, the same dialect this builder targets. Systemd timers and Kubernetes CronJobs also accept standard expressions.": "有效——两者都使用 Vixie cron，正是本工具的目标方言。systemd timer 和 Kubernetes CronJob 也接受标准表达式。",
+
+    "el:Pick the schedule in plain controls — minutes, hours, days, weekdays — and get the exact cron expression, a description, and the next times it will fire. The reverse of the cron explainer.": "用普通控件选好分钟、小时、日、星期，直接得到准确的 cron 表达式、一句说明和接下来的执行时间。它是 <a href=\"/tools/cron-explainer.html\">cron 解释器</a> 的反向工具。"
 });

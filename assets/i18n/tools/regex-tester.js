@@ -36,5 +36,7 @@ window.I18N_DICTS.push({
   "What does the s flag do?": "s 标志有什么用？",
   "el:The ECMAScript (JavaScript) flavor, exactly as implemented by new RegExp() in your browser. Python, PCRE and Go regexes differ in details like named groups and possessive quantifiers.": "ECMAScript（JavaScript）风格，与你浏览器中 <code>new RegExp()</code> 的实现完全一致。Python、PCRE 和 Go 的正则在命名分组、独占量词等细节上与此不同。",
   "el:Catastrophic backtracking — nested quantifiers like (a+)+b over long non-matching input can take exponential time. Rewrite with atomic-style grouping or make the sub-pattern specific.": "灾难性回溯——像 <code>(a+)+b</code> 这样的嵌套量词，在长的不匹配输入上可能耗时指数级增长。改用原子分组写法，或让子模式更具体。",
-  "el:It makes . match newline characters too. The d flag adds match indices, which the details table uses when present.": "它让 <code>.</code> 也能匹配换行符。d 标志会附加匹配索引，详情表在有该标志时会使用。"
+  "el:It makes . match newline characters too. The d flag adds match indices, which the details table uses when present.": "它让 <code>.</code> 也能匹配换行符。d 标志会附加匹配索引，详情表在有该标志时会使用。",
+
+    "el:Test JavaScript regular expressions against live text. Matches are highlighted as you type, capture groups are listed per match, and the replacement preview shows exactly what String.replace() would produce.": "在实时文本上测试 JavaScript 正则表达式。输入时即高亮匹配，逐个列出捕获组，替换预览显示 <code>String.replace()</code> 的真实结果。"
 });

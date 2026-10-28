@@ -4,7 +4,7 @@
  * assets/i18n/*.js and are matched by DOM text nodes, so no page markup needs
  * data-i18n attributes. Dynamic JS strings use window.ezI18N.t()/tf().
  */
-var ASSET_V = "20261022b";
+var ASSET_V = "20261028b";
 
 (function () {
   "use strict";
@@ -41,7 +41,14 @@ var ASSET_V = "20261022b";
   var dicts = [];
   var lang = "en";
 
+  // The static Chinese edition lives under /zh/. The path is authoritative
+  // there: someone who chose English on the English page must still get Chinese
+  // content when they land on a /zh/ URL.
+  function isZhPath() { return /^\/zh(\/|$)/.test(location.pathname); }
+  function stripZh(p) { return p.indexOf("/zh/") === 0 ? p.slice(3) : p; }
+
   function getLang() {
+    if (isZhPath()) return "zh";
     var v = null;
     try { v = new URLSearchParams(location.search).get("lang"); } catch (e) { /* file:// */ }
     if (v !== "zh" && v !== "en") {
@@ -131,10 +138,28 @@ var ASSET_V = "20261022b";
     if (!nav || nav.querySelector(".lang-switch")) return;
     var wrap = document.createElement("div");
     wrap.className = "lang-switch";
-    // Buttons, not links: an <a href="?lang=zh"> is crawlable and creates a
-    // ?lang= duplicate of every page in Search Console. A button keeps the
-    // deep link working (we still write ?lang= into the URL) without handing
-    // Googlebot an extra URL to fetch.
+
+    // Pages with a static Chinese edition link straight to it: one canonical URL
+    // per language, and the anchor hands crawlers a path to the /zh/ copy.
+    // Pages without one keep the ?lang= deep link behind a button, so Googlebot
+    // never discovers a parameterised duplicate.
+    var clean = stripZh(location.pathname);
+    var hasStaticZh = !!(DICT_FILES[clean] || DICT_FILES[clean.replace(/\/$/, "/index.html")]);
+    if (hasStaticZh) {
+      // lang can still be "zh" on an English URL (?lang=zh deep link), so the
+      // highlight follows the active language, not the path.
+      var zhActive = lang === "zh";
+      var zhHref = clean === "/" ? "/zh/" : "/zh" + clean;
+      var enHref = zhActive ? clean + "?lang=en" : clean;
+      wrap.innerHTML =
+        '<a href="' + zhHref + '" hreflang="zh-CN"' +
+        (zhActive ? ' class="active" aria-current="page"' : "") + ">中文</a>" +
+        '<a href="' + enHref + '" hreflang="en"' +
+        (zhActive ? "" : ' class="active" aria-current="page"') + ">EN</a>";
+      nav.appendChild(wrap);
+      return;
+    }
+
     wrap.innerHTML =
       '<button type="button" data-lang="zh"' + (lang === "zh" ? ' class="active" aria-current="page"' : "") + ">中文</button>" +
       '<button type="button" data-lang="en"' + (lang === "en" ? ' class="active" aria-current="page"' : "") + ">EN</button>";
@@ -188,13 +213,18 @@ var ASSET_V = "20261022b";
 
   function init() {
     lang = getLang();
-    var path = location.pathname.replace(/\/$/, "/index.html");
-    var files = ["i18n/common.js"].concat(DICT_FILES[location.pathname] || DICT_FILES[path] || []);
+    var clean = stripZh(location.pathname);
+    var path = clean.replace(/\/$/, "/index.html");
+    var files = ["i18n/common.js"].concat(DICT_FILES[clean] || DICT_FILES[path] || []);
     Promise.all(files.map(function (f) {
       return loadScript("/assets/" + f + "?v=" + ASSET_V).catch(function () { /* dictionary missing: keep English */ });
     })).then(function () {
       dicts = (window.I18N_DICTS || []).slice();
       if (lang !== "zh") { injectSwitcher(); localizeMainSiteLinks(); return; }
+      // The /zh/ pages ship pre-translated. Load the dictionaries so t()/tf()
+      // can serve dynamic strings, but skip the walk: the keys are English and
+      // cannot match a DOM that is already Chinese.
+      if (document.documentElement.hasAttribute("data-zh-static")) { finish(0); return; }
       var count = applyDict(mergeDicts());
       finish(count);
     }).catch(function () { /* never break the page over i18n */ });

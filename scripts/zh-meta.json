@@ -1,0 +1,91 @@
+{
+  "_comment": "Chinese title and meta description for every page that has a full dictionary. Keys are paths relative to the site root, matching the English page. Used by scripts/generate_zh.mjs to rewrite <head> on the /zh/ pages.",
+  "index.html": {
+    "title": "ezaiops 工具 — AI 与 DevOps 在线工具箱",
+    "desc": "18 款纯浏览器运行的 AI 与 DevOps 工具：LLM 分词与成本计算器、JSON 格式化、正则测试、Cron 解释、JWT 调试、子网计算等。无需注册，数据不出本地。"
+  },
+  "about.html": {
+    "title": "关于 — ezaiops tools",
+    "desc": "tools.ezaiops.com 是什么、为什么所有工具都在浏览器本地运行，以及 LLM 模型价格数据的来源与更新方式。"
+  },
+  "contact.html": {
+    "title": "联系 — ezaiops tools",
+    "desc": "报告错误的 LLM 模型价格、程序缺陷或功能建议。价格纠错会被优先处理。"
+  },
+  "privacy.html": {
+    "title": "隐私政策 — ezaiops tools",
+    "desc": "tools.ezaiops.com 隐私政策：所有工具在浏览器本地运行，不收集你的输入内容，没有账户系统。"
+  },
+  "tools/cron-explainer.html": {
+    "title": "Cron 表达式解释器 — 大白话说明与下次执行时间",
+    "desc": "把任意 cron 表达式翻译成大白话，并列出未来 10 次执行时间（按你的本地时区）。支持标准五字段 Unix cron。"
+  },
+  "tools/cron-generator.html": {
+    "title": "Cron 表达式生成器 — 可视化构建定时任务",
+    "desc": "可视化选择分、时、日、月、星期，直接生成 cron 表达式，附中文说明与下次执行时间。"
+  },
+  "tools/diff-checker.html": {
+    "title": "文本对比工具 — 逐行与字符级差异高亮",
+    "desc": "粘贴两段文本，逐行和字符级高亮差异。完全在浏览器本地比对，内容不会上传。"
+  },
+  "tools/encode-decode.html": {
+    "title": "Base64 编解码、URL 编码与 SHA-256 哈希",
+    "desc": "Base64 与 URL 编码解码、HTML 实体转义、SHA-256 校验和计算。全部转换在浏览器本地完成。"
+  },
+  "tools/image-compressor.html": {
+    "title": "图片压缩与格式转换 — JPG/PNG 转 WebP",
+    "desc": "用 canvas 在浏览器本地压缩 JPG/PNG 并转成 WebP，带质量滑块与压缩前后体积对比，图片不上传服务器。"
+  },
+  "tools/json-formatter.html": {
+    "title": "JSON 格式化与校验 — 美化、压缩、错误定位",
+    "desc": "格式化、美化、压缩并校验 JSON，出错时给出精确行列位置。同时显示体积、键数量与嵌套深度。"
+  },
+  "tools/jwt-debugger.html": {
+    "title": "JWT 调试器 — 本地解码与签名校验",
+    "desc": "在浏览器本地解码 JWT 的 header、payload 与过期时间，查看算法与声明，并用 HMAC-SHA256 校验签名。"
+  },
+  "tools/meta-tag-generator.html": {
+    "title": "Meta 标签与 Open Graph 生成器 — 带预览",
+    "desc": "生成 title、description、canonical、Open Graph 与 Twitter 卡片标签，实时预览 Google 搜索结果与社交分享效果。"
+  },
+  "tools/mortgage-calculator.html": {
+    "title": "房贷计算器 — 等额本息与等额本金对比",
+    "desc": "计算固定利率贷款的月供、总利息与还清时间，支持等额本息与等额本金两种还款方式，输出完整摊还表。"
+  },
+  "tools/password-generator.html": {
+    "title": "密码生成器、助记短语与 UUID 生成",
+    "desc": "生成高强度随机密码并评估强度，也能生成易记短语与 RFC 4122 v4 UUID，支持批量生成。"
+  },
+  "tools/pdf-tools.html": {
+    "title": "PDF 合并与拆分 — 浏览器本地处理",
+    "desc": "把多个 PDF 合并成一个，或按页码范围拆分出新文件。基于 pdf-lib 在浏览器本地完成，文件不上传。"
+  },
+  "tools/qr-generator.html": {
+    "title": "二维码生成器 — 导出 SVG 与 PNG",
+    "desc": "把链接或文本生成二维码，支持选择容错等级，导出 SVG 或 PNG。浏览器本地渲染，内容不外传。"
+  },
+  "tools/regex-tester.html": {
+    "title": "正则表达式测试器 — JavaScript 实时匹配",
+    "desc": "在实时文本上测试 JavaScript 正则表达式，高亮匹配结果，显示捕获组，并预览替换效果。"
+  },
+  "tools/self-host-vs-api.html": {
+    "title": "自建推理 vs 调用 API 盈亏平衡计算器",
+    "desc": "输入每月 token 用量，算出租 GPU 自建推理何时比调用 LLM API 更便宜，给出盈亏平衡点与月度成本对比。"
+  },
+  "tools/subnet-calculator.html": {
+    "title": "子网与 CIDR 计算器 — IPv4 网络计算",
+    "desc": "计算 IPv4 子网：网络地址、广播地址、可用主机范围、点分/十六进制/二进制掩码、通配符与主机数量。"
+  },
+  "tools/timestamp-converter.html": {
+    "title": "Unix 时间戳转换 — 纪元、ISO 8601、本地时间",
+    "desc": "把 Unix 时间戳转成 ISO 8601 与可读日期，带实时时钟，支持毫秒级精度，全部在浏览器本地转换。"
+  },
+  "tools/token-counter.html": {
+    "title": "LLM 分词与成本计算器 — 单次、每日、每月",
+    "desc": "统计 prompt 的 token 数，并按 43 个模型估算单次、每日、每月 API 成本，自动计入 Batch 五折与缓存折扣。"
+  },
+  "tools/unit-converter.html": {
+    "title": "单位换算 — 长度、重量、温度、数据量",
+    "desc": "即时换算长度、重量、温度、面积、速度与数据存储单位，本地运行，无需注册。"
+  }
+}

@@ -218,6 +218,31 @@ console.log("\n== token-counter share link prefill ==");
   check("prefill monthly", $("#mc-cost-month", doc).textContent === "$39.00", $("#mc-cost-month", doc).textContent);
 }
 
+console.log("\n== static Chinese edition (/zh/) ==");
+{
+  const { doc, errors } = await load("zh/tools/json-formatter.html");
+  await sleep(300);
+  check("zh page html lang", doc.documentElement.getAttribute("lang") === "zh-CN",
+    String(doc.documentElement.getAttribute("lang")));
+  check("zh page title is Chinese", /[\u4e00-\u9fff]/.test(doc.title), doc.title);
+  check("zh page canonical points at itself",
+    (doc.querySelector('link[rel="canonical"]') || {}).href === "https://tools.ezaiops.com/zh/tools/json-formatter.html",
+    (doc.querySelector('link[rel="canonical"]') || {}).href);
+  check("zh page declares the hreflang pair",
+    doc.querySelectorAll('link[rel="alternate"][hreflang]').length === 3);
+  const zhChars = (doc.body.textContent.match(/[\u4e00-\u9fff]/g) || []).length;
+  check("zh page ships Chinese markup (no JS needed)", zhChars > 100, String(zhChars) + " 汉字");
+  check("zh page keeps model links on the English tree",
+    doc.querySelector('.site-footer a[href^="/models/"]') !== null);
+  check("zh page links tools into /zh/",
+    doc.querySelector('.site-footer a[href="/zh/tools/token-counter.html"]') !== null);
+  check("zh page has no console errors", errors.length === 0, errors[0]);
+
+  const en = await load("tools/json-formatter.html");
+  check("english page points at the zh edition",
+    en.doc.querySelector('link[rel="alternate"][hreflang="zh-CN"][href$="/zh/tools/json-formatter.html"]') !== null);
+}
+
 console.log("\n== bilingual mode (?lang=zh) ==");
 {
   const { doc, errors } = await load("tools/token-counter.html?lang=zh");
@@ -225,8 +250,16 @@ console.log("\n== bilingual mode (?lang=zh) ==");
   check("html lang is zh-CN", doc.documentElement.getAttribute("lang") === "zh-CN",
     String(doc.documentElement.getAttribute("lang")));
   check("switcher injected", doc.querySelector(".lang-switch") !== null);
-  check("switcher marks zh active", /active/.test((doc.querySelector('.lang-switch [data-lang="zh"]') || {}).className || ""));
-  check("switcher emits no crawlable ?lang= link", doc.querySelector('.lang-switch a[href*="lang="]') === null);
+  const zhActive = doc.querySelector(".lang-switch .active");
+  check("switcher marks zh active",
+    !!zhActive && /中文/.test(zhActive.textContent || ""),
+    zhActive ? zhActive.textContent : "no .active");
+  // The Chinese edition is a real URL tree now, so the switcher must point at
+  // /zh/ rather than at a ?lang=zh duplicate.
+  check("switcher links to the static zh edition",
+    doc.querySelector('.lang-switch a[href^="/zh/"]') !== null);
+  check("switcher emits no ?lang=zh link",
+    doc.querySelector('.lang-switch a[href*="lang=zh"]') === null);
   check("nav translated", /工具/.test(doc.querySelector(".site-nav").textContent));
   check("footer translated", /输入内容|不会离开/.test(doc.querySelector(".site-footer").textContent));
   check("brand label translated", /工具/.test(doc.querySelector(".brand").textContent),

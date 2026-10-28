@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-zh-static="1"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Unix 时间戳转换 — 纪元、ISO 8601、本地时间</title>
+<meta name="description" content="把 Unix 时间戳转成 ISO 8601 与可读日期，带实时时钟，支持毫秒级精度，全部在浏览器本地转换。">
+<link rel="canonical" href="https://tools.ezaiops.com/zh/tools/timestamp-converter.html">
+<link rel="alternate" hreflang="zh-CN" href="https://tools.ezaiops.com/zh/tools/timestamp-converter.html">
+<link rel="alternate" hreflang="en" href="https://tools.ezaiops.com/tools/timestamp-converter.html">
+<link rel="alternate" hreflang="x-default" href="https://tools.ezaiops.com/tools/timestamp-converter.html">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Unix 时间戳转换 — 纪元、ISO 8601、本地时间">
+<meta property="og:description" content="把 Unix 时间戳转成 ISO 8601 与可读日期，带实时时钟，支持毫秒级精度，全部在浏览器本地转换。">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/style.css?v=20261028b">
+<script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Unix Timestamp Converter",
+  "url": "https://tools.ezaiops.com/zh/tools/timestamp-converter.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}</script>
+
+
+
+<script src="/assets/i18n.js?v=20261028b"></script><script src="/assets/i18n/common.js?v=20261028b"></script><script src="/assets/i18n/tools/timestamp-converter.js?v=20261028b"></script><meta property="og:locale" content="zh_CN"></head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/zh/"><span class="logo">ez</span>ezaiops <small>工具</small></a>
+    <nav class="site-nav">
+      <a href="/zh/">工具</a>
+      <a href="/models/index.html">模型价格</a>
+      <a href="https://ezaiops.com/" title="ezaiops.com — AI Agent 可观测性与 LLMOps 实战笔记（中文）">博客</a>
+      <a href="https://github.com/ezaiops">GitHub</a>
+    <div class="lang-switch"><a href="/zh/tools/timestamp-converter.html" hreflang="zh-CN" class="active" aria-current="page">中文</a><a href="/tools/timestamp-converter.html?lang=en" hreflang="en">EN</a></div></nav>
+  </div>
+</header>
+
+<main class="wrap tool-page">
+  <nav class="crumbs"><a href="/zh/">首页</a> / 工具 / <a href="/zh/tools/timestamp-converter.html">时间戳转换</a><a class="main-site-link" href="https://ezaiops.com/">ezaiops.com ↗</a></nav>
+  <h1>Unix 时间戳转换器</h1>
+  <p class="lead">Unix 时间戳（秒或毫秒）、ISO 8601 字符串与人类可读时间互转——UTC 与本地时区兼备。顶部时钟实时跳动，下方全部离线运行。</p>
+
+  <section class="panel">
+    <label class="field-label">当前时间</label>
+    <div class="stats-grid">
+      <div class="stat"><div class="k">Unix 秒</div><div class="v" id="ts-now-s">1793196558</div></div>
+      <div class="stat"><div class="k">Unix 毫秒</div><div class="v" id="ts-now-ms">1793196558566</div></div>
+      <div class="stat"><div class="k">ISO 8601 (UTC)</div><div class="v" id="ts-now-iso" style="font-size:14px">2026-10-28T14:09:18Z</div></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn small" id="ts-copy-now" type="button" data-copy-target="#ts-now-s">复制当前 Unix 时间</button>
+    </div>
+  </section>
+
+  <section class="panel">
+    <label class="field-label" for="ts-input">待转换的时间戳</label>
+    <input type="text" id="ts-input" class="mono" value="0" spellcheck="false">
+    <div class="hint">支持 Unix 秒（10 位）、Unix 毫秒（13 位）、ISO 8601（<code>2026-10-13T06:00:00Z</code>), <code>2026-10-13 09:00</code>, or <code>now</code>. <span class="badge blue" id="ts-detected">unix s</span></div>
+    <div class="btn-row">
+      <button class="btn small" id="ts-now-btn" type="button">现在</button>
+      <button class="btn small" id="ts-clear" type="button">清空</button>
+    </div>
+
+    <dl class="kv-list">
+      <dt>ISO 8601 (UTC)</dt><dd id="ts-iso">1970-01-01T00:00:00Z</dd>
+      <dt>本地时间</dt><dd id="ts-local">1970-01-01 08:00:00</dd>
+      <dt>时区偏移</dt><dd id="ts-offset">UTC+08:00</dd>
+      <dt>RFC 2822</dt><dd id="ts-rfc">Thu, 01 Jan 1970 08:00:00</dd>
+      <dt>星期</dt><dd id="ts-dow">Thursday</dd>
+      <dt>Unix 秒</dt><dd id="ts-secs">0</dd>
+      <dt>Unix 毫秒</dt><dd id="ts-msecs">0</dd>
+      <dt>相对时间</dt><dd id="ts-rel">57 years ago</dd>
+    </dl>
+
+    <label class="field-label" for="ts-local-input" style="margin-top:16px">人类可读时间 → Unix</label>
+    <div class="field-row">
+      <div class="field"><input type="datetime-local" id="ts-local-input"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn small" id="ts-from-local" type="button">转换为 Unix</button>
+    </div>
+    <p class="note" id="ts-local-out"></p>
+  </section>
+
+  <div class="ad-slot">
+    <strong>广告位</strong>
+    Google AdSense 占位——网站通过审批并有稳定流量后启用。
+  </div>
+
+  <section class="prose">
+    <h2>一段话看懂 Unix 时间</h2>
+    <p>Unix 纪元指自 <strong>1970 年 1 月 1 日 00:00:00 UTC</strong> 以来经过的秒数（不含闰秒——Unix 时间假装每天正好 86,400 秒）。毫秒时间戳是同一计数值乘以 1,000，也就是 JavaScript 的 <code>Date.now()</code> 和大多数 JSON API 的返回格式。因此时间戳 <code>0</code> 即纪元本身，负值则是 1970 年之前的时刻。</p>
+
+    <h2>常见时间戳坑</h2>
+    <ul>
+      <li><strong>秒与毫秒混淆。</strong>10 位时间戳是秒，13 位是毫秒。混用是最高发的时间戳 bug——13 位的值会溢出 32 位整数，弄坏某些数据库。</li>
+      <li><strong>秒级精度存储。</strong>像 <code>1728790800.123</code> 这样的浮点在许多引擎中会被悄悄丢掉亚秒精度。</li>
+      <li><strong>2038 年问题。</strong>32 位有符号秒数将在 2038 年 1 月 19 日溢出。请使用 64 位存储或毫秒。</li>
+      <li><strong>服务器时区不是你的时区。</strong>用 UTC 存储和计算，在边缘格式化；永远不要用恰好运行你代码的那台虚机的时区去格式化时间戳。</li>
+    </ul>
+
+    <h2>常见问题</h2>
+    <details class="faq">
+      <summary>时间戳的最大值是多少？</summary>
+      <div class="faq-body">JavaScript 日期在纪元附近 ±8,640,000,000,000,000 毫秒（约 ±273,790 年）范围内可靠，远超任何实际用途。64 位系统有相近的上限。</div>
+    </details>
+    <details class="faq">
+      <summary>闰秒会被计入吗？</summary>
+      <div class="faq-body">不会。Unix 时间忽略闰秒；每插入一个闰秒，UTC 与 Unix 时钟就相差一秒，之后重新同步。对日志场景来说这个差异不可见。</div>
+    </details>
+    <details class="faq">
+      <summary>时间戳会被发送到别处吗？</summary>
+      <div class="faq-body">不会。所有转换都在你的浏览器中用内置 Date 对象完成。</div>
+    </details>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h4>常用工具</h4>
+        <ul>
+          <li><a href="/zh/tools/token-counter.html">LLM 分词与成本计算器</a></li>
+          <li><a href="/zh/tools/json-formatter.html">JSON 工具</a></li>
+          <li><a href="/zh/tools/regex-tester.html">正则测试</a></li>
+          <li><a href="/zh/tools/cron-explainer.html">Cron 解释</a></li>
+          <li><a href="/zh/tools/encode-decode.html">Base64 / URL / 哈希</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>模型价格</h4>
+        <ul>
+          <li><a href="/models/index.html">全部模型</a></li>
+          <li><a href="/models/gpt-5-6-sol.html">GPT-5.6 Sol 价格</a></li>
+          <li><a href="/models/claude-opus-5.html">Claude Opus 5 价格</a></li>
+          <li><a href="/models/gemini-3-1-pro.html">Gemini 3.1 Pro 价格</a></li>
+          <li><a href="/models/deepseek-v4-1-flash.html">DeepSeek V4.1 Flash 价格</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>更多</h4>
+        <ul>
+          <li><a href="https://ezaiops.com/">ezaiops.com</a></li>
+          <li><a href="/zh/about.html">关于</a></li>
+          <li><a href="/zh/contact.html">联系</a></li>
+          <li><a href="/zh/privacy.html">隐私政策</a></li>
+          <li><a href="https://github.com/ezaiops">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">© 2026 ezaiops · 输入内容不会离开你的浏览器</div>
+  </div>
+</footer>
+
+<script src="/assets/common.js?v=20261028b" defer=""></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  function ezT(k) { return window.ezI18N ? window.ezI18N.t(k) : k; }
+  function ezTf(k) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    if (window.ezI18N) return window.ezI18N.tf.apply(window.ezI18N, [k].concat(args));
+    return k.replace(/%s/g, function () { return String(args.shift()); });
+  }
+  var input = $("#ts-input");
+
+  var DOW = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+  function pad(n) { return ("0" + n).slice(-2); }
+  function isoUTC(d) {
+    return d.getUTCFullYear() + "-" + pad(d.getUTCMonth() + 1) + "-" + pad(d.getUTCDate()) +
+      "T" + pad(d.getUTCHours()) + ":" + pad(d.getUTCMinutes()) + ":" + pad(d.getUTCSeconds()) + "Z";
+  }
+  function localStr(d) {
+    return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()) +
+      " " + pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds());
+  }
+  function rfc2822(d) {
+    var MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    return DOW[d.getDay()].slice(0, 3) + ", " + pad(d.getDate()) + " " + MON[d.getMonth()] + " " + d.getFullYear() +
+      " " + pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds());
+  }
+  function offsetStr(d) {
+    var off = -d.getTimezoneOffset();
+    var sign = off >= 0 ? "+" : "-";
+    var a = Math.abs(off);
+    return "UTC" + sign + pad(Math.floor(a / 60)) + ":" + pad(a % 60);
+  }
+  function relative(d, now) {
+    var diff = Math.round((d.getTime() - now.getTime()) / 1000);
+    var abs = Math.abs(diff);
+    var unit, val;
+    if (abs < 60) { unit = "second"; val = abs; }
+    else if (abs < 3600) { unit = "minute"; val = Math.round(abs / 60); }
+    else if (abs < 86400) { unit = "hour"; val = Math.round(abs / 3600); }
+    else if (abs < 2592000) { unit = "day"; val = Math.round(abs / 86400); }
+    else if (abs < 31536000) { unit = "month"; val = Math.round(abs / 2592000); }
+    else { unit = "year"; val = Math.round(abs / 31536000); }
+    var s = ezTf("%s " + unit + (val === 1 ? "" : "s"), val);
+    return diff >= 0 ? ezTf("in %s", s) : ezTf("%s ago", s);
+  }
+
+  function parseInput(s) {
+    s = String(s || "").trim();
+    if (!s) return { date: null, kind: "empty" };
+    if (s.toLowerCase() === "now") return { date: new Date(), kind: "now" };
+    if (/^-?\d{1,13}$/.test(s)) {
+      var n = parseInt(s, 10);
+      var isMs = s.replace(/^-/, "").length > 10;
+      return { date: new Date(isMs ? n : n * 1000), kind: isMs ? "unix ms" : "unix s" };
+    }
+    var d = new Date(s);
+    if (isNaN(d.getTime())) return { date: null, kind: "unparsed" };
+    return { date: d, kind: "date string" };
+  }
+
+  function convert() {
+    var parsed = parseInput(input.value);
+    var badge = $("#ts-detected");
+    badge.textContent = parsed.kind;
+    badge.className = "badge " + (parsed.date ? "blue" : "amber");
+    if (!parsed.date) {
+      ["iso", "local", "offset", "rfc", "dow", "secs", "msecs", "rel"].forEach(function (k) {
+        $("#ts-" + k).textContent = "—";
+      });
+      return;
+    }
+    var d = parsed.date;
+    var now = new Date();
+    $("#ts-iso").textContent = isoUTC(d);
+    $("#ts-local").textContent = localStr(d);
+    $("#ts-offset").textContent = offsetStr(d);
+    $("#ts-rfc").textContent = rfc2822(d);
+    $("#ts-dow").textContent = DOW[d.getDay()];
+    $("#ts-secs").textContent = String(Math.floor(d.getTime() / 1000));
+    $("#ts-msecs").textContent = String(d.getTime());
+    $("#ts-rel").textContent = relative(d, now);
+  }
+
+  function tick() {
+    var now = new Date();
+    $("#ts-now-s").textContent = String(Math.floor(now.getTime() / 1000));
+    $("#ts-now-ms").textContent = String(now.getTime());
+    $("#ts-now-iso").textContent = isoUTC(now);
+  }
+
+  input.addEventListener("input", convert);
+  $("#ts-now-btn").addEventListener("click", function () {
+    input.value = String(Math.floor(Date.now() / 1000));
+    convert();
+  });
+  $("#ts-clear").addEventListener("click", function () { input.value = ""; convert(); });
+  $("#ts-from-local").addEventListener("click", function () {
+    var v = $("#ts-local-input").value;
+    if (!v) { $("#ts-local-out").textContent = ezT("Pick a date and time first."); return; }
+    var ms = new Date(v).getTime();
+    $("#ts-local-out").textContent = isNaN(ms)
+      ? ezT("Could not parse that value.")
+      : ezTf("%s local = %s (unix seconds), %s ms, %s", v, Math.floor(ms / 1000), ms, new Date(ms).toISOString());
+  });
+
+  tick();
+  convert();
+  var timer = setInterval(tick, 1000);
+  window.addEventListener("beforeunload", function () { clearInterval(timer); });
+});
+</script>
+
+
+</body></html>

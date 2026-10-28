@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-zh-static="1"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>关于 — ezaiops tools</title>
+<meta name="description" content="tools.ezaiops.com 是什么、为什么所有工具都在浏览器本地运行，以及 LLM 模型价格数据的来源与更新方式。">
+<link rel="canonical" href="https://tools.ezaiops.com/zh/about.html">
+<link rel="alternate" hreflang="zh-CN" href="https://tools.ezaiops.com/zh/about.html">
+<link rel="alternate" hreflang="en" href="https://tools.ezaiops.com/about.html">
+<link rel="alternate" hreflang="x-default" href="https://tools.ezaiops.com/about.html">
+
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/style.css?v=20261028b">
+
+
+
+<script src="/assets/i18n.js?v=20261028b"></script><script src="/assets/i18n/common.js?v=20261028b"></script><script src="/assets/i18n/about.js?v=20261028b"></script><meta property="og:title" content="关于"><meta property="og:description" content="tools.ezaiops.com 是什么、为什么所有工具都在浏览器本地运行，以及 LLM 模型价格数据的来源与更新方式。"><meta property="og:locale" content="zh_CN"></head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/zh/"><span class="logo">ez</span>ezaiops <small>工具</small></a>
+    <nav class="site-nav">
+      <a href="/zh/">工具</a>
+      <a href="/models/index.html">模型价格</a>
+      <a href="https://ezaiops.com/" title="ezaiops.com — AI Agent 可观测性与 LLMOps 实战笔记（中文）">博客</a>
+      <a href="https://github.com/ezaiops">GitHub</a>
+    <div class="lang-switch"><a href="/zh/about.html" hreflang="zh-CN" class="active" aria-current="page">中文</a><a href="/about.html?lang=en" hreflang="en">EN</a></div></nav>
+  </div>
+</header>
+
+<main class="wrap tool-page">
+  <nav class="crumbs"><a href="/zh/">首页</a> / <span>关于</span><a class="main-site-link" href="https://ezaiops.com/">ezaiops.com ↗</a></nav>
+  <h1>关于 ezaiops 工具站</h1>
+  <p class="lead">免费的 LLM 成本测算与日常工程工具。没有账号，没有上传，也没有任何后端可以存下你输入的内容。</p>
+
+  <section class="prose">
+    <h2>这是什么</h2>
+    <p>tools.ezaiops.com 包含 18 个浏览器端工具，以及覆盖 43 个 LLM 模型的价格数据库。整站是托管在 GitHub Pages 上的静态 HTML、CSS 与 JavaScript——背后没有应用服务器，所以这些工具才敢承诺输入不出本机：根本没有地方可去。</p>
+
+    <h2>为什么全部在本地运行</h2>
+    <p>大多数免费在线工具的做法是：把你的输入发到服务器、在那边处理、再把结果送回来。选个颜色无所谓，但一段含客户数据的 prompt、一个 JWT、一份合同 PDF 或一把私钥就不行了。这里的工具全部在你已打开的这个标签页里完成解析、哈希、压缩和渲染。其中三个（分词计数、二维码生成、PDF 工具）会在首次使用时从 CDN 下载一个库；库在本地运行，你的内容从不包含在那个请求里。</p>
+
+    <h2>价格数据怎么维护</h2>
+    <p>站上每一个价格都来自同一个数据文件，每个价格页都会标注最后核对日期。费率直接读各家官方文档——OpenAI、Anthropic、Google、DeepSeek、xAI、Z.AI、Moonshot、MiniMax、小米和 Mistral——而不是抄聚合博客，因为聚合站总是慢半拍。长上下文档位、缓存命中价、Batch 折扣和峰谷时段都按规则显式建模，不会糊成一个平均值。</p>
+    <p>价格一直在变。如果你发现某个数字和厂商页面已经对不上，<a href="/zh/contact.html">告诉我们</a>，我们会改——这是读者能发来的最有价值的一条消息。</p>
+
+    <h2>我们不做什么</h2>
+    <ul>
+      <li>不做账号，不收邮箱，不用订阅墙拦人。</li>
+      <li>不卖位置：没有人能花钱买对比表里的排序或「最便宜」标签。</li>
+      <li>不卖也不共享数据，因为工具根本不收集。</li>
+    </ul>
+
+    <h2>谁在做这件事</h2>
+    <p>ezaiops 在 ezaiops.com 写 AI Agent 可观测性、LLMOps 与生产级 AI 运维的实战笔记。这些工具是那些工作的副产品——成本计算器之所以存在，是因为照着价格页估算 agent 的月账单实在烦人；子网和 cron 工具则是因为我们自己一直在用。源码和 issue 都在 <a href="https://github.com/ezaiops">GitHub</a> 上。</p>
+
+    <h2>联系我们</h2>
+    <p>纠错、报 bug、提需求都欢迎——最快的方式见<a href="/zh/contact.html">联系页</a>。<a href="/zh/privacy.html">隐私政策</a>说明了本站会接触到的那一点点数据。</p>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="legal">© 2026 ezaiops · 输入内容不会离开你的浏览器</div>
+    <nav class="footer-links"><a href="/zh/about.html">关于</a><span>·</span><a href="/zh/contact.html">联系</a><span>·</span><a href="/zh/privacy.html">隐私</a></nav>
+  </div>
+</footer>
+
+<script src="/assets/common.js?v=20261028b" defer=""></script>
+
+
+</body></html>
