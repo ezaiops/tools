@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MiniMax M3.1 Flash API pricing in 2026: cost per 1M tokens | ezaiops tools</title>
+<meta name="description" content="MiniMax M3.1 Flash costs $0.15 per 1M input tokens and $0.60 per 1M output tokens. Context window, caching rates, a quick cost calculator and comparisons with nearby models.">
+<link rel="canonical" href="https://tools.ezaiops.com/models/minimax-m3-1-flash.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="MiniMax M3.1 Flash API pricing in 2026: cost per 1M tokens | ezaiops tools">
+<meta property="og:description" content="MiniMax M3.1 Flash costs $0.15 per 1M input tokens and $0.60 per 1M output tokens. Context window, caching rates, a quick cost calculator and comparisons with nearby models.">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/style.css?v=20261022b">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How much does MiniMax M3.1 Flash cost per 1M tokens?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "$0.15 per 1M input tokens and $0.60 per 1M output tokens, with cached input at $0.015 per 1M. MiniMax's rate card lists a single price across the 1M-token context window."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is MiniMax M3.1 Flash cheaper than MiniMax M3?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Input and output are both half of M3's $0.30/$1.20, and the cache-read rate falls from $0.06 to $0.015 per 1M. M3.1 Flash also removes M3's higher tier for prompts above 512K tokens."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does MiniMax M3.1 Flash have time-of-day pricing?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Unlike DeepSeek, MiniMax bills the same rate around the clock, so there is no off-peak window to schedule batch work into and no peak multiplier to budget for."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is MiniMax M3.1 Flash open weights?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. The weights were released under an open licence on 23 October 2026, four days after the API launch, at 428B total and 23B active parameters."
+      }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/"><span class="logo">ez</span>ezaiops <small>tools</small></a>
+    <nav class="site-nav">
+      <a href="/">Tools</a>
+      <a href="/models/index.html">LLM pricing</a>
+      <a href="https://ezaiops.com/en/" title="ezaiops.com — AI agent observability &amp; LLMOps field notes (in English)">Blog</a>
+      <a href="https://github.com/ezaiops">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap tool-page">
+  <nav class="crumbs"><a href="/">Home</a> / <a href="/models/index.html">LLM pricing</a> / MiniMax M3.1 Flash<a class="main-site-link" href="https://ezaiops.com/en/">ezaiops.com ↗</a></nav>
+
+  <h1>MiniMax M3.1 Flash API pricing: cost per 1M tokens</h1>
+  <p class="lead">MiniMax M3.1 Flash currently costs <strong>$0.15 per 1M input tokens</strong> and
+  <strong>$0.60 per 1M output tokens</strong> through the MiniMax API. Released 2026-10-19. Half the M3 rate on input and output and 70% cheaper cache reads, with 428B total / 23B active parameters, open weights and roughly 200 tokens per second.
+  Prices below were verified against official pricing documentation on 2026-10-28.</p>
+
+  <section class="panel">
+    <div class="stats-grid">
+      <div class="stat"><div class="k">Input / 1M tokens</div><div class="v">$0.15</div></div>
+      <div class="stat"><div class="k">Output / 1M tokens</div><div class="v">$0.60</div></div>
+      <div class="stat"><div class="k">Output multiple</div><div class="v">4.0×</div></div>
+      <div class="stat"><div class="k">Context window</div><div class="v">1M</div></div>
+    </div>
+
+    <table class="data">
+      <thead><tr><th>Tier</th><th class="num">Input / 1M</th><th class="num">Output / 1M</th></tr></thead>
+      <tbody>
+        <tr><td>Standard rate</td><td class="num">$0.15</td><td class="num">$0.60</td></tr>
+        
+      </tbody>
+    </table>
+    <dl class="kv-list"><dt>Cached input</dt><dd>$0.015</dd></dl>
+    <p class="note">Verify current rates on the MiniMax pricing page before committing budget —
+    providers adjust prices frequently, and long-context or caching discounts may not show up
+    in the headline numbers.</p>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0;font-size:16px">Quick cost calculator for MiniMax M3.1 Flash</h2>
+    <div class="field-row">
+      <div class="field">
+        <label class="field-label" for="mc-in">Input tokens</label>
+        <input type="number" id="mc-in" class="mono" value="1000000" min="0">
+      </div>
+      <div class="field">
+        <label class="field-label" for="mc-out">Output tokens</label>
+        <input type="number" id="mc-out" class="mono" value="100000" min="0">
+      </div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat"><div class="k">One request (this volume)</div><div class="v" id="mc-cost">—</div></div>
+      <div class="stat"><div class="k">× 1,000 such requests</div><div class="v" id="mc-1k">—</div></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0;font-size:16px">MiniMax M3.1 Flash vs nearby models (blended at a 3:1 input:output ratio)</h2>
+    <table class="data">
+      <thead><tr><th>Model</th><th>Provider</th><th class="num">Input</th><th class="num">Output</th><th class="num">Cached in</th><th>Context</th></tr></thead>
+      <tbody><tr><td><a href="/models/glm-5-3-flash.html">GLM-5.3 Flash</a></td><td>Z.AI</td><td class="num">$0.15</td><td class="num">$0.50</td><td class="num">$0.03</td><td>1M</td></tr><tr><td><a href="/models/deepseek-v4-1-flash.html">DeepSeek V4.1 Flash</a></td><td>DeepSeek</td><td class="num">$0.15</td><td class="num">$0.60</td><td class="num">$0.003</td><td>1M</td></tr><tr style="background:var(--accent-soft)"><td><strong>MiniMax M3.1 Flash</strong></td><td>MiniMax</td><td class="num">$0.15</td><td class="num">$0.60</td><td class="num">$0.015</td><td>1M</td></tr><tr><td><a href="/models/mistral-small-4.html">Mistral Small 4</a></td><td>Mistral</td><td class="num">$0.15</td><td class="num">$0.60</td><td class="num">$0.015</td><td>131K</td></tr><tr><td><a href="/models/gpt-5-6-luna.html">GPT-5.6 Luna</a></td><td>OpenAI</td><td class="num">$0.20</td><td class="num">$1.20</td><td class="num">—</td><td>—</td></tr></tbody>
+    </table>
+    <p class="note">The full 37-model comparison lives on the <a href="/models/index.html">pricing hub</a>,
+    and the <a href="/tools/token-counter.html">token &amp; cost calculator</a> will price your actual prompt.</p>
+  </section>
+
+  <section class="prose">
+    <h2>What MiniMax M3.1 Flash costs</h2><p>$0.15 per 1M input tokens, $0.60 per 1M output tokens and $0.015 per 1M cached input — a flat rate across the 1M-token window, with no long-context multiplier published. Against MiniMax M3 at $0.30/$1.20 that is half price on both sides and a 75% cut on cache reads.</p><p>On the numbers this is the cheapest credible agent tier in this table: $0.60 output undercuts DeepSeek V4.1 Flash's $0.60 only on paper, because DeepSeek's published rate is an off-peak rate that doubles for seven hours every weekday. M3.1 Flash has no time-of-day pricing, so the rate above is the rate you pay at 10am on a Tuesday.</p><h2>The trade you are making</h2><p>At 23B active parameters out of 428B total, this is a sparse model built for throughput rather than depth — MiniMax quotes roughly 200 tokens per second and a 70% drop in the cost of completing an agentic task, which is a claim about retries and turn count, not about per-token price. A model that needs fewer steps to finish is cheaper than its rate card suggests; one that needs more is more expensive.</p><p>Treat the vendor benchmark wins as directional and the independent leaderboard position as the useful signal. For extraction, classification, tool routing and high-volume fan-out this tier is now hard to argue against on price; for long-horizon reasoning the $2-$10 tier still earns its cost.</p>
+
+    <h2>Frequently asked questions</h2>
+    <details class="faq"><summary>How much does MiniMax M3.1 Flash cost per 1M tokens?</summary>
+      <div class="faq-body">$0.15 per 1M input tokens and $0.60 per 1M output tokens, with cached input at $0.015 per 1M. MiniMax's rate card lists a single price across the 1M-token context window.</div></details>
+    <details class="faq"><summary>Is MiniMax M3.1 Flash cheaper than MiniMax M3?</summary>
+      <div class="faq-body">Yes. Input and output are both half of M3's $0.30/$1.20, and the cache-read rate falls from $0.06 to $0.015 per 1M. M3.1 Flash also removes M3's higher tier for prompts above 512K tokens.</div></details>
+    <details class="faq"><summary>Does MiniMax M3.1 Flash have time-of-day pricing?</summary>
+      <div class="faq-body">No. Unlike DeepSeek, MiniMax bills the same rate around the clock, so there is no off-peak window to schedule batch work into and no peak multiplier to budget for.</div></details>
+    <details class="faq"><summary>Is MiniMax M3.1 Flash open weights?</summary>
+      <div class="faq-body">Yes. The weights were released under an open licence on 23 October 2026, four days after the API launch, at 428B total and 23B active parameters.</div></details>
+    
+  </section>
+
+<div class="ad-slot">
+  <strong>Ad slot</strong>
+  Google AdSense placeholder — activated once the site is approved and has steady traffic.
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h4>Popular tools</h4>
+        <ul>
+          <li><a href="/tools/token-counter.html">LLM token &amp; cost calculator</a></li>
+          <li><a href="/tools/json-formatter.html">JSON formatter</a></li>
+          <li><a href="/tools/regex-tester.html">Regex tester</a></li>
+          <li><a href="/tools/cron-explainer.html">Cron explainer</a></li>
+          <li><a href="/tools/encode-decode.html">Base64 / URL / hash</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>LLM pricing</h4>
+        <ul>
+          <li><a href="/models/index.html">All models</a></li>
+          <li><a href="/models/gpt-5-6-sol.html">GPT-5.6 Sol pricing</a></li>
+          <li><a href="/models/claude-opus-5.html">Claude Opus 5 pricing</a></li>
+          <li><a href="/models/gemini-3-1-pro.html">Gemini 3.1 Pro pricing</a></li>
+          <li><a href="/models/deepseek-v4-1-flash.html">DeepSeek V4.1 Flash pricing</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>More</h4>
+        <ul>
+          <li><a href="https://ezaiops.com/en/">ezaiops.com</a></li>
+          <li><a href="/about.html">About</a></li>
+          <li><a href="/contact.html">Contact</a></li>
+          <li><a href="/privacy.html">Privacy policy</a></li>
+          <li><a href="https://github.com/ezaiops">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">&copy; <span data-year>2026</span> ezaiops &middot; your input never leaves your browser</div>
+  </div>
+</footer>
+
+<script src="/assets/common.js?v=20261022b" defer></script>
+<script src="/assets/models.js?v=20261022b" defer></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var models = (window.EZ_MODELS || {}).models || [];
+  var me = null;
+  for (var i = 0; i < models.length; i++) if (models[i].id === "minimax-m3-1-flash") me = models[i];
+  if (!me) return;
+  var inEl = document.getElementById("mc-in");
+  var outEl = document.getElementById("mc-out");
+  function fmt(n) {
+    if (n <= 0) return "$0";
+    if (n < 0.000001) return "<$0.000001";
+    var d = n < 0.01 ? 6 : n < 1 ? 4 : 2;
+    return "$" + n.toFixed(d);
+  }
+  function recalc() {
+    var ti = Math.max(0, parseFloat(inEl.value || "0") || 0);
+    var to = Math.max(0, parseFloat(outEl.value || "0") || 0);
+    document.getElementById("mc-cost").textContent = fmt(ti * me.input / 1e6 + to * me.output / 1e6);
+    document.getElementById("mc-1k").textContent = fmt((ti * me.input / 1e6 + to * me.output / 1e6) * 1000);
+  }
+  inEl.addEventListener("input", recalc);
+  outEl.addEventListener("input", recalc);
+  recalc();
+});
+</script>
+
+</body>
+</html>

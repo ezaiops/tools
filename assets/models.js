@@ -1,5 +1,5 @@
 window.EZ_MODELS = {
-  "updated": "2026-10-18",
+  "updated": "2026-10-28",
   "models": [
     {
       "id": "gpt-6-astra",
@@ -22,7 +22,149 @@ window.EZ_MODELS = {
       "output": 10.0,
       "cached_input": 0.1,
       "context": "1.05M",
-      "note": "High-demand coding and agent tier; cache read $0.10 per 1M"
+      "tier_threshold": 272000,
+      "input_high": 4.0,
+      "output_high": 15.0,
+      "note": "High-demand coding and agent tier; cache read $0.10 per 1M and cache writes $2.50. Prompts above 272K tokens bill at $4/$15 for the full request",
+      "specs": {
+        "Max output": "128K",
+        "Knowledge cutoff": "2026-04-30",
+        "Image input": "Supported",
+        "Cache write (30 min)": "$2.50 / 1M",
+        "Cache write (12 h)": "$5.00 / 1M"
+      },
+      "detail": {
+        "verified": "2026-10-28",
+        "faq": [
+          {
+            "q": "How much does GPT-6.1 Sol cost per 1M tokens?",
+            "a": "$2.00 per 1M input tokens and $10.00 per 1M output tokens. Cached input bills at $0.10 per 1M, and cache writes cost $2.50 per 1M for 30-minute retention."
+          },
+          {
+            "q": "Does GPT-6.1 Sol charge more for long prompts?",
+            "a": "Yes. Requests above 272K input tokens are billed at 2x the input and cache rates and 1.5x the output rate, so $4.00 in and $15.00 out, applied to the whole request rather than only the excess tokens."
+          },
+          {
+            "q": "Is there a batch discount on GPT-6.1 Sol?",
+            "a": "Yes. Batch and Flex processing run at 50% of the standard rate ($1.00/$5.00), while Fast mode doubles it to $4.00/$20.00."
+          },
+          {
+            "q": "What is the difference between GPT-6.1 Sol and GPT-6.1 Terra?",
+            "a": "Terra is exactly half the price of Sol on both input and output ($1.00/$5.00 against $2.00/$10.00) with the same 1.05M context window. Sol targets complex coding and long-horizon agent work; Terra targets high-volume computer use, visual reasoning and writing."
+          }
+        ]
+      }
+    },
+    {
+      "id": "gpt-6-1-terra",
+      "name": "GPT-6.1 Terra",
+      "provider": "OpenAI",
+      "input": 1.0,
+      "output": 5.0,
+      "cached_input": 0.05,
+      "context": "1.05M",
+      "tier_threshold": 272000,
+      "input_high": 2.0,
+      "output_high": 7.5,
+      "note": "Released 2026-10-26. A tenth of GPT-6 Astra on both rates and half of GPT-6.1 Sol; prompts above 272K tokens bill at $2/$7.50 for the full request",
+      "specs": {
+        "Max output": "128K",
+        "Knowledge cutoff": "2026-06-01",
+        "Image input": "Supported",
+        "Cache write (30 min)": "$1.25 / 1M",
+        "Cache write (12 h)": "$2.50 / 1M"
+      },
+      "detail": {
+        "verified": "2026-10-28",
+        "tables": [
+          {
+            "title": "Same workload on GPT-6.1 Terra and GPT-6.1 Sol",
+            "head": [
+              "Workload",
+              "Input tokens",
+              "Output tokens",
+              "GPT-6.1 Terra",
+              "GPT-6.1 Sol"
+            ],
+            "rows": [
+              [
+                "Single summarization call",
+                "1M",
+                "100K",
+                "$1.50",
+                "$3.00"
+              ],
+              [
+                "Long document pass, no cache reuse",
+                "1M",
+                "20K",
+                "$1.10",
+                "$2.20"
+              ],
+              [
+                "Cached agent loop, one turn",
+                "50K (45K cache hit)",
+                "5K",
+                "$0.032",
+                "$0.065"
+              ],
+              [
+                "That loop, 20 turns/day for 30 days",
+                "30M",
+                "3M",
+                "$19.35",
+                "$38.70"
+              ]
+            ],
+            "note": "Computed from the standard rates above. The same 30M/3M agent loop bills $207 a month on GPT-6 Astra."
+          }
+        ],
+        "sections": [
+          {
+            "h2": "What GPT-6.1 Terra actually costs",
+            "paras": [
+              "$1.00 per 1M input tokens and $5.00 per 1M output tokens, with cache hits at $0.05 — five percent of the uncached rate. Cache writes are the only number that surprises people: $1.25 per 1M for 30-minute retention and $2.50 for 12-hour retention, so a workload that rewrites its prefix every turn pays for the writes it never reads.",
+              "The model sits exactly halfway between GPT-6.1 Sol and nothing: Sol costs $2/$10, so Terra is half on both sides, and GPT-6 Astra costs $10/$50, so Terra is a tenth. For the same 1.05M context window and the same 128K maximum output, that is the widest price gap OpenAI has put between two tiers with identical context limits."
+            ]
+          },
+          {
+            "h2": "The 272K cliff is the number to watch",
+            "paras": [
+              "Terra inherits the same long-context rule as Astra and Sol: a request above 272K input tokens is billed at 2x the input and cache rates and 1.5x the output rate, and the multiplier applies to the entire request, not just the tokens past the threshold. A 400K-token prompt with 20K of output costs $0.95 instead of $0.50, which means the cost of crossing the line is 90% of the request, not 32% of it.",
+              "In practice that makes chunking cheaper than long context below roughly 272K, and it makes 300K-token requests the most expensive mistake on this price list. Measure prompt length before you assume the headline rate."
+            ]
+          },
+          {
+            "h2": "Why the per-token price understates the shift",
+            "paras": [
+              "OpenAI's own numbers put GPT-6.1 Terra at 57.6% on Agents' Last Exam at medium reasoning effort, against 42.6% for GPT-5.6 Terra, at $0.29 per task versus $0.84. A 15-point accuracy gain and a 65% cost cut at the same time is the reason this tier matters: the constraint on always-on agents was never capability, it was whether you could afford to let them run.",
+              "Treat vendor benchmarks as directional. The 50.3% Terminal-Bench 4.0 figure at maximum reasoning effort still means half of those tasks go unsolved, and every headline number here comes from the vendor's own harness."
+            ]
+          }
+        ],
+        "faq": [
+          {
+            "q": "How much does GPT-6.1 Terra cost per 1M tokens?",
+            "a": "$1.00 per 1M input tokens and $5.00 per 1M output tokens. Cached input bills at $0.05 per 1M, and cache writes cost $1.25 per 1M for 30-minute retention or $2.50 for 12-hour retention."
+          },
+          {
+            "q": "Is GPT-6.1 Terra cheaper than GPT-6.1 Sol?",
+            "a": "Yes, by exactly half: $1.00/$5.00 against Sol's $2.00/$10.00, with the same 1.05M context window and 128K maximum output. Sol is the tier for complex coding and long-horizon reasoning; Terra is the tier for high-volume computer use, visual reasoning and writing."
+          },
+          {
+            "q": "What happens above 272K input tokens?",
+            "a": "The whole request is repriced at 2x input and cache rates and 1.5x output: $2.00 in, $0.10 cached in, $7.50 out. The multiplier applies to every token in the request, so a 300K-token prompt costs more than twice what the same prompt costs at 270K."
+          },
+          {
+            "q": "Does GPT-6.1 Terra have a batch discount?",
+            "a": "Yes. Batch and Flex processing cost 50% of standard ($0.50/$2.50), and Fast mode costs 2x standard. The long-context multiplier stacks on top of whichever mode you pick."
+          },
+          {
+            "q": "What is GPT-6.1 Terra's context window and knowledge cutoff?",
+            "a": "1,050,000 tokens of context and 128,000 maximum output tokens, with a knowledge cutoff of 1 June 2026. Reasoning effort can be set to none, low, medium, high, xhigh or max, and medium is the default."
+          }
+        ]
+      }
     },
     {
       "id": "gpt-6-luna",
@@ -143,9 +285,9 @@ window.EZ_MODELS = {
       "provider": "Google",
       "input": 2.0,
       "output": 10.0,
-      "cached_input": null,
+      "cached_input": 0.1,
       "context": "1.05M",
-      "note": "Flagship reasoning model, released October 2026. Introductory $2/$10 through 2026-11-30, then $4/$20. Implicit caching only (no published cached rate)"
+      "note": "Flagship reasoning model, released October 2026. Introductory $2/$10 through 2026-11-30, then $4/$20; cache reads are $0.10 now and $0.20 after. Implicit caching only, so there is no cache-write fee"
     },
     {
       "id": "gemini-3-1-pro",
@@ -498,7 +640,13 @@ window.EZ_MODELS = {
       "output": 15.0,
       "cached_input": 0.3,
       "context": "1M",
-      "note": "Global API with full open weights; cache write $3 per 5 min, $6 per hour"
+      "note": "Global API with full open weights; cache write $3 per 5 min, $6 per hour",
+      "specs": {
+        "Open weights": "Yes",
+        "Reasoning effort": "low / high / max",
+        "Cache write (5 min)": "$3.00 / 1M",
+        "Cache write (1 h)": "$6.00 / 1M"
+      }
     },
     {
       "id": "kimi-k2-7-code",
@@ -509,6 +657,158 @@ window.EZ_MODELS = {
       "cached_input": 0.19,
       "context": "262K",
       "note": "Coding-focused tier. High-speed variant bills $1.90/$8.00"
+    },
+    {
+      "id": "kimi-k3-1-pro",
+      "name": "Kimi K3.1 Pro",
+      "provider": "Moonshot",
+      "input": 2.0,
+      "output": 10.0,
+      "cached_input": 0.2,
+      "context": "1M",
+      "note": "Released 2026-10-24. A third cheaper than K3 on both sides, with 3T-class open weights due by 2026-11-04. Cache write $2 per 5 min, $4 per hour; Highspeed runs 2-3x faster at $4/$20",
+      "specs": {
+        "Max output": "1,048,576",
+        "Default max output": "131,072",
+        "Open weights": "Yes, by 2026-11-04",
+        "Reasoning effort": "low / high / max",
+        "Cache write (5 min)": "$2.00 / 1M",
+        "Cache write (1 h)": "$4.00 / 1M"
+      },
+      "detail": {
+        "verified": "2026-10-28",
+        "tables": [
+          {
+            "title": "Kimi K3.1 Pro against the model it replaces",
+            "head": [
+              "Workload",
+              "Input tokens",
+              "Output tokens",
+              "K3.1 Pro",
+              "K3"
+            ],
+            "rows": [
+              [
+                "Single summarization call",
+                "1M",
+                "100K",
+                "$3.00",
+                "$4.50"
+              ],
+              [
+                "Long document pass, no cache reuse",
+                "1M",
+                "20K",
+                "$2.20",
+                "$3.30"
+              ],
+              [
+                "Cached agent loop, one turn",
+                "50K (45K cache hit)",
+                "5K",
+                "$0.069",
+                "$0.104"
+              ],
+              [
+                "That loop, 20 turns/day for 30 days",
+                "30M",
+                "3M",
+                "$41.40",
+                "$62.10"
+              ]
+            ],
+            "note": "Computed from the standard rates above. The same 30M/3M loop on GPT-6 Astra bills $207 a month."
+          }
+        ],
+        "sections": [
+          {
+            "h2": "What Kimi K3.1 Pro costs, and what it is cheaper than",
+            "paras": [
+              "$2.00 per 1M input tokens and $10.00 per 1M output tokens, with cache hits at $0.20. That is a third below Kimi K3 at $3/$15, and a fifth of GPT-6 Astra at $10/$50, which is the comparison Moonshot itself leads with.",
+              "The rate card is flat: unlike OpenAI, Google and xAI, Moonshot does not reprice long prompts, so the full 1,048,576-token window bills at the same per-token rate as a 1,000-token request. That single fact is the reason to look here for document work — a 400K-token prompt on this model costs $0.80 of input, while the same prompt on GPT-6.1 Terra costs $0.80 before the long-context multiplier and $1.60 after it.",
+              "Cache writes are billed by TTL and are not refunded: $2.00 per 1M for 5-minute retention, $4.00 for an hour. Short-lived prefixes should stay on the default 5-minute TTL."
+            ]
+          },
+          {
+            "h2": "Highspeed: the same model at twice the price",
+            "paras": [
+              "Kimi K3.1 Pro Highspeed is not a different model. It serves the same weights with 2-3x the output speed and bills $4/$20 with $4/$8 cache writes, so the decision is purely whether latency is worth 100% more per token. Interactive products usually say yes; batch pipelines almost never do.",
+              "Both variants require a minimum $1 top-up to unlock, and both keep thinking mode on permanently with reasoning effort limited to low, high or max. There is no way to turn reasoning off, which matters when you are pricing a chat workload with short answers — every reply carries hidden thinking tokens billed at the output rate."
+            ]
+          }
+        ],
+        "faq": [
+          {
+            "q": "How much does Kimi K3.1 Pro cost per 1M tokens?",
+            "a": "$2.00 per 1M input tokens and $10.00 per 1M output tokens, with cached input at $0.20 per 1M. Cache writes cost $2.00 per 1M for 5-minute retention and $4.00 for one hour."
+          },
+          {
+            "q": "Does Kimi K3.1 Pro charge more for long context?",
+            "a": "No. Moonshot bills a single flat rate across the full 1,048,576-token context window, with no long-context multiplier. That makes it cheaper than OpenAI and Google tiers for prompts above roughly 272K tokens, where those providers reprice the whole request."
+          },
+          {
+            "q": "Kimi K3.1 Pro or K3.1 Pro Highspeed?",
+            "a": "Same weights, same 1M context, same $0.20 cache hits. Highspeed outputs 2-3x faster and costs $4.00/$20.00 with $4.00/$8.00 cache writes. Choose it when latency is user-visible; stay on standard for batch work."
+          },
+          {
+            "q": "Is Kimi K3.1 Pro open weights?",
+            "a": "Yes, at 3T-class parameter scale — the largest open-weight model published so far, by Moonshot's account. Full weights are scheduled for release by 4 November 2026; the API is available now."
+          }
+        ]
+      }
+    },
+    {
+      "id": "minimax-m3-1-flash",
+      "name": "MiniMax M3.1 Flash",
+      "provider": "MiniMax",
+      "input": 0.15,
+      "output": 0.6,
+      "cached_input": 0.015,
+      "context": "1M",
+      "note": "Released 2026-10-19. Half the M3 rate on input and output and 70% cheaper cache reads, with 428B total / 23B active parameters, open weights and roughly 200 tokens per second",
+      "specs": {
+        "Parameters": "428B total / 23B active",
+        "Output speed": "~200 tokens/sec",
+        "Open weights": "Yes",
+        "Cache read": "$0.015 / 1M"
+      },
+      "detail": {
+        "verified": "2026-10-28",
+        "sections": [
+          {
+            "h2": "What MiniMax M3.1 Flash costs",
+            "paras": [
+              "$0.15 per 1M input tokens, $0.60 per 1M output tokens and $0.015 per 1M cached input — a flat rate across the 1M-token window, with no long-context multiplier published. Against MiniMax M3 at $0.30/$1.20 that is half price on both sides and a 75% cut on cache reads.",
+              "On the numbers this is the cheapest credible agent tier in this table: $0.60 output undercuts DeepSeek V4.1 Flash's $0.60 only on paper, because DeepSeek's published rate is an off-peak rate that doubles for seven hours every weekday. M3.1 Flash has no time-of-day pricing, so the rate above is the rate you pay at 10am on a Tuesday."
+            ]
+          },
+          {
+            "h2": "The trade you are making",
+            "paras": [
+              "At 23B active parameters out of 428B total, this is a sparse model built for throughput rather than depth — MiniMax quotes roughly 200 tokens per second and a 70% drop in the cost of completing an agentic task, which is a claim about retries and turn count, not about per-token price. A model that needs fewer steps to finish is cheaper than its rate card suggests; one that needs more is more expensive.",
+              "Treat the vendor benchmark wins as directional and the independent leaderboard position as the useful signal. For extraction, classification, tool routing and high-volume fan-out this tier is now hard to argue against on price; for long-horizon reasoning the $2-$10 tier still earns its cost."
+            ]
+          }
+        ],
+        "faq": [
+          {
+            "q": "How much does MiniMax M3.1 Flash cost per 1M tokens?",
+            "a": "$0.15 per 1M input tokens and $0.60 per 1M output tokens, with cached input at $0.015 per 1M. MiniMax's rate card lists a single price across the 1M-token context window."
+          },
+          {
+            "q": "Is MiniMax M3.1 Flash cheaper than MiniMax M3?",
+            "a": "Yes. Input and output are both half of M3's $0.30/$1.20, and the cache-read rate falls from $0.06 to $0.015 per 1M. M3.1 Flash also removes M3's higher tier for prompts above 512K tokens."
+          },
+          {
+            "q": "Does MiniMax M3.1 Flash have time-of-day pricing?",
+            "a": "No. Unlike DeepSeek, MiniMax bills the same rate around the clock, so there is no off-peak window to schedule batch work into and no peak multiplier to budget for."
+          },
+          {
+            "q": "Is MiniMax M3.1 Flash open weights?",
+            "a": "Yes. The weights were released under an open licence on 23 October 2026, four days after the API launch, at 428B total and 23B active parameters."
+          }
+        ]
+      }
     },
     {
       "id": "minimax-m3",
@@ -591,7 +891,7 @@ window.EZ_MODELS = {
     "https://api-docs.deepseek.com/quick_start/pricing/",
     "https://docs.x.ai/docs/models",
     "https://docs.z.ai/guides/overview/pricing",
-    "https://platform.moonshot.ai/docs/pricing",
+    "https://platform.kimi.ai/docs/pricing/chat",
     "https://platform.minimaxi.com/docs/price",
     "https://platform.xiaomimimo.com/docs/en-US/price/pay-as-you-go",
     "https://mistral.ai/pricing/api"

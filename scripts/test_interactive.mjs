@@ -797,6 +797,7 @@ console.log("\n== models: October 2026 release wave ==");
   check("argon shows $2 in / $10 out", /\$2\b/.test(aText) && /\$10\b/.test(aText));
   check("argon notes the promo end date", /2026-11-30/.test(aText));
   check("argon flat-rate FAQ (no tier)", /flat per-token rate/.test(aText));
+  check("argon cache read rate published", /\$0\.10/.test(aText));
   check("no dangling cache price when caching has no rate", !/billed at —/.test(aText), aText.match(/billed at [^.]*\./)?.[0]);
 
   const haiku = await load("models/claude-haiku-5-5.html");
@@ -813,6 +814,23 @@ console.log("\n== models: October 2026 release wave ==");
   const mText = large4.doc.body.textContent;
   check("mistral large 4 sale price", /\$0\.68/.test(mText) && /\$2\.09/.test(mText));
   check("mistral large 4 notes list price", /\$1\.36/.test(mText));
+
+  const terra = await load("models/gpt-6-1-terra.html");
+  const tText = terra.doc.body.textContent;
+  check("terra standard price", /\$1 per 1M input/.test(tText) && /\$5 per 1M output/.test(tText));
+  check("terra long-context tier shown", /272,000/.test(tText) && /\$7\.50/.test(tText));
+  check("terra cached input rate", /\$0\.05/.test(tText));
+
+  const kimi31 = await load("models/kimi-k3-1-pro.html");
+  const kText = kimi31.doc.body.textContent;
+  check("kimi k3.1 pro price", /\$2 per 1M input/.test(kText) && /\$10 per 1M output/.test(kText));
+  check("kimi k3.1 pro shows highspeed variant", /\$20/.test(kText) && /Highspeed/.test(kText));
+
+  const m3f = await load("models/minimax-m3-1-flash.html");
+  const m3Text = m3f.doc.body.textContent;
+  check("m3.1 flash price", /\$0\.15 per 1M input/.test(m3Text) && /\$0\.60 per 1M output/.test(m3Text));
+  check("m3.1 flash cache rate", /\$0\.015/.test(m3Text));
+
 
   const tc = await load("tools/token-counter.html");
   await sleep(400);
@@ -865,7 +883,7 @@ console.log("\n== pages: about / contact / privacy ==");
   const about = await load("about.html");
   check("about has one h1", $$(about.doc, "h1").length === 1);
   check("about links to contact", $$(about.doc, 'a[href="/contact.html"]').length >= 1);
-  check("about names the tool and model counts", /18 browser-based tools/.test(about.doc.body.textContent) && /34 LLM models/.test(about.doc.body.textContent));
+  check("about names the tool and model counts", /18 browser-based tools/.test(about.doc.body.textContent) && new RegExp(modelN + " LLM models").test(about.doc.body.textContent));
 
   const contact = await load("contact.html");
   check("contact links to the issue tracker", $$(contact.doc, 'a[href="https://github.com/ezaiops/tools/issues"]').length >= 1);

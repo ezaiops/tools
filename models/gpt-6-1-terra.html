@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GPT-6.1 Terra API pricing in 2026: cost per 1M tokens | ezaiops tools</title>
+<meta name="description" content="GPT-6.1 Terra costs $1 per 1M input tokens and $5 per 1M output tokens. Context window, caching rates, a quick cost calculator and comparisons with nearby models.">
+<link rel="canonical" href="https://tools.ezaiops.com/models/gpt-6-1-terra.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="GPT-6.1 Terra API pricing in 2026: cost per 1M tokens | ezaiops tools">
+<meta property="og:description" content="GPT-6.1 Terra costs $1 per 1M input tokens and $5 per 1M output tokens. Context window, caching rates, a quick cost calculator and comparisons with nearby models.">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/style.css?v=20261022b">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How much does GPT-6.1 Terra cost per 1M tokens?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "$1.00 per 1M input tokens and $5.00 per 1M output tokens. Cached input bills at $0.05 per 1M, and cache writes cost $1.25 per 1M for 30-minute retention or $2.50 for 12-hour retention."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is GPT-6.1 Terra cheaper than GPT-6.1 Sol?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, by exactly half: $1.00/$5.00 against Sol's $2.00/$10.00, with the same 1.05M context window and 128K maximum output. Sol is the tier for complex coding and long-horizon reasoning; Terra is the tier for high-volume computer use, visual reasoning and writing."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What happens above 272K input tokens?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The whole request is repriced at 2x input and cache rates and 1.5x output: $2.00 in, $0.10 cached in, $7.50 out. The multiplier applies to every token in the request, so a 300K-token prompt costs more than twice what the same prompt costs at 270K."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does GPT-6.1 Terra have a batch discount?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Batch and Flex processing cost 50% of standard ($0.50/$2.50), and Fast mode costs 2x standard. The long-context multiplier stacks on top of whichever mode you pick."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is GPT-6.1 Terra's context window and knowledge cutoff?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "1,050,000 tokens of context and 128,000 maximum output tokens, with a knowledge cutoff of 1 June 2026. Reasoning effort can be set to none, low, medium, high, xhigh or max, and medium is the default."
+      }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/"><span class="logo">ez</span>ezaiops <small>tools</small></a>
+    <nav class="site-nav">
+      <a href="/">Tools</a>
+      <a href="/models/index.html">LLM pricing</a>
+      <a href="https://ezaiops.com/en/" title="ezaiops.com — AI agent observability &amp; LLMOps field notes (in English)">Blog</a>
+      <a href="https://github.com/ezaiops">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap tool-page">
+  <nav class="crumbs"><a href="/">Home</a> / <a href="/models/index.html">LLM pricing</a> / GPT-6.1 Terra<a class="main-site-link" href="https://ezaiops.com/en/">ezaiops.com ↗</a></nav>
+
+  <h1>GPT-6.1 Terra API pricing: cost per 1M tokens</h1>
+  <p class="lead">GPT-6.1 Terra currently costs <strong>$1 per 1M input tokens</strong> and
+  <strong>$5 per 1M output tokens</strong> through the OpenAI API. Released 2026-10-26. A tenth of GPT-6 Astra on both rates and half of GPT-6.1 Sol; prompts above 272K tokens bill at $2/$7.50 for the full request.
+  Prices below were verified against official pricing documentation on 2026-10-28.</p>
+
+  <section class="panel">
+    <div class="stats-grid">
+      <div class="stat"><div class="k">Input / 1M tokens</div><div class="v">$1</div></div>
+      <div class="stat"><div class="k">Output / 1M tokens</div><div class="v">$5</div></div>
+      <div class="stat"><div class="k">Output multiple</div><div class="v">5.0×</div></div>
+      <div class="stat"><div class="k">Context window</div><div class="v">1.05M</div></div>
+    </div>
+
+    <table class="data">
+      <thead><tr><th>Tier</th><th class="num">Input / 1M</th><th class="num">Output / 1M</th></tr></thead>
+      <tbody>
+        <tr><td>Standard rate</td><td class="num">$1</td><td class="num">$5</td></tr>
+        <tr><td>Above 272,000 tokens per request</td><td class="num">$2</td><td class="num">$7.50</td></tr>
+      </tbody>
+    </table>
+    <dl class="kv-list"><dt>Cached input</dt><dd>$0.05</dd></dl>
+    <p class="note">Verify current rates on the OpenAI pricing page before committing budget —
+    providers adjust prices frequently, and long-context or caching discounts may not show up
+    in the headline numbers.</p>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0;font-size:16px">Quick cost calculator for GPT-6.1 Terra</h2>
+    <div class="field-row">
+      <div class="field">
+        <label class="field-label" for="mc-in">Input tokens</label>
+        <input type="number" id="mc-in" class="mono" value="1000000" min="0">
+      </div>
+      <div class="field">
+        <label class="field-label" for="mc-out">Output tokens</label>
+        <input type="number" id="mc-out" class="mono" value="100000" min="0">
+      </div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat"><div class="k">One request (this volume)</div><div class="v" id="mc-cost">—</div></div>
+      <div class="stat"><div class="k">× 1,000 such requests</div><div class="v" id="mc-1k">—</div></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0;font-size:16px">GPT-6.1 Terra vs GPT-6.1 Sol</h2>
+    <table class="data">
+      <thead><tr><th></th><th>GPT-6.1 Terra</th><th>GPT-6.1 Sol</th></tr></thead>
+      <tbody><tr><td>Input / 1M</td><td class="num">$1</td><td class="num">$2</td></tr><tr><td>Output / 1M</td><td class="num">$5</td><td class="num">$10</td></tr><tr><td>Cache hit / 1M</td><td class="num">$0.05</td><td class="num">$0.10</td></tr><tr><td>Context window</td><td class="num">1.05M</td><td class="num">1.05M</td></tr><tr><td>Max output</td><td class="num">128K</td><td class="num">128K</td></tr><tr><td>Knowledge cutoff</td><td class="num">2026-06-01</td><td class="num">2026-04-30</td></tr><tr><td>Image input</td><td class="num">Supported</td><td class="num">Supported</td></tr><tr><td>Cache write (30 min)</td><td class="num">$1.25 / 1M</td><td class="num">$2.50 / 1M</td></tr><tr><td>Cache write (12 h)</td><td class="num">$2.50 / 1M</td><td class="num">$5.00 / 1M</td></tr></tbody>
+    </table>
+    <p class="note">Full breakdown: <a href="/models/gpt-6-1-sol.html">GPT-6.1 Sol pricing</a>.</p>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0;font-size:16px">Same workload on GPT-6.1 Terra and GPT-6.1 Sol</h2>
+    <table class="data">
+      <thead><tr><th>Workload</th><th class="num">Input tokens</th><th class="num">Output tokens</th><th class="num">GPT-6.1 Terra</th><th class="num">GPT-6.1 Sol</th></tr></thead>
+      <tbody><tr><td>Single summarization call</td><td class="num">1M</td><td class="num">100K</td><td class="num">$1.50</td><td class="num">$3.00</td></tr><tr><td>Long document pass, no cache reuse</td><td class="num">1M</td><td class="num">20K</td><td class="num">$1.10</td><td class="num">$2.20</td></tr><tr><td>Cached agent loop, one turn</td><td class="num">50K (45K cache hit)</td><td class="num">5K</td><td class="num">$0.032</td><td class="num">$0.065</td></tr><tr><td>That loop, 20 turns/day for 30 days</td><td class="num">30M</td><td class="num">3M</td><td class="num">$19.35</td><td class="num">$38.70</td></tr></tbody>
+    </table>
+    <p class="note">Computed from the standard rates above. The same 30M/3M agent loop bills $207 a month on GPT-6 Astra.</p>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0;font-size:16px">GPT-6.1 Terra vs nearby models (blended at a 3:1 input:output ratio)</h2>
+    <table class="data">
+      <thead><tr><th>Model</th><th>Provider</th><th class="num">Input</th><th class="num">Output</th><th class="num">Cached in</th><th>Context</th></tr></thead>
+      <tbody><tr><td><a href="/models/grok-4-3.html">Grok 4.3</a></td><td>xAI</td><td class="num">$1.25</td><td class="num">$2.50</td><td class="num">—</td><td>—</td></tr><tr><td><a href="/models/kimi-k2-7-code.html">Kimi K2.7 Code</a></td><td>Moonshot</td><td class="num">$0.95</td><td class="num">$4</td><td class="num">$0.19</td><td>262K</td></tr><tr style="background:var(--accent-soft)"><td><strong>GPT-6.1 Terra</strong></td><td>OpenAI</td><td class="num">$1</td><td class="num">$5</td><td class="num">$0.05</td><td>1.05M</td></tr><tr><td><a href="/models/claude-haiku-4-5.html">Claude Haiku 4.5</a></td><td>Anthropic</td><td class="num">$1</td><td class="num">$5</td><td class="num">$0.10</td><td>200K</td></tr><tr><td><a href="/models/glm-5-3.html">GLM-5.3</a></td><td>Z.AI</td><td class="num">$1.40</td><td class="num">$4.40</td><td class="num">$0.26</td><td>1M</td></tr></tbody>
+    </table>
+    <p class="note">The full 37-model comparison lives on the <a href="/models/index.html">pricing hub</a>,
+    and the <a href="/tools/token-counter.html">token &amp; cost calculator</a> will price your actual prompt.</p>
+  </section>
+
+  <section class="prose">
+    <h2>What GPT-6.1 Terra actually costs</h2><p>$1.00 per 1M input tokens and $5.00 per 1M output tokens, with cache hits at $0.05 — five percent of the uncached rate. Cache writes are the only number that surprises people: $1.25 per 1M for 30-minute retention and $2.50 for 12-hour retention, so a workload that rewrites its prefix every turn pays for the writes it never reads.</p><p>The model sits exactly halfway between GPT-6.1 Sol and nothing: Sol costs $2/$10, so Terra is half on both sides, and GPT-6 Astra costs $10/$50, so Terra is a tenth. For the same 1.05M context window and the same 128K maximum output, that is the widest price gap OpenAI has put between two tiers with identical context limits.</p><h2>The 272K cliff is the number to watch</h2><p>Terra inherits the same long-context rule as Astra and Sol: a request above 272K input tokens is billed at 2x the input and cache rates and 1.5x the output rate, and the multiplier applies to the entire request, not just the tokens past the threshold. A 400K-token prompt with 20K of output costs $0.95 instead of $0.50, which means the cost of crossing the line is 90% of the request, not 32% of it.</p><p>In practice that makes chunking cheaper than long context below roughly 272K, and it makes 300K-token requests the most expensive mistake on this price list. Measure prompt length before you assume the headline rate.</p><h2>Why the per-token price understates the shift</h2><p>OpenAI's own numbers put GPT-6.1 Terra at 57.6% on Agents' Last Exam at medium reasoning effort, against 42.6% for GPT-5.6 Terra, at $0.29 per task versus $0.84. A 15-point accuracy gain and a 65% cost cut at the same time is the reason this tier matters: the constraint on always-on agents was never capability, it was whether you could afford to let them run.</p><p>Treat vendor benchmarks as directional. The 50.3% Terminal-Bench 4.0 figure at maximum reasoning effort still means half of those tasks go unsolved, and every headline number here comes from the vendor's own harness.</p>
+
+    <h2>Frequently asked questions</h2>
+    <details class="faq"><summary>How much does GPT-6.1 Terra cost per 1M tokens?</summary>
+      <div class="faq-body">$1.00 per 1M input tokens and $5.00 per 1M output tokens. Cached input bills at $0.05 per 1M, and cache writes cost $1.25 per 1M for 30-minute retention or $2.50 for 12-hour retention.</div></details>
+    <details class="faq"><summary>Is GPT-6.1 Terra cheaper than GPT-6.1 Sol?</summary>
+      <div class="faq-body">Yes, by exactly half: $1.00/$5.00 against Sol's $2.00/$10.00, with the same 1.05M context window and 128K maximum output. Sol is the tier for complex coding and long-horizon reasoning; Terra is the tier for high-volume computer use, visual reasoning and writing.</div></details>
+    <details class="faq"><summary>What happens above 272K input tokens?</summary>
+      <div class="faq-body">The whole request is repriced at 2x input and cache rates and 1.5x output: $2.00 in, $0.10 cached in, $7.50 out. The multiplier applies to every token in the request, so a 300K-token prompt costs more than twice what the same prompt costs at 270K.</div></details>
+    <details class="faq"><summary>Does GPT-6.1 Terra have a batch discount?</summary>
+      <div class="faq-body">Yes. Batch and Flex processing cost 50% of standard ($0.50/$2.50), and Fast mode costs 2x standard. The long-context multiplier stacks on top of whichever mode you pick.</div></details>
+    <details class="faq"><summary>What is GPT-6.1 Terra's context window and knowledge cutoff?</summary>
+      <div class="faq-body">1,050,000 tokens of context and 128,000 maximum output tokens, with a knowledge cutoff of 1 June 2026. Reasoning effort can be set to none, low, medium, high, xhigh or max, and medium is the default.</div></details>
+    
+  </section>
+
+<div class="ad-slot">
+  <strong>Ad slot</strong>
+  Google AdSense placeholder — activated once the site is approved and has steady traffic.
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h4>Popular tools</h4>
+        <ul>
+          <li><a href="/tools/token-counter.html">LLM token &amp; cost calculator</a></li>
+          <li><a href="/tools/json-formatter.html">JSON formatter</a></li>
+          <li><a href="/tools/regex-tester.html">Regex tester</a></li>
+          <li><a href="/tools/cron-explainer.html">Cron explainer</a></li>
+          <li><a href="/tools/encode-decode.html">Base64 / URL / hash</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>LLM pricing</h4>
+        <ul>
+          <li><a href="/models/index.html">All models</a></li>
+          <li><a href="/models/gpt-5-6-sol.html">GPT-5.6 Sol pricing</a></li>
+          <li><a href="/models/claude-opus-5.html">Claude Opus 5 pricing</a></li>
+          <li><a href="/models/gemini-3-1-pro.html">Gemini 3.1 Pro pricing</a></li>
+          <li><a href="/models/deepseek-v4-1-flash.html">DeepSeek V4.1 Flash pricing</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>More</h4>
+        <ul>
+          <li><a href="https://ezaiops.com/en/">ezaiops.com</a></li>
+          <li><a href="/about.html">About</a></li>
+          <li><a href="/contact.html">Contact</a></li>
+          <li><a href="/privacy.html">Privacy policy</a></li>
+          <li><a href="https://github.com/ezaiops">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">&copy; <span data-year>2026</span> ezaiops &middot; your input never leaves your browser</div>
+  </div>
+</footer>
+
+<script src="/assets/common.js?v=20261022b" defer></script>
+<script src="/assets/models.js?v=20261022b" defer></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var models = (window.EZ_MODELS || {}).models || [];
+  var me = null;
+  for (var i = 0; i < models.length; i++) if (models[i].id === "gpt-6-1-terra") me = models[i];
+  if (!me) return;
+  var inEl = document.getElementById("mc-in");
+  var outEl = document.getElementById("mc-out");
+  function fmt(n) {
+    if (n <= 0) return "$0";
+    if (n < 0.000001) return "<$0.000001";
+    var d = n < 0.01 ? 6 : n < 1 ? 4 : 2;
+    return "$" + n.toFixed(d);
+  }
+  function recalc() {
+    var ti = Math.max(0, parseFloat(inEl.value || "0") || 0);
+    var to = Math.max(0, parseFloat(outEl.value || "0") || 0);
+    document.getElementById("mc-cost").textContent = fmt(ti * me.input / 1e6 + to * me.output / 1e6);
+    document.getElementById("mc-1k").textContent = fmt((ti * me.input / 1e6 + to * me.output / 1e6) * 1000);
+  }
+  inEl.addEventListener("input", recalc);
+  outEl.addEventListener("input", recalc);
+  recalc();
+});
+</script>
+
+</body>
+</html>

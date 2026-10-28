@@ -21,7 +21,7 @@
       "name": "How much does Gemini 4 Argon cost per 1M tokens?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "$2 per 1M input tokens, $10 per 1M output tokens"
+        "text": "$2 per 1M input tokens, $10 per 1M output tokens Cached input is billed at $0.10 per 1M tokens where caching is supported."
       }
     },
     {
@@ -29,7 +29,7 @@
       "name": "Does the Gemini 4 Argon context window cost extra?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "The published context window is charged at a flat per-token rate. Flagship reasoning model, released October 2026. Introductory $2/$10 through 2026-11-30, then $4/$20. Implicit caching only (no published cached rate)"
+        "text": "The published context window is charged at a flat per-token rate. Flagship reasoning model, released October 2026. Introductory $2/$10 through 2026-11-30, then $4/$20; cache reads are $0.10 now and $0.20 after. Implicit caching only, so there is no cache-write fee"
       }
     },
     {
@@ -37,7 +37,7 @@
       "name": "What is the cheapest way to run Gemini 4 Argon at scale?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Keep a stable prompt prefix so it caches, cap output length, schedule asynchronous work into off-peak windows where the provider prices by time, and move the easy 80% of traffic to a lower tier."
+        "text": "Keep a stable prompt prefix so it caches; cached input runs at $0.10 per 1M, cap output length, schedule asynchronous work into off-peak windows where the provider prices by time, and move the easy 80% of traffic to a lower tier."
       }
     }
   ]
@@ -63,8 +63,8 @@
 
   <h1>Gemini 4 Argon API pricing: cost per 1M tokens</h1>
   <p class="lead">Gemini 4 Argon currently costs <strong>$2 per 1M input tokens</strong> and
-  <strong>$10 per 1M output tokens</strong> through the Google API. Flagship reasoning model, released October 2026. Introductory $2/$10 through 2026-11-30, then $4/$20. Implicit caching only (no published cached rate).
-  Prices below were verified against official pricing documentation on 2026-10-18.</p>
+  <strong>$10 per 1M output tokens</strong> through the Google API. Flagship reasoning model, released October 2026. Introductory $2/$10 through 2026-11-30, then $4/$20; cache reads are $0.10 now and $0.20 after. Implicit caching only, so there is no cache-write fee.
+  Prices below were verified against official pricing documentation on 2026-10-28.</p>
 
   <section class="panel">
     <div class="stats-grid">
@@ -81,7 +81,7 @@
         
       </tbody>
     </table>
-    <dl class="kv-list"><dt>Cached input</dt><dd>not offered</dd></dl>
+    <dl class="kv-list"><dt>Cached input</dt><dd>$0.10</dd></dl>
     <p class="note">Verify current rates on the Google pricing page before committing budget —
     providers adjust prices frequently, and long-context or caching discounts may not show up
     in the headline numbers.</p>
@@ -109,22 +109,22 @@
     <h2 style="margin-top:0;font-size:16px">Gemini 4 Argon vs nearby models (blended at a 3:1 input:output ratio)</h2>
     <table class="data">
       <thead><tr><th>Model</th><th>Provider</th><th class="num">Input</th><th class="num">Output</th><th class="num">Cached in</th><th>Context</th></tr></thead>
-      <tbody><tr><td><a href="/models/claude-sonnet-5-5.html">Claude Sonnet 5.5</a></td><td>Anthropic</td><td class="num">$2</td><td class="num">$10</td><td class="num">$0.20</td><td>1M</td></tr><tr><td><a href="/models/claude-sonnet-5.html">Claude Sonnet 5</a></td><td>Anthropic</td><td class="num">$2</td><td class="num">$10</td><td class="num">$0.20</td><td>1M</td></tr><tr style="background:var(--accent-soft)"><td><strong>Gemini 4 Argon</strong></td><td>Google</td><td class="num">$2</td><td class="num">$10</td><td class="num">—</td><td>1.05M</td></tr><tr><td><a href="/models/gpt-5-6-terra.html">GPT-5.6 Terra</a></td><td>OpenAI</td><td class="num">$2</td><td class="num">$12</td><td class="num">—</td><td>—</td></tr><tr><td><a href="/models/gemini-3-1-pro.html">Gemini 3.1 Pro</a></td><td>Google</td><td class="num">$2</td><td class="num">$12</td><td class="num">—</td><td>1M</td></tr></tbody>
+      <tbody><tr><td><a href="/models/claude-sonnet-5-5.html">Claude Sonnet 5.5</a></td><td>Anthropic</td><td class="num">$2</td><td class="num">$10</td><td class="num">$0.20</td><td>1M</td></tr><tr><td><a href="/models/claude-sonnet-5.html">Claude Sonnet 5</a></td><td>Anthropic</td><td class="num">$2</td><td class="num">$10</td><td class="num">$0.20</td><td>1M</td></tr><tr style="background:var(--accent-soft)"><td><strong>Gemini 4 Argon</strong></td><td>Google</td><td class="num">$2</td><td class="num">$10</td><td class="num">$0.10</td><td>1.05M</td></tr><tr><td><a href="/models/kimi-k3-1-pro.html">Kimi K3.1 Pro</a></td><td>Moonshot</td><td class="num">$2</td><td class="num">$10</td><td class="num">$0.20</td><td>1M</td></tr><tr><td><a href="/models/gpt-5-6-terra.html">GPT-5.6 Terra</a></td><td>OpenAI</td><td class="num">$2</td><td class="num">$12</td><td class="num">—</td><td>—</td></tr></tbody>
     </table>
-    <p class="note">The full 34-model comparison lives on the <a href="/models/index.html">pricing hub</a>,
+    <p class="note">The full 37-model comparison lives on the <a href="/models/index.html">pricing hub</a>,
     and the <a href="/tools/token-counter.html">token &amp; cost calculator</a> will price your actual prompt.</p>
   </section>
 
   <section class="prose">
-    <h2>How to think about Gemini 4 Argon pricing</h2><p>Output tokens bill at 5.0× the input rate, which is the number that decides whether a workload is affordable: summarization and classification are input-heavy, while agents, chain-of-thought reasoning and long-form drafting are output-heavy. Before comparing headline prices, measure the real token mix from your own logs, then apply the blended formula <code>(input share × input price) + (output share × output price)</code>.</p><p>Beyond the headline rate, three levers usually decide a real bill: batch discounts where the provider offers one, cache hits on a stable prompt prefix, and right-sizing — routing simple steps to a mini or flash-class model instead of the flagship. Not every provider offers all three, so confirm which apply rather than assuming them.</p>
+    <h2>How to think about Gemini 4 Argon pricing</h2><p>Output tokens bill at 5.0× the input rate, which is the number that decides whether a workload is affordable: summarization and classification are input-heavy, while agents, chain-of-thought reasoning and long-form drafting are output-heavy. Before comparing headline prices, measure the real token mix from your own logs, then apply the blended formula <code>(input share × input price) + (output share × output price)</code>.</p><p>Beyond the headline rate, three levers usually decide a real bill: batch discounts where the provider offers one, cache hits on a stable prompt prefix, and right-sizing — routing simple steps to a mini or flash-class model instead of the flagship. Not every provider offers all three, so confirm which apply rather than assuming them. A cache hit bills at $0.10 against $2 for a miss, so a reused prefix is the cheapest tokens you will ever buy.</p>
 
     <h2>Frequently asked questions</h2>
     <details class="faq"><summary>How much does Gemini 4 Argon cost per 1M tokens?</summary>
-      <div class="faq-body">$2 per 1M input tokens, $10 per 1M output tokens</div></details>
+      <div class="faq-body">$2 per 1M input tokens, $10 per 1M output tokens Cached input is billed at $0.10 per 1M tokens where caching is supported.</div></details>
     <details class="faq"><summary>Does the Gemini 4 Argon context window cost extra?</summary>
-      <div class="faq-body">The published context window is charged at a flat per-token rate. Flagship reasoning model, released October 2026. Introductory $2/$10 through 2026-11-30, then $4/$20. Implicit caching only (no published cached rate)</div></details>
+      <div class="faq-body">The published context window is charged at a flat per-token rate. Flagship reasoning model, released October 2026. Introductory $2/$10 through 2026-11-30, then $4/$20; cache reads are $0.10 now and $0.20 after. Implicit caching only, so there is no cache-write fee</div></details>
     <details class="faq"><summary>What is the cheapest way to run Gemini 4 Argon at scale?</summary>
-      <div class="faq-body">Keep a stable prompt prefix so it caches, cap output length, schedule asynchronous work into off-peak windows where the provider prices by time, and move the easy 80% of traffic to a lower tier.</div></details>
+      <div class="faq-body">Keep a stable prompt prefix so it caches; cached input runs at $0.10 per 1M, cap output length, schedule asynchronous work into off-peak windows where the provider prices by time, and move the easy 80% of traffic to a lower tier.</div></details>
     
   </section>
 

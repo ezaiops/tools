@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kimi K3.1 Pro API pricing in 2026: cost per 1M tokens | ezaiops tools</title>
+<meta name="description" content="Kimi K3.1 Pro costs $2 per 1M input tokens and $10 per 1M output tokens. Context window, caching rates, a quick cost calculator and comparisons with nearby models.">
+<link rel="canonical" href="https://tools.ezaiops.com/models/kimi-k3-1-pro.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Kimi K3.1 Pro API pricing in 2026: cost per 1M tokens | ezaiops tools">
+<meta property="og:description" content="Kimi K3.1 Pro costs $2 per 1M input tokens and $10 per 1M output tokens. Context window, caching rates, a quick cost calculator and comparisons with nearby models.">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/style.css?v=20261022b">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How much does Kimi K3.1 Pro cost per 1M tokens?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "$2.00 per 1M input tokens and $10.00 per 1M output tokens, with cached input at $0.20 per 1M. Cache writes cost $2.00 per 1M for 5-minute retention and $4.00 for one hour."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does Kimi K3.1 Pro charge more for long context?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Moonshot bills a single flat rate across the full 1,048,576-token context window, with no long-context multiplier. That makes it cheaper than OpenAI and Google tiers for prompts above roughly 272K tokens, where those providers reprice the whole request."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Kimi K3.1 Pro or K3.1 Pro Highspeed?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Same weights, same 1M context, same $0.20 cache hits. Highspeed outputs 2-3x faster and costs $4.00/$20.00 with $4.00/$8.00 cache writes. Choose it when latency is user-visible; stay on standard for batch work."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is Kimi K3.1 Pro open weights?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, at 3T-class parameter scale — the largest open-weight model published so far, by Moonshot's account. Full weights are scheduled for release by 4 November 2026; the API is available now."
+      }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/"><span class="logo">ez</span>ezaiops <small>tools</small></a>
+    <nav class="site-nav">
+      <a href="/">Tools</a>
+      <a href="/models/index.html">LLM pricing</a>
+      <a href="https://ezaiops.com/en/" title="ezaiops.com — AI agent observability &amp; LLMOps field notes (in English)">Blog</a>
+      <a href="https://github.com/ezaiops">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap tool-page">
+  <nav class="crumbs"><a href="/">Home</a> / <a href="/models/index.html">LLM pricing</a> / Kimi K3.1 Pro<a class="main-site-link" href="https://ezaiops.com/en/">ezaiops.com ↗</a></nav>
+
+  <h1>Kimi K3.1 Pro API pricing: cost per 1M tokens</h1>
+  <p class="lead">Kimi K3.1 Pro currently costs <strong>$2 per 1M input tokens</strong> and
+  <strong>$10 per 1M output tokens</strong> through the Moonshot API. Released 2026-10-24. A third cheaper than K3 on both sides, with 3T-class open weights due by 2026-11-04. Cache write $2 per 5 min, $4 per hour; Highspeed runs 2-3x faster at $4/$20.
+  Prices below were verified against official pricing documentation on 2026-10-28.</p>
+
+  <section class="panel">
+    <div class="stats-grid">
+      <div class="stat"><div class="k">Input / 1M tokens</div><div class="v">$2</div></div>
+      <div class="stat"><div class="k">Output / 1M tokens</div><div class="v">$10</div></div>
+      <div class="stat"><div class="k">Output multiple</div><div class="v">5.0×</div></div>
+      <div class="stat"><div class="k">Context window</div><div class="v">1M</div></div>
+    </div>
+
+    <table class="data">
+      <thead><tr><th>Tier</th><th class="num">Input / 1M</th><th class="num">Output / 1M</th></tr></thead>
+      <tbody>
+        <tr><td>Standard rate</td><td class="num">$2</td><td class="num">$10</td></tr>
+        
+      </tbody>
+    </table>
+    <dl class="kv-list"><dt>Cached input</dt><dd>$0.20</dd></dl>
+    <p class="note">Verify current rates on the Moonshot pricing page before committing budget —
+    providers adjust prices frequently, and long-context or caching discounts may not show up
+    in the headline numbers.</p>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0;font-size:16px">Quick cost calculator for Kimi K3.1 Pro</h2>
+    <div class="field-row">
+      <div class="field">
+        <label class="field-label" for="mc-in">Input tokens</label>
+        <input type="number" id="mc-in" class="mono" value="1000000" min="0">
+      </div>
+      <div class="field">
+        <label class="field-label" for="mc-out">Output tokens</label>
+        <input type="number" id="mc-out" class="mono" value="100000" min="0">
+      </div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat"><div class="k">One request (this volume)</div><div class="v" id="mc-cost">—</div></div>
+      <div class="stat"><div class="k">× 1,000 such requests</div><div class="v" id="mc-1k">—</div></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0;font-size:16px">Kimi K3.1 Pro vs Kimi K3</h2>
+    <table class="data">
+      <thead><tr><th></th><th>Kimi K3.1 Pro</th><th>Kimi K3</th></tr></thead>
+      <tbody><tr><td>Input / 1M</td><td class="num">$2</td><td class="num">$3</td></tr><tr><td>Output / 1M</td><td class="num">$10</td><td class="num">$15</td></tr><tr><td>Cache hit / 1M</td><td class="num">$0.20</td><td class="num">$0.30</td></tr><tr><td>Context window</td><td class="num">1M</td><td class="num">1M</td></tr><tr><td>Max output</td><td class="num">1,048,576</td><td class="num">—</td></tr><tr><td>Default max output</td><td class="num">131,072</td><td class="num">—</td></tr><tr><td>Open weights</td><td class="num">Yes, by 2026-11-04</td><td class="num">Yes</td></tr><tr><td>Reasoning effort</td><td class="num">low / high / max</td><td class="num">low / high / max</td></tr><tr><td>Cache write (5 min)</td><td class="num">$2.00 / 1M</td><td class="num">$3.00 / 1M</td></tr><tr><td>Cache write (1 h)</td><td class="num">$4.00 / 1M</td><td class="num">$6.00 / 1M</td></tr></tbody>
+    </table>
+    <p class="note">Full breakdown: <a href="/models/kimi-k3.html">Kimi K3 pricing</a>.</p>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0;font-size:16px">Kimi K3.1 Pro against the model it replaces</h2>
+    <table class="data">
+      <thead><tr><th>Workload</th><th class="num">Input tokens</th><th class="num">Output tokens</th><th class="num">K3.1 Pro</th><th class="num">K3</th></tr></thead>
+      <tbody><tr><td>Single summarization call</td><td class="num">1M</td><td class="num">100K</td><td class="num">$3.00</td><td class="num">$4.50</td></tr><tr><td>Long document pass, no cache reuse</td><td class="num">1M</td><td class="num">20K</td><td class="num">$2.20</td><td class="num">$3.30</td></tr><tr><td>Cached agent loop, one turn</td><td class="num">50K (45K cache hit)</td><td class="num">5K</td><td class="num">$0.069</td><td class="num">$0.104</td></tr><tr><td>That loop, 20 turns/day for 30 days</td><td class="num">30M</td><td class="num">3M</td><td class="num">$41.40</td><td class="num">$62.10</td></tr></tbody>
+    </table>
+    <p class="note">Computed from the standard rates above. The same 30M/3M loop on GPT-6 Astra bills $207 a month.</p>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0;font-size:16px">Kimi K3.1 Pro vs nearby models (blended at a 3:1 input:output ratio)</h2>
+    <table class="data">
+      <thead><tr><th>Model</th><th>Provider</th><th class="num">Input</th><th class="num">Output</th><th class="num">Cached in</th><th>Context</th></tr></thead>
+      <tbody><tr><td><a href="/models/claude-sonnet-5.html">Claude Sonnet 5</a></td><td>Anthropic</td><td class="num">$2</td><td class="num">$10</td><td class="num">$0.20</td><td>1M</td></tr><tr><td><a href="/models/gemini-4-argon.html">Gemini 4 Argon</a></td><td>Google</td><td class="num">$2</td><td class="num">$10</td><td class="num">$0.10</td><td>1.05M</td></tr><tr style="background:var(--accent-soft)"><td><strong>Kimi K3.1 Pro</strong></td><td>Moonshot</td><td class="num">$2</td><td class="num">$10</td><td class="num">$0.20</td><td>1M</td></tr><tr><td><a href="/models/gpt-5-6-terra.html">GPT-5.6 Terra</a></td><td>OpenAI</td><td class="num">$2</td><td class="num">$12</td><td class="num">—</td><td>—</td></tr><tr><td><a href="/models/gemini-3-1-pro.html">Gemini 3.1 Pro</a></td><td>Google</td><td class="num">$2</td><td class="num">$12</td><td class="num">—</td><td>1M</td></tr></tbody>
+    </table>
+    <p class="note">The full 37-model comparison lives on the <a href="/models/index.html">pricing hub</a>,
+    and the <a href="/tools/token-counter.html">token &amp; cost calculator</a> will price your actual prompt.</p>
+  </section>
+
+  <section class="prose">
+    <h2>What Kimi K3.1 Pro costs, and what it is cheaper than</h2><p>$2.00 per 1M input tokens and $10.00 per 1M output tokens, with cache hits at $0.20. That is a third below Kimi K3 at $3/$15, and a fifth of GPT-6 Astra at $10/$50, which is the comparison Moonshot itself leads with.</p><p>The rate card is flat: unlike OpenAI, Google and xAI, Moonshot does not reprice long prompts, so the full 1,048,576-token window bills at the same per-token rate as a 1,000-token request. That single fact is the reason to look here for document work — a 400K-token prompt on this model costs $0.80 of input, while the same prompt on GPT-6.1 Terra costs $0.80 before the long-context multiplier and $1.60 after it.</p><p>Cache writes are billed by TTL and are not refunded: $2.00 per 1M for 5-minute retention, $4.00 for an hour. Short-lived prefixes should stay on the default 5-minute TTL.</p><h2>Highspeed: the same model at twice the price</h2><p>Kimi K3.1 Pro Highspeed is not a different model. It serves the same weights with 2-3x the output speed and bills $4/$20 with $4/$8 cache writes, so the decision is purely whether latency is worth 100% more per token. Interactive products usually say yes; batch pipelines almost never do.</p><p>Both variants require a minimum $1 top-up to unlock, and both keep thinking mode on permanently with reasoning effort limited to low, high or max. There is no way to turn reasoning off, which matters when you are pricing a chat workload with short answers — every reply carries hidden thinking tokens billed at the output rate.</p>
+
+    <h2>Frequently asked questions</h2>
+    <details class="faq"><summary>How much does Kimi K3.1 Pro cost per 1M tokens?</summary>
+      <div class="faq-body">$2.00 per 1M input tokens and $10.00 per 1M output tokens, with cached input at $0.20 per 1M. Cache writes cost $2.00 per 1M for 5-minute retention and $4.00 for one hour.</div></details>
+    <details class="faq"><summary>Does Kimi K3.1 Pro charge more for long context?</summary>
+      <div class="faq-body">No. Moonshot bills a single flat rate across the full 1,048,576-token context window, with no long-context multiplier. That makes it cheaper than OpenAI and Google tiers for prompts above roughly 272K tokens, where those providers reprice the whole request.</div></details>
+    <details class="faq"><summary>Kimi K3.1 Pro or K3.1 Pro Highspeed?</summary>
+      <div class="faq-body">Same weights, same 1M context, same $0.20 cache hits. Highspeed outputs 2-3x faster and costs $4.00/$20.00 with $4.00/$8.00 cache writes. Choose it when latency is user-visible; stay on standard for batch work.</div></details>
+    <details class="faq"><summary>Is Kimi K3.1 Pro open weights?</summary>
+      <div class="faq-body">Yes, at 3T-class parameter scale — the largest open-weight model published so far, by Moonshot's account. Full weights are scheduled for release by 4 November 2026; the API is available now.</div></details>
+    
+  </section>
+
+<div class="ad-slot">
+  <strong>Ad slot</strong>
+  Google AdSense placeholder — activated once the site is approved and has steady traffic.
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h4>Popular tools</h4>
+        <ul>
+          <li><a href="/tools/token-counter.html">LLM token &amp; cost calculator</a></li>
+          <li><a href="/tools/json-formatter.html">JSON formatter</a></li>
+          <li><a href="/tools/regex-tester.html">Regex tester</a></li>
+          <li><a href="/tools/cron-explainer.html">Cron explainer</a></li>
+          <li><a href="/tools/encode-decode.html">Base64 / URL / hash</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>LLM pricing</h4>
+        <ul>
+          <li><a href="/models/index.html">All models</a></li>
+          <li><a href="/models/gpt-5-6-sol.html">GPT-5.6 Sol pricing</a></li>
+          <li><a href="/models/claude-opus-5.html">Claude Opus 5 pricing</a></li>
+          <li><a href="/models/gemini-3-1-pro.html">Gemini 3.1 Pro pricing</a></li>
+          <li><a href="/models/deepseek-v4-1-flash.html">DeepSeek V4.1 Flash pricing</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>More</h4>
+        <ul>
+          <li><a href="https://ezaiops.com/en/">ezaiops.com</a></li>
+          <li><a href="/about.html">About</a></li>
+          <li><a href="/contact.html">Contact</a></li>
+          <li><a href="/privacy.html">Privacy policy</a></li>
+          <li><a href="https://github.com/ezaiops">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">&copy; <span data-year>2026</span> ezaiops &middot; your input never leaves your browser</div>
+  </div>
+</footer>
+
+<script src="/assets/common.js?v=20261022b" defer></script>
+<script src="/assets/models.js?v=20261022b" defer></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var models = (window.EZ_MODELS || {}).models || [];
+  var me = null;
+  for (var i = 0; i < models.length; i++) if (models[i].id === "kimi-k3-1-pro") me = models[i];
+  if (!me) return;
+  var inEl = document.getElementById("mc-in");
+  var outEl = document.getElementById("mc-out");
+  function fmt(n) {
+    if (n <= 0) return "$0";
+    if (n < 0.000001) return "<$0.000001";
+    var d = n < 0.01 ? 6 : n < 1 ? 4 : 2;
+    return "$" + n.toFixed(d);
+  }
+  function recalc() {
+    var ti = Math.max(0, parseFloat(inEl.value || "0") || 0);
+    var to = Math.max(0, parseFloat(outEl.value || "0") || 0);
+    document.getElementById("mc-cost").textContent = fmt(ti * me.input / 1e6 + to * me.output / 1e6);
+    document.getElementById("mc-1k").textContent = fmt((ti * me.input / 1e6 + to * me.output / 1e6) * 1000);
+  }
+  inEl.addEventListener("input", recalc);
+  outEl.addEventListener("input", recalc);
+  recalc();
+});
+</script>
+
+</body>
+</html>

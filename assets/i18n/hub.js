@@ -33,7 +33,7 @@ window.I18N_DICTS.push({
   "Unit converter": "单位换算",
   "Self-hosted vs API break-even": "自托管 vs API 盈亏平衡",
 
-  "Count tokens and price a prompt across 34 models — per request, day and month, with cache and batch discounts.": "跨 34 个模型统计 token 并估算成本——单次、每日、每月，含缓存与 Batch 折扣。",
+  "Count tokens and price a prompt across 37 models — per request, day and month, with cache and batch discounts.": "跨 37 个模型统计 token 并估算成本——单次、每日、每月，含缓存与 Batch 折扣。",
   "Find the monthly volume where renting a GPU beats per-token API pricing.": "算出每月用量达到多少时，租 GPU 比按 token 付 API 更划算。",
   "Format, minify and validate JSON, with the exact line and column of the first error.": "格式化、压缩与校验 JSON，并精确定位第一个错误的行列。",
   "Test JavaScript regex against live text, with capture groups and replacement preview.": "对文本实时测试 JavaScript 正则，查看捕获分组与替换预览。",
@@ -53,7 +53,7 @@ window.I18N_DICTS.push({
   "Monthly payment, amortization schedule and extra-payment payoff scenarios.": "月供、还款计划表与提前还款场景测算。",
 
   "LLM API pricing, model by model": "逐模型 LLM API 价格",
-  "34 models with per-1M-token input and output prices, context windows, cache rates and peak/off-peak windows — each page shows when it was last verified.": "34 个模型的每百万 token 输入/输出价格、上下文窗口、缓存费率与峰谷时段——每个页面都标注了最近核实日期。",
+  "37 models with per-1M-token input and output prices, context windows, cache rates and peak/off-peak windows — each page shows when it was last verified.": "37 个模型的每百万 token 输入/输出价格、上下文窗口、缓存费率与峰谷时段——每个页面都标注了最近核实日期。",
   "Browse pricing": "浏览价格",
 
   "Why these tools exist": "这些工具为什么存在",
