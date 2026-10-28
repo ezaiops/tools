@@ -339,15 +339,52 @@ def model_page(m):
     return html
 
 
+# Provider order for the hub table, most-searched first. Alphabetical order put
+# Alibaba above OpenAI, which is not what anyone arrives looking for.
+PROVIDER_ORDER = ["OpenAI", "Anthropic", "Google", "DeepSeek", "xAI", "Alibaba",
+                  "ByteDance", "Moonshot", "Z.AI", "MiniMax", "Xiaomi", "Mistral"]
+
+
+def hub_order(m):
+    """Ranked models first, then everything else grouped by provider popularity.
+
+    `rank` is an editorial field in models.json for the models people actually
+    look up. Unranked models fall below all of them, so a newly added model
+    never jumps the queue by accident.
+    """
+    r = m.get("rank")
+    if r is not None:
+        return (0, r, 0, "")
+    try:
+        p = PROVIDER_ORDER.index(m["provider"])
+    except ValueError:
+        p = len(PROVIDER_ORDER)
+    return (1, p, m["input"], m["name"])
+
+
+def note_preview(m, limit=110):
+    """Shorten the note on the hub table only.
+
+    Full notes run to 40 words and turn each row into a six-line block, which
+    defeats the point of a comparison table — you can only see five models per
+    screen. The full text stays on the model page.
+    """
+    n = m["note"].rstrip(". ")
+    if len(n) <= limit:
+        return n
+    return n[:limit].rsplit(" ", 1)[0].rstrip(",;:") + "…"
+
+
 def index_page():
+    ordered = sorted(MODELS, key=hub_order)
     rows = []
-    for m in sorted(MODELS, key=lambda x: (x["provider"], x["input"])):
+    for m in ordered:
         rows.append(
             "<tr><td><a href=\"/models/%s.html\">%s</a></td><td>%s</td><td class=\"num\">%s</td>"
             "<td class=\"num\">%s</td><td class=\"num\">%s</td><td>%s</td><td>%s</td></tr>" % (
                 m["id"], esc(m["name"]), esc(m["provider"]), money(m["input"]),
                 money(m["output"]), money(m.get("cached_input")),
-                m.get("context") or "—", esc(m["note"])))
+                m.get("context") or "—", esc(note_preview(m))))
     ld = json.dumps({
         "@context": "https://schema.org",
         "@type": "ItemList",
@@ -357,7 +394,7 @@ def index_page():
             {"@type": "ListItem", "position": i + 1,
              "name": m["name"],
              "url": "%s/models/%s.html" % (BASE, m["id"])}
-            for i, m in enumerate(MODELS)]
+            for i, m in enumerate(ordered)]
     }, ensure_ascii=False)
     canonical = BASE + "/models/index.html"
     html = HEAD.replace("@@TITLE@@", esc("LLM API pricing comparison 2026 — %d models per 1M tokens | ezaiops tools" % len(MODELS)))
@@ -369,8 +406,9 @@ def index_page():
   <nav class="crumbs"><a href="/">Home</a> / LLM pricing<a class="main-site-link" href="https://ezaiops.com/en/">ezaiops.com \u2197</a></nav>
   <h1>LLM API pricing, model by model</h1>
   <p class="lead">Every major frontier model, priced per 1M tokens, side by side. Data verified
-  against official provider documentation on @@UPD@@. Pick a row for the full breakdown, a
-  calculator and neighbor comparisons — or jump straight to the
+  against official provider documentation on @@UPD@@. Rows are ordered by how often people look
+  them up, not alphabetically — the flagship tiers sit at the top, older and cheaper tiers below.
+  Pick a row for the full breakdown, a calculator and neighbor comparisons — or jump straight to the
   <a href="/tools/token-counter.html">token &amp; cost calculator</a>.</p>
   <p class="main-site-banner">Part of <a href="https://ezaiops.com/en/">ezaiops.com</a> — field notes on AI agent observability, LLMOps and production AI ops.</p>
 

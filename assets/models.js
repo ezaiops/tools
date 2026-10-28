@@ -3,6 +3,7 @@ window.EZ_MODELS = {
   "models": [
     {
       "id": "gpt-6-astra",
+      "rank": 1,
       "name": "GPT-6 Astra",
       "provider": "OpenAI",
       "input": 10.0,
@@ -16,6 +17,7 @@ window.EZ_MODELS = {
     },
     {
       "id": "gpt-6-1-sol",
+      "rank": 4,
       "name": "GPT-6.1 Sol",
       "provider": "OpenAI",
       "input": 2.0,
@@ -57,6 +59,7 @@ window.EZ_MODELS = {
     },
     {
       "id": "gpt-6-1-terra",
+      "rank": 9,
       "name": "GPT-6.1 Terra",
       "provider": "OpenAI",
       "input": 1.0,
@@ -208,6 +211,7 @@ window.EZ_MODELS = {
     },
     {
       "id": "claude-fable-5-1",
+      "rank": 2,
       "name": "Claude Fable 5.1",
       "provider": "Anthropic",
       "input": 10.0,
@@ -218,6 +222,7 @@ window.EZ_MODELS = {
     },
     {
       "id": "claude-opus-5-5",
+      "rank": 5,
       "name": "Claude Opus 5.5",
       "provider": "Anthropic",
       "input": 4.0,
@@ -238,6 +243,7 @@ window.EZ_MODELS = {
     },
     {
       "id": "claude-sonnet-5-5",
+      "rank": 8,
       "name": "Claude Sonnet 5.5",
       "provider": "Anthropic",
       "input": 2.0,
@@ -281,6 +287,7 @@ window.EZ_MODELS = {
     },
     {
       "id": "gemini-4-argon",
+      "rank": 3,
       "name": "Gemini 4 Argon",
       "provider": "Google",
       "input": 2.0,
@@ -304,6 +311,7 @@ window.EZ_MODELS = {
     },
     {
       "id": "gemini-3-8-flash",
+      "rank": 7,
       "name": "Gemini 3.8 Flash",
       "provider": "Google",
       "input": 0.75,
@@ -324,6 +332,7 @@ window.EZ_MODELS = {
     },
     {
       "id": "grok-4-7",
+      "rank": 11,
       "name": "Grok 4.7",
       "provider": "xAI",
       "input": 2.0,
@@ -363,6 +372,7 @@ window.EZ_MODELS = {
     },
     {
       "id": "deepseek-v4-1-flash",
+      "rank": 6,
       "name": "DeepSeek V4.1 Flash",
       "provider": "DeepSeek",
       "input": 0.15,
@@ -480,6 +490,7 @@ window.EZ_MODELS = {
     },
     {
       "id": "deepseek-v4-pro",
+      "rank": 10,
       "name": "DeepSeek V4 Pro",
       "provider": "DeepSeek",
       "input": 0.66,
@@ -604,6 +615,7 @@ window.EZ_MODELS = {
     },
     {
       "id": "glm-5-3",
+      "rank": 15,
       "name": "GLM-5.3",
       "provider": "Z.AI",
       "input": 1.4,
@@ -660,6 +672,7 @@ window.EZ_MODELS = {
     },
     {
       "id": "kimi-k3-1-pro",
+      "rank": 13,
       "name": "Kimi K3.1 Pro",
       "provider": "Moonshot",
       "input": 2.0,
@@ -885,6 +898,7 @@ window.EZ_MODELS = {
     },
     {
       "id": "qwen3-8-max",
+      "rank": 12,
       "name": "Qwen3.8 Max",
       "provider": "Alibaba",
       "input": 1.65,
@@ -1120,6 +1134,7 @@ window.EZ_MODELS = {
     },
     {
       "id": "doubao-seed-2-1-turbo",
+      "rank": 14,
       "name": "Doubao Seed 2.1 Turbo",
       "provider": "ByteDance",
       "input": 0.5,
