@@ -6,7 +6,7 @@
       "name": "LLM token & cost calculator",
       "url": "/tools/token-counter.html",
       "icon": "$",
-      "desc": "Count tokens and price a prompt across 37 models — per request, day and month, with cache and batch discounts.",
+      "desc": "Count tokens and price a prompt across 39 models — per request, day and month, with cache and batch discounts.",
       "tags": [
         "AI",
         "featured"

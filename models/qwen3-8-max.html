@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Qwen3.8 Max API pricing in 2026: cost per 1M tokens | ezaiops tools</title>
+<meta name="description" content="Qwen3.8 Max costs $1.65 per 1M input tokens and $4.95 per 1M output tokens. Context window, caching rates, a quick cost calculator and comparisons with nearby models.">
+<link rel="canonical" href="https://tools.ezaiops.com/models/qwen3-8-max.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Qwen3.8 Max API pricing in 2026: cost per 1M tokens | ezaiops tools">
+<meta property="og:description" content="Qwen3.8 Max costs $1.65 per 1M input tokens and $4.95 per 1M output tokens. Context window, caching rates, a quick cost calculator and comparisons with nearby models.">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/style.css?v=20261022b">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How much does Qwen3.8 Max cost per 1M tokens?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "$1.65 per 1M input tokens and $4.951 per 1M output tokens in the Singapore region, with implicit cache hits at $0.206 per 1M. The US (Virginia) region bills $2.00/$6.00 for the same model, and China (Beijing) bills CNY 12/36."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why is Qwen3.8 Max cheaper in Singapore than in the US?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Alibaba prices each Model Studio region separately. Singapore, Germany, Japan and Hong Kong all list $1.65/$4.951; the US (Virginia) region lists $2.00/$6.00, about 21% more for identical weights. Provision the workspace in the region whose rate card you intend to pay."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the difference between implicit and explicit caching on Qwen3.8 Max?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Implicit caching is automatic and bills hits at $0.206 per 1M. Explicit caching costs $2.063 per 1M to create and $0.137 per 1M to read. Explicit reads are cheaper per token but the write fee means a prefix needs roughly 30 reuses before it beats implicit caching."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does Qwen3.8 Max have a 1M context window?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The context window is 1,000,000 tokens, but the maximum input is 991,808 and drops to 983,616 in thinking mode. Max output is 131,072 tokens with up to 262,144 tokens of chain-of-thought."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is Qwen3.8 Max multimodal?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes for input: it accepts text, images and video and returns text. Vision understanding is native rather than a bolt-on, which is what makes the long-video and document-parsing workloads viable at this price."
+      }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/"><span class="logo">ez</span>ezaiops <small>tools</small></a>
+    <nav class="site-nav">
+      <a href="/">Tools</a>
+      <a href="/models/index.html">LLM pricing</a>
+      <a href="https://ezaiops.com/en/" title="ezaiops.com — AI agent observability &amp; LLMOps field notes (in English)">Blog</a>
+      <a href="https://github.com/ezaiops">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap tool-page">
+  <nav class="crumbs"><a href="/">Home</a> / <a href="/models/index.html">LLM pricing</a> / Qwen3.8 Max<a class="main-site-link" href="https://ezaiops.com/en/">ezaiops.com ↗</a></nav>
+
+  <h1>Qwen3.8 Max API pricing: cost per 1M tokens</h1>
+  <p class="lead">Qwen3.8 Max currently costs <strong>$1.65 per 1M input tokens</strong> and
+  <strong>$4.95 per 1M output tokens</strong> through the Alibaba API. 2.4T-parameter MoE flagship, listed at $1.65/$4.95 per 1M in Singapore; the US region bills $2/$6 for the same model and China (Beijing) bills CNY 12/36. Batch file input is half price.
+  Prices below were verified against official pricing documentation on 2026-10-28.</p>
+
+  <section class="panel">
+    <div class="stats-grid">
+      <div class="stat"><div class="k">Input / 1M tokens</div><div class="v">$1.65</div></div>
+      <div class="stat"><div class="k">Output / 1M tokens</div><div class="v">$4.95</div></div>
+      <div class="stat"><div class="k">Output multiple</div><div class="v">3.0×</div></div>
+      <div class="stat"><div class="k">Context window</div><div class="v">1M</div></div>
+    </div>
+
+    <table class="data">
+      <thead><tr><th>Tier</th><th class="num">Input / 1M</th><th class="num">Output / 1M</th></tr></thead>
+      <tbody>
+        <tr><td>Standard rate</td><td class="num">$1.65</td><td class="num">$4.95</td></tr>
+        
+      </tbody>
+    </table>
+    <dl class="kv-list"><dt>Cached input</dt><dd>$0.206</dd></dl>
+    <p class="note">Verify current rates on the Alibaba pricing page before committing budget —
+    providers adjust prices frequently, and long-context or caching discounts may not show up
+    in the headline numbers.</p>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0;font-size:16px">Quick cost calculator for Qwen3.8 Max</h2>
+    <div class="field-row">
+      <div class="field">
+        <label class="field-label" for="mc-in">Input tokens</label>
+        <input type="number" id="mc-in" class="mono" value="1000000" min="0">
+      </div>
+      <div class="field">
+        <label class="field-label" for="mc-out">Output tokens</label>
+        <input type="number" id="mc-out" class="mono" value="100000" min="0">
+      </div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat"><div class="k">One request (this volume)</div><div class="v" id="mc-cost">—</div></div>
+      <div class="stat"><div class="k">× 1,000 such requests</div><div class="v" id="mc-1k">—</div></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0;font-size:16px">Qwen3.8 Max vs Qwen3.8 Flash</h2>
+    <table class="data">
+      <thead><tr><th></th><th>Qwen3.8 Max</th><th>Qwen3.8 Flash</th></tr></thead>
+      <tbody><tr><td>Input / 1M</td><td class="num">$1.65</td><td class="num">$0.113</td></tr><tr><td>Output / 1M</td><td class="num">$4.95</td><td class="num">$0.382</td></tr><tr><td>Cache hit / 1M</td><td class="num">$0.206</td><td class="num">$0.014</td></tr><tr><td>Context window</td><td class="num">1M</td><td class="num">1M</td></tr><tr><td>Parameters</td><td class="num">2.4T total / 95B active</td><td class="num">—</td></tr><tr><td>Max output</td><td class="num">131K</td><td class="num">131K</td></tr><tr><td>Max input</td><td class="num">991,808</td><td class="num">991,808</td></tr><tr><td>Image / video input</td><td class="num">Supported</td><td class="num">Supported</td></tr><tr><td>Explicit cache read</td><td class="num">$0.137 / 1M</td><td class="num">$0.014 / 1M</td></tr><tr><td>Explicit cache write</td><td class="num">$2.063 / 1M</td><td class="num">$0.177 / 1M</td></tr></tbody>
+    </table>
+    <p class="note">Full breakdown: <a href="/models/qwen3-8-flash.html">Qwen3.8 Flash pricing</a>.</p>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0;font-size:16px">The same model at three different prices</h2>
+    <table class="data">
+      <thead><tr><th>Region</th><th class="num">Input / 1M</th><th class="num">Output / 1M</th><th class="num">Cached input / 1M</th></tr></thead>
+      <tbody><tr><td>Singapore (international default)</td><td class="num">$1.65</td><td class="num">$4.951</td><td class="num">$0.206</td></tr><tr><td>Germany, Japan, Hong Kong</td><td class="num">$1.65</td><td class="num">$4.951</td><td class="num">$0.206</td></tr><tr><td>US (Virginia)</td><td class="num">$2.00</td><td class="num">$6.00</td><td class="num">$0.25</td></tr><tr><td>China (Beijing)</td><td class="num">CNY 12</td><td class="num">CNY 36</td><td class="num">CNY 1.5</td></tr></tbody>
+    </table>
+    <p class="note">Model Studio regional rate cards, read on 2026-10-28. The US region costs 21% more than Singapore for identical weights.</p>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0;font-size:16px">Cost per workload at the Singapore rate</h2>
+    <table class="data">
+      <thead><tr><th>Workload</th><th class="num">Input tokens</th><th class="num">Output tokens</th><th class="num">Cost</th></tr></thead>
+      <tbody><tr><td>Single summarization call</td><td class="num">1M</td><td class="num">100K</td><td class="num">$2.15</td></tr><tr><td>Long document pass, no cache reuse</td><td class="num">1M</td><td class="num">20K</td><td class="num">$1.75</td></tr><tr><td>Cached agent loop, one turn</td><td class="num">50K (45K cache hit)</td><td class="num">5K</td><td class="num">$0.042</td></tr><tr><td>That loop, 20 turns/day for 30 days</td><td class="num">30M (90% cache hit)</td><td class="num">3M</td><td class="num">$25.36</td></tr></tbody>
+    </table>
+    <p class="note">Computed from the rates above. The same loop bills $8.51 on DeepSeek V4 Pro and $19.35 on GPT-6.1 Terra.</p>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0;font-size:16px">Qwen3.8 Max vs nearby models (blended at a 3:1 input:output ratio)</h2>
+    <table class="data">
+      <thead><tr><th>Model</th><th>Provider</th><th class="num">Input</th><th class="num">Output</th><th class="num">Cached in</th><th>Context</th></tr></thead>
+      <tbody><tr><td><a href="/models/claude-haiku-4-5.html">Claude Haiku 4.5</a></td><td>Anthropic</td><td class="num">$1</td><td class="num">$5</td><td class="num">$0.10</td><td>200K</td></tr><tr><td><a href="/models/glm-5-3.html">GLM-5.3</a></td><td>Z.AI</td><td class="num">$1.40</td><td class="num">$4.40</td><td class="num">$0.26</td><td>1M</td></tr><tr style="background:var(--accent-soft)"><td><strong>Qwen3.8 Max</strong></td><td>Alibaba</td><td class="num">$1.65</td><td class="num">$4.95</td><td class="num">$0.206</td><td>1M</td></tr><tr><td><a href="/models/grok-4-7.html">Grok 4.7</a></td><td>xAI</td><td class="num">$2</td><td class="num">$6</td><td class="num">$0.50</td><td>500K</td></tr><tr><td><a href="/models/grok-4-5.html">Grok 4.5</a></td><td>xAI</td><td class="num">$2</td><td class="num">$6</td><td class="num">—</td><td>—</td></tr></tbody>
+    </table>
+    <p class="note">The full 39-model comparison lives on the <a href="/models/index.html">pricing hub</a>,
+    and the <a href="/tools/token-counter.html">token &amp; cost calculator</a> will price your actual prompt.</p>
+  </section>
+
+  <section class="prose">
+    <h2>What Qwen3.8 Max costs, and why the region matters</h2><p>$1.65 per 1M input tokens and $4.951 per 1M output tokens in Singapore, which is the default endpoint for international accounts. That is 21% cheaper than the US (Virginia) region at $2/$6 for identical weights, and the gap is not a promotion — it is how Alibaba prices regions. Where you provision the workspace decides your bill before you write a line of code.</p><p>The China (Beijing) rate card is CNY 12 in and CNY 36 out per 1M, which converts to roughly $1.65/$4.95 at current rates. Paying in CNY through a mainland account and paying in USD through Singapore land in the same place; the US region is the expensive one.</p><p>Batch file processing halves input to $0.825 and output to $2.475, but Alibaba disables batch inference on this model in most regions, so check availability before designing around the discount.</p><h2>Cache is two products here, not one</h2><p>Implicit caching is automatic and bills hits at $0.206 per 1M — an eighth of the uncached rate. Explicit caching is something you create and pay for separately: $2.063 per 1M to write and $0.137 per 1M to read. Explicit reads are the cheapest input on this price list, but the write fee means a prefix has to be reused roughly 15 times before explicit caching beats implicit.</p><p>Do the arithmetic before reaching for explicit cache. The write fee divided by the saving per read gives the break-even: $2.063 / ($0.206 − $0.137) ≈ 30 reuses of the same prefix. Below that, implicit caching is cheaper and needs no code.</p><h2>The 1M context is really 991K of input</h2><p>Alibaba publishes a 1,000,000-token context window but a 991,808-token maximum input, and thinking mode cuts that to 983,616 because the reasoning tokens count against the same budget. Max output is 131,072 with up to 262,144 tokens of chain-of-thought.</p><p>Those numbers are honest but easy to misread as &quot;1M in, 131K out&quot;. Plan for 983K of input plus 131K of output in thinking mode and the arithmetic holds.</p>
+
+    <h2>Frequently asked questions</h2>
+    <details class="faq"><summary>How much does Qwen3.8 Max cost per 1M tokens?</summary>
+      <div class="faq-body">$1.65 per 1M input tokens and $4.951 per 1M output tokens in the Singapore region, with implicit cache hits at $0.206 per 1M. The US (Virginia) region bills $2.00/$6.00 for the same model, and China (Beijing) bills CNY 12/36.</div></details>
+    <details class="faq"><summary>Why is Qwen3.8 Max cheaper in Singapore than in the US?</summary>
+      <div class="faq-body">Alibaba prices each Model Studio region separately. Singapore, Germany, Japan and Hong Kong all list $1.65/$4.951; the US (Virginia) region lists $2.00/$6.00, about 21% more for identical weights. Provision the workspace in the region whose rate card you intend to pay.</div></details>
+    <details class="faq"><summary>What is the difference between implicit and explicit caching on Qwen3.8 Max?</summary>
+      <div class="faq-body">Implicit caching is automatic and bills hits at $0.206 per 1M. Explicit caching costs $2.063 per 1M to create and $0.137 per 1M to read. Explicit reads are cheaper per token but the write fee means a prefix needs roughly 30 reuses before it beats implicit caching.</div></details>
+    <details class="faq"><summary>Does Qwen3.8 Max have a 1M context window?</summary>
+      <div class="faq-body">The context window is 1,000,000 tokens, but the maximum input is 991,808 and drops to 983,616 in thinking mode. Max output is 131,072 tokens with up to 262,144 tokens of chain-of-thought.</div></details>
+    <details class="faq"><summary>Is Qwen3.8 Max multimodal?</summary>
+      <div class="faq-body">Yes for input: it accepts text, images and video and returns text. Vision understanding is native rather than a bolt-on, which is what makes the long-video and document-parsing workloads viable at this price.</div></details>
+    
+  </section>
+
+<div class="ad-slot">
+  <strong>Ad slot</strong>
+  Google AdSense placeholder — activated once the site is approved and has steady traffic.
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h4>Popular tools</h4>
+        <ul>
+          <li><a href="/tools/token-counter.html">LLM token &amp; cost calculator</a></li>
+          <li><a href="/tools/json-formatter.html">JSON formatter</a></li>
+          <li><a href="/tools/regex-tester.html">Regex tester</a></li>
+          <li><a href="/tools/cron-explainer.html">Cron explainer</a></li>
+          <li><a href="/tools/encode-decode.html">Base64 / URL / hash</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>LLM pricing</h4>
+        <ul>
+          <li><a href="/models/index.html">All models</a></li>
+          <li><a href="/models/gpt-5-6-sol.html">GPT-5.6 Sol pricing</a></li>
+          <li><a href="/models/claude-opus-5.html">Claude Opus 5 pricing</a></li>
+          <li><a href="/models/gemini-3-1-pro.html">Gemini 3.1 Pro pricing</a></li>
+          <li><a href="/models/deepseek-v4-1-flash.html">DeepSeek V4.1 Flash pricing</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>More</h4>
+        <ul>
+          <li><a href="https://ezaiops.com/en/">ezaiops.com</a></li>
+          <li><a href="/about.html">About</a></li>
+          <li><a href="/contact.html">Contact</a></li>
+          <li><a href="/privacy.html">Privacy policy</a></li>
+          <li><a href="https://github.com/ezaiops">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">&copy; <span data-year>2026</span> ezaiops &middot; your input never leaves your browser</div>
+  </div>
+</footer>
+
+<script src="/assets/common.js?v=20261022b" defer></script>
+<script src="/assets/models.js?v=20261022b" defer></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var models = (window.EZ_MODELS || {}).models || [];
+  var me = null;
+  for (var i = 0; i < models.length; i++) if (models[i].id === "qwen3-8-max") me = models[i];
+  if (!me) return;
+  var inEl = document.getElementById("mc-in");
+  var outEl = document.getElementById("mc-out");
+  function fmt(n) {
+    if (n <= 0) return "$0";
+    if (n < 0.000001) return "<$0.000001";
+    var d = n < 0.01 ? 6 : n < 1 ? 4 : 2;
+    return "$" + n.toFixed(d);
+  }
+  function recalc() {
+    var ti = Math.max(0, parseFloat(inEl.value || "0") || 0);
+    var to = Math.max(0, parseFloat(outEl.value || "0") || 0);
+    document.getElementById("mc-cost").textContent = fmt(ti * me.input / 1e6 + to * me.output / 1e6);
+    document.getElementById("mc-1k").textContent = fmt((ti * me.input / 1e6 + to * me.output / 1e6) * 1000);
+  }
+  inEl.addEventListener("input", recalc);
+  outEl.addEventListener("input", recalc);
+  recalc();
+});
+</script>
+
+</body>
+</html>

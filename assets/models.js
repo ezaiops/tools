@@ -882,6 +882,241 @@ window.EZ_MODELS = {
       "cached_input": 0.015,
       "context": "131K",
       "note": "Budget tier, good for classification workloads"
+    },
+    {
+      "id": "qwen3-8-max",
+      "name": "Qwen3.8 Max",
+      "provider": "Alibaba",
+      "input": 1.65,
+      "output": 4.95,
+      "cached_input": 0.206,
+      "context": "1M",
+      "note": "2.4T-parameter MoE flagship, listed at $1.65/$4.95 per 1M in Singapore; the US region bills $2/$6 for the same model and China (Beijing) bills CNY 12/36. Batch file input is half price",
+      "specs": {
+        "Parameters": "2.4T total / 95B active",
+        "Max output": "131K",
+        "Max input": "991,808",
+        "Image / video input": "Supported",
+        "Explicit cache read": "$0.137 / 1M",
+        "Explicit cache write": "$2.063 / 1M"
+      },
+      "detail": {
+        "verified": "2026-10-28",
+        "tables": [
+          {
+            "title": "The same model at three different prices",
+            "head": [
+              "Region",
+              "Input / 1M",
+              "Output / 1M",
+              "Cached input / 1M"
+            ],
+            "rows": [
+              [
+                "Singapore (international default)",
+                "$1.65",
+                "$4.951",
+                "$0.206"
+              ],
+              [
+                "Germany, Japan, Hong Kong",
+                "$1.65",
+                "$4.951",
+                "$0.206"
+              ],
+              [
+                "US (Virginia)",
+                "$2.00",
+                "$6.00",
+                "$0.25"
+              ],
+              [
+                "China (Beijing)",
+                "CNY 12",
+                "CNY 36",
+                "CNY 1.5"
+              ]
+            ],
+            "note": "Model Studio regional rate cards, read on 2026-10-28. The US region costs 21% more than Singapore for identical weights."
+          },
+          {
+            "title": "Cost per workload at the Singapore rate",
+            "head": [
+              "Workload",
+              "Input tokens",
+              "Output tokens",
+              "Cost"
+            ],
+            "rows": [
+              [
+                "Single summarization call",
+                "1M",
+                "100K",
+                "$2.15"
+              ],
+              [
+                "Long document pass, no cache reuse",
+                "1M",
+                "20K",
+                "$1.75"
+              ],
+              [
+                "Cached agent loop, one turn",
+                "50K (45K cache hit)",
+                "5K",
+                "$0.042"
+              ],
+              [
+                "That loop, 20 turns/day for 30 days",
+                "30M (90% cache hit)",
+                "3M",
+                "$25.36"
+              ]
+            ],
+            "note": "Computed from the rates above. The same loop bills $8.51 on DeepSeek V4 Pro and $19.35 on GPT-6.1 Terra."
+          }
+        ],
+        "sections": [
+          {
+            "h2": "What Qwen3.8 Max costs, and why the region matters",
+            "paras": [
+              "$1.65 per 1M input tokens and $4.951 per 1M output tokens in Singapore, which is the default endpoint for international accounts. That is 21% cheaper than the US (Virginia) region at $2/$6 for identical weights, and the gap is not a promotion — it is how Alibaba prices regions. Where you provision the workspace decides your bill before you write a line of code.",
+              "The China (Beijing) rate card is CNY 12 in and CNY 36 out per 1M, which converts to roughly $1.65/$4.95 at current rates. Paying in CNY through a mainland account and paying in USD through Singapore land in the same place; the US region is the expensive one.",
+              "Batch file processing halves input to $0.825 and output to $2.475, but Alibaba disables batch inference on this model in most regions, so check availability before designing around the discount."
+            ]
+          },
+          {
+            "h2": "Cache is two products here, not one",
+            "paras": [
+              "Implicit caching is automatic and bills hits at $0.206 per 1M — an eighth of the uncached rate. Explicit caching is something you create and pay for separately: $2.063 per 1M to write and $0.137 per 1M to read. Explicit reads are the cheapest input on this price list, but the write fee means a prefix has to be reused roughly 15 times before explicit caching beats implicit.",
+              "Do the arithmetic before reaching for explicit cache. The write fee divided by the saving per read gives the break-even: $2.063 / ($0.206 − $0.137) ≈ 30 reuses of the same prefix. Below that, implicit caching is cheaper and needs no code."
+            ]
+          },
+          {
+            "h2": "The 1M context is really 991K of input",
+            "paras": [
+              "Alibaba publishes a 1,000,000-token context window but a 991,808-token maximum input, and thinking mode cuts that to 983,616 because the reasoning tokens count against the same budget. Max output is 131,072 with up to 262,144 tokens of chain-of-thought.",
+              "Those numbers are honest but easy to misread as \"1M in, 131K out\". Plan for 983K of input plus 131K of output in thinking mode and the arithmetic holds."
+            ]
+          }
+        ],
+        "faq": [
+          {
+            "q": "How much does Qwen3.8 Max cost per 1M tokens?",
+            "a": "$1.65 per 1M input tokens and $4.951 per 1M output tokens in the Singapore region, with implicit cache hits at $0.206 per 1M. The US (Virginia) region bills $2.00/$6.00 for the same model, and China (Beijing) bills CNY 12/36."
+          },
+          {
+            "q": "Why is Qwen3.8 Max cheaper in Singapore than in the US?",
+            "a": "Alibaba prices each Model Studio region separately. Singapore, Germany, Japan and Hong Kong all list $1.65/$4.951; the US (Virginia) region lists $2.00/$6.00, about 21% more for identical weights. Provision the workspace in the region whose rate card you intend to pay."
+          },
+          {
+            "q": "What is the difference between implicit and explicit caching on Qwen3.8 Max?",
+            "a": "Implicit caching is automatic and bills hits at $0.206 per 1M. Explicit caching costs $2.063 per 1M to create and $0.137 per 1M to read. Explicit reads are cheaper per token but the write fee means a prefix needs roughly 30 reuses before it beats implicit caching."
+          },
+          {
+            "q": "Does Qwen3.8 Max have a 1M context window?",
+            "a": "The context window is 1,000,000 tokens, but the maximum input is 991,808 and drops to 983,616 in thinking mode. Max output is 131,072 tokens with up to 262,144 tokens of chain-of-thought."
+          },
+          {
+            "q": "Is Qwen3.8 Max multimodal?",
+            "a": "Yes for input: it accepts text, images and video and returns text. Vision understanding is native rather than a bolt-on, which is what makes the long-video and document-parsing workloads viable at this price."
+          }
+        ]
+      }
+    },
+    {
+      "id": "qwen3-8-flash",
+      "name": "Qwen3.8 Flash",
+      "provider": "Alibaba",
+      "input": 0.113,
+      "output": 0.382,
+      "cached_input": 0.014,
+      "context": "1M",
+      "note": "Budget multimodal tier at $0.113/$0.382 per 1M in Singapore, with the full 1M context window and 131K output; Hong Kong and US bill $0.15/$0.47",
+      "specs": {
+        "Max output": "131K",
+        "Max input": "991,808",
+        "Image / video input": "Supported",
+        "Explicit cache read": "$0.014 / 1M",
+        "Explicit cache write": "$0.177 / 1M"
+      },
+      "detail": {
+        "verified": "2026-10-28",
+        "tables": [
+          {
+            "title": "Qwen3.8 Flash against the other sub-$0.50 output tiers",
+            "head": [
+              "Model",
+              "Input / 1M",
+              "Output / 1M",
+              "Context"
+            ],
+            "rows": [
+              [
+                "Qwen3.8 Flash (Singapore)",
+                "$0.113",
+                "$0.382",
+                "1M"
+              ],
+              [
+                "MiniMax M3.1 Flash",
+                "$0.15",
+                "$0.60",
+                "1M"
+              ],
+              [
+                "DeepSeek V4.1 Flash (off-peak)",
+                "$0.15",
+                "$0.60",
+                "1M"
+              ],
+              [
+                "GPT-6 Luna",
+                "$0.10",
+                "$0.50",
+                "1.05M"
+              ],
+              [
+                "Gemini 3.5 Flash-Lite",
+                "$0.30",
+                "$2.50",
+                "1.05M"
+              ]
+            ],
+            "note": "Prices per 1M tokens from each provider's own rate card on 2026-10-28. DeepSeek's rate doubles during weekday peak windows."
+          }
+        ],
+        "sections": [
+          {
+            "h2": "What Qwen3.8 Flash costs",
+            "paras": [
+              "$0.113 per 1M input tokens and $0.382 per 1M output tokens in Singapore, with implicit cache hits at $0.014. Hong Kong and the US list $0.15/$0.47 — a 33% premium for the same model, which is the same regional pattern as Qwen3.8 Max.",
+              "At $0.382 output this is the cheapest way to buy a 1M-token context window from a major provider. GPT-6 Luna is slightly cheaper per token at $0.10/$0.50 but caps output cost higher; Gemini 3.5 Flash-Lite is $2.50 output, six times more."
+            ]
+          },
+          {
+            "h2": "Where the cheap rate stops being cheap",
+            "paras": [
+              "Flash is priced for throughput, not for reasoning depth. The 1M window and native video input make it attractive for extraction, screenshot triage and long-document summarisation, which is exactly the workload where output stays short and the $0.382 rate does most of the work.",
+              "It is not a substitute for Max on long-horizon agent work. If a task needs dozens of tool calls with retries, the cheaper model's higher step count can erase its per-token advantage — which is why per-task cost, not per-token price, is the number to compare."
+            ]
+          }
+        ],
+        "faq": [
+          {
+            "q": "How much does Qwen3.8 Flash cost per 1M tokens?",
+            "a": "$0.113 per 1M input tokens and $0.382 per 1M output tokens in the Singapore region, with implicit cache hits at $0.014 per 1M. Hong Kong and US (Virginia) list $0.15/$0.47."
+          },
+          {
+            "q": "Does Qwen3.8 Flash have the same 1M context as Max?",
+            "a": "Yes. Both offer a 1,000,000-token context window, a 991,808-token maximum input and 131,072 tokens of output. Flash reaches that window at a tenth of Max's input price."
+          },
+          {
+            "q": "Is Qwen3.8 Flash multimodal?",
+            "a": "Yes. It accepts text, images and video and returns text, and it is compatible with both the OpenAI and Anthropic API protocols, so it can drop into Claude Code or Codex style tooling."
+          }
+        ]
+      }
     }
   ],
   "sources": [
@@ -894,6 +1129,7 @@ window.EZ_MODELS = {
     "https://platform.kimi.ai/docs/pricing/chat",
     "https://platform.minimaxi.com/docs/price",
     "https://platform.xiaomimimo.com/docs/en-US/price/pay-as-you-go",
-    "https://mistral.ai/pricing/api"
+    "https://mistral.ai/pricing/api",
+    "https://www.alibabacloud.com/help/en/model-studio/models"
   ]
 };

@@ -2,7 +2,7 @@
 window.I18N_DICTS = window.I18N_DICTS || [];
 window.I18N_DICTS.push({
   "LLM token counter & cost calculator": "LLM 分词与成本计算器",
-  "Paste a prompt to count its tokens and price it across 37 models — per request, per day and per month, with batch-API and prompt-cache discounts applied. Tokenization runs locally with the official GPT tokenizer; your text never leaves this page.": "粘贴一段 prompt，即可统计词元数量，并核算 37 个模型的单次、每日、每月成本——自动应用 Batch 五折与 prompt 缓存折扣。分词在本地用官方 GPT 分词器完成，你的文本不会离开页面。",
+  "Paste a prompt to count its tokens and price it across 39 models — per request, per day and per month, with batch-API and prompt-cache discounts applied. Tokenization runs locally with the official GPT tokenizer; your text never leaves this page.": "粘贴一段 prompt，即可统计词元数量，并核算 39 个模型的单次、每日、每月成本——自动应用 Batch 五折与 prompt 缓存折扣。分词在本地用官方 GPT 分词器完成，你的文本不会离开页面。",
   "Prompt or text": "Prompt 或文本",
   "Model": "模型",
   "Expected output tokens": "预期输出 tokens",

@@ -117,7 +117,10 @@ console.log("\n== token-counter.html ==");
   const { win, doc, errors } = await load("tools/token-counter.html");
   const opts = $$(doc, "#tc-model option");
   check("model selector matches data", opts.length === modelN, String(opts.length));
-  check("provider groups", $$(doc, "#tc-model optgroup").length === 10);
+  // Derive from the data so adding a provider does not silently break this.
+  const providerN = new Set(modelData.models.map((m) => m.provider)).size;
+  check("provider groups", $$(doc, "#tc-model optgroup").length === providerN,
+    String($$(doc, "#tc-model optgroup").length) + " vs " + providerN);
   setInput(win, $("#tc-input", doc), "hello world");
   await sleep(500);
   check("chars counted", $("#tc-chars", doc).textContent === "11", $("#tc-chars", doc).textContent);
@@ -831,6 +834,16 @@ console.log("\n== models: October 2026 release wave ==");
   check("m3.1 flash price", /\$0\.15 per 1M input/.test(m3Text) && /\$0\.60 per 1M output/.test(m3Text));
   check("m3.1 flash cache rate", /\$0\.015/.test(m3Text));
 
+  const qmax = await load("models/qwen3-8-max.html");
+  const qText = qmax.doc.body.textContent;
+  check("qwen3.8 max price", /\$1\.65 per 1M input/.test(qText));
+  check("qwen3.8 max regional table", /US \(Virginia\)/.test(qText) && /CNY 12/.test(qText));
+  check("qwen3.8 max cache rates", /\$0\.206/.test(qText) && /\$0\.137/.test(qText));
+
+  const qflash = await load("models/qwen3-8-flash.html");
+  const qfText = qflash.doc.body.textContent;
+  check("qwen3.8 flash price", /\$0\.113 per 1M input/.test(qfText) && /\$0\.382 per 1M output/.test(qfText));
+
 
   const tc = await load("tools/token-counter.html");
   await sleep(400);
@@ -846,7 +859,8 @@ console.log("\n== models/index.html ==");
   const { doc, errors } = await load("models/index.html");
   check("one row per model", $$(doc, "table.data tbody tr").length === modelN, String($$(doc, "table.data tbody tr").length));
   check("links to model pages", $$(doc, 'a[href^="/models/"]').length >= modelN);
-  check("sources listed", $$(doc, ".prose ul li").length === 10, String($$(doc, ".prose ul li").length));
+  check("sources listed", $$(doc, ".prose ul li").length === modelData.sources.length,
+    String($$(doc, ".prose ul li").length));
   check("main site link in crumbs", $$(doc, ".main-site-link").length === 1);
   check("main site banner", $$(doc, ".main-site-banner a").length >= 1);
   check("no console errors", errors.length === 0, errors.join(" | "));
