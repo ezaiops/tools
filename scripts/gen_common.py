@@ -65,7 +65,7 @@ HEAD = """<!doctype html>
 <meta property="og:title" content="@@TITLE@@">
 <meta property="og:description" content="@@DESC@@">
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
-<link rel="stylesheet" href="/assets/style.css?v=20261028b">
+<link rel="stylesheet" href="/assets/style.css?v=20261028g">
 <script type="application/ld+json">
 @@LD@@
 </script>
@@ -135,8 +135,8 @@ FOOT = """
   </div>
 </footer>
 
-<script src="/assets/common.js?v=20261028b" defer></script>
-<script src="/assets/models.js?v=20261028b" defer></script>
+<script src="/assets/common.js?v=20261028g" defer></script>
+<script src="/assets/models.js?v=20261028g" defer></script>
 </body>
 </html>
 """

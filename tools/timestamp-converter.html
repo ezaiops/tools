@@ -10,7 +10,7 @@
 <meta property="og:title" content="Unix Timestamp Converter">
 <meta property="og:description" content="Epoch to ISO 8601 and back, with a live clock.">
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
-<link rel="stylesheet" href="/assets/style.css?v=20261028b">
+<link rel="stylesheet" href="/assets/style.css?v=20261028g">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -158,7 +158,7 @@
   </div>
 </footer>
 
-<script src="/assets/common.js?v=20261028b" defer></script>
+<script src="/assets/common.js?v=20261028g" defer></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   "use strict";
@@ -170,6 +170,10 @@ document.addEventListener("DOMContentLoaded", function () {
     return k.replace(/%s/g, function () { return String(args.shift()); });
   }
   var input = $("#ts-input");
+
+  // Relative time ("57 years ago") is built at render time, so the first pass
+  // can run before the dictionary finishes loading. Re-render once it arrives.
+  window.addEventListener("ez:i18n", function () { convert(); });
 
   var DOW = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 

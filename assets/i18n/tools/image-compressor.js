@@ -35,5 +35,10 @@ window.I18N_DICTS.push({
   "Does quality 80 look bad?": "质量 80 画质会差吗？",
   "For photographs, rarely noticeable. Drop to 60–70 for thumbnails and social previews; keep 90+ for images with text or fine line art.": "对照片来说几乎看不出。缩略图和社交预览用 60–70；含文字或精细线条的图保持 90 以上。",
   "Where do my images go?": "我的图片会传到哪去？",
-  "Nowhere. The file picker, canvas and download all happen locally; the page makes no network requests with your image data.": "哪也不去。文件选择、canvas 和下载全部在本地完成；页面不会用你的图片数据发任何网络请求。"
+  "Nowhere. The file picker, canvas and download all happen locally; the page makes no network requests with your image data.": "哪也不去。文件选择、canvas 和下载全部在本地完成；页面不会用你的图片数据发任何网络请求。",
+
+    "el:Your file is read with FileReader into an <img>, drawn onto a <canvas> (which is where resizing happens), and re-encoded with canvas.toBlob() at the quality you chose. That is the same encode/decode path the browser itself uses — there is no magic, and no server.": "文件用 <code>FileReader</code> 读进 <code>&lt;img&gt;</code>，画到 <code>&lt;canvas&gt;</code> 上（缩放就在这一步），再用 <code>canvas.toBlob()</code> 按你选的质量重新编码。这就是浏览器自己的编解码路径——没有魔法，也没有服务器。",
+  "el:WebP typically gives 25–40% smaller files than JPEG at equivalent quality, and supports transparency that JPEG cannot. Supported by all current browsers.": "<strong>WebP</strong> 在同等画质下通常比 JPEG 小 25–40%，还支持 JPEG 做不到的透明通道。当前所有浏览器都支持。",
+  "el:JPEG is the universal fallback; quality 80 is the sweet spot for photos.": "<strong>JPEG</strong> 是通用兜底格式；照片用 80 质量最合适。",
+  "el:PNG is lossless — re-encoding an already-PNG file rarely shrinks it unless you resize or drop to 8-bit colors, which this tool does not do.": "<strong>PNG</strong> 是无损格式——已经是 PNG 的文件再编码几乎不会变小，除非缩放或降到 8 位色，而本工具不做这两件事。"
 });

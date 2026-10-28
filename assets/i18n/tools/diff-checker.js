@@ -21,5 +21,7 @@ window.I18N_DICTS.push({
   "Does it ignore whitespace?": "会忽略空白吗？",
   "No — a trailing space is a difference. Trim both sides first if you want whitespace-insensitive comparison.": "不会——行尾空格也算差异。想要忽略空白的比较，先自行去除两侧空白。",
   "Is my text uploaded?": "文本会被上传吗？",
-  "No. The diff is computed in your browser; the page never transmits the contents.": "不会。差异在你的浏览器中计算，页面从不传输内容。"
+  "No. The diff is computed in your browser; the page never transmits the contents.": "不会。差异在你的浏览器中计算，页面从不传输内容。",
+
+    "el:Line differences come from the Myers O(ND) algorithm — the same family that powers git diff. It finds the shortest edit script (insertions and deletions) between the two line sequences. Modified lines are then paired up and a word-level Myers pass highlights the changed words inside them, which is what makes small edits readable at a glance.": "行级差异用 Myers O(ND) 算法计算——和 <code>git diff</code> 同一族。它找出两个行序列之间最短的编辑脚本（插入与删除）。配对的修改行再做一次词级 Myers 比较，把行内改动的词高亮出来，小改动才能一眼看清。"
 });

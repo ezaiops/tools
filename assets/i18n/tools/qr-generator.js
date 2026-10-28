@@ -33,5 +33,11 @@ window.I18N_DICTS.push({
   "SVG or PNG?": "用 SVG 还是 PNG？",
   "SVG for anything printed or scaled — it stays razor-sharp at any size and is tiny. PNG when you need a raster image for a chat app or CMS upload field.": "需要打印或缩放的场景用 SVG——任意尺寸都锐利，且体积很小。需要聊天软件或 CMS 上传位图时用 PNG。",
   "Can I put a logo in the middle?": "可以在中间放 logo 吗？",
-  "Not with this tool directly, but pick error correction Q or H and paste a small logo over the center in any editor — the redundancy absorbs it.": "本工具不直接支持，但选 Q 或 H 纠错等级，然后在任意编辑器里把小 logo 贴到中心即可——冗余足以吸收它。"
+  "Not with this tool directly, but pick error correction Q or H and paste a small logo over the center in any editor — the redundancy absorbs it.": "本工具不直接支持，但选 Q 或 H 纠错等级，然后在任意编辑器里把小 logo 贴到中心即可——冗余足以吸收它。",
+
+    "el:L (7%) — smallest code, clean digital displays or screens.": "<strong>L (7%)</strong>——码面最小，适合干净的数字屏幕。",
+  "el:M (15%) — the everyday default; good for posters and packaging.": "<strong>M (15%)</strong>——日常默认，海报和包装都够用。",
+  "el:Q (25%) — outdoor signage, anything that might get scuffed.": "<strong>Q (25%)</strong>——户外标识，以及可能被磨损的场景。",
+  "el:H (30%) — overlaid logos, industrial environments, codes that will take abuse.": "<strong>H (30%)</strong>——叠加 logo、工业环境，以及会被折腾的二维码。",
+  "el:The generator library (qrcode-generator) is loaded from a CDN on first use; if it cannot load, the page tells you instead of failing silently. Once loaded, everything runs offline.": "生成库（<code>qrcode-generator</code>）在首次使用时从 CDN 加载；加载失败时页面会明确告诉你，而不是静默失败。加载完成后全部离线运行。"
 });

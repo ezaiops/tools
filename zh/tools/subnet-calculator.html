@@ -13,7 +13,7 @@
 <meta property="og:title" content="子网与 CIDR 计算器 — IPv4 网络计算">
 <meta property="og:description" content="计算 IPv4 子网：网络地址、广播地址、可用主机范围、点分/十六进制/二进制掩码、通配符与主机数量。">
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
-<link rel="stylesheet" href="/assets/style.css?v=20261028b">
+<link rel="stylesheet" href="/assets/style.css?v=20261028g">
 <script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
@@ -30,7 +30,7 @@
 
 
 
-<script src="/assets/i18n.js?v=20261028b"></script><script src="/assets/i18n/common.js?v=20261028b"></script><script src="/assets/i18n/tools/subnet-calculator.js?v=20261028b"></script><meta property="og:locale" content="zh_CN"></head>
+<script src="/assets/i18n.js?v=20261028g"></script><script src="/assets/i18n/common.js?v=20261028g"></script><script src="/assets/i18n/tools/subnet-calculator.js?v=20261028g"></script><meta property="og:locale" content="zh_CN"></head>
 <body>
 
 <header class="site-header">
@@ -73,12 +73,12 @@
     </div>
     <pre class="code-out error hidden" id="sn-err" style="margin-top:12px"></pre>
 
-    <dl class="kv-list" id="sn-results" style="margin-top:14px"><dt>IP address</dt><dd class="mono">192.168.1.37  (3232235813)</dd><dt>Network address</dt><dd class="mono">192.168.1.0/26</dd><dt>Broadcast address</dt><dd class="mono">192.168.1.63</dd><dt>Usable host range</dt><dd class="mono">192.168.1.1 – 192.168.1.62</dd><dt>Subnet mask</dt><dd class="mono">255.255.255.192  (0xffffffc0)</dd><dt>Wildcard mask</dt><dd class="mono">0.0.0.63</dd><dt>Total addresses</dt><dd class="mono">64</dd><dt>Usable hosts</dt><dd class="mono">62</dd><dt>Address class</dt><dd class="mono">C (small networks)</dd><dt>Private range</dt><dd class="mono">Yes — 192.168.0.0/16 (private)</dd></dl>
+    <dl class="kv-list" id="sn-results" style="margin-top:14px"><dt>IP 地址</dt><dd class="mono">192.168.1.37  (3232235813)</dd><dt>网络地址</dt><dd class="mono">192.168.1.0/26</dd><dt>广播地址</dt><dd class="mono">192.168.1.63</dd><dt>可用主机范围</dt><dd class="mono">192.168.1.1 – 192.168.1.62</dd><dt>子网掩码</dt><dd class="mono">255.255.255.192  (0xffffffc0)</dd><dt>通配符掩码</dt><dd class="mono">0.0.0.63</dd><dt>总地址数</dt><dd class="mono">64</dd><dt>可用主机数</dt><dd class="mono">62</dd><dt>地址类别</dt><dd class="mono">C 类（小型网络）</dd><dt>私有网段</dt><dd class="mono">是 — 192.168.0.0/16（私有）</dd></dl>
 
     <h3 style="font-size:14px;margin:18px 0 0">二进制分解</h3>
     <table class="data">
-      <thead><tr><th></th><th class="mono">Octet 1</th><th class="mono">Octet 2</th><th class="mono">Octet 3</th><th class="mono">Octet 4</th></tr></thead>
-      <tbody id="sn-binary"><tr><td>Address</td><td class="mono">1100 0000</td><td class="mono">1010 1000</td><td class="mono">0000 0001</td><td class="mono">0010 0101</td></tr><tr><td>Mask</td><td class="mono">1111 1111</td><td class="mono">1111 1111</td><td class="mono">1111 1111</td><td class="mono">1100 0000</td></tr><tr><td>Network</td><td class="mono">1100 0000</td><td class="mono">1010 1000</td><td class="mono">0000 0001</td><td class="mono">0000 0000</td></tr></tbody>
+      <thead><tr><th></th><th class="mono">第 1 段</th><th class="mono">第 2 段</th><th class="mono">第 3 段</th><th class="mono">第 4 段</th></tr></thead>
+      <tbody id="sn-binary"><tr><td>地址</td><td class="mono">1100 0000</td><td class="mono">1010 1000</td><td class="mono">0000 0001</td><td class="mono">0010 0101</td></tr><tr><td>掩码</td><td class="mono">1111 1111</td><td class="mono">1111 1111</td><td class="mono">1111 1111</td><td class="mono">1100 0000</td></tr><tr><td>网络</td><td class="mono">1100 0000</td><td class="mono">1010 1000</td><td class="mono">0000 0001</td><td class="mono">0000 0000</td></tr></tbody>
     </table>
 
     <h3 style="font-size:14px;margin:18px 0 0">常用前缀长度</h3>
@@ -95,8 +95,8 @@
 
   <section class="prose">
     <h2>子网计算原理</h2>
-    <p>An IPv4 address is 32 bits, written as four octets. The prefix length — the number after the slash — says how many leading bits belong to the network. The <strong>network address</strong> keeps those bits and zeroes the rest; the <strong>broadcast address</strong> sets all host bits to 1. Hosts between them (minus the two reserved ends) are assignable, so a <code>/24</code> gives 254 usable addresses, a <code>/30</code> gives 2 — the classic point-to-point link.</p>
-    <p>Two details trip people up: usable hosts is <code>2^(32-prefix) − 2</code>, except for <code>/31</code> (RFC 3021, both addresses usable on point-to-point links) and <code>/32</code> (a single host). And a host address like <code>192.168.1.37/26</code> is <em>inside</em> the network <code>192.168.1.0/26</code> — the calculator always shows the network the address belongs to.</p>
+    <p>IPv4 地址是 32 位，写成四段。前缀长度——斜杠后面那个数字——表示前多少位属于网络。<strong>网络地址</strong>保留这些位、其余置 0；<strong>广播地址</strong>把主机位全置 1。两者之间（去掉两端保留）就是可分配的主机地址，所以 <code>/24</code> 有 254 个可用地址，<code>/30</code> 有 2 个——经典的点对点链路。</p>
+    <p>有两个细节容易踩坑：可用主机数是 <code>2^(32-prefix) − 2</code>，但 <code>/31</code> 例外（RFC 3021，点对点链路两个地址都可用），<code>/32</code> 也只有单个主机。另外像 <code>192.168.1.37/26</code> 这样的主机地址，其实<em>属于</em>网络 <code>192.168.1.0/26</code>——计算器总是显示该地址所属的网络。</p>
 
     <h2>常见问题</h2>
     <details class="faq">
@@ -152,7 +152,7 @@
   </div>
 </footer>
 
-<script src="/assets/common.js?v=20261028b" defer=""></script>
+<script src="/assets/common.js?v=20261028g" defer=""></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   "use strict";
@@ -193,19 +193,21 @@ document.addEventListener("DOMContentLoaded", function () {
     return "0x" + ("00000000" + (n >>> 0).toString(16)).slice(-8);
   }
   function classOf(first) {
-    if (first < 128) return "A (large networks)";
-    if (first < 192) return "B (medium networks)";
-    if (first < 224) return "C (small networks)";
-    if (first < 240) return "D (multicast)";
-    return "E (reserved)";
+    var zh = !!(window.ezI18N && window.ezI18N.lang === "zh");
+    if (first < 128) return zh ? "A 类（大型网络）" : "A (large networks)";
+    if (first < 192) return zh ? "B 类（中型网络）" : "B (medium networks)";
+    if (first < 224) return zh ? "C 类（小型网络）" : "C (small networks)";
+    if (first < 240) return zh ? "D 类（组播）" : "D (multicast)";
+    return zh ? "E 类（保留）" : "E (reserved)";
   }
   function privateOf(first, second) {
-    if (first === 10) return "Yes — 10.0.0.0/8 (private)";
-    if (first === 172 && second >= 16 && second <= 31) return "Yes — 172.16.0.0/12 (private)";
-    if (first === 192 && second === 168) return "Yes — 192.168.0.0/16 (private)";
-    if (first === 127) return "Loopback — 127.0.0.0/8";
-    if (first === 169 && second === 254) return "Link-local — 169.254.0.0/16";
-    return "No — public";
+    var zh = !!(window.ezI18N && window.ezI18N.lang === "zh");
+    if (first === 10) return (zh ? "是 — 10.0.0.0/8（私有）" : "Yes — 10.0.0.0/8 (private)");
+    if (first === 172 && second >= 16 && second <= 31) return (zh ? "是 — 172.16.0.0/12（私有）" : "Yes — 172.16.0.0/12 (private)");
+    if (first === 192 && second === 168) return (zh ? "是 — 192.168.0.0/16（私有）" : "Yes — 192.168.0.0/16 (private)");
+    if (first === 127) return (zh ? "环回 — 127.0.0.0/8" : "Loopback — 127.0.0.0/8");
+    if (first === 169 && second === 254) return (zh ? "链路本地 — 169.254.0.0/16" : "Link-local — 169.254.0.0/16");
+    return zh ? "否 — 公网地址" : "No — public";
   }
 
   function calculate() {
@@ -248,7 +250,7 @@ document.addEventListener("DOMContentLoaded", function () {
       ["Private range", privateOf((ip >>> 24) & 255, (ip >>> 16) & 255)]
     ];
     $("#sn-results").innerHTML = rows.map(function (r) {
-      return "<dt>" + r[0] + "</dt><dd class=\"mono\">" + r[1] + "</dd>";
+      return "<dt>" + ezT(r[0]) + "</dt><dd class=\"mono\">" + r[1] + "</dd>";
     }).join("");
 
     var binRows = [
@@ -260,7 +262,7 @@ document.addEventListener("DOMContentLoaded", function () {
       var cells = r[1].match(/.{8}/g).map(function (oct) {
         return "<td class=\"mono\">" + oct.replace(/(\d{4})(\d{4})/, "$1 $2") + "</td>";
       }).join("");
-      return "<tr><td>" + r[0] + "</td>" + cells + "</tr>";
+      return "<tr><td>" + ezT(r[0]) + "</td>" + cells + "</tr>";
     }).join("");
 
     var trows = [];

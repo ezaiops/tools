@@ -44,5 +44,13 @@ window.I18N_DICTS.push({
   "Does this support IPv6?": "支持 IPv6 吗？",
   "No — IPv6 uses 128-bit addresses and prefix math works differently. This calculator is IPv4 only.": "不支持——IPv6 使用 128 位地址，前缀计算方式不同。本工具仅支持 IPv4。",
   "Is my address sent anywhere?": "我的地址会被发送出去吗？",
-  "No. All math runs in your browser with JavaScript integer operations; nothing is transmitted.": "不会。所有计算都在你的浏览器中用 JavaScript 整数运算完成，没有任何传输。"
+  "No. All math runs in your browser with JavaScript integer operations; nothing is transmitted.": "不会。所有计算都在你的浏览器中用 JavaScript 整数运算完成，没有任何传输。",
+
+    "el:An IPv4 address is 32 bits, written as four octets. The prefix length — the number after the slash — says how many leading bits belong to the network. The network address keeps those bits and zeroes the rest; the broadcast address sets all host bits to 1. Hosts between them (minus the two reserved ends) are assignable, so a /24 gives 254 usable addresses, a /30 gives 2 — the classic point-to-point link.": "IPv4 地址是 32 位，写成四段。前缀长度——斜杠后面那个数字——表示前多少位属于网络。<strong>网络地址</strong>保留这些位、其余置 0；<strong>广播地址</strong>把主机位全置 1。两者之间（去掉两端保留）就是可分配的主机地址，所以 <code>/24</code> 有 254 个可用地址，<code>/30</code> 有 2 个——经典的点对点链路。",
+  "el:Two details trip people up: usable hosts is 2^(32-prefix) − 2, except for /31 (RFC 3021, both addresses usable on point-to-point links) and /32 (a single host). And a host address like 192.168.1.37/26 is inside the network 192.168.1.0/26 — the calculator always shows the network the address belongs to.": "有两个细节容易踩坑：可用主机数是 <code>2^(32-prefix) − 2</code>，但 <code>/31</code> 例外（RFC 3021，点对点链路两个地址都可用），<code>/32</code> 也只有单个主机。另外像 <code>192.168.1.37/26</code> 这样的主机地址，其实<em>属于</em>网络 <code>192.168.1.0/26</code>——计算器总是显示该地址所属的网络。",
+
+    "Octet 1": "第 1 段",
+  "Octet 2": "第 2 段",
+  "Octet 3": "第 3 段",
+  "Octet 4": "第 4 段"
 });

@@ -13,7 +13,7 @@
 <meta property="og:title" content="PDF 合并与拆分 — 浏览器本地处理">
 <meta property="og:description" content="把多个 PDF 合并成一个，或按页码范围拆分出新文件。基于 pdf-lib 在浏览器本地完成，文件不上传。">
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
-<link rel="stylesheet" href="/assets/style.css?v=20261028b">
+<link rel="stylesheet" href="/assets/style.css?v=20261028g">
 <script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
@@ -30,7 +30,7 @@
 
 
 
-<script src="/assets/i18n.js?v=20261028b"></script><script src="/assets/i18n/common.js?v=20261028b"></script><script src="/assets/i18n/tools/pdf-tools.js?v=20261028b"></script><meta property="og:locale" content="zh_CN"></head>
+<script src="/assets/i18n.js?v=20261028g"></script><script src="/assets/i18n/common.js?v=20261028g"></script><script src="/assets/i18n/tools/pdf-tools.js?v=20261028g"></script><meta property="og:locale" content="zh_CN"></head>
 <body>
 
 <header class="site-header">
@@ -100,9 +100,9 @@
 
   <section class="prose">
     <h2>什么在本地运行</h2>
-    <p>The whole operation uses <code>pdf-lib</code>, a pure-JavaScript PDF library loaded from a CDN on first use. Your files are read with <code>FileReader</code>, assembled or trimmed in memory, and written back with <code>URL.createObjectURL</code>. No server ever sees the bytes — and no size or rate limits, because there is nothing to meter.</p>
+    <p>整个过程用的是 <code>pdf-lib</code>——一个纯 JavaScript 的 PDF 库，首次使用时从 CDN 加载。文件由 <code>FileReader</code> 读入，在内存里合并或裁剪，再用 <code>URL.createObjectURL</code> 写回。服务端从来看不到这些字节，也没有大小或频率限制，因为没有东西需要计量。</p>
     <ul>
-      <li><strong>Merge</strong> concatenates full documents in the order you list them. Bookmarks and form fields from the sources are not preserved.</li>
+      <li><strong>合并</strong>按你列出的顺序把完整文档首尾相接。源文件里的书签和表单字段不会保留。</li>
       <li><strong>提取</strong> copies the selected pages into a new document. Pages stay exactly as they were — text, images and vector content included.</li>
       <li>加密的 PDF 需要先移除密码才能在这里处理。</li>
     </ul>
@@ -161,7 +161,7 @@
   </div>
 </footer>
 
-<script src="/assets/common.js?v=20261028b" defer=""></script>
+<script src="/assets/common.js?v=20261028g" defer=""></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   "use strict";

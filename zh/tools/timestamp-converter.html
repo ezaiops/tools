@@ -13,7 +13,7 @@
 <meta property="og:title" content="Unix 时间戳转换 — 纪元、ISO 8601、本地时间">
 <meta property="og:description" content="把 Unix 时间戳转成 ISO 8601 与可读日期，带实时时钟，支持毫秒级精度，全部在浏览器本地转换。">
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
-<link rel="stylesheet" href="/assets/style.css?v=20261028b">
+<link rel="stylesheet" href="/assets/style.css?v=20261028g">
 <script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
@@ -30,7 +30,7 @@
 
 
 
-<script src="/assets/i18n.js?v=20261028b"></script><script src="/assets/i18n/common.js?v=20261028b"></script><script src="/assets/i18n/tools/timestamp-converter.js?v=20261028b"></script><meta property="og:locale" content="zh_CN"></head>
+<script src="/assets/i18n.js?v=20261028g"></script><script src="/assets/i18n/common.js?v=20261028g"></script><script src="/assets/i18n/tools/timestamp-converter.js?v=20261028g"></script><meta property="og:locale" content="zh_CN"></head>
 <body>
 
 <header class="site-header">
@@ -53,9 +53,9 @@
   <section class="panel">
     <label class="field-label">当前时间</label>
     <div class="stats-grid">
-      <div class="stat"><div class="k">Unix 秒</div><div class="v" id="ts-now-s">1793196558</div></div>
-      <div class="stat"><div class="k">Unix 毫秒</div><div class="v" id="ts-now-ms">1793196558566</div></div>
-      <div class="stat"><div class="k">ISO 8601 (UTC)</div><div class="v" id="ts-now-iso" style="font-size:14px">2026-10-28T14:09:18Z</div></div>
+      <div class="stat"><div class="k">Unix 秒</div><div class="v" id="ts-now-s">1793198089</div></div>
+      <div class="stat"><div class="k">Unix 毫秒</div><div class="v" id="ts-now-ms">1793198089299</div></div>
+      <div class="stat"><div class="k">ISO 8601 (UTC)</div><div class="v" id="ts-now-iso" style="font-size:14px">2026-10-28T14:34:49Z</div></div>
     </div>
     <div class="btn-row">
       <button class="btn small" id="ts-copy-now" type="button" data-copy-target="#ts-now-s">复制当前 Unix 时间</button>
@@ -79,7 +79,7 @@
       <dt>星期</dt><dd id="ts-dow">Thursday</dd>
       <dt>Unix 秒</dt><dd id="ts-secs">0</dd>
       <dt>Unix 毫秒</dt><dd id="ts-msecs">0</dd>
-      <dt>相对时间</dt><dd id="ts-rel">57 years ago</dd>
+      <dt>相对时间</dt><dd id="ts-rel">57 年前</dd>
     </dl>
 
     <label class="field-label" for="ts-local-input" style="margin-top:16px">人类可读时间 → Unix</label>
@@ -163,7 +163,7 @@
   </div>
 </footer>
 
-<script src="/assets/common.js?v=20261028b" defer=""></script>
+<script src="/assets/common.js?v=20261028g" defer=""></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   "use strict";
@@ -175,6 +175,10 @@ document.addEventListener("DOMContentLoaded", function () {
     return k.replace(/%s/g, function () { return String(args.shift()); });
   }
   var input = $("#ts-input");
+
+  // Relative time ("57 years ago") is built at render time, so the first pass
+  // can run before the dictionary finishes loading. Re-render once it arrives.
+  window.addEventListener("ez:i18n", function () { convert(); });
 
   var DOW = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 

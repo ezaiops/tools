@@ -10,7 +10,7 @@
 <meta property="og:title" content="Meta Tag &amp; Open Graph Generator">
 <meta property="og:description" content="Meta tags with a live preview.">
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
-<link rel="stylesheet" href="/assets/style.css?v=20261028b">
+<link rel="stylesheet" href="/assets/style.css?v=20261028g">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -185,7 +185,7 @@
   </div>
 </footer>
 
-<script src="/assets/common.js?v=20261028b" defer></script>
+<script src="/assets/common.js?v=20261028g" defer></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   "use strict";
@@ -198,6 +198,12 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   function domain(url) {
     try { return new URL(url).hostname.replace(/^www\./, ""); } catch (e) { return url; }
+  }
+
+  // Warnings below are built at runtime, so they need the dictionary too.
+  // Called late (on input and on ez:i18n), by which point the engine is ready.
+  function T(s) {
+    return (window.ezI18N && window.ezI18N.t) ? window.ezI18N.t(s) : s;
   }
 
   function render() {
@@ -258,13 +264,15 @@ document.addEventListener("DOMContentLoaded", function () {
     $("#mt-code").value = lines.join("\n");
 
     var issues = [];
-    if (title.length > 60) issues.push("title will be truncated in search results");
-    if (desc.length > 160) issues.push("description will be truncated");
-    if (desc.length > 0 && desc.length < 70) issues.push("description is short — 140–160 chars earns more clicks");
-    if (!image) issues.push("no og:image — social shares will show a plain link");
-    if (url && url.indexOf("http") !== 0) issues.push("canonical URL should be absolute (https://)");
-    $("#mt-serp-note").textContent = issues.length ? "Heads up: " + issues.join("; ") + "." : "";
+    if (title.length > 60) issues.push(T("title will be truncated in search results"));
+    if (desc.length > 160) issues.push(T("description will be truncated"));
+    if (desc.length > 0 && desc.length < 70) issues.push(T("description is short — 140–160 chars earns more clicks"));
+    if (!image) issues.push(T("no og:image — social shares will show a plain link"));
+    if (url && url.indexOf("http") !== 0) issues.push(T("canonical URL should be absolute (https://)"));
+    $("#mt-serp-note").textContent = issues.length ? T("Heads up: ") + issues.join("; ") + "." : "";
   }
+
+  window.addEventListener("ez:i18n", render);
 
   ["mt-title", "mt-desc", "mt-url", "mt-image", "mt-site", "mt-type", "mt-twitter"].forEach(function (id) {
     $("#" + id).addEventListener("input", render);

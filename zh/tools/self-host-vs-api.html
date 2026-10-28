@@ -13,7 +13,7 @@
 <meta property="og:title" content="自建推理 vs 调用 API 盈亏平衡计算器">
 <meta property="og:description" content="输入每月 token 用量，算出租 GPU 自建推理何时比调用 LLM API 更便宜，给出盈亏平衡点与月度成本对比。">
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
-<link rel="stylesheet" href="/assets/style.css?v=20261028b">
+<link rel="stylesheet" href="/assets/style.css?v=20261028g">
 <script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
@@ -30,7 +30,7 @@
 
 
 
-<script src="/assets/i18n.js?v=20261028b"></script><script src="/assets/i18n/common.js?v=20261028b"></script><script src="/assets/i18n/tools/self-host-vs-api.js?v=20261028b"></script><meta property="og:locale" content="zh_CN"></head>
+<script src="/assets/i18n.js?v=20261028g"></script><script src="/assets/i18n/common.js?v=20261028g"></script><script src="/assets/i18n/tools/self-host-vs-api.js?v=20261028g"></script><meta property="og:locale" content="zh_CN"></head>
 <body>
 
 <header class="site-header">
@@ -129,8 +129,8 @@
     <h2>盈亏平衡怎么算</h2>
     <p>自托管的成本近似固定（GPU 小时 × 费率），每个 token 的边际成本接近于零；API 则是纯边际成本（tokens × 单价）。盈亏平衡点是两条成本线的交点：</p>
     <p class="mono" style="font-size:13px">盈亏平衡 tokens = GPU 月成本 ÷ API 每 token 单价</p>
-    <p>The catch is <strong>utilization</strong>: a 24×7 GPU burns money whether or not requests arrive, so below the break-even you are strictly worse off, and near it you carry ops risk (SLA, upgrades, security patches) that an API absorbs. Above it — typically hundreds of millions of tokens per month — the GPU wins, often by 3–10×. For most teams the honest answer is: start on the API, move the stable high-volume slice to self-hosting once it clearly exceeds break-even, and keep the API as the burst fallback.</p>
-    <p>Model quality is the other half of the equation — this tool compares <em>cost</em> only. A 70B open model is not a GPT-6-class model; the fair comparison is usually an open model against a cheaper API tier (see the <a href="/models/index.html">pricing table</a>).</p>
+    <p>关键在于<strong>利用率</strong>：GPU 只要开着就在烧钱，跟有没有请求无关。所以低于盈亏平衡点时你纯亏，接近时还要承担 API 替你兜住的运维风险（SLA、升级、安全补丁）。高于平衡点——通常是每月数亿 token——GPU 就赢了，而且常常赢 3–10 倍。对多数团队来说诚实的答案是：先用 API，等稳定的高用量部分明显越过平衡点再迁到自建，同时保留 API 应对突发。</p>
+    <p>模型质量是等式的另一半——本工具只比<em>成本</em>。70B 的开源模型不是 GPT-6 级别的模型；公平的比较通常是开源模型对便宜的 API 档位（见<a href="/models/index.html">模型价格表</a>）。</p>
 
     <h2>常见问题</h2>
     <details class="faq">
@@ -186,8 +186,8 @@
   </div>
 </footer>
 
-<script src="/assets/common.js?v=20261028b" defer=""></script>
-<script src="/assets/models.js?v=20261028b" defer=""></script>
+<script src="/assets/common.js?v=20261028g" defer=""></script>
+<script src="/assets/models.js?v=20261028g" defer=""></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   "use strict";

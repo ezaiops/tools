@@ -13,7 +13,7 @@
 <meta property="og:title" content="Cron 表达式生成器 — 可视化构建定时任务">
 <meta property="og:description" content="可视化选择分、时、日、月、星期，直接生成 cron 表达式，附中文说明与下次执行时间。">
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
-<link rel="stylesheet" href="/assets/style.css?v=20261028b">
+<link rel="stylesheet" href="/assets/style.css?v=20261028g">
 <script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
@@ -30,7 +30,7 @@
 
 
 
-<script src="/assets/i18n.js?v=20261028b"></script><script src="/assets/i18n/common.js?v=20261028b"></script><script src="/assets/i18n/tools/cron-generator.js?v=20261028b"></script><meta property="og:locale" content="zh_CN"></head>
+<script src="/assets/i18n.js?v=20261028g"></script><script src="/assets/i18n/common.js?v=20261028g"></script><script src="/assets/i18n/tools/cron-generator.js?v=20261028g"></script><meta property="og:locale" content="zh_CN"></head>
 <body>
 
 <header class="site-header">
@@ -137,16 +137,16 @@
       <input type="text" id="cg-expr" class="mono" readonly="" style="flex:1 1 260px;font-size:16px">
       <button class="btn" id="cg-copy" type="button" data-copy-target="#cg-expr">复制</button>
     </div>
-    <p class="note" id="cg-desc">Runs every minute, of every hour.</p>
+    <p class="note" id="cg-desc">运行：每分钟，每小时。</p>
     <pre class="code-out error hidden" id="cg-err" style="margin-top:10px"></pre>
 
     <div class="stats-grid">
       <div class="stat"><div class="k">每 30 天运行次数</div><div class="v" id="cg-perday">43,200</div></div>
-      <div class="stat"><div class="k">下次运行</div><div class="v" id="cg-next" style="font-size:15px">Wednesday October 28, 22:10</div></div>
+      <div class="stat"><div class="k">下次运行</div><div class="v" id="cg-next" style="font-size:15px">10 月 28 日 周三 22:35</div></div>
     </div>
     <h3 style="font-size:14px;margin:16px 0 0">未来 5 次运行（本地时区）</h3>
-    <ol class="plain-list" id="cg-runs" style="font-size:13.5px"><li>Wednesday October 28, 22:10</li><li>Wednesday October 28, 22:11</li><li>Wednesday October 28, 22:12</li><li>Wednesday October 28, 22:13</li><li>Wednesday October 28, 22:14</li></ol>
-    <p class="note">Share this expression with the <a href="/zh/tools/cron-explainer.html">cron explainer</a> to double-check what it means, or paste it straight into your crontab.</p>
+    <ol class="plain-list" id="cg-runs" style="font-size:13.5px"><li>10 月 28 日 周三 22:35</li><li>10 月 28 日 周三 22:36</li><li>10 月 28 日 周三 22:37</li><li>10 月 28 日 周三 22:38</li><li>10 月 28 日 周三 22:39</li></ol>
+    <p class="note">把这条表达式丢给 <a href="/zh/tools/cron-explainer.html">cron 解释器</a> 复核含义，或者直接粘进你的 crontab。</p>
   </section>
 
   <div class="ad-slot">
@@ -156,8 +156,8 @@
 
   <section class="prose">
     <h2>Cron 表达式是怎么组成的</h2>
-    <p>A cron line has five fields — minute, hour, day of month, month, day of week — separated by spaces. Each field accepts a wildcard (<code>*</code>), a single value, a list (<code>1,15</code>), a range (<code>1-5</code>) or a step (<code>*/5</code>). This builder emits the shortest correct form for whatever you pick, so <code>0 9 * * 1-5</code> — 9am on weekdays — stays minimal instead of expanding into lists.</p>
-    <p>One classic trap: when <strong>both</strong> day-of-month and day-of-week are restricted, cron fires on days matching <em>either</em> field, not both. If you pick "the 1st" plus "Monday", you get the 1st <em>and</em> every Monday — usually not what people intend. Leave one of the two on "Every day" for the intersection you expect.</p>
+    <p>一行 cron 有五个字段——分、时、日、月、星期——用空格分隔。每个字段都接受通配符（<code>*</code>）、单值、列表（<code>1,15</code>）、区间（<code>1-5</code>）或步长（<code>*/5</code>）。这个生成器总是输出最短的等价写法，所以 <code>0 9 * * 1-5</code>（工作日 9 点）会保持简洁，而不是展开成一堆列表。</p>
+    <p>一个经典陷阱：当「日」和「星期」都被限定，cron 会在<em>满足任意一个</em>的日子触发，而不是两个都满足。如果你选了「1 号」加「周一」，实际得到的是每月 1 号<em>加上</em>每个周一——通常不是你想要的意思。想让两个条件同时生效，其中一个必须留「每天」。</p>
 
     <h2>常见问题</h2>
     <details class="faq">
@@ -213,7 +213,7 @@
   </div>
 </footer>
 
-<script src="/assets/common.js?v=20261028b" defer=""></script>
+<script src="/assets/common.js?v=20261028g" defer=""></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   "use strict";
@@ -383,25 +383,33 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function fmtRun(d) {
     var pad = function (n) { return n < 10 ? "0" + n : "" + n; };
+    var zh = !!(window.ezI18N && window.ezI18N.lang === "zh");
+    if (zh) {
+      return (d.getMonth() + 1) + " 月 " + d.getDate() + " 日 周" + "日一二三四五六"[d.getDay()] +
+        " " + pad(d.getHours()) + ":" + pad(d.getMinutes());
+    }
     return DOW_NAMES[d.getDay()] + " " + MONTH_NAMES[d.getMonth()] + " " + d.getDate() + ", " +
       pad(d.getHours()) + ":" + pad(d.getMinutes());
   }
 
   function describe(expr) {
     var f = expr.split(/\s+/);
+    // Built by concatenation, so the word order has to be rewritten per
+    // language rather than translated phrase by phrase.
+    var zh = !!(window.ezI18N && window.ezI18N.lang === "zh");
     var parts = [];
-    if (f[0] === "*") parts.push("every minute");
-    else if (f[0].indexOf("*/") === 0) parts.push("every " + f[0].slice(2) + " minutes");
-    else parts.push("at minute " + f[0]);
-    if (f[1] === "*") parts.push("of every hour");
-    else parts.push("past hour " + f[1]);
+    if (f[0] === "*") parts.push(zh ? "每分钟" : "every minute");
+    else if (f[0].indexOf("*/") === 0) parts.push(zh ? "每 " + f[0].slice(2) + " 分钟" : "every " + f[0].slice(2) + " minutes");
+    else parts.push(zh ? "在第 " + f[0] + " 分钟" : "at minute " + f[0]);
+    if (f[1] === "*") parts.push(zh ? "每小时" : "of every hour");
+    else parts.push(zh ? "每小时的第 " + f[1] + " 分" : "past hour " + f[1]);
     if (f[2] !== "*" || f[4] !== "*") {
-      if (f[2] !== "*") parts.push("on day-of-month " + f[2]);
-      if (f[4] !== "*") parts.push("on day-of-week " + f[4]);
-      if (f[2] !== "*" && f[4] !== "*") parts.push("(either matches — see the note below)");
+      if (f[2] !== "*") parts.push(zh ? "每月 " + f[2] + " 日" : "on day-of-month " + f[2]);
+      if (f[4] !== "*") parts.push(zh ? "每周 " + f[4] : "on day-of-week " + f[4]);
+      if (f[2] !== "*" && f[4] !== "*") parts.push(zh ? "（两者任一匹配，见下方说明）" : "(either matches — see the note below)");
     }
-    if (f[3] !== "*") parts.push("in month " + f[3]);
-    $("#cg-desc").textContent = "Runs " + parts.join(", ") + ".";
+    if (f[3] !== "*") parts.push(zh ? f[3] + " 月" : "in month " + f[3]);
+    $("#cg-desc").textContent = (zh ? "运行：" : "Runs ") + parts.join(zh ? "，" : ", ") + (zh ? "。" : ".");
   }
 
   Object.keys(fields).forEach(function (k) {

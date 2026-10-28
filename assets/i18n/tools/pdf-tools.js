@@ -39,5 +39,8 @@ window.I18N_DICTS.push({
   "Can I rotate, reorder or delete pages?": "可以旋转、重排或删除页面吗？",
   "Not in this version — merge and extract only. Reordering is possible by extracting ranges in the order you want them and merging the results.": "当前版本不行——只有合并和提取。重排可以这样做：按想要的顺序提取各范围，再合并结果。",
 
-    "el:Combine several PDFs into one file, or pull selected page ranges out of a PDF — locally, with pdf-lib. Your documents are read in the browser and never uploaded, which matters for anything confidential.": "把多个 PDF 合成一个文件，或从 PDF 里抽取指定页码范围——本地完成，基于 <code>pdf-lib</code>。文档在浏览器里读取、从不上传，处理机密文件才放心。"
+    "el:Combine several PDFs into one file, or pull selected page ranges out of a PDF — locally, with pdf-lib. Your documents are read in the browser and never uploaded, which matters for anything confidential.": "把多个 PDF 合成一个文件，或从 PDF 里抽取指定页码范围——本地完成，基于 <code>pdf-lib</code>。文档在浏览器里读取、从不上传，处理机密文件才放心。",
+
+    "el:The whole operation uses pdf-lib, a pure-JavaScript PDF library loaded from a CDN on first use. Your files are read with FileReader, assembled or trimmed in memory, and written back with URL.createObjectURL. No server ever sees the bytes — and no size or rate limits, because there is nothing to meter.": "整个过程用的是 <code>pdf-lib</code>——一个纯 JavaScript 的 PDF 库，首次使用时从 CDN 加载。文件由 <code>FileReader</code> 读入，在内存里合并或裁剪，再用 <code>URL.createObjectURL</code> 写回。服务端从来看不到这些字节，也没有大小或频率限制，因为没有东西需要计量。",
+  "el:Merge concatenates full documents in the order you list them. Bookmarks and form fields from the sources are not preserved.": "<strong>合并</strong>按你列出的顺序把完整文档首尾相接。源文件里的书签和表单字段不会保留。"
 });

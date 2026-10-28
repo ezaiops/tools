@@ -4,7 +4,7 @@
  * assets/i18n/*.js and are matched by DOM text nodes, so no page markup needs
  * data-i18n attributes. Dynamic JS strings use window.ezI18N.t()/tf().
  */
-var ASSET_V = "20261028b";
+var ASSET_V = "20261028g";
 
 (function () {
   "use strict";

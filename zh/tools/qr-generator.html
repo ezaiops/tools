@@ -13,7 +13,7 @@
 <meta property="og:title" content="二维码生成器 — 导出 SVG 与 PNG">
 <meta property="og:description" content="把链接或文本生成二维码，支持选择容错等级，导出 SVG 或 PNG。浏览器本地渲染，内容不外传。">
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
-<link rel="stylesheet" href="/assets/style.css?v=20261028b">
+<link rel="stylesheet" href="/assets/style.css?v=20261028g">
 <script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
@@ -30,7 +30,7 @@
 
 
 
-<script src="/assets/i18n.js?v=20261028b"></script><script src="/assets/i18n/common.js?v=20261028b"></script><script src="/assets/i18n/tools/qr-generator.js?v=20261028b"></script><meta property="og:locale" content="zh_CN"></head>
+<script src="/assets/i18n.js?v=20261028g"></script><script src="/assets/i18n/common.js?v=20261028g"></script><script src="/assets/i18n/tools/qr-generator.js?v=20261028g"></script><meta property="og:locale" content="zh_CN"></head>
 <body>
 
 <header class="site-header">
@@ -89,12 +89,12 @@
     <h2>如何选择纠错等级</h2>
     <p>二维码自带冗余：等级越高，即使部分区域脏污、印刷不清或被 logo 遮挡，扫码器仍能恢复。代价是同样内容需要更大（更密）的码图。</p>
     <ul>
-      <li><strong>L (7%)</strong> — smallest code, clean digital displays or screens.</li>
-      <li><strong>M (15%)</strong> — the everyday default; good for posters and packaging.</li>
-      <li><strong>Q (25%)</strong> — outdoor signage, anything that might get scuffed.</li>
-      <li><strong>H (30%)</strong> — overlaid logos, industrial environments, codes that will take abuse.</li>
+      <li><strong>L (7%)</strong>——码面最小，适合干净的数字屏幕。</li>
+      <li><strong>M (15%)</strong>——日常默认，海报和包装都够用。</li>
+      <li><strong>Q (25%)</strong>——户外标识，以及可能被磨损的场景。</li>
+      <li><strong>H (30%)</strong>——叠加 logo、工业环境，以及会被折腾的二维码。</li>
     </ul>
-    <p>The generator library (<code>qrcode-generator</code>) is loaded from a CDN on first use; if it cannot load, the page tells you instead of failing silently. Once loaded, everything runs offline.</p>
+    <p>生成库（<code>qrcode-generator</code>）在首次使用时从 CDN 加载；加载失败时页面会明确告诉你，而不是静默失败。加载完成后全部离线运行。</p>
 
     <h2>常见问题</h2>
     <details class="faq">
@@ -150,7 +150,7 @@
   </div>
 </footer>
 
-<script src="/assets/common.js?v=20261028b" defer=""></script>
+<script src="/assets/common.js?v=20261028g" defer=""></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   "use strict";

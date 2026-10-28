@@ -38,5 +38,9 @@ window.I18N_DICTS.push({
   "Why does the signature check fail on a valid token?": "为什么有效令牌的签名验证会失败？",
   "Common causes: the token uses RS256/ES256 (not supported here), the secret has surrounding whitespace, or the token was signed by a different issuer. Only HS256 is checked.": "常见原因：令牌使用 RS256/ES256（此处不支持）、密钥带首尾空白、或令牌由其他签发方签发。只有 HS256 会被检查。",
   "Can I edit the payload and re-sign?": "可以修改载荷后重新签名吗？",
-  "No — this tool is read-only by design. Tamper-testing belongs in your test suite with your own keys.": "不可以——本工具按设计只读。篡改测试应在你自己的测试套件中用自己的密钥进行。"
+  "No — this tool is read-only by design. Tamper-testing belongs in your test suite with your own keys.": "不可以——本工具按设计只读。篡改测试应在你自己的测试套件中用自己的密钥进行。",
+
+    "el:A JWT is three base64url segments joined by dots: header.payload.signature. The header says which algorithm signed it (alg) and the token type; the payload carries claims — registered ones like sub (subject), iat (issued at) and exp (expiry) plus whatever your issuer adds. The signature covers the first two segments, which is why decoding alone proves nothing about authenticity — anyone can re-encode a modified payload. Always verify the signature server-side against the issuer's keys.": "JWT 是三段 base64url 用点连接：<code>header.payload.signature</code>。header 说明用哪个算法签名（<code>alg</code>）以及令牌类型；payload 装声明——<code>sub</code>（主体）、<code>iat</code>（签发时间）、<code>exp</code>（过期时间）这类注册声明，加上签发方自定义的字段。签名覆盖前两段，所以光解码证明不了真实性——任何人都能改完 payload 再重新编码。验签一定要在服务端用签发方的密钥做。",
+  "el:alg: none in the header is a red flag — it asks the verifier to skip signature checking entirely. Never accept it.": "header 里出现 <strong>alg: none</strong> 是危险信号——它在要求验证方完全跳过签名校验。永远不要接受。",
+  "el:exp is in seconds since the epoch; expired tokens should be rejected, not silently refreshed.": "<strong>exp</strong> 是 Unix 纪元秒数；过期令牌应当被拒绝，而不是悄悄刷新。"
 });

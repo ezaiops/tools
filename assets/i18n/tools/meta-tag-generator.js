@@ -28,5 +28,16 @@ window.I18N_DICTS.push({
   "Where does the image need to live?": "图片需要放在哪里？",
   "No. Google ignored the keywords meta tag as a ranking signal decades ago. Spending characters there is wasted; Bing has said it may treat them as spam signals. Skip them.": "没用。Google 几十年前就把 keywords 标签排除在排名因素之外，浪费字符；Bing 甚至表示可能把它当作垃圾信号。别写。",
   "Google rewrites descriptions on most queries when it thinks a query-specific snippet from the page body matches better. Write a good description anyway — it still wins for branded and navigational queries.": "当 Google 认为页面正文中某个与查询更匹配的片段更好时，它会在多数查询下重写描述。但还是该写好描述——品牌词和导航查询它仍然使用你的版本。",
-  "Anywhere crawlable with an absolute https URL — your own CDN or static host is best, so you control it. 1200×630 is the universal safe size.": "任何可爬取的绝对 https URL 即可——放自己的 CDN 或静态主机最好，控制权在你。1200×630 是通用安全尺寸。"
+  "Anywhere crawlable with an absolute https URL — your own CDN or static host is best, so you control it. 1200×630 is the universal safe size.": "任何可爬取的绝对 https URL 即可——放自己的 CDN 或静态主机最好，控制权在你。1200×630 是通用安全尺寸。",
+
+    "title will be truncated in search results": "标题会在搜索结果中被截断",
+  "description will be truncated": "描述会被截断",
+  "description is short — 140–160 chars earns more clicks": "描述偏短——140–160 字符点击率更高",
+  "no og:image — social shares will show a plain link": "缺少 og:image——分享时只会显示纯链接",
+  "canonical URL should be absolute (https://)": "canonical URL 应为绝对地址（https://）",
+  "Heads up: ": "注意：",
+
+    "website": "网站",
+  "article": "文章",
+  "product": "产品"
 });

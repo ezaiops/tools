@@ -13,7 +13,7 @@
 <meta property="og:title" content="JWT 调试器 — 本地解码与签名校验">
 <meta property="og:description" content="在浏览器本地解码 JWT 的 header、payload 与过期时间，查看算法与声明，并用 HMAC-SHA256 校验签名。">
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
-<link rel="stylesheet" href="/assets/style.css?v=20261028b">
+<link rel="stylesheet" href="/assets/style.css?v=20261028g">
 <script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
@@ -30,7 +30,7 @@
 
 
 
-<script src="/assets/i18n.js?v=20261028b"></script><script src="/assets/i18n/common.js?v=20261028b"></script><script src="/assets/i18n/tools/jwt-debugger.js?v=20261028b"></script><meta property="og:locale" content="zh_CN"></head>
+<script src="/assets/i18n.js?v=20261028g"></script><script src="/assets/i18n/common.js?v=20261028g"></script><script src="/assets/i18n/tools/jwt-debugger.js?v=20261028g"></script><meta property="og:locale" content="zh_CN"></head>
 <body>
 
 <header class="site-header">
@@ -98,10 +98,10 @@
 
   <section class="prose">
     <h2>读懂 JWT</h2>
-    <p>A JWT is three base64url segments joined by dots: <code>header.payload.signature</code>. The header says which algorithm signed it (<code>alg</code>) and the token type; the payload carries claims — registered ones like <code>sub</code> (subject), <code>iat</code> (issued at) and <code>exp</code> (expiry) plus whatever your issuer adds. The signature covers the first two segments, which is why decoding alone proves nothing about authenticity — anyone can re-encode a modified payload. Always verify the signature server-side against the issuer's keys.</p>
+    <p>JWT 是三段 base64url 用点连接：<code>header.payload.signature</code>。header 说明用哪个算法签名（<code>alg</code>）以及令牌类型；payload 装声明——<code>sub</code>（主体）、<code>iat</code>（签发时间）、<code>exp</code>（过期时间）这类注册声明，加上签发方自定义的字段。签名覆盖前两段，所以光解码证明不了真实性——任何人都能改完 payload 再重新编码。验签一定要在服务端用签发方的密钥做。</p>
     <ul>
-      <li><strong>alg: none</strong> in the header is a red flag — it asks the verifier to skip signature checking entirely. Never accept it.</li>
-      <li><strong>exp</strong> is in seconds since the epoch; expired tokens should be rejected, not silently refreshed.</li>
+      <li>header 里出现 <strong>alg: none</strong> 是危险信号——它在要求验证方完全跳过签名校验。永远不要接受。</li>
+      <li><strong>exp</strong> 是 Unix 纪元秒数；过期令牌应当被拒绝，而不是悄悄刷新。</li>
       <li>HS256 使用共享密钥；RS256/ES256 使用非对称密钥——这里的签名检查仅覆盖 HS256。</li>
     </ul>
 
@@ -159,7 +159,7 @@
   </div>
 </footer>
 
-<script src="/assets/common.js?v=20261028b" defer=""></script>
+<script src="/assets/common.js?v=20261028g" defer=""></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   "use strict";

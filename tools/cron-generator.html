@@ -10,7 +10,7 @@
 <meta property="og:title" content="Cron Schedule Builder">
 <meta property="og:description" content="Build cron expressions visually and see what they mean.">
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
-<link rel="stylesheet" href="/assets/style.css?v=20261028b">
+<link rel="stylesheet" href="/assets/style.css?v=20261028g">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -208,7 +208,7 @@
   </div>
 </footer>
 
-<script src="/assets/common.js?v=20261028b" defer></script>
+<script src="/assets/common.js?v=20261028g" defer></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   "use strict";
@@ -378,25 +378,33 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function fmtRun(d) {
     var pad = function (n) { return n < 10 ? "0" + n : "" + n; };
+    var zh = !!(window.ezI18N && window.ezI18N.lang === "zh");
+    if (zh) {
+      return (d.getMonth() + 1) + " 月 " + d.getDate() + " 日 周" + "日一二三四五六"[d.getDay()] +
+        " " + pad(d.getHours()) + ":" + pad(d.getMinutes());
+    }
     return DOW_NAMES[d.getDay()] + " " + MONTH_NAMES[d.getMonth()] + " " + d.getDate() + ", " +
       pad(d.getHours()) + ":" + pad(d.getMinutes());
   }
 
   function describe(expr) {
     var f = expr.split(/\s+/);
+    // Built by concatenation, so the word order has to be rewritten per
+    // language rather than translated phrase by phrase.
+    var zh = !!(window.ezI18N && window.ezI18N.lang === "zh");
     var parts = [];
-    if (f[0] === "*") parts.push("every minute");
-    else if (f[0].indexOf("*/") === 0) parts.push("every " + f[0].slice(2) + " minutes");
-    else parts.push("at minute " + f[0]);
-    if (f[1] === "*") parts.push("of every hour");
-    else parts.push("past hour " + f[1]);
+    if (f[0] === "*") parts.push(zh ? "每分钟" : "every minute");
+    else if (f[0].indexOf("*/") === 0) parts.push(zh ? "每 " + f[0].slice(2) + " 分钟" : "every " + f[0].slice(2) + " minutes");
+    else parts.push(zh ? "在第 " + f[0] + " 分钟" : "at minute " + f[0]);
+    if (f[1] === "*") parts.push(zh ? "每小时" : "of every hour");
+    else parts.push(zh ? "每小时的第 " + f[1] + " 分" : "past hour " + f[1]);
     if (f[2] !== "*" || f[4] !== "*") {
-      if (f[2] !== "*") parts.push("on day-of-month " + f[2]);
-      if (f[4] !== "*") parts.push("on day-of-week " + f[4]);
-      if (f[2] !== "*" && f[4] !== "*") parts.push("(either matches — see the note below)");
+      if (f[2] !== "*") parts.push(zh ? "每月 " + f[2] + " 日" : "on day-of-month " + f[2]);
+      if (f[4] !== "*") parts.push(zh ? "每周 " + f[4] : "on day-of-week " + f[4]);
+      if (f[2] !== "*" && f[4] !== "*") parts.push(zh ? "（两者任一匹配，见下方说明）" : "(either matches — see the note below)");
     }
-    if (f[3] !== "*") parts.push("in month " + f[3]);
-    $("#cg-desc").textContent = "Runs " + parts.join(", ") + ".";
+    if (f[3] !== "*") parts.push(zh ? f[3] + " 月" : "in month " + f[3]);
+    $("#cg-desc").textContent = (zh ? "运行：" : "Runs ") + parts.join(zh ? "，" : ", ") + (zh ? "。" : ".");
   }
 
   Object.keys(fields).forEach(function (k) {

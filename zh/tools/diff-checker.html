@@ -13,7 +13,7 @@
 <meta property="og:title" content="文本对比工具 — 逐行与字符级差异高亮">
 <meta property="og:description" content="粘贴两段文本，逐行和字符级高亮差异。完全在浏览器本地比对，内容不会上传。">
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
-<link rel="stylesheet" href="/assets/style.css?v=20261028b">
+<link rel="stylesheet" href="/assets/style.css?v=20261028g">
 <script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
@@ -30,7 +30,7 @@
 
 
 
-<script src="/assets/i18n.js?v=20261028b"></script><script src="/assets/i18n/common.js?v=20261028b"></script><script src="/assets/i18n/tools/diff-checker.js?v=20261028b"></script><meta property="og:locale" content="zh_CN"></head>
+<script src="/assets/i18n.js?v=20261028g"></script><script src="/assets/i18n/common.js?v=20261028g"></script><script src="/assets/i18n/tools/diff-checker.js?v=20261028g"></script><meta property="og:locale" content="zh_CN"></head>
 <body>
 
 <header class="site-header">
@@ -90,7 +90,7 @@ dozen jugs of liquor</textarea>
 
   <section class="prose">
     <h2>差异是怎么算的</h2>
-    <p>Line differences come from the Myers O(ND) algorithm — the same family that powers <code>git diff</code>. It finds the shortest edit script (insertions and deletions) between the two line sequences. Modified lines are then paired up and a word-level Myers pass highlights the changed words inside them, which is what makes small edits readable at a glance.</p>
+    <p>行级差异用 Myers O(ND) 算法计算——和 <code>git diff</code> 同一族。它找出两个行序列之间最短的编辑脚本（插入与删除）。配对的修改行再做一次词级 Myers 比较，把行内改动的词高亮出来，小改动才能一眼看清。</p>
     <p>一切都在你设备的 JavaScript 中运行。实际表现接近线性，最坏情况是平方级——粘贴几千行没问题，粘贴整个代码库就不行了。</p>
 
     <h2>常见问题</h2>
@@ -147,7 +147,7 @@ dozen jugs of liquor</textarea>
   </div>
 </footer>
 
-<script src="/assets/common.js?v=20261028b" defer=""></script>
+<script src="/assets/common.js?v=20261028g" defer=""></script>
 <style>
 .df-row { display: flex; font-family: var(--mono); font-size: 13px; line-height: 1.5; }
 .df-gutter { flex: 0 0 44px; text-align: right; padding: 1px 8px; color: var(--muted); user-select: none; border-right: 1px solid var(--border); }

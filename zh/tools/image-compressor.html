@@ -13,7 +13,7 @@
 <meta property="og:title" content="图片压缩与格式转换 — JPG/PNG 转 WebP">
 <meta property="og:description" content="用 canvas 在浏览器本地压缩 JPG/PNG 并转成 WebP，带质量滑块与压缩前后体积对比，图片不上传服务器。">
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
-<link rel="stylesheet" href="/assets/style.css?v=20261028b">
+<link rel="stylesheet" href="/assets/style.css?v=20261028g">
 <script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
@@ -30,7 +30,7 @@
 
 
 
-<script src="/assets/i18n.js?v=20261028b"></script><script src="/assets/i18n/common.js?v=20261028b"></script><script src="/assets/i18n/tools/image-compressor.js?v=20261028b"></script><meta property="og:locale" content="zh_CN"></head>
+<script src="/assets/i18n.js?v=20261028g"></script><script src="/assets/i18n/common.js?v=20261028g"></script><script src="/assets/i18n/tools/image-compressor.js?v=20261028g"></script><meta property="og:locale" content="zh_CN"></head>
 <body>
 
 <header class="site-header">
@@ -104,11 +104,11 @@
 
   <section class="prose">
     <h2>这个工具实际做什么</h2>
-    <p>Your file is read with <code>FileReader</code> into an <code>&lt;img&gt;</code>, drawn onto a <code>&lt;canvas&gt;</code> (which is where resizing happens), and re-encoded with <code>canvas.toBlob()</code> at the quality you chose. That is the same encode/decode path the browser itself uses — there is no magic, and no server.</p>
+    <p>文件用 <code>FileReader</code> 读进 <code>&lt;img&gt;</code>，画到 <code>&lt;canvas&gt;</code> 上（缩放就在这一步），再用 <code>canvas.toBlob()</code> 按你选的质量重新编码。这就是浏览器自己的编解码路径——没有魔法，也没有服务器。</p>
     <ul>
-      <li><strong>WebP</strong> typically gives 25–40% smaller files than JPEG at equivalent quality, and supports transparency that JPEG cannot. Supported by all current browsers.</li>
-      <li><strong>JPEG</strong> is the universal fallback; quality 80 is the sweet spot for photos.</li>
-      <li><strong>PNG</strong> is lossless — re-encoding an already-PNG file rarely shrinks it unless you resize or drop to 8-bit colors, which this tool does not do.</li>
+      <li><strong>WebP</strong> 在同等画质下通常比 JPEG 小 25–40%，还支持 JPEG 做不到的透明通道。当前所有浏览器都支持。</li>
+      <li><strong>JPEG</strong> 是通用兜底格式；照片用 80 质量最合适。</li>
+      <li><strong>PNG</strong> 是无损格式——已经是 PNG 的文件再编码几乎不会变小，除非缩放或降到 8 位色，而本工具不做这两件事。</li>
     </ul>
     <p>最好的结果来自尽可能大的原图：canvas 里缩小比放大小文件更清晰，4000px 拍摄的照片压到 25% 通常比 1000px 原图压到 25% 看起来更好。</p>
 
@@ -166,7 +166,7 @@
   </div>
 </footer>
 
-<script src="/assets/common.js?v=20261028b" defer=""></script>
+<script src="/assets/common.js?v=20261028g" defer=""></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   "use strict";
