@@ -4,7 +4,7 @@
  * assets/i18n/*.js and are matched by DOM text nodes, so no page markup needs
  * data-i18n attributes. Dynamic JS strings use window.ezI18N.t()/tf().
  */
-var ASSET_V = "20261028g";
+var ASSET_V = "20261029a";
 
 (function () {
   "use strict";
@@ -204,8 +204,26 @@ var ASSET_V = "20261028g";
     });
   }
 
+  // A ?lang=zh view of an English URL duplicates the static /zh/ page: same
+  // content, two addresses, and Search Console showed the parameterised one
+  // outranking the real copy. Pointing canonical at the static page tells Google
+  // to consolidate on /zh/. Skipped on /zh/ pages (already self-referential) and
+  // on pages with no static edition, where it would point at a 404.
+  function pointCanonicalAtStaticZh() {
+    if (isZhPath()) return;
+    var clean = stripZh(location.pathname);
+    var hasStatic = !!(DICT_FILES[clean] || DICT_FILES[clean.replace(/\/$/, "/index.html")]);
+    if (!hasStatic) return;
+    var canon = document.querySelector('link[rel="canonical"]');
+    if (!canon) return;
+    var href = canon.getAttribute("href") || "";
+    var origin = (href.match(/^https?:\/\/[^\/]+/) || [location.origin])[0];
+    canon.setAttribute("href", origin + (clean === "/" ? "/zh/" : "/zh" + clean));
+  }
+
   function finish(count) {
     document.documentElement.setAttribute("lang", lang === "zh" ? "zh-CN" : "en");
+    if (lang === "zh") pointCanonicalAtStaticZh();
     injectSwitcher();
     localizeMainSiteLinks();
     window.dispatchEvent(new CustomEvent("ez:i18n", { detail: { lang: lang, replaced: count } }));

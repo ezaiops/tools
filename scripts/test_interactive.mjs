@@ -256,10 +256,21 @@ console.log("\n== bilingual mode (?lang=zh) ==");
     zhActive ? zhActive.textContent : "no .active");
   // The Chinese edition is a real URL tree now, so the switcher must point at
   // /zh/ rather than at a ?lang=zh duplicate.
+  // A ?lang=zh view duplicates the static /zh/ page; canonical must consolidate
+  // on the static copy, and must NOT point at a /zh/ URL that does not exist.
+  check("?lang=zh canonical points at the static zh page",
+    (doc.querySelector('link[rel="canonical"]') || {}).href === "https://tools.ezaiops.com/zh/tools/token-counter.html",
+    (doc.querySelector('link[rel="canonical"]') || {}).href);
+
   check("switcher links to the static zh edition",
     doc.querySelector('.lang-switch a[href^="/zh/"]') !== null);
   check("switcher emits no ?lang=zh link",
     doc.querySelector('.lang-switch a[href*="lang=zh"]') === null);
+  const noZh = await load("models/gpt-6-astra.html?lang=zh");
+  check("model page ?lang=zh keeps its own canonical (no phantom /zh/ target)",
+    (noZh.doc.querySelector('link[rel="canonical"]') || {}).href === "https://tools.ezaiops.com/models/gpt-6-astra.html",
+    (noZh.doc.querySelector('link[rel="canonical"]') || {}).href);
+
   check("nav translated", /工具/.test(doc.querySelector(".site-nav").textContent));
   check("footer translated", /输入内容|不会离开/.test(doc.querySelector(".site-footer").textContent));
   check("brand label translated", /工具/.test(doc.querySelector(".brand").textContent),
