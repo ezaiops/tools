@@ -158,6 +158,11 @@ git push origin main
 - 404 页仍是按钮式切换(无静态中文版,保持现状)。
 - `scripts/generate_zh.mjs` 依赖 jsdom,执行环境只有作者机器;接手方如要重生成 `/zh/` 工具页,需要自行准备 jsdom 环境或改写成能跑的路径。
 
+## 10. 姊妹仓库提醒
+
+- **blogpages 站(ezaiops.com)另有 `blogpages/HANDOVER.md`**,记录 ads.txt / robots.txt / Cloudflare 运维要点(Bot Preference Sync 启用曾导致 Google 报"找不到 ads.txt",详见该文档)。
+- 两个域名共用同一 AdSense publisher ID,但 **`ads.txt` 按域名独立读取**:`tools/HANDOVER.md` 所在仓库根目录的 `ads.txt` 与 `blogpages/docs/ads.txt` 必须同步维护。
+
 ---
 
 *记录时间:2026-10-30。当前 `main`:@ 8c4926a。*
