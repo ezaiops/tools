@@ -4,11 +4,19 @@ import datetime
 import glob
 import json
 import os
+import re
 from gen_common import (ROOT, BASE, TODAY, UPDATED, MODELS, SOURCES, BY_ID,
                         COMPARISONS, money, zh_money, blended, esc, HEAD, CRUMBS, FOOT,
                         ZH_HEAD, ZH_CRUMBS, ZH_FOOT)
 from zh_models import (NOTES, SPEC_KEYS, SPEC_VALUES, FAQ_ZH, SECTIONS_ZH,
                        TABLES_ZH)
+
+def md_bold(text):
+    """Paragraph copy renders as escaped text, so **emphasis** in the source has
+    to become markup after escaping. Without this the asterisks show up literally
+    on the page, which is how it looked the first time these sections shipped."""
+    return re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", esc(text))
+
 
 def source_item(url):
     """One line of the bibliography.
@@ -605,7 +613,7 @@ def model_page_zh(m):
 
     if detail.get("sections") and slug in SECTIONS_ZH:
         prose = "".join(
-            "<h2>%s</h2>" % esc(s["h2"]) + "".join("<p>%s</p>" % esc(p) for p in s["paras"])
+            "<h2>%s</h2>" % esc(s["h2"]) + "".join("<p>%s</p>" % md_bold(p) for p in s["paras"])
             for s in SECTIONS_ZH[slug])
     else:
         prose = generic_prose_zh(m)
