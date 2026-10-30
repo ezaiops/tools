@@ -201,6 +201,25 @@ def check_chrome(all_pages):
                             % (lang, len(groups), odd[:5]))
 
 
+def check_footer_parity():
+    """The English and Chinese footers must link the same models.
+
+    They are two files (scripts/chrome/footer.html and footer.zh.html) rather
+    than one generated from the other, so the model list can drift. Compare a
+    representative pair by the model slugs they link.
+    """
+    def slugs(path):
+        m = re.search(r"<footer.*?</footer>", read(path), re.S)
+        if not m:
+            return None
+        return set(re.findall(r'href="(?:/zh)?/models/([a-z0-9-]+)\.html"', m.group(0)))
+
+    en, zh = slugs("tools/json-formatter.html"), slugs("zh/tools/json-formatter.html")
+    if en is not None and zh is not None and en != zh:
+        problems.append("footer model links differ between languages: en-only=%s zh-only=%s"
+                        % (sorted(en - zh), sorted(zh - en)))
+
+
 def check_weight(all_pages):
     sizes = [(os.path.getsize(os.path.join(ROOT, p)), p) for p in all_pages]
     avg = sum(s for s, _ in sizes) / len(sizes)
@@ -219,6 +238,7 @@ def main():
     check_orphans(all_pages)
     check_assets(all_pages)
     check_chrome(all_pages)
+    check_footer_parity()
     avg = check_weight(all_pages)
 
     print("pages: %d (average %.1f KB)" % (len(all_pages), avg / 1024))

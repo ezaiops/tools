@@ -1,0 +1,83 @@
+# ezaiops tools
+
+> Browser-based utilities for AI and DevOps work: LLM API pricing data, token counting, JSON, regex, cron and subnet math. Every tool runs locally in the browser; no input is uploaded.
+
+Two sites: tools.ezaiops.com (this one, English with a full Chinese edition under /zh/) and ezaiops.com (field notes on AI agent observability).
+
+## LLM API pricing
+
+Per 1M tokens. USD is the international list price; CNY is the mainland China list price where the provider publishes one. These are separate rate cards, not currency conversions — the same model is often priced differently in each region.
+
+Data verified 2026-10-28 against official provider documentation.
+
+- [All 43 models](https://tools.ezaiops.com/models/index.html): full table with input, output, cached input, context window and long-context tiers
+- [GPT-6 Astra](https://tools.ezaiops.com/models/gpt-6-astra.html): input $10, output $50 per 1M, 1.05M context
+- [Claude Fable 5.1](https://tools.ezaiops.com/models/claude-fable-5-1.html): input $10, output $50 per 1M, 1M context
+- [Gemini 4 Argon](https://tools.ezaiops.com/models/gemini-4-argon.html): input $2, output $10 per 1M, 1.05M context
+- [GPT-6.1 Sol](https://tools.ezaiops.com/models/gpt-6-1-sol.html): input $2, output $10 per 1M, 1.05M context
+- [Claude Opus 5.5](https://tools.ezaiops.com/models/claude-opus-5-5.html): input $4, output $20 per 1M, 1M context
+- [DeepSeek V4.1 Flash](https://tools.ezaiops.com/models/deepseek-v4-1-flash.html): input $0.15, output $0.60 per 1M (CNY 1/4), 1M context
+- [Gemini 3.8 Flash](https://tools.ezaiops.com/models/gemini-3-8-flash.html): input $0.75, output $3.75 per 1M, 1.05M context
+- [Claude Sonnet 5.5](https://tools.ezaiops.com/models/claude-sonnet-5-5.html): input $2, output $10 per 1M, 1M context
+- [GPT-6.1 Terra](https://tools.ezaiops.com/models/gpt-6-1-terra.html): input $1, output $5 per 1M, 1.05M context
+- [DeepSeek V4 Pro](https://tools.ezaiops.com/models/deepseek-v4-pro.html): input $0.66, output $1.98 per 1M (CNY 4.50/13.50), 1M context
+- [Grok 4.7](https://tools.ezaiops.com/models/grok-4-7.html): input $2, output $6 per 1M, 500K context
+- [Qwen3.8 Max](https://tools.ezaiops.com/models/qwen3-8-max.html): input $1.65, output $4.95 per 1M (CNY 12/36), 1M context
+
+## Tools
+
+- [LLM token & cost calculator](https://tools.ezaiops.com/tools/token-counter.html): Count tokens and price a prompt across 43 models — per request, day and month, with cache and batch discounts.
+- [JSON formatter & validator](https://tools.ezaiops.com/tools/json-formatter.html): Format, minify and validate JSON, with the exact line and column of the first error.
+- [Regex tester](https://tools.ezaiops.com/tools/regex-tester.html): Test JavaScript regex against live text, with capture groups and replacement preview.
+- [Cron expression explainer](https://tools.ezaiops.com/tools/cron-explainer.html): Turn any cron expression into plain English and the next runs in your timezone.
+- [Base64 / URL / hash](https://tools.ezaiops.com/tools/encode-decode.html): Base64, URL encoding, HTML entities and SHA hashes — computed locally.
+- [Unix timestamp converter](https://tools.ezaiops.com/tools/timestamp-converter.html): Convert between Unix epoch, ISO 8601 and local time, with a live clock.
+- [Password & UUID generator](https://tools.ezaiops.com/tools/password-generator.html): Strong passwords, memorable passphrases and v4 UUIDs with entropy scoring.
+- [Meta tag & OG generator](https://tools.ezaiops.com/tools/meta-tag-generator.html): Title, description, Open Graph and Twitter tags with a live social preview.
+- [Cron schedule builder](https://tools.ezaiops.com/tools/cron-generator.html): Pick days and times visually and get the cron expression — the reverse.
+- [Subnet & CIDR calculator](https://tools.ezaiops.com/tools/subnet-calculator.html): Network, broadcast and host range for any IPv4 CIDR block, plus the binary view.
+- [Self-hosted vs API break-even](https://tools.ezaiops.com/tools/self-host-vs-api.html): Find the monthly volume where renting a GPU beats per-token API pricing.
+- [Mortgage & loan calculator](https://tools.ezaiops.com/tools/mortgage-calculator.html): Monthly payment, amortization schedule and extra-payment payoff scenarios.
+- [Image compressor & converter](https://tools.ezaiops.com/tools/image-compressor.html): Compress JPG/PNG and convert to WebP in the browser — nothing is uploaded.
+- [PDF merge & split](https://tools.ezaiops.com/tools/pdf-tools.html): Merge, split and reorder PDF pages locally with pdf-lib.
+- [JWT debugger](https://tools.ezaiops.com/tools/jwt-debugger.html): Decode JWT header, payload and expiry, and verify HS256 signatures locally.
+- [Text diff checker](https://tools.ezaiops.com/tools/diff-checker.html): Line and word diff for two blocks of text, side by side or inline.
+- [Unit converter](https://tools.ezaiops.com/tools/unit-converter.html): Length, weight, temperature, area, speed and data size, including GiB vs GB.
+- [QR code generator](https://tools.ezaiops.com/tools/qr-generator.html): Generate QR codes as SVG or PNG with four error-correction levels.
+
+## Chinese edition
+
+Every page above has a Chinese twin under /zh/. Chinese model pages quote the mainland CNY rate where one exists.
+
+- [中文首页](https://tools.ezaiops.com/zh/)
+- [中文价格中心](https://tools.ezaiops.com/zh/models/index.html)
+
+## Reference
+
+- [About](https://tools.ezaiops.com/about.html): why everything runs client-side, and how the pricing data is sourced
+- [Token & cost calculator](https://tools.ezaiops.com/tools/token-counter.html): paste a prompt, see tokens and monthly cost across models
+- [Self-hosted vs API break-even](https://tools.ezaiops.com/tools/self-host-vs-api.html): the token volume where renting a GPU beats paying per token
+
+## Sources
+
+Prices come from these pages and are re-checked when they change:
+
+- https://developers.openai.com/api/docs/pricing
+- https://platform.claude.com/docs/en/about-claude/pricing
+- https://ai.google.dev/gemini-api/docs/pricing
+- https://api-docs.deepseek.com/quick_start/pricing/
+- https://docs.x.ai/docs/models
+- https://docs.z.ai/guides/overview/pricing
+- https://platform.kimi.ai/docs/pricing/chat
+- https://platform.minimaxi.com/docs/price
+- https://platform.xiaomimimo.com/docs/en-US/price/pay-as-you-go
+- https://mistral.ai/pricing/api
+- https://www.alibabacloud.com/help/en/model-studio/models
+- https://docs.byteplus.com/en/docs/modelark/model-pricing
+
+## Notes for summarisation
+
+- Prices are per 1,000,000 tokens unless stated otherwise.
+- Cached input is the rate for repeated prompt prefixes; it is usually a fraction of the base input rate.
+- Several providers bill long prompts at a higher rate for the whole request, not just the tokens past the threshold. Model pages state the threshold where one exists.
+- DeepSeek publishes peak and off-peak rates; the figures here are off-peak, which applies roughly 79%% of the week.

@@ -11,7 +11,10 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE = "https://tools.ezaiops.com"
 
 problems = []
-pages = sorted(glob.glob(os.path.join(ROOT, "**", "*.html"), recursive=True))
+# scripts/chrome/ holds HTML fragments (header, footer), not pages: they have no
+# <head>, no title and must not be checked as standalone documents.
+pages = sorted(p for p in glob.glob(os.path.join(ROOT, "**", "*.html"), recursive=True)
+               if not os.path.relpath(p, ROOT).replace("\\", "/").startswith("scripts/"))
 titles = {}
 
 

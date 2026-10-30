@@ -46,5 +46,7 @@ window.I18N_DICTS.push({
     "/ Tools /": "/ 工具 /",
   "GPT-5.6 Sol pricing": "GPT-5.6 Sol 价格",
   "Claude Opus 5 pricing": "Claude Opus 5 价格",
-  "Gemini 3.1 Pro pricing": "Gemini 3.1 Pro 价格"
+  "Gemini 3.1 Pro pricing": "Gemini 3.1 Pro 价格",
+
+    "Gemini 4 Argon pricing": "Gemini 4 Argon 价格"
 });
