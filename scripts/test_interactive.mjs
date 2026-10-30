@@ -997,6 +997,14 @@ console.log("\n== models/index.html ==");
   check("links to model pages", $$(doc, 'a[href^="/models/"]').length >= modelN);
   check("sources listed", $$(doc, ".prose ul li").length === modelData.sources.length,
     String($$(doc, ".prose ul li").length));
+  // Sources used to render as raw URLs in plain text; they must be clickable and
+  // open off-site in a new tab.
+  const srcLinks = $$(doc, ".prose ul li a[href^='http']");
+  check("sources are clickable links",
+    srcLinks.length === modelData.sources.length &&
+    srcLinks.every((a) => a.getAttribute("target") === "_blank" &&
+                          a.getAttribute("rel") === "noopener"),
+    String(srcLinks.length));
   check("main site link in crumbs", $$(doc, ".main-site-link").length === 1);
   check("main site banner", $$(doc, ".main-site-banner a").length >= 1);
   check("no console errors", errors.length === 0, errors.join(" | "));

@@ -10,6 +10,20 @@ from gen_common import (ROOT, BASE, TODAY, UPDATED, MODELS, SOURCES, BY_ID,
 from zh_models import (NOTES, SPEC_KEYS, SPEC_VALUES, FAQ_ZH, SECTIONS_ZH,
                        TABLES_ZH)
 
+def source_item(url):
+    """One line of the bibliography.
+
+    The domain is the visible label and the full URL sits in the title, so the
+    list reads as a reference list instead of a wall of raw URLs — while still
+    letting anyone check exactly which page a figure came from.
+    """
+    from urllib.parse import urlparse
+    host = urlparse(url).netloc
+    label = host[4:] if host.startswith("www.") else host
+    return ('<li><a href="%s" title="%s" target="_blank" rel="noopener">%s</a></li>'
+            % (esc(url), esc(url), esc(label)))
+
+
 # Time-of-day windows as published in models.json, translated on the zh pages.
 TIME_WINDOW_ZH = {
     "Weekday peak (UTC 01:00-04:00 and 06:00-10:00)": "工作日高峰(UTC 01:00-04:00 与 06:00-10:00)",
@@ -781,7 +795,7 @@ def index_page():
     html += FOOT
     html = html.replace("@@UPDATED@@", UPDATED)
     html = html.replace("@@ROWS@@", "".join(rows))
-    html = html.replace("@@SOURCES@@", "".join("<li>%s</li>" % s for s in SOURCES))
+    html = html.replace("@@SOURCES@@", "".join(source_item(u) for u in SOURCES))
     html = html.replace("@@UPD@@", UPDATED)
     return html
 
@@ -850,7 +864,7 @@ def index_page_zh():
 """
     html += ZH_FOOT
     html = html.replace("@@ROWS@@", "".join(rows))
-    html = html.replace("@@SOURCES@@", "".join("<li>%s</li>" % s for s in SOURCES))
+    html = html.replace("@@SOURCES@@", "".join(source_item(u) for u in SOURCES))
     html = html.replace("@@UPD@@", UPDATED)
     return html
 
