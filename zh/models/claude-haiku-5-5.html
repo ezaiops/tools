@@ -78,6 +78,7 @@
       <div class="stat"><div class="k">输出倍率</div><div class="v">5.0×</div></div>
       <div class="stat"><div class="k">上下文窗口</div><div class="v">1M</div></div>
     </div>
+    <p class="note">该模型在中国大陆没有官方 API，此处显示的是<strong>国际站美元定价</strong>，不是人民币换算。</p>
 
     <table class="data">
       <thead><tr><th>档位</th><th class="num">输入 / 1M</th><th class="num">输出 / 1M</th></tr></thead>
@@ -113,7 +114,7 @@
     <h2 style="margin-top:0;font-size:16px">Claude Haiku 5.5 与邻近模型对比(按输入:输出 3:1 混合)</h2>
     <table class="data">
       <thead><tr><th>模型</th><th>提供商</th><th class="num">输入</th><th class="num">输出</th><th class="num">缓存输入</th><th>上下文</th></tr></thead>
-      <tbody><tr><td><a href="/zh/models/qwen3-8-flash.html">Qwen3.8 Flash</a></td><td>Alibaba</td><td class="num">$0.113</td><td class="num">$0.382</td><td class="num">$0.014</td><td>1M</td></tr><tr><td><a href="/zh/models/gpt-6-luna.html">GPT-6 Luna</a></td><td>OpenAI</td><td class="num">$0.10</td><td class="num">$0.50</td><td class="num">$0.01</td><td>1.05M</td></tr><tr style="background:var(--accent-soft)"><td><strong>Claude Haiku 5.5</strong></td><td>Anthropic</td><td class="num">$0.10</td><td class="num">$0.50</td><td class="num">$0.01</td><td>1M</td></tr><tr><td><a href="/zh/models/glm-5-3-flash.html">GLM-5.3 Flash</a></td><td>Z.AI</td><td class="num">$0.15</td><td class="num">$0.50</td><td class="num">$0.03</td><td>1M</td></tr><tr><td><a href="/zh/models/deepseek-v4-1-flash.html">DeepSeek V4.1 Flash</a></td><td>DeepSeek</td><td class="num">$0.15</td><td class="num">$0.60</td><td class="num">$0.003</td><td>1M</td></tr></tbody>
+      <tbody><tr><td><a href="/zh/models/qwen3-8-flash.html">Qwen3.8 Flash</a></td><td>Alibaba</td><td class="num">¥0.80</td><td class="num">¥2.70</td><td class="num">$0.014</td><td>1M</td></tr><tr><td><a href="/zh/models/gpt-6-luna.html">GPT-6 Luna</a></td><td>OpenAI</td><td class="num">$0.10</td><td class="num">$0.50</td><td class="num">$0.01</td><td>1.05M</td></tr><tr style="background:var(--accent-soft)"><td><strong>Claude Haiku 5.5</strong></td><td>Anthropic</td><td class="num">$0.10</td><td class="num">$0.50</td><td class="num">$0.01</td><td>1M</td></tr><tr><td><a href="/zh/models/glm-5-3-flash.html">GLM-5.3 Flash</a></td><td>Z.AI</td><td class="num">$0.15</td><td class="num">$0.50</td><td class="num">$0.03</td><td>1M</td></tr><tr><td><a href="/zh/models/deepseek-v4-1-flash.html">DeepSeek V4.1 Flash</a></td><td>DeepSeek</td><td class="num">¥1</td><td class="num">¥4</td><td class="num">¥0.02</td><td>1M</td></tr></tbody>
     </table>
     <p class="note">完整的 43 款模型对比见<a href="/zh/models/index.html">价格中心</a>,
     而<a href="/zh/tools/token-counter.html">分词与成本计算器</a>可为你的真实 prompt 计价。</p>
@@ -184,19 +185,28 @@ document.addEventListener("DOMContentLoaded", function () {
   var me = null;
   for (var i = 0; i < models.length; i++) if (models[i].id === "claude-haiku-5-5") me = models[i];
   if (!me) return;
+  // Chinese pages bill in CNY where the provider publishes a mainland rate.
+  // data-zh-static is a server-rendered attribute, so it is readable before the
+  // i18n engine finishes loading; the language check is only a fallback.
+  var zhPage = document.documentElement.hasAttribute("data-zh-static") ||
+               !!(window.ezI18N && window.ezI18N.lang === "zh");
+  var c = zhPage && me.cny ? me.cny : null;
+  var inRate = c ? c.input : me.input;
+  var outRate = c ? c.output : me.output;
+  var sym = c ? "¥" : "$";
   var inEl = document.getElementById("mc-in");
   var outEl = document.getElementById("mc-out");
   function fmt(n) {
-    if (n <= 0) return "$0";
-    if (n < 0.000001) return "<$0.000001";
+    if (n <= 0) return sym + "0";
+    if (n < 0.000001) return "<" + sym + "0.000001";
     var d = n < 0.01 ? 6 : n < 1 ? 4 : 2;
-    return "$" + n.toFixed(d);
+    return sym + n.toFixed(d);
   }
   function recalc() {
     var ti = Math.max(0, parseFloat(inEl.value || "0") || 0);
     var to = Math.max(0, parseFloat(outEl.value || "0") || 0);
-    document.getElementById("mc-cost").textContent = fmt(ti * me.input / 1e6 + to * me.output / 1e6);
-    document.getElementById("mc-1k").textContent = fmt((ti * me.input / 1e6 + to * me.output / 1e6) * 1000);
+    document.getElementById("mc-cost").textContent = fmt(ti * inRate / 1e6 + to * outRate / 1e6);
+    document.getElementById("mc-1k").textContent = fmt((ti * inRate / 1e6 + to * outRate / 1e6) * 1000);
   }
   inEl.addEventListener("input", recalc);
   outEl.addEventListener("input", recalc);

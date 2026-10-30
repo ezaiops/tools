@@ -341,6 +341,31 @@ console.log("\n== bilingual: model pages keep data in EN, chrome in ZH ==");
   check("model h1 stays EN", /GPT-6 Astra API pricing/.test($("h1", doc).textContent));
   check("crumb crumb main-site link kept", doc.querySelector(".main-site-link") !== null);
   // With a real /zh/models/ tree the switcher must be a link to it, not a button.
+  // Chinese pages bill in CNY where the provider publishes a mainland rate;
+  // models without one must fall back to USD rather than show a conversion.
+  const zhQwen = await load("zh/models/qwen3-8-max.html");
+  const zhQText = zhQwen.doc.body.textContent;
+  check("zh model page prices in CNY", /¥12/.test(zhQText), "expect ¥12");
+  // The note deliberately quotes the international USD rate for comparison, so
+  // only the price cards must be pure CNY.
+  const zhStats = [...zhQwen.doc.querySelectorAll(".stat .v")].map((e) => e.textContent);
+  check("zh model price cards use CNY only",
+    zhStats.some((t) => /¥12/.test(t)) && !zhStats.some((t) => /^\$/.test(t)),
+    zhStats.join(" | "));
+  check("zh model calculator bills in CNY",
+    /¥15\.60/.test($("#mc-cost", zhQwen.doc).textContent),
+    $("#mc-cost", zhQwen.doc).textContent);
+
+  const zhAstra = await load("zh/models/gpt-6-astra.html");
+  check("zh model without a CNY rate falls back to USD",
+    /\$10/.test(zhAstra.doc.body.textContent));
+  check("zh fallback calculator stays in USD",
+    /^\$/.test($("#mc-cost", zhAstra.doc).textContent),
+    $("#mc-cost", zhAstra.doc).textContent);
+
+  const enQwen = await load("models/qwen3-8-max.html");
+  check("english model page stays in USD", /\$1\.65/.test(enQwen.doc.body.textContent));
+
   check("model ?lang=zh switcher links to /zh/models/",
     doc.querySelector('.lang-switch a[href^="/zh/models/"]') !== null);
   check("model ?lang=zh switcher emits no ?lang=zh link",

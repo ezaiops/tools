@@ -5,7 +5,7 @@ import glob
 import json
 import os
 from gen_common import (ROOT, BASE, TODAY, UPDATED, MODELS, SOURCES, BY_ID,
-                        COMPARISONS, money, blended, esc, HEAD, CRUMBS, FOOT,
+                        COMPARISONS, money, zh_money, blended, esc, HEAD, CRUMBS, FOOT,
                         ZH_HEAD, ZH_CRUMBS, ZH_FOOT)
 from zh_models import (NOTES, SPEC_KEYS, SPEC_VALUES, FAQ_ZH, SECTIONS_ZH,
                        TABLES_ZH)
@@ -47,19 +47,28 @@ document.addEventListener("DOMContentLoaded", function () {
   var me = null;
   for (var i = 0; i < models.length; i++) if (models[i].id === "@@ID@@") me = models[i];
   if (!me) return;
+  // Chinese pages bill in CNY where the provider publishes a mainland rate.
+  // data-zh-static is a server-rendered attribute, so it is readable before the
+  // i18n engine finishes loading; the language check is only a fallback.
+  var zhPage = document.documentElement.hasAttribute("data-zh-static") ||
+               !!(window.ezI18N && window.ezI18N.lang === "zh");
+  var c = zhPage && me.cny ? me.cny : null;
+  var inRate = c ? c.input : me.input;
+  var outRate = c ? c.output : me.output;
+  var sym = c ? "\u00a5" : "$";
   var inEl = document.getElementById("mc-in");
   var outEl = document.getElementById("mc-out");
   function fmt(n) {
-    if (n <= 0) return "$0";
-    if (n < 0.000001) return "<$0.000001";
+    if (n <= 0) return sym + "0";
+    if (n < 0.000001) return "<" + sym + "0.000001";
     var d = n < 0.01 ? 6 : n < 1 ? 4 : 2;
-    return "$" + n.toFixed(d);
+    return sym + n.toFixed(d);
   }
   function recalc() {
     var ti = Math.max(0, parseFloat(inEl.value || "0") || 0);
     var to = Math.max(0, parseFloat(outEl.value || "0") || 0);
-    document.getElementById("mc-cost").textContent = fmt(ti * me.input / 1e6 + to * me.output / 1e6);
-    document.getElementById("mc-1k").textContent = fmt((ti * me.input / 1e6 + to * me.output / 1e6) * 1000);
+    document.getElementById("mc-cost").textContent = fmt(ti * inRate / 1e6 + to * outRate / 1e6);
+    document.getElementById("mc-1k").textContent = fmt((ti * inRate / 1e6 + to * outRate / 1e6) * 1000);
   }
   inEl.addEventListener("input", recalc);
   outEl.addEventListener("input", recalc);
@@ -85,11 +94,12 @@ def neighbor_table(m, limit=5, zh=False):
             name_cell = "<strong>%s</strong>" % esc(x["name"])
         else:
             name_cell = '<a href="%s%s.html">%s</a>' % (stem, x["id"], esc(x["name"]))
+        price = (lambda mm, k: zh_money(mm, k)) if zh else (lambda mm, k: money(mm.get(k)))
         out.append(
             "<tr%s><td>%s</td><td>%s</td><td class=\"num\">%s</td><td class=\"num\">%s</td>"
             "<td class=\"num\">%s</td><td>%s</td></tr>" % (
-                hi_attr, name_cell, esc(x["provider"]), money(x["input"]),
-                money(x["output"]), money(x.get("cached_input")),
+                hi_attr, name_cell, esc(x["provider"]), price(x, "input"),
+                price(x, "output"), price(x, "cached_input"),
                 x.get("context") or "—"))
     return "".join(out)
 
@@ -321,13 +331,18 @@ def pair_panel_zh(m):
             continue
         other = BY_ID[next(i for i in ids if i != m["id"])]
         suffix = "（非高峰）" if (m.get("time_pricing") or other.get("time_pricing")) else ""
+        # Only bill in CNY when BOTH sides publish a mainland rate; otherwise the
+        # row would mix ¥ and $ in a head-to-head, which reads as a comparison
+        # between things priced in different currencies.
+        both_cny = bool(m.get("cny")) and bool(other.get("cny"))
+        price = (lambda mm, k: zh_money(mm, k)) if both_cny else (lambda mm, k: money(mm.get(k)))
         rows = [
-            ("输入 / 1M%s" % suffix, money(m["input"]), money(other["input"])),
-            ("输出 / 1M%s" % suffix, money(m["output"]), money(other["output"])),
+            ("输入 / 1M%s" % suffix, price(m, "input"), price(other, "input")),
+            ("输出 / 1M%s" % suffix, price(m, "output"), price(other, "output")),
         ]
         if m.get("cached_input") or other.get("cached_input"):
-            rows.append(("缓存命中 / 1M", money(m.get("cached_input")),
-                         money(other.get("cached_input"))))
+            rows.append(("缓存命中 / 1M", price(m, "cached_input"),
+                         price(other, "cached_input")))
         if m.get("context") or other.get("context"):
             rows.append(("上下文窗口", m.get("context") or "—", other.get("context") or "—"))
 
@@ -395,7 +410,7 @@ def model_page(m):
     # .kv-list is a two-column grid built on <dt>/<dd>; emitting table rows here
     # produced invalid markup that browsers flatten into "Cached input$0.022".
     cache_row = ("<dt>Cached input</dt><dd>%s</dd>"
-                 % money(m["cached_input"])) if m.get("cached_input") else \
+                 % zh_money(m, "cached_input")) if m.get("cached_input") else \
                 "<dt>Cached input</dt><dd>not offered</dd>"
 
     # A time-priced model already renders "Off-peak (default)" and "Peak" rows.
@@ -525,10 +540,16 @@ def model_page_zh(m):
     verified = detail.get("verified") or UPDATED
     canonical = "%s/zh/models/%s.html" % (BASE, slug)
     en_url = "%s/models/%s.html" % (BASE, slug)
+    if m.get("cny"):
+        price_note = ('<p class="note">价格为<strong>中国大陆官方定价</strong>（人民币），'
+                      '取自厂商国内站。国际站美元价见 <a href="%s">英文页</a>。</p>' % en_url)
+    else:
+        price_note = ('<p class="note">该模型在中国大陆没有官方 API，此处显示的是'
+                      '<strong>国际站美元定价</strong>，不是人民币换算。</p>')
     title = "%s API 价格(2026)——每 1M token 成本 | ezaiops tools" % name
     desc = ("%s 每 1M 输入 tokens %s、每 1M 输出 tokens %s。包含上下文窗口、"
             "缓存费率、快速成本计算器与邻近模型对比。"
-            % (name, money(m["input"]), money(m["output"])))
+            % (name, zh_money(m, "input"), zh_money(m, "output")))
 
     faqs = ([(f["q"], f["a"]) for f in detail["faq"]] if detail.get("faq")
             else generic_faqs(m))
@@ -550,14 +571,14 @@ def model_page_zh(m):
         tier_row = ("<tr><td>单次请求超过 %s tokens</td><td class=\"num\">%s</td>"
                     "<td class=\"num\">%s</td></tr>" % (
                         "{:,}".format(m["tier_threshold"]),
-                        money(m.get("input_high")), money(m.get("output_high"))))
+                        zh_money(m, "input_high"), zh_money(m, "output_high")))
     cache_row = ("<dt>缓存输入</dt><dd>%s</dd>"
-                 % money(m["cached_input"])) if m.get("cached_input") else \
+                 % zh_money(m, "cached_input")) if m.get("cached_input") else \
                 "<dt>缓存输入</dt><dd>不提供</dd>"
     base_row = ""
     if not m.get("time_pricing"):
         base_row = ('<tr><td>标准价格</td><td class="num">%s</td>'
-                    '<td class="num">%s</td></tr>' % (money(m["input"]), money(m["output"])))
+                    '<td class="num">%s</td></tr>' % (zh_money(m, "input"), zh_money(m, "output")))
 
     price_mode = "（非高峰）" if m.get("time_pricing") else ""
     multiple = m["output"] / m["input"]
@@ -589,17 +610,18 @@ def model_page_zh(m):
     html += f"""
   <h1>{esc(name)} API 价格:每 1M token 成本</h1>
   <p class="lead">{name} 通过 {esc(m['provider'])} API 的价格:每 1M 输入 tokens
-  <strong>{money(m['input'])}</strong>{price_mode}、每 1M 输出 tokens
-  <strong>{money(m['output'])}</strong>。{esc(note_zh)}。
+  <strong>{zh_money(m, 'input')}</strong>{price_mode}、每 1M 输出 tokens
+  <strong>{zh_money(m, 'output')}</strong>。{esc(note_zh)}。
   以下价格已于 {verified} 对照官方定价文档核实。</p>
 
   <section class="panel">
     <div class="stats-grid">
-      <div class="stat"><div class="k">输入 / 1M tokens</div><div class="v">{money(m['input'])}</div></div>
-      <div class="stat"><div class="k">输出 / 1M tokens</div><div class="v">{money(m['output'])}</div></div>
+      <div class="stat"><div class="k">输入 / 1M tokens</div><div class="v">{zh_money(m, 'input')}</div></div>
+      <div class="stat"><div class="k">输出 / 1M tokens</div><div class="v">{zh_money(m, 'output')}</div></div>
       <div class="stat"><div class="k">输出倍率</div><div class="v">{multiple:.1f}×</div></div>
       <div class="stat"><div class="k">上下文窗口</div><div class="v">{esc(m.get('context') or '—')}</div></div>
     </div>
+    {price_note}
 
     <table class="data">
       <thead><tr><th>档位</th><th class="num">输入 / 1M</th><th class="num">输出 / 1M</th></tr></thead>
@@ -697,8 +719,8 @@ def index_page():
         rows.append(
             "<tr><td><a href=\"/models/%s.html\">%s</a></td><td>%s</td><td class=\"num\">%s</td>"
             "<td class=\"num\">%s</td><td class=\"num\">%s</td><td>%s</td><td>%s</td></tr>" % (
-                m["id"], esc(m["name"]), esc(m["provider"]), money(m["input"]),
-                money(m["output"]), money(m.get("cached_input")),
+                m["id"], esc(m["name"]), esc(m["provider"]), zh_money(m, "input"),
+                zh_money(m, "output"), zh_money(m, "cached_input"),
                 m.get("context") or "—", esc(note_preview(m))))
     ld = json.dumps({
         "@context": "https://schema.org",
@@ -768,8 +790,8 @@ def index_page_zh():
         rows.append(
             "<tr><td><a href=\"/zh/models/%s.html\">%s</a></td><td>%s</td><td class=\"num\">%s</td>"
             "<td class=\"num\">%s</td><td class=\"num\">%s</td><td>%s</td><td>%s</td></tr>" % (
-                m["id"], esc(m["name"]), esc(m["provider"]), money(m["input"]),
-                money(m["output"]), money(m.get("cached_input")),
+                m["id"], esc(m["name"]), esc(m["provider"]), zh_money(m, "input"),
+                zh_money(m, "output"), zh_money(m, "cached_input"),
                 m.get("context") or "—", esc(note)))
     ld = json.dumps({
         "@context": "https://schema.org",
@@ -807,6 +829,7 @@ def index_page_zh():
       <thead><tr><th>模型</th><th>提供商</th><th class="num">输入 / 1M</th><th class="num">输出 / 1M</th><th class="num">缓存输入</th><th>上下文</th><th>备注</th></tr></thead>
       <tbody>@@ROWS@@</tbody>
     </table>
+    <p class="note">标 <strong>¥</strong> 的是中国大陆官方定价（取自各厂商国内站）；标 <strong>$</strong> 的模型在中国大陆没有官方 API，显示的是国际站美元价。两套价目由厂商分别制定，<strong>不是汇率换算</strong>——同一模型在不同区域的价格本来就不一样。</p>
   </section>
 
   <section class="prose">

@@ -30,17 +30,36 @@ BY_ID = {m["id"]: m for m in MODELS}
 COMPARISONS = DATA.get("comparisons", [])
 
 
-def money(x):
-    """Prices read as prices: whole dollars stay bare ($5), anything with cents
-    keeps at least two decimals ($0.60 rather than $0.6), and sub-cent cache
-    rates keep the digits they need ($0.003)."""
+def money_amt(x, sym):
+    """Prices read as prices: whole amounts stay bare (¥12), anything with cents
+    keeps at least two decimals (¥0.80 rather than ¥0.8), and sub-cent cache
+    rates keep the digits they need (¥0.025)."""
     if x is None:
         return "—"
     v = float(x)
     if v == int(v):
-        return "$" + str(int(v))
+        return sym + str(int(v))
     whole, _, frac = ("%.4f" % v).rstrip("0").partition(".")
-    return "$%s.%s" % (whole, frac.ljust(2, "0"))
+    return "%s%s.%s" % (sym, whole, frac.ljust(2, "0"))
+
+
+def money(x):
+    return money_amt(x, "$")
+
+
+def zh_money(m, key):
+    """Price shown on a Chinese page: the mainland CNY rate when the provider
+    publishes one, otherwise the international USD rate.
+
+    These are independent rate cards, not conversions — Qwen3.8 Max is $1.65 in
+    Singapore, CNY 12 in Beijing and $2 in Virginia — so a model with no CNY
+    entry falls back to USD instead of showing a converted number that nobody
+    actually charges.
+    """
+    cny = m.get("cny") or {}
+    if cny.get(key) is not None:
+        return money_amt(cny[key], "¥")
+    return money_amt(m.get(key), "$")
 
 
 def blended(m, out_ratio):

@@ -221,19 +221,28 @@ document.addEventListener("DOMContentLoaded", function () {
   var me = null;
   for (var i = 0; i < models.length; i++) if (models[i].id === "gpt-6-1-terra") me = models[i];
   if (!me) return;
+  // Chinese pages bill in CNY where the provider publishes a mainland rate.
+  // data-zh-static is a server-rendered attribute, so it is readable before the
+  // i18n engine finishes loading; the language check is only a fallback.
+  var zhPage = document.documentElement.hasAttribute("data-zh-static") ||
+               !!(window.ezI18N && window.ezI18N.lang === "zh");
+  var c = zhPage && me.cny ? me.cny : null;
+  var inRate = c ? c.input : me.input;
+  var outRate = c ? c.output : me.output;
+  var sym = c ? "¥" : "$";
   var inEl = document.getElementById("mc-in");
   var outEl = document.getElementById("mc-out");
   function fmt(n) {
-    if (n <= 0) return "$0";
-    if (n < 0.000001) return "<$0.000001";
+    if (n <= 0) return sym + "0";
+    if (n < 0.000001) return "<" + sym + "0.000001";
     var d = n < 0.01 ? 6 : n < 1 ? 4 : 2;
-    return "$" + n.toFixed(d);
+    return sym + n.toFixed(d);
   }
   function recalc() {
     var ti = Math.max(0, parseFloat(inEl.value || "0") || 0);
     var to = Math.max(0, parseFloat(outEl.value || "0") || 0);
-    document.getElementById("mc-cost").textContent = fmt(ti * me.input / 1e6 + to * me.output / 1e6);
-    document.getElementById("mc-1k").textContent = fmt((ti * me.input / 1e6 + to * me.output / 1e6) * 1000);
+    document.getElementById("mc-cost").textContent = fmt(ti * inRate / 1e6 + to * outRate / 1e6);
+    document.getElementById("mc-1k").textContent = fmt((ti * inRate / 1e6 + to * outRate / 1e6) * 1000);
   }
   inEl.addEventListener("input", recalc);
   outEl.addEventListener("input", recalc);

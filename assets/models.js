@@ -372,6 +372,11 @@ window.EZ_MODELS = {
     },
     {
       "id": "deepseek-v4-1-flash",
+      "cny": {
+        "input": 1,
+        "output": 4,
+        "cached_input": 0.02
+      },
       "rank": 6,
       "name": "DeepSeek V4.1 Flash",
       "provider": "DeepSeek",
@@ -490,6 +495,11 @@ window.EZ_MODELS = {
     },
     {
       "id": "deepseek-v4-pro",
+      "cny": {
+        "input": 4.5,
+        "output": 13.5,
+        "cached_input": 0.15
+      },
       "rank": 10,
       "name": "DeepSeek V4 Pro",
       "provider": "DeepSeek",
@@ -672,6 +682,11 @@ window.EZ_MODELS = {
     },
     {
       "id": "kimi-k3-1-pro",
+      "cny": {
+        "input": 13,
+        "output": 68,
+        "cached_input": 1.3
+      },
       "rank": 13,
       "name": "Kimi K3.1 Pro",
       "provider": "Moonshot",
@@ -772,6 +787,11 @@ window.EZ_MODELS = {
     },
     {
       "id": "minimax-m3-1-flash",
+      "cny": {
+        "input": 1,
+        "output": 4,
+        "cached_input": 0.1
+      },
       "name": "MiniMax M3.1 Flash",
       "provider": "MiniMax",
       "input": 0.15,
@@ -838,6 +858,11 @@ window.EZ_MODELS = {
     },
     {
       "id": "mimo-v2-6-pro",
+      "cny": {
+        "input": 3,
+        "output": 6,
+        "cached_input": 0.025
+      },
       "name": "MiMo V2.6 Pro",
       "provider": "Xiaomi",
       "input": 0.435,
@@ -848,6 +873,11 @@ window.EZ_MODELS = {
     },
     {
       "id": "mimo-v2-6-flash",
+      "cny": {
+        "input": 1,
+        "output": 2,
+        "cached_input": 0.02
+      },
       "name": "MiMo V2.6 Flash",
       "provider": "Xiaomi",
       "input": 0.14,
@@ -898,6 +928,11 @@ window.EZ_MODELS = {
     },
     {
       "id": "qwen3-8-max",
+      "cny": {
+        "input": 12,
+        "output": 36,
+        "cached_input": 1.5
+      },
       "rank": 12,
       "name": "Qwen3.8 Max",
       "provider": "Alibaba",
@@ -1040,6 +1075,10 @@ window.EZ_MODELS = {
     },
     {
       "id": "qwen3-8-flash",
+      "cny": {
+        "input": 0.8,
+        "output": 2.7
+      },
       "name": "Qwen3.8 Flash",
       "provider": "Alibaba",
       "input": 0.113,
@@ -1134,6 +1173,11 @@ window.EZ_MODELS = {
     },
     {
       "id": "doubao-seed-2-1-turbo",
+      "cny": {
+        "input": 6,
+        "output": 30,
+        "cached_input": 1.2
+      },
       "rank": 14,
       "name": "Doubao Seed 2.1 Turbo",
       "provider": "ByteDance",
