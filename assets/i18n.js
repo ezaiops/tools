@@ -4,7 +4,7 @@
  * assets/i18n/*.js and are matched by DOM text nodes, so no page markup needs
  * data-i18n attributes. Dynamic JS strings use window.ezI18N.t()/tf().
  */
-var ASSET_V = "20261030a";
+var ASSET_V = "20261030b";
 
 (function () {
   "use strict";
@@ -181,9 +181,37 @@ var ASSET_V = "20261030a";
     return hits.length;
   }
 
+  function choiceFrom(el) {
+    // data-lang is present on runtime-injected pills; the statically generated
+    // /zh/ pages only carry hrefs, so derive the choice from the path.
+    if (el.getAttribute && el.getAttribute("data-lang")) return el.getAttribute("data-lang");
+    var h = (el.getAttribute && el.getAttribute("href")) || "";
+    return /^\/zh(\/|$)/.test(h) ? "zh" : "en";
+  }
+
+  // Persist the choice on every switch, link or button. Without this, the ?lang
+  // deep link only applies to the current page: navigating to a fresh URL reads
+  // the stale localStorage preference and silently switches back.
+  function persistChoice(wrap) {
+    wrap.addEventListener("click", function (ev) {
+      var a = ev.target.closest ? ev.target.closest("[data-lang],a") : null;
+      if (!a) return;
+      var next = choiceFrom(a);
+      if (next !== "zh" && next !== "en") return;
+      try { localStorage.setItem(LANG_KEY, next); } catch (e) { /* storage off */ }
+    });
+  }
+
   function injectSwitcher() {
     var nav = document.querySelector(".site-nav");
-    if (!nav || nav.querySelector(".lang-switch")) return;
+    if (!nav) return;
+    var existing = nav.querySelector(".lang-switch");
+    if (existing) {
+      // The /zh/ static pages ship the pill in the markup; wire persistence so
+      // an EN click there steers the next visit too.
+      persistChoice(existing);
+      return;
+    }
     var wrap = document.createElement("div");
     wrap.className = "lang-switch";
 
@@ -200,11 +228,12 @@ var ASSET_V = "20261030a";
       var zhHref = clean === "/" ? "/zh/" : "/zh" + clean;
       var enHref = zhActive ? clean + "?lang=en" : clean;
       wrap.innerHTML =
-        '<a href="' + zhHref + '" hreflang="zh-CN"' +
+        '<a href="' + zhHref + '" data-lang="zh" hreflang="zh-CN"' +
         (zhActive ? ' class="active" aria-current="page"' : "") + ">中文</a>" +
-        '<a href="' + enHref + '" hreflang="en"' +
+        '<a href="' + enHref + '" data-lang="en" hreflang="en"' +
         (zhActive ? "" : ' class="active" aria-current="page"') + ">EN</a>";
       nav.appendChild(wrap);
+      persistChoice(wrap);
       return;
     }
 

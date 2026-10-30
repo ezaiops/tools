@@ -292,6 +292,8 @@ console.log("\n== bilingual mode (?lang=zh) ==");
 
   check("switcher links to the static zh edition",
     doc.querySelector('.lang-switch a[href^="/zh/"]') !== null);
+  check("switcher links carry data-lang (choice persists)",
+    doc.querySelector('.lang-switch a[data-lang]') !== null);
   check("switcher emits no ?lang=zh link",
     doc.querySelector('.lang-switch a[href*="lang=zh"]') === null);
   const noZh = await load("models/gpt-6-astra.html?lang=zh");
