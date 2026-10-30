@@ -25,6 +25,14 @@ function check(label, cond, extra) {
   else { failed++; console.log("  FAIL " + label + (extra ? " -- " + extra : "")); }
 }
 
+// body.textContent includes <script> source, and the calculator script legitimately
+// contains a "¥" character. Currency assertions must look at visible text only.
+function visibleText(doc) {
+  const clone = doc.body.cloneNode(true);
+  clone.querySelectorAll("script, style").forEach((n) => n.remove());
+  return clone.textContent;
+}
+
 async function load(rel) {
   const errors = [];
   const vc = new VirtualConsole();
@@ -344,7 +352,7 @@ console.log("\n== bilingual: model pages keep data in EN, chrome in ZH ==");
   // Chinese pages bill in CNY where the provider publishes a mainland rate;
   // models without one must fall back to USD rather than show a conversion.
   const zhQwen = await load("zh/models/qwen3-8-max.html");
-  const zhQText = zhQwen.doc.body.textContent;
+  const zhQText = visibleText(zhQwen.doc);
   check("zh model page prices in CNY", /¥12/.test(zhQText), "expect ¥12");
   // The note deliberately quotes the international USD rate for comparison, so
   // only the price cards must be pure CNY.
@@ -365,6 +373,17 @@ console.log("\n== bilingual: model pages keep data in EN, chrome in ZH ==");
 
   const enQwen = await load("models/qwen3-8-max.html");
   check("english model page stays in USD", /\$1\.65/.test(enQwen.doc.body.textContent));
+  // Regression: a range-limited edit once leaked zh_money into the English
+  // renderer, so the English page showed a CNY cache rate.
+  check("english model page contains no CNY symbol",
+    !/¥/.test(visibleText(enQwen.doc)), "found ¥ on the English page");
+
+  const enDs = await load("models/deepseek-v4-1-flash.html");
+  check("english deepseek page is pure USD",
+    !/¥/.test(visibleText(enDs.doc)));
+  const zhDs = await load("zh/models/deepseek-v4-1-flash.html");
+  check("chinese deepseek page prices the model in CNY",
+    /¥1/.test(zhDs.doc.body.textContent) && /¥4/.test(zhDs.doc.body.textContent));
 
   check("model ?lang=zh switcher links to /zh/models/",
     doc.querySelector('.lang-switch a[href^="/zh/models/"]') !== null);

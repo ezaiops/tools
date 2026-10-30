@@ -68,7 +68,7 @@
   <h1>MiMo V2.6 Pro API 价格:每 1M token 成本</h1>
   <p class="lead">MiMo V2.6 Pro 通过 Xiaomi API 的价格:每 1M 输入 tokens
   <strong>¥3</strong>、每 1M 输出 tokens
-  <strong>¥6</strong>。Batch API 半价。超高速版按 $4.35/$8.70 计费。
+  <strong>¥6</strong>。Batch API 半价。超高速版按国际站 $4.35/$8.70 计费（人民币报价未公布）。
   以下价格已于 2026-10-28 对照官方定价文档核实。</p>
 
   <section class="panel">
@@ -121,13 +121,14 @@
   </section>
 
   <section class="prose">
+    <p class="note">以下正文与成本表中的金额按<strong>国际站美元费率</strong>推演；本页价格卡与计算器显示的是中国大陆人民币定价。</p>
     <h2>如何看待 MiMo V2.6 Pro 的价格</h2><p>输出 token 的计费倍率是输入的 2.0 倍,这个数字决定一项工作负载是否负担得起:摘要与分类是输入密集型,而 agent、思维链推理和长篇写作是输出密集型。在比较宣传价格之前,先从自己的日志中测量真实的 token 比例,再用混合公式 <code>(输入占比 × 输入价格) + (输出占比 × 输出价格)</code> 计算。</p><p>除了头条费率,通常还有三个杠杆决定真实账单:厂商提供的批量折扣、稳定 prompt 前缀的缓存命中,以及合理选型——把简单步骤交给 mini 或 flash 类模型而不是旗舰。并非所有厂商都同时提供这三项,先逐项确认哪些适用,而不是想当然。 缓存命中按 $0.0036 计费,未命中则按 $0.435,因此被复用的前缀是你买过的最便宜的 token。</p>
 
     <h2>常见问题</h2>
     <details class="faq"><summary>MiMo V2.6 Pro 每 1M token 多少钱?</summary>
       <div class="faq-body">每 1M 输入 tokens $0.435、每 1M 输出 tokens $0.87 支持缓存的场景下,缓存输入按 $0.0036/1M tokens 计费。</div></details>
     <details class="faq"><summary>MiMo V2.6 Pro 的上下文窗口要额外收费吗?</summary>
-      <div class="faq-body">公布的上下文窗口按统一的每 token 费率计费。 Batch API 半价。超高速版按 $4.35/$8.70 计费</div></details>
+      <div class="faq-body">公布的上下文窗口按统一的每 token 费率计费。 Batch API 半价。超高速版按国际站 $4.35/$8.70 计费（人民币报价未公布）</div></details>
     <details class="faq"><summary>规模化运行 MiMo V2.6 Pro 最省钱的方式是什么?</summary>
       <div class="faq-body">保持稳定的 prompt 前缀以命中缓存;缓存输入按 $0.0036/1M 计费,限制输出长度,把异步任务安排进厂商按时间计价的非高峰窗口,并把容易处理的约 80% 流量切到更低档位。</div></details>
     

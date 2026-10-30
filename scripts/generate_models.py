@@ -410,7 +410,7 @@ def model_page(m):
     # .kv-list is a two-column grid built on <dt>/<dd>; emitting table rows here
     # produced invalid markup that browsers flatten into "Cached input$0.022".
     cache_row = ("<dt>Cached input</dt><dd>%s</dd>"
-                 % zh_money(m, "cached_input")) if m.get("cached_input") else \
+                 % money(m["cached_input"])) if m.get("cached_input") else \
                 "<dt>Cached input</dt><dd>not offered</dd>"
 
     # A time-priced model already renders "Off-peak (default)" and "Peak" rows.
@@ -543,9 +543,14 @@ def model_page_zh(m):
     if m.get("cny"):
         price_note = ('<p class="note">价格为<strong>中国大陆官方定价</strong>（人民币），'
                       '取自厂商国内站。国际站美元价见 <a href="%s">英文页</a>。</p>' % en_url)
+        # 正文的深度推演按国际站美元费率写成，改数字会引入计算错误，
+        # 所以保留原值并在这里说清楚口径。
+        prose_note = ('<p class="note">以下正文与成本表中的金额按<strong>国际站美元费率</strong>推演；'
+                      '本页价格卡与计算器显示的是中国大陆人民币定价。</p>')
     else:
         price_note = ('<p class="note">该模型在中国大陆没有官方 API，此处显示的是'
                       '<strong>国际站美元定价</strong>，不是人民币换算。</p>')
+        prose_note = ""
     title = "%s API 价格(2026)——每 1M token 成本 | ezaiops tools" % name
     desc = ("%s 每 1M 输入 tokens %s、每 1M 输出 tokens %s。包含上下文窗口、"
             "缓存费率、快速成本计算器与邻近模型对比。"
@@ -664,6 +669,7 @@ def model_page_zh(m):
 {sibling}  </section>
 
   <section class="prose">
+    {prose_note}
     {prose}
 
     <h2>常见问题</h2>
@@ -719,8 +725,8 @@ def index_page():
         rows.append(
             "<tr><td><a href=\"/models/%s.html\">%s</a></td><td>%s</td><td class=\"num\">%s</td>"
             "<td class=\"num\">%s</td><td class=\"num\">%s</td><td>%s</td><td>%s</td></tr>" % (
-                m["id"], esc(m["name"]), esc(m["provider"]), zh_money(m, "input"),
-                zh_money(m, "output"), zh_money(m, "cached_input"),
+                m["id"], esc(m["name"]), esc(m["provider"]), money(m["input"]),
+                money(m["output"]), money(m.get("cached_input")),
                 m.get("context") or "—", esc(note_preview(m))))
     ld = json.dumps({
         "@context": "https://schema.org",
