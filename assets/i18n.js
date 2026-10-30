@@ -4,7 +4,7 @@
  * assets/i18n/*.js and are matched by DOM text nodes, so no page markup needs
  * data-i18n attributes. Dynamic JS strings use window.ezI18N.t()/tf().
  */
-var ASSET_V = "20261029a";
+var ASSET_V = "20261030a";
 
 (function () {
   "use strict";
@@ -35,7 +35,55 @@ var ASSET_V = "20261029a";
     "/tools/encode-decode.html": ["i18n/tools/encode-decode.js"],
     "/tools/timestamp-converter.html": ["i18n/tools/timestamp-converter.js"],
     "/tools/password-generator.html": ["i18n/tools/password-generator.js"],
-    "/tools/meta-tag-generator.html": ["i18n/tools/meta-tag-generator.js"]
+    "/tools/meta-tag-generator.html": ["i18n/tools/meta-tag-generator.js"],
+
+    // Pricing pages: the /zh/models/ tree is the static Chinese edition, so
+    // these entries only need to exist for hasStaticZh — the switcher links to
+    // /zh/ and no runtime dictionary is loaded.
+    "/models/index.html": [],
+    "/models/gpt-6-astra.html": [],
+    "/models/gpt-6-1-sol.html": [],
+    "/models/gpt-6-1-terra.html": [],
+    "/models/gpt-6-luna.html": [],
+    "/models/gpt-5-6-sol.html": [],
+    "/models/gpt-5-6-terra.html": [],
+    "/models/gpt-5-6-luna.html": [],
+    "/models/claude-fable-5-1.html": [],
+    "/models/claude-opus-5-5.html": [],
+    "/models/claude-opus-5.html": [],
+    "/models/claude-sonnet-5-5.html": [],
+    "/models/claude-sonnet-5.html": [],
+    "/models/claude-haiku-4-5.html": [],
+    "/models/claude-haiku-5-5.html": [],
+    "/models/gemini-4-argon.html": [],
+    "/models/gemini-3-1-pro.html": [],
+    "/models/gemini-3-8-flash.html": [],
+    "/models/gemini-3-5-flash-lite.html": [],
+    "/models/grok-4-7.html": [],
+    "/models/grok-4-5.html": [],
+    "/models/grok-4-3.html": [],
+    "/models/deepseek-v4-1-flash.html": [],
+    "/models/deepseek-v4-pro.html": [],
+    "/models/glm-5-3.html": [],
+    "/models/glm-5-3-flash.html": [],
+    "/models/glm-5-3-flashx.html": [],
+    "/models/kimi-k3.html": [],
+    "/models/kimi-k2-7-code.html": [],
+    "/models/kimi-k3-1-pro.html": [],
+    "/models/minimax-m3-1-flash.html": [],
+    "/models/minimax-m3.html": [],
+    "/models/mimo-v2-6-pro.html": [],
+    "/models/mimo-v2-6-flash.html": [],
+    "/models/mistral-medium-3-5.html": [],
+    "/models/mistral-large-4.html": [],
+    "/models/mistral-large-3.html": [],
+    "/models/mistral-small-4.html": [],
+    "/models/qwen3-8-max.html": [],
+    "/models/qwen3-8-flash.html": [],
+    "/models/doubao-seed-2-1-turbo.html": [],
+    "/models/doubao-seed-2-0-pro.html": [],
+    "/models/doubao-seed-2-0-lite.html": [],
+    "/models/doubao-seed-2-0-mini.html": []
   };
 
   var dicts = [];

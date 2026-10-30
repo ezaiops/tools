@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-zh-static="1"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Doubao Seed 2.1 Turbo API 价格(2026)——每 1M token 成本 | ezaiops tools</title>
+<meta name="description" content="Doubao Seed 2.1 Turbo 每 1M 输入 tokens $0.50、每 1M 输出 tokens $2.50。包含上下文窗口、缓存费率、快速成本计算器与邻近模型对比。">
+<link rel="canonical" href="https://tools.ezaiops.com/zh/models/doubao-seed-2-1-turbo.html">
+<link rel="alternate" hreflang="zh-CN" href="https://tools.ezaiops.com/zh/models/doubao-seed-2-1-turbo.html">
+<link rel="alternate" hreflang="en" href="https://tools.ezaiops.com/models/doubao-seed-2-1-turbo.html">
+<link rel="alternate" hreflang="x-default" href="https://tools.ezaiops.com/models/doubao-seed-2-1-turbo.html">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Doubao Seed 2.1 Turbo API 价格(2026)——每 1M token 成本 | ezaiops tools">
+<meta property="og:description" content="Doubao Seed 2.1 Turbo 每 1M 输入 tokens $0.50、每 1M 输出 tokens $2.50。包含上下文窗口、缓存费率、快速成本计算器与邻近模型对比。">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/style.css?v=20261030a">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How much does Doubao Seed 2.1 Turbo cost per 1M tokens?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "$0.50 per 1M input tokens and $2.50 per 1M output tokens on BytePlus ModelArk, with cached input at $0.10 per 1M. The rate is flat across the full 256K context window."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is there a long-context surcharge on Doubao Seed 2.1 Turbo?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Unlike the Seed 2.0 family, which doubles its rates above 128K tokens per request, Turbo bills the same $0.50/$2.50 at 250K tokens as at 250."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does BytePlus charge for cache storage?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Cached tokens cost $0.0083 per 1M tokens per hour on top of the $0.10 cache-hit rate, so long-lived prefixes carry a holding cost that pure per-token comparisons miss."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I use Doubao Seed 2.1 Pro internationally?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Not yet on ModelArk as of 2026-10-28. Volcengine lists doubao-seed-2.1-pro at CNY 12/60 per 1M, but the international catalogue stops at Turbo and the Seed 2.0 family."
+      }
+    }
+  ]
+}
+</script>
+
+<script src="/assets/i18n.js?v=20261030a"></script><script src="/assets/i18n/common.js?v=20261030a"></script><meta property="og:locale" content="zh_CN"></head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/zh/"><span class="logo">ez</span>ezaiops <small>工具</small></a>
+    <nav class="site-nav">
+      <a href="/zh/">工具</a>
+      <a href="/zh/models/index.html">模型价格</a>
+      <a href="https://ezaiops.com/" title="ezaiops.com — AI Agent 可观测性与 LLMOps 实战笔记（中文）">博客</a>
+      <a href="https://github.com/ezaiops">GitHub</a>
+    <div class="lang-switch"><a href="/zh/models/doubao-seed-2-1-turbo.html" hreflang="zh-CN" class="active" aria-current="page">中文</a><a href="/models/doubao-seed-2-1-turbo.html?lang=en" hreflang="en">EN</a></div></nav>
+  </div>
+</header>
+
+<main class="wrap tool-page">
+  <nav class="crumbs"><a href="/zh/">首页</a> / <a href="/zh/models/index.html">模型价格</a> / Doubao Seed 2.1 Turbo<a class="main-site-link" href="https://ezaiops.com/">ezaiops.com ↗</a></nav>
+
+  <h1>Doubao Seed 2.1 Turbo API 价格:每 1M token 成本</h1>
+  <p class="lead">Doubao Seed 2.1 Turbo 通过 ByteDance API 的价格:每 1M 输入 tokens
+  <strong>$0.50</strong>、每 1M 输出 tokens
+  <strong>$2.50</strong>。整个 256K 窗口统一费率——与 Seed 2.0 家族不同,没有长上下文档位。缓存命中 $0.10,缓存存储 $0.0083/1M tokens/小时。
+  以下价格已于 2026-10-28 对照官方定价文档核实。</p>
+
+  <section class="panel">
+    <div class="stats-grid">
+      <div class="stat"><div class="k">输入 / 1M tokens</div><div class="v">$0.50</div></div>
+      <div class="stat"><div class="k">输出 / 1M tokens</div><div class="v">$2.50</div></div>
+      <div class="stat"><div class="k">输出倍率</div><div class="v">5.0×</div></div>
+      <div class="stat"><div class="k">上下文窗口</div><div class="v">256K</div></div>
+    </div>
+
+    <table class="data">
+      <thead><tr><th>档位</th><th class="num">输入 / 1M</th><th class="num">输出 / 1M</th></tr></thead>
+      <tbody>
+        <tr><td>标准价格</td><td class="num">$0.50</td><td class="num">$2.50</td></tr>
+        
+      </tbody>
+    </table>
+    <dl class="kv-list"><dt>缓存输入</dt><dd>$0.10</dd></dl>
+    <p class="note">在承诺预算之前,请务必到 ByteDance 官方价格页核实当前费率——厂商调价频繁,
+    长上下文或缓存折扣也可能不会体现在头条数字里。</p>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0;font-size:16px">Doubao Seed 2.1 Turbo 快速成本计算器</h2>
+    <div class="field-row">
+      <div class="field">
+        <label class="field-label" for="mc-in">输入 tokens</label>
+        <input type="number" id="mc-in" class="mono" value="1000000" min="0">
+      </div>
+      <div class="field">
+        <label class="field-label" for="mc-out">输出 tokens</label>
+        <input type="number" id="mc-out" class="mono" value="100000" min="0">
+      </div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat"><div class="k">单次请求(此用量)</div><div class="v" id="mc-cost">—</div></div>
+      <div class="stat"><div class="k">× 1,000 次此类请求</div><div class="v" id="mc-1k">—</div></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0;font-size:16px">Doubao Seed 2.1 Turbo 对比 Doubao Seed 2.0 Pro</h2>
+    <table class="data">
+      <thead><tr><th></th><th>Doubao Seed 2.1 Turbo</th><th>Doubao Seed 2.0 Pro</th></tr></thead>
+      <tbody><tr><td>输入 / 1M</td><td class="num">$0.50</td><td class="num">$0.50</td></tr><tr><td>输出 / 1M</td><td class="num">$2.50</td><td class="num">$3</td></tr><tr><td>缓存命中 / 1M</td><td class="num">$0.10</td><td class="num">$0.10</td></tr><tr><td>上下文窗口</td><td class="num">256K</td><td class="num">256K</td></tr><tr><td>模型 ID</td><td class="num">dola-seed-2-1-turbo</td><td class="num">seed-2-0-pro-260328</td></tr><tr><td>缓存存储</td><td class="num">$0.0083 / 1M-hour</td><td class="num">$0.0083 / 1M-hour</td></tr><tr><td>档位分界</td><td class="num">—</td><td class="num">128K</td></tr></tbody>
+    </table>
+    <p class="note">完整对比:<a href="/zh/models/doubao-seed-2-0-pro.html">Doubao Seed 2.0 Pro 价格</a>。</p>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0;font-size:16px">Turbo 对比它夹在中间的 Seed 2.0 各档位</h2>
+    <table class="data">
+      <thead><tr><th>模型</th><th class="num">输入 / 1M</th><th class="num">输出 / 1M</th><th class="num">档位分界</th><th class="num">上下文</th></tr></thead>
+      <tbody><tr><td>Doubao Seed 2.1 Turbo</td><td class="num">$0.50</td><td class="num">$2.50</td><td class="num">无</td><td class="num">256K</td></tr><tr><td>Doubao Seed 2.0 Pro</td><td class="num">$0.50</td><td class="num">$3.00</td><td class="num">128K</td><td class="num">256K</td></tr><tr><td>Doubao Seed 2.0 Lite</td><td class="num">$0.25</td><td class="num">$2.00</td><td class="num">128K</td><td class="num">256K</td></tr><tr><td>Doubao Seed 2.0 Mini</td><td class="num">$0.10</td><td class="num">$0.40</td><td class="num">128K</td><td class="num">256K</td></tr></tbody>
+    </table>
+    <p class="note">BytePlus ModelArk 标准推理费率,读取于 2026-10-28。超过档位分界后,Seed 2.0 价格按整单翻倍。</p>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0;font-size:16px">Doubao Seed 2.1 Turbo 与邻近模型对比(按输入:输出 3:1 混合)</h2>
+    <table class="data">
+      <thead><tr><th>模型</th><th>提供商</th><th class="num">输入</th><th class="num">输出</th><th class="num">缓存输入</th><th>上下文</th></tr></thead>
+      <tbody><tr><td><a href="/zh/models/gemini-3-5-flash-lite.html">Gemini 3.5 Flash-Lite</a></td><td>Google</td><td class="num">$0.30</td><td class="num">$2.50</td><td class="num">$0.03</td><td>1.05M</td></tr><tr><td><a href="/zh/models/deepseek-v4-pro.html">DeepSeek V4 Pro</a></td><td>DeepSeek</td><td class="num">$0.66</td><td class="num">$1.98</td><td class="num">$0.022</td><td>1M</td></tr><tr style="background:var(--accent-soft)"><td><strong>Doubao Seed 2.1 Turbo</strong></td><td>ByteDance</td><td class="num">$0.50</td><td class="num">$2.50</td><td class="num">$0.10</td><td>256K</td></tr><tr><td><a href="/zh/models/mistral-large-4.html">Mistral Large 4</a></td><td>Mistral</td><td class="num">$0.68</td><td class="num">$2.09</td><td class="num">$0.07</td><td>1M</td></tr><tr><td><a href="/zh/models/doubao-seed-2-0-pro.html">Doubao Seed 2.0 Pro</a></td><td>ByteDance</td><td class="num">$0.50</td><td class="num">$3</td><td class="num">$0.10</td><td>256K</td></tr></tbody>
+    </table>
+    <p class="note">完整的 43 款模型对比见<a href="/zh/models/index.html">价格中心</a>,
+    而<a href="/zh/tools/token-counter.html">分词与成本计算器</a>可为你的真实 prompt 计价。</p>
+  </section>
+
+  <section class="prose">
+    <h2>Doubao Seed 2.1 Turbo 的费用</h2><p>每 1M 输入 tokens $0.50、每 1M 输出 tokens $2.50,从 1 token 到 256K 全程统一。这个“平”结构就是全部要点:Seed 2.0 Pro 输入同样收 $0.50,但 prompt 一旦超过 128K 就翻倍到 $1.00,所以 Turbo 是整个家族里唯一让 200K-token 文档与短问题保持相同单 token 价格的模型。</p><p>缓存命中按 $0.10 计费——输入费率的五分之一——而且 BytePlus 还加收 $0.0083/1M tokens/小时的缓存存储费,这是多数对比都会漏掉的数字。一个在缓存里放了一天的 200K 前缀,光存储就是 $0.04;对热门的 agent 循环微不足道,对只用一次的前缀则是浪费。</p><p>Flex 处理约为此费率的一半,只支持隐式缓存;Batch 推理单独定价。在承诺标准费率之前,两者都值得先核算。</p><h2>国际目录落后于中文目录</h2><p>火山引擎(中国平台)已经上线 doubao-seed-2.1-pro,标价人民币 12 进 / 60 出,约为 Turbo 的两倍,还有一个在国际上没有对应版本的 doubao-seed-evolving 模型。ModelArk 提供 Turbo 与 Seed 2.0 家族,但不提供 2.1 Pro。</p><p>如果你规划的是一个只在中文渠道见过的模型,这个差距就很重要。在围绕它设计方案之前,先确认该模型 ID 在你实际要调用的平台上存在。</p>
+
+    <h2>常见问题</h2>
+    <details class="faq"><summary>Doubao Seed 2.1 Turbo 每 1M token 多少钱?</summary>
+      <div class="faq-body">在 BytePlus ModelArk 上每 1M 输入 tokens $0.50、每 1M 输出 tokens $2.50,缓存输入 $0.10/1M。费率在整个 256K 上下文窗口内保持一致。</div></details>
+    <details class="faq"><summary>Doubao Seed 2.1 Turbo 有长上下文附加费吗?</summary>
+      <div class="faq-body">没有。与 128K tokens 以上费率翻倍的 Seed 2.0 家族不同,Turbo 在 250K tokens 时与 250 tokens 时都按同样的 $0.50/$2.50 计费。</div></details>
+    <details class="faq"><summary>BytePlus 对缓存存储收费吗?</summary>
+      <div class="faq-body">收。缓存 token 在 $0.10 缓存命中费率之外,另按 $0.0083/1M tokens/小时收取存储费,因此长寿前缀会带来纯 token 对比容易忽略的持有成本。</div></details>
+    <details class="faq"><summary>我能在国际范围使用 Doubao Seed 2.1 Pro 吗?</summary>
+      <div class="faq-body">截至 2026-10-28,ModelArk 上还没有。火山引擎将 doubao-seed-2.1-pro 标价为人民币 12/60 每 1M,但国际目录只到 Turbo 与 Seed 2.0 家族。</div></details>
+    
+  </section>
+
+<div class="ad-slot">
+  <strong>广告位</strong>
+  Google AdSense 占位——网站通过审批并有稳定流量后启用。
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h4>常用工具</h4>
+        <ul>
+          <li><a href="/zh/tools/token-counter.html">LLM 分词与成本计算器</a></li>
+          <li><a href="/zh/tools/json-formatter.html">JSON 工具</a></li>
+          <li><a href="/zh/tools/regex-tester.html">正则测试</a></li>
+          <li><a href="/zh/tools/cron-explainer.html">Cron 解释</a></li>
+          <li><a href="/zh/tools/encode-decode.html">Base64 / URL / 哈希</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>模型价格</h4>
+        <ul>
+          <li><a href="/zh/models/index.html">全部模型</a></li>
+          <li><a href="/zh/models/gpt-6-astra.html">GPT-6 Astra 价格</a></li>
+          <li><a href="/zh/models/claude-fable-5-1.html">Claude Fable 5.1 价格</a></li>
+          <li><a href="/zh/models/gemini-3-8-flash.html">Gemini 3.8 Flash 价格</a></li>
+          <li><a href="/zh/models/deepseek-v4-1-flash.html">DeepSeek V4.1 Flash 价格</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>更多</h4>
+        <ul>
+          <li><a href="https://ezaiops.com/">ezaiops.com</a></li>
+          <li><a href="/zh/about.html">关于</a></li>
+          <li><a href="/zh/contact.html">联系</a></li>
+          <li><a href="/zh/privacy.html">隐私政策</a></li>
+          <li><a href="https://github.com/ezaiops">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">© <span data-year>2026</span> ezaiops · 输入内容不会离开你的浏览器</div>
+  </div>
+</footer>
+
+<script src="/assets/common.js?v=20261030a" defer></script>
+<script src="/assets/models.js?v=20261030a" defer></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var models = (window.EZ_MODELS || {}).models || [];
+  var me = null;
+  for (var i = 0; i < models.length; i++) if (models[i].id === "doubao-seed-2-1-turbo") me = models[i];
+  if (!me) return;
+  var inEl = document.getElementById("mc-in");
+  var outEl = document.getElementById("mc-out");
+  function fmt(n) {
+    if (n <= 0) return "$0";
+    if (n < 0.000001) return "<$0.000001";
+    var d = n < 0.01 ? 6 : n < 1 ? 4 : 2;
+    return "$" + n.toFixed(d);
+  }
+  function recalc() {
+    var ti = Math.max(0, parseFloat(inEl.value || "0") || 0);
+    var to = Math.max(0, parseFloat(outEl.value || "0") || 0);
+    document.getElementById("mc-cost").textContent = fmt(ti * me.input / 1e6 + to * me.output / 1e6);
+    document.getElementById("mc-1k").textContent = fmt((ti * me.input / 1e6 + to * me.output / 1e6) * 1000);
+  }
+  inEl.addEventListener("input", recalc);
+  outEl.addEventListener("input", recalc);
+  recalc();
+});
+</script>
+
+</body>
+</html>

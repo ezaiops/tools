@@ -243,6 +243,34 @@ console.log("\n== static Chinese edition (/zh/) ==");
     en.doc.querySelector('link[rel="alternate"][hreflang="zh-CN"][href$="/zh/tools/json-formatter.html"]') !== null);
 }
 
+console.log("\n== static Chinese edition: /zh/models/ ==");
+{
+  const { doc, errors } = await load("zh/models/deepseek-v4-pro.html");
+  await sleep(300);
+  check("zh model page html lang", doc.documentElement.getAttribute("lang") === "zh-CN",
+    String(doc.documentElement.getAttribute("lang")));
+  check("zh model page title is Chinese", /[\u4e00-\u9fff]/.test(doc.title), doc.title);
+  check("zh model page canonical points at itself",
+    (doc.querySelector('link[rel="canonical"]') || {}).href === "https://tools.ezaiops.com/zh/models/deepseek-v4-pro.html",
+    (doc.querySelector('link[rel="canonical"]') || {}).href);
+  check("zh model page declares the hreflang pair",
+    doc.querySelectorAll('link[rel="alternate"][hreflang]').length === 3);
+  const zhChars = (doc.body.textContent.match(/[\u4e00-\u9fff]/g) || []).length;
+  check("zh model page ships Chinese markup (no JS needed)", zhChars > 100, String(zhChars) + " 汉字");
+  check("zh model page keeps the numbers and model names",
+    /\$0\.66 per 1M input tokens/.test(doc.body.textContent) === false &&
+    /每 1M 输入 tokens \$\d/.test(doc.body.textContent), doc.body.textContent.slice(0, 200));
+  check("zh model page has static switcher back to EN",
+    doc.querySelector('.lang-switch a[href="/models/deepseek-v4-pro.html?lang=en"]') !== null);
+  check("zh model page links the pricing hub into /zh/",
+    doc.querySelector('.site-footer a[href="/zh/models/index.html"]') !== null);
+  check("zh model page has no console errors", errors.length === 0, errors[0]);
+
+  const enm = await load("models/deepseek-v4-pro.html");
+  check("en model page points at the zh edition",
+    enm.doc.querySelector('link[rel="alternate"][hreflang="zh-CN"][href$="/zh/models/deepseek-v4-pro.html"]') !== null);
+}
+
 console.log("\n== bilingual mode (?lang=zh) ==");
 {
   const { doc, errors } = await load("tools/token-counter.html?lang=zh");
@@ -267,8 +295,8 @@ console.log("\n== bilingual mode (?lang=zh) ==");
   check("switcher emits no ?lang=zh link",
     doc.querySelector('.lang-switch a[href*="lang=zh"]') === null);
   const noZh = await load("models/gpt-6-astra.html?lang=zh");
-  check("model page ?lang=zh keeps its own canonical (no phantom /zh/ target)",
-    (noZh.doc.querySelector('link[rel="canonical"]') || {}).href === "https://tools.ezaiops.com/models/gpt-6-astra.html",
+  check("model page ?lang=zh canonical points at the static zh page",
+    (noZh.doc.querySelector('link[rel="canonical"]') || {}).href === "https://tools.ezaiops.com/zh/models/gpt-6-astra.html",
     (noZh.doc.querySelector('link[rel="canonical"]') || {}).href);
 
   check("nav translated", /工具/.test(doc.querySelector(".site-nav").textContent));
@@ -307,6 +335,11 @@ console.log("\n== bilingual: model pages keep data in EN, chrome in ZH ==");
   check("model nav translated", /工具/.test(doc.querySelector(".site-nav").textContent));
   check("model h1 stays EN", /GPT-6 Astra API pricing/.test($("h1", doc).textContent));
   check("crumb crumb main-site link kept", doc.querySelector(".main-site-link") !== null);
+  // With a real /zh/models/ tree the switcher must be a link to it, not a button.
+  check("model ?lang=zh switcher links to /zh/models/",
+    doc.querySelector('.lang-switch a[href^="/zh/models/"]') !== null);
+  check("model ?lang=zh switcher emits no ?lang=zh link",
+    doc.querySelector('.lang-switch a[href*="lang=zh"]') === null);
 }
 
 console.log("\n== cron-generator.html ==");

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-zh-static="1"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GPT-6.1 Terra API 价格(2026)——每 1M token 成本 | ezaiops tools</title>
+<meta name="description" content="GPT-6.1 Terra 每 1M 输入 tokens $1、每 1M 输出 tokens $5。包含上下文窗口、缓存费率、快速成本计算器与邻近模型对比。">
+<link rel="canonical" href="https://tools.ezaiops.com/zh/models/gpt-6-1-terra.html">
+<link rel="alternate" hreflang="zh-CN" href="https://tools.ezaiops.com/zh/models/gpt-6-1-terra.html">
+<link rel="alternate" hreflang="en" href="https://tools.ezaiops.com/models/gpt-6-1-terra.html">
+<link rel="alternate" hreflang="x-default" href="https://tools.ezaiops.com/models/gpt-6-1-terra.html">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="GPT-6.1 Terra API 价格(2026)——每 1M token 成本 | ezaiops tools">
+<meta property="og:description" content="GPT-6.1 Terra 每 1M 输入 tokens $1、每 1M 输出 tokens $5。包含上下文窗口、缓存费率、快速成本计算器与邻近模型对比。">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/style.css?v=20261030a">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How much does GPT-6.1 Terra cost per 1M tokens?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "$1.00 per 1M input tokens and $5.00 per 1M output tokens. Cached input bills at $0.05 per 1M, and cache writes cost $1.25 per 1M for 30-minute retention or $2.50 for 12-hour retention."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is GPT-6.1 Terra cheaper than GPT-6.1 Sol?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, by exactly half: $1.00/$5.00 against Sol's $2.00/$10.00, with the same 1.05M context window and 128K maximum output. Sol is the tier for complex coding and long-horizon reasoning; Terra is the tier for high-volume computer use, visual reasoning and writing."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What happens above 272K input tokens?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The whole request is repriced at 2x input and cache rates and 1.5x output: $2.00 in, $0.10 cached in, $7.50 out. The multiplier applies to every token in the request, so a 300K-token prompt costs more than twice what the same prompt costs at 270K."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does GPT-6.1 Terra have a batch discount?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Batch and Flex processing cost 50% of standard ($0.50/$2.50), and Fast mode costs 2x standard. The long-context multiplier stacks on top of whichever mode you pick."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is GPT-6.1 Terra's context window and knowledge cutoff?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "1,050,000 tokens of context and 128,000 maximum output tokens, with a knowledge cutoff of 1 June 2026. Reasoning effort can be set to none, low, medium, high, xhigh or max, and medium is the default."
+      }
+    }
+  ]
+}
+</script>
+
+<script src="/assets/i18n.js?v=20261030a"></script><script src="/assets/i18n/common.js?v=20261030a"></script><meta property="og:locale" content="zh_CN"></head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/zh/"><span class="logo">ez</span>ezaiops <small>工具</small></a>
+    <nav class="site-nav">
+      <a href="/zh/">工具</a>
+      <a href="/zh/models/index.html">模型价格</a>
+      <a href="https://ezaiops.com/" title="ezaiops.com — AI Agent 可观测性与 LLMOps 实战笔记（中文）">博客</a>
+      <a href="https://github.com/ezaiops">GitHub</a>
+    <div class="lang-switch"><a href="/zh/models/gpt-6-1-terra.html" hreflang="zh-CN" class="active" aria-current="page">中文</a><a href="/models/gpt-6-1-terra.html?lang=en" hreflang="en">EN</a></div></nav>
+  </div>
+</header>
+
+<main class="wrap tool-page">
+  <nav class="crumbs"><a href="/zh/">首页</a> / <a href="/zh/models/index.html">模型价格</a> / GPT-6.1 Terra<a class="main-site-link" href="https://ezaiops.com/">ezaiops.com ↗</a></nav>
+
+  <h1>GPT-6.1 Terra API 价格:每 1M token 成本</h1>
+  <p class="lead">GPT-6.1 Terra 通过 OpenAI API 的价格:每 1M 输入 tokens
+  <strong>$1</strong>、每 1M 输出 tokens
+  <strong>$5</strong>。2026-10-26 发布。两项费率均为 GPT-6 Astra 的十分之一、GPT-6.1 Sol 的一半;超过 272K tokens 的 prompt 整单按 $2/$7.50 计费。
+  以下价格已于 2026-10-28 对照官方定价文档核实。</p>
+
+  <section class="panel">
+    <div class="stats-grid">
+      <div class="stat"><div class="k">输入 / 1M tokens</div><div class="v">$1</div></div>
+      <div class="stat"><div class="k">输出 / 1M tokens</div><div class="v">$5</div></div>
+      <div class="stat"><div class="k">输出倍率</div><div class="v">5.0×</div></div>
+      <div class="stat"><div class="k">上下文窗口</div><div class="v">1.05M</div></div>
+    </div>
+
+    <table class="data">
+      <thead><tr><th>档位</th><th class="num">输入 / 1M</th><th class="num">输出 / 1M</th></tr></thead>
+      <tbody>
+        <tr><td>标准价格</td><td class="num">$1</td><td class="num">$5</td></tr>
+        <tr><td>单次请求超过 272,000 tokens</td><td class="num">$2</td><td class="num">$7.50</td></tr>
+      </tbody>
+    </table>
+    <dl class="kv-list"><dt>缓存输入</dt><dd>$0.05</dd></dl>
+    <p class="note">在承诺预算之前,请务必到 OpenAI 官方价格页核实当前费率——厂商调价频繁,
+    长上下文或缓存折扣也可能不会体现在头条数字里。</p>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0;font-size:16px">GPT-6.1 Terra 快速成本计算器</h2>
+    <div class="field-row">
+      <div class="field">
+        <label class="field-label" for="mc-in">输入 tokens</label>
+        <input type="number" id="mc-in" class="mono" value="1000000" min="0">
+      </div>
+      <div class="field">
+        <label class="field-label" for="mc-out">输出 tokens</label>
+        <input type="number" id="mc-out" class="mono" value="100000" min="0">
+      </div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat"><div class="k">单次请求(此用量)</div><div class="v" id="mc-cost">—</div></div>
+      <div class="stat"><div class="k">× 1,000 次此类请求</div><div class="v" id="mc-1k">—</div></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0;font-size:16px">GPT-6.1 Terra 对比 GPT-6.1 Sol</h2>
+    <table class="data">
+      <thead><tr><th></th><th>GPT-6.1 Terra</th><th>GPT-6.1 Sol</th></tr></thead>
+      <tbody><tr><td>输入 / 1M</td><td class="num">$1</td><td class="num">$2</td></tr><tr><td>输出 / 1M</td><td class="num">$5</td><td class="num">$10</td></tr><tr><td>缓存命中 / 1M</td><td class="num">$0.05</td><td class="num">$0.10</td></tr><tr><td>上下文窗口</td><td class="num">1.05M</td><td class="num">1.05M</td></tr><tr><td>最大输出</td><td class="num">128K</td><td class="num">128K</td></tr><tr><td>知识截止日期</td><td class="num">2026-06-01</td><td class="num">2026-04-30</td></tr><tr><td>图像输入</td><td class="num">支持</td><td class="num">支持</td></tr><tr><td>缓存写入(30 分钟)</td><td class="num">$1.25 / 1M</td><td class="num">$2.50 / 1M</td></tr><tr><td>缓存写入(12 小时)</td><td class="num">$2.50 / 1M</td><td class="num">$5.00 / 1M</td></tr></tbody>
+    </table>
+    <p class="note">完整对比:<a href="/zh/models/gpt-6-1-sol.html">GPT-6.1 Sol 价格</a>。</p>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0;font-size:16px">同一负载在 GPT-6.1 Terra 与 GPT-6.1 Sol 上</h2>
+    <table class="data">
+      <thead><tr><th>工作负载</th><th class="num">输入 tokens</th><th class="num">输出 tokens</th><th class="num">GPT-6.1 Terra</th><th class="num">GPT-6.1 Sol</th></tr></thead>
+      <tbody><tr><td>单次摘要调用</td><td class="num">1M</td><td class="num">100K</td><td class="num">$1.50</td><td class="num">$3.00</td></tr><tr><td>长文档一次性处理,无缓存复用</td><td class="num">1M</td><td class="num">20K</td><td class="num">$1.10</td><td class="num">$2.20</td></tr><tr><td>缓存 agent 循环,单轮</td><td class="num">50K（45K 缓存命中）</td><td class="num">5K</td><td class="num">$0.032</td><td class="num">$0.065</td></tr><tr><td>以上循环,每天 20 轮 × 30 天</td><td class="num">30M</td><td class="num">3M</td><td class="num">$19.35</td><td class="num">$38.70</td></tr></tbody>
+    </table>
+    <p class="note">按上述标准费率计算。同样的 30M/3M agent 循环在 GPT-6 Astra 上每月 $207。</p>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0;font-size:16px">GPT-6.1 Terra 与邻近模型对比(按输入:输出 3:1 混合)</h2>
+    <table class="data">
+      <thead><tr><th>模型</th><th>提供商</th><th class="num">输入</th><th class="num">输出</th><th class="num">缓存输入</th><th>上下文</th></tr></thead>
+      <tbody><tr><td><a href="/zh/models/grok-4-3.html">Grok 4.3</a></td><td>xAI</td><td class="num">$1.25</td><td class="num">$2.50</td><td class="num">—</td><td>—</td></tr><tr><td><a href="/zh/models/kimi-k2-7-code.html">Kimi K2.7 Code</a></td><td>Moonshot</td><td class="num">$0.95</td><td class="num">$4</td><td class="num">$0.19</td><td>262K</td></tr><tr style="background:var(--accent-soft)"><td><strong>GPT-6.1 Terra</strong></td><td>OpenAI</td><td class="num">$1</td><td class="num">$5</td><td class="num">$0.05</td><td>1.05M</td></tr><tr><td><a href="/zh/models/claude-haiku-4-5.html">Claude Haiku 4.5</a></td><td>Anthropic</td><td class="num">$1</td><td class="num">$5</td><td class="num">$0.10</td><td>200K</td></tr><tr><td><a href="/zh/models/glm-5-3.html">GLM-5.3</a></td><td>Z.AI</td><td class="num">$1.40</td><td class="num">$4.40</td><td class="num">$0.26</td><td>1M</td></tr></tbody>
+    </table>
+    <p class="note">完整的 43 款模型对比见<a href="/zh/models/index.html">价格中心</a>,
+    而<a href="/zh/tools/token-counter.html">分词与成本计算器</a>可为你的真实 prompt 计价。</p>
+  </section>
+
+  <section class="prose">
+    <h2>GPT-6.1 Terra 的实际花费</h2><p>每 1M 输入 tokens $1.00、每 1M 输出 tokens $5.00,缓存命中 $0.05——仅为未缓存费率的 5%。缓存写入是唯一让人意外的地方:30 分钟保留期 $1.25/1M、12 小时保留期 $2.50/1M,因此每轮都重写前缀的工作负载,要为从未读过的写入付费。</p><p>该模型的位置恰好在 GPT-6.1 Sol 与“零”之间:Sol 是 $2/$10,所以 Terra 两侧各为其一半;GPT-6 Astra 是 $10/$50,所以 Terra 是它的十分之一。在同样的 1.05M 上下文窗口与同样 128K 最大输出下,这是 OpenAI 在两个上下文限制完全相同的档位之间拉出的最大价差。</p><h2>272K 断崖是最该盯住的数字</h2><p>Terra 沿用与 Astra、Sol 相同的长上下文规则:超过 272K 输入 tokens 的请求按输入与缓存费率的 2 倍、输出费率的 1.5 倍计费,且倍率作用于整单请求,不只是越过阈值的部分。一个 400K-token 的 prompt 配 20K 输出,费用为 $0.95 而非 $0.50——也就是说,越线所增加的成本是整单的 90%,而不是多出的那 32%。</p><p>实际效果是:在约 272K 以下,分块比长上下文更便宜;而在 300K-token 的请求是这个价格表上最昂贵的错误。在假设头条费率之前,先度量 prompt 长度。</p><h2>为什么单 token 价格会被低估这种转变</h2><p>OpenAI 自己的数据把 GPT-6.1 Terra 在 medium 推理强度下的 Agents 最后一考得分定为 57.6%,而 GPT-5.6 Terra 为 42.6%;每任务成本从 $0.84 降到 $0.29。精度提升 15 分、成本同步下降 65%,这正是这一档位重要的原因:常驻 agent 的瓶颈从来不是能力,而是你能否负担得起让它们一直跑。</p><p>请把厂商基准当作方向性参考。最高推理强度下 Terminal-Bench 4.0 的 50.3% 仍意味着其中一半任务没有解决,而且这里的每个头条数字都来自厂商自己的测试框架。</p>
+
+    <h2>常见问题</h2>
+    <details class="faq"><summary>GPT-6.1 Terra 每 1M token 多少钱?</summary>
+      <div class="faq-body">每 1M 输入 tokens $1.00,每 1M 输出 tokens $5.00。缓存输入按 $0.05/1M 计费,缓存写入在 30 分钟保留期下为 $1.25/1M,12 小时保留期为 $2.50/1M。</div></details>
+    <details class="faq"><summary>GPT-6.1 Terra 比 GPT-6.1 Sol 便宜吗?</summary>
+      <div class="faq-body">是,正好便宜一半:$1.00/$5.00 对 Sol 的 $2.00/$10.00,上下文窗口同样为 1.05M,最大输出同样为 128K。Sol 是面向复杂编程与长周期推理的档位;Terra 是面向高吞吐计算机使用、视觉推理与写作的档位。</div></details>
+    <details class="faq"><summary>超过 272K 输入 tokens 会怎样?</summary>
+      <div class="faq-body">整单重新按输入与缓存费率的 2 倍、输出费率的 1.5 倍计费:输入 $2.00、缓存输入 $0.10、输出 $7.50。倍率作用于请求中的每一个 token,因此一个 300K-token 的 prompt 比同样内容在 270K 时贵两倍还多。</div></details>
+    <details class="faq"><summary>GPT-6.1 Terra 有批量折扣吗?</summary>
+      <div class="faq-body">有。Batch 与 Flex 处理为标准费率的 50%($0.50/$2.50),Fast 模式为标准费率的 2 倍。长上下文倍率会在你所选模式之上叠加。</div></details>
+    <details class="faq"><summary>GPT-6.1 Terra 的上下文窗口与知识截止日期是多少?</summary>
+      <div class="faq-body">上下文 1,050,000 tokens,最大输出 128,000 tokens,知识截止日期为 2026 年 6 月 1 日。推理强度可设为 none、low、medium、high、xhigh 或 max,默认为 medium。</div></details>
+    
+  </section>
+
+<div class="ad-slot">
+  <strong>广告位</strong>
+  Google AdSense 占位——网站通过审批并有稳定流量后启用。
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h4>常用工具</h4>
+        <ul>
+          <li><a href="/zh/tools/token-counter.html">LLM 分词与成本计算器</a></li>
+          <li><a href="/zh/tools/json-formatter.html">JSON 工具</a></li>
+          <li><a href="/zh/tools/regex-tester.html">正则测试</a></li>
+          <li><a href="/zh/tools/cron-explainer.html">Cron 解释</a></li>
+          <li><a href="/zh/tools/encode-decode.html">Base64 / URL / 哈希</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>模型价格</h4>
+        <ul>
+          <li><a href="/zh/models/index.html">全部模型</a></li>
+          <li><a href="/zh/models/gpt-6-astra.html">GPT-6 Astra 价格</a></li>
+          <li><a href="/zh/models/claude-fable-5-1.html">Claude Fable 5.1 价格</a></li>
+          <li><a href="/zh/models/gemini-3-8-flash.html">Gemini 3.8 Flash 价格</a></li>
+          <li><a href="/zh/models/deepseek-v4-1-flash.html">DeepSeek V4.1 Flash 价格</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>更多</h4>
+        <ul>
+          <li><a href="https://ezaiops.com/">ezaiops.com</a></li>
+          <li><a href="/zh/about.html">关于</a></li>
+          <li><a href="/zh/contact.html">联系</a></li>
+          <li><a href="/zh/privacy.html">隐私政策</a></li>
+          <li><a href="https://github.com/ezaiops">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">© <span data-year>2026</span> ezaiops · 输入内容不会离开你的浏览器</div>
+  </div>
+</footer>
+
+<script src="/assets/common.js?v=20261030a" defer></script>
+<script src="/assets/models.js?v=20261030a" defer></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var models = (window.EZ_MODELS || {}).models || [];
+  var me = null;
+  for (var i = 0; i < models.length; i++) if (models[i].id === "gpt-6-1-terra") me = models[i];
+  if (!me) return;
+  var inEl = document.getElementById("mc-in");
+  var outEl = document.getElementById("mc-out");
+  function fmt(n) {
+    if (n <= 0) return "$0";
+    if (n < 0.000001) return "<$0.000001";
+    var d = n < 0.01 ? 6 : n < 1 ? 4 : 2;
+    return "$" + n.toFixed(d);
+  }
+  function recalc() {
+    var ti = Math.max(0, parseFloat(inEl.value || "0") || 0);
+    var to = Math.max(0, parseFloat(outEl.value || "0") || 0);
+    document.getElementById("mc-cost").textContent = fmt(ti * me.input / 1e6 + to * me.output / 1e6);
+    document.getElementById("mc-1k").textContent = fmt((ti * me.input / 1e6 + to * me.output / 1e6) * 1000);
+  }
+  inEl.addEventListener("input", recalc);
+  outEl.addEventListener("input", recalc);
+  recalc();
+});
+</script>
+
+</body>
+</html>

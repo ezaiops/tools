@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-zh-static="1"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DeepSeek V4 Pro API 价格(2026)——每 1M token 成本 | ezaiops tools</title>
+<meta name="description" content="DeepSeek V4 Pro 每 1M 输入 tokens $0.66、每 1M 输出 tokens $1.98。包含上下文窗口、缓存费率、快速成本计算器与邻近模型对比。">
+<link rel="canonical" href="https://tools.ezaiops.com/zh/models/deepseek-v4-pro.html">
+<link rel="alternate" hreflang="zh-CN" href="https://tools.ezaiops.com/zh/models/deepseek-v4-pro.html">
+<link rel="alternate" hreflang="en" href="https://tools.ezaiops.com/models/deepseek-v4-pro.html">
+<link rel="alternate" hreflang="x-default" href="https://tools.ezaiops.com/models/deepseek-v4-pro.html">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="DeepSeek V4 Pro API 价格(2026)——每 1M token 成本 | ezaiops tools">
+<meta property="og:description" content="DeepSeek V4 Pro 每 1M 输入 tokens $0.66、每 1M 输出 tokens $1.98。包含上下文窗口、缓存费率、快速成本计算器与邻近模型对比。">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/style.css?v=20261030a">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How much does DeepSeek V4 Pro cost per 1M tokens?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "$0.66 per 1M input tokens and $1.98 per 1M output tokens at off-peak rates. Weekday peak (01:00-04:00 and 06:00-10:00 UTC) doubles both, to $1.32 and $3.96. Cached input bills at $0.022 per 1M."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is DeepSeek V4 Pro cheaper at night?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Off-peak rates are half the peak rates. Peak covers seven hours per weekday, so about 79% of the week bills at the lower rate; weekends and Chinese public holidays are off-peak all day."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does DeepSeek V4 Pro have a batch API discount?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. DeepSeek does not publish a batch discount for this model, so the 50% asynchronous saving offered by OpenAI, Anthropic and Google has no equivalent here. Off-peak pricing and cache hits are the available levers."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Should I use V4 Pro or V4.1 Flash?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Flash for extraction, classification, image input and high-concurrency fan-out: it is 4.4x cheaper on input and 3.3x cheaper on output, accepts images, and allows 2,500 concurrent requests against 500. Use V4 Pro when reasoning depth is worth the premium."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does DeepSeek charge for Search and Fetch?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "$0.75 per 1,000 successful requests, free until 00:00 Beijing time on 1 November 2026. After that, retrieval is billed separately from tokens and can add around 26% to a search-heavy agent's bill."
+      }
+    }
+  ]
+}
+</script>
+
+<script src="/assets/i18n.js?v=20261030a"></script><script src="/assets/i18n/common.js?v=20261030a"></script><meta property="og:locale" content="zh_CN"></head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/zh/"><span class="logo">ez</span>ezaiops <small>工具</small></a>
+    <nav class="site-nav">
+      <a href="/zh/">工具</a>
+      <a href="/zh/models/index.html">模型价格</a>
+      <a href="https://ezaiops.com/" title="ezaiops.com — AI Agent 可观测性与 LLMOps 实战笔记（中文）">博客</a>
+      <a href="https://github.com/ezaiops">GitHub</a>
+    <div class="lang-switch"><a href="/zh/models/deepseek-v4-pro.html" hreflang="zh-CN" class="active" aria-current="page">中文</a><a href="/models/deepseek-v4-pro.html?lang=en" hreflang="en">EN</a></div></nav>
+  </div>
+</header>
+
+<main class="wrap tool-page">
+  <nav class="crumbs"><a href="/zh/">首页</a> / <a href="/zh/models/index.html">模型价格</a> / DeepSeek V4 Pro<a class="main-site-link" href="https://ezaiops.com/">ezaiops.com ↗</a></nav>
+
+  <h1>DeepSeek V4 Pro API 价格:每 1M token 成本</h1>
+  <p class="lead">DeepSeek V4 Pro 通过 DeepSeek API 的价格:每 1M 输入 tokens
+  <strong>$0.66</strong>（非高峰）、每 1M 输出 tokens
+  <strong>$1.98</strong>。页面显示非高峰费率。工作日高峰翻倍至 $1.32/$3.96。仅文本(无视觉),1M 上下文,最大输出 384K。
+  以下价格已于 2026-10-24 对照官方定价文档核实。</p>
+
+  <section class="panel">
+    <div class="stats-grid">
+      <div class="stat"><div class="k">输入 / 1M tokens</div><div class="v">$0.66</div></div>
+      <div class="stat"><div class="k">输出 / 1M tokens</div><div class="v">$1.98</div></div>
+      <div class="stat"><div class="k">输出倍率</div><div class="v">3.0×</div></div>
+      <div class="stat"><div class="k">上下文窗口</div><div class="v">1M</div></div>
+    </div>
+
+    <table class="data">
+      <thead><tr><th>档位</th><th class="num">输入 / 1M</th><th class="num">输出 / 1M</th></tr></thead>
+      <tbody>
+        
+        <tr><td>非高峰价格(默认)</td><td class="num">$0.66</td><td class="num">$1.98</td></tr><tr><td>工作日高峰(UTC 01:00-04:00 与 06:00-10:00)</td><td class="num">$1.32</td><td class="num">$3.96</td></tr>
+      </tbody>
+    </table>
+    <dl class="kv-list"><dt>缓存输入</dt><dd>$0.022</dd></dl>
+    <p class="note">在承诺预算之前,请务必到 DeepSeek 官方价格页核实当前费率——厂商调价频繁,
+    长上下文或缓存折扣也可能不会体现在头条数字里。</p>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0;font-size:16px">DeepSeek V4 Pro 快速成本计算器</h2>
+    <div class="field-row">
+      <div class="field">
+        <label class="field-label" for="mc-in">输入 tokens</label>
+        <input type="number" id="mc-in" class="mono" value="1000000" min="0">
+      </div>
+      <div class="field">
+        <label class="field-label" for="mc-out">输出 tokens</label>
+        <input type="number" id="mc-out" class="mono" value="100000" min="0">
+      </div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat"><div class="k">单次请求(此用量)</div><div class="v" id="mc-cost">—</div></div>
+      <div class="stat"><div class="k">× 1,000 次此类请求</div><div class="v" id="mc-1k">—</div></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0;font-size:16px">DeepSeek V4 Pro 对比 V4.1 Flash</h2>
+    <table class="data">
+      <thead><tr><th></th><th>DeepSeek V4 Pro</th><th>DeepSeek V4.1 Flash</th></tr></thead>
+      <tbody><tr><td>输入 / 1M（非高峰）</td><td class="num">$0.66</td><td class="num">$0.15</td></tr><tr><td>输出 / 1M（非高峰）</td><td class="num">$1.98</td><td class="num">$0.60</td></tr><tr><td>缓存命中 / 1M</td><td class="num">$0.022</td><td class="num">$0.003</td></tr><tr><td>上下文窗口</td><td class="num">1M</td><td class="num">1M</td></tr><tr><td>最大输出</td><td class="num">384K</td><td class="num">384K</td></tr><tr><td>图像输入</td><td class="num">不支持</td><td class="num">支持</td></tr><tr><td>并发上限</td><td class="num">500</td><td class="num">2,500</td></tr><tr><td>模型版本</td><td class="num">V4-Pro-0813</td><td class="num">V4.1-Flash-1017</td></tr></tbody>
+    </table>
+    <p class="note">完整对比:<a href="/zh/models/deepseek-v4-1-flash.html">DeepSeek V4.1 Flash 价格</a>。</p>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0;font-size:16px">每类负载的成本:非高峰 vs 工作日高峰</h2>
+    <table class="data">
+      <thead><tr><th>工作负载</th><th class="num">输入 tokens</th><th class="num">输出 tokens</th><th class="num">非高峰</th><th class="num">高峰</th></tr></thead>
+      <tbody><tr><td>单次摘要调用</td><td class="num">1M</td><td class="num">100K</td><td class="num">$0.86</td><td class="num">$1.72</td></tr><tr><td>长文档一次性处理,无缓存复用</td><td class="num">1M</td><td class="num">20K</td><td class="num">$0.70</td><td class="num">$1.40</td></tr><tr><td>缓存 agent 循环,单轮</td><td class="num">50K（45K 缓存命中）</td><td class="num">5K</td><td class="num">$0.014</td><td class="num">$0.028</td></tr><tr><td>以上循环,每天 20 轮 × 30 天</td><td class="num">30M</td><td class="num">3M</td><td class="num">$8.51</td><td class="num">$17.03</td></tr></tbody>
+    </table>
+    <p class="note">按上述费率计算。缓存循环假设 90% 的输入命中缓存;同样的循环在无缓存时,非高峰每月 $25.74。</p>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0;font-size:16px">DeepSeek V4 Pro 与邻近模型对比(按输入:输出 3:1 混合)</h2>
+    <table class="data">
+      <thead><tr><th>模型</th><th>提供商</th><th class="num">输入</th><th class="num">输出</th><th class="num">缓存输入</th><th>上下文</th></tr></thead>
+      <tbody><tr><td><a href="/zh/models/mistral-large-3.html">Mistral Large 3</a></td><td>Mistral</td><td class="num">$0.50</td><td class="num">$1.50</td><td class="num">—</td><td>—</td></tr><tr><td><a href="/zh/models/gemini-3-5-flash-lite.html">Gemini 3.5 Flash-Lite</a></td><td>Google</td><td class="num">$0.30</td><td class="num">$2.50</td><td class="num">$0.03</td><td>1.05M</td></tr><tr style="background:var(--accent-soft)"><td><strong>DeepSeek V4 Pro</strong></td><td>DeepSeek</td><td class="num">$0.66</td><td class="num">$1.98</td><td class="num">$0.022</td><td>1M</td></tr><tr><td><a href="/zh/models/doubao-seed-2-1-turbo.html">Doubao Seed 2.1 Turbo</a></td><td>ByteDance</td><td class="num">$0.50</td><td class="num">$2.50</td><td class="num">$0.10</td><td>256K</td></tr><tr><td><a href="/zh/models/mistral-large-4.html">Mistral Large 4</a></td><td>Mistral</td><td class="num">$0.68</td><td class="num">$2.09</td><td class="num">$0.07</td><td>1M</td></tr></tbody>
+    </table>
+    <p class="note">完整的 43 款模型对比见<a href="/zh/models/index.html">价格中心</a>,
+    而<a href="/zh/tools/token-counter.html">分词与成本计算器</a>可为你的真实 prompt 计价。</p>
+  </section>
+
+  <section class="prose">
+    <h2>2026 年 10 月 DeepSeek V4 Pro 的实际花费</h2><p>$0.66/1M tokens 是非高峰费率,不是牌价。DeepSeek 公布高峰费率,并在两个工作日窗口之外减半:UTC 01:00-04:00 与 06:00-10:00。也就是每天七小时、每周五天,约占日历的 21%。其余 79% 按上述费率计费,中国法定节假日全天按非高峰计算。</p><p>缓存命中是这里最宽的杠杆。缓存命中 $0.022/1M tokens,而未命中是 $0.66,相差 30 倍。反复发送同一段长系统提示的 agent 只为它付一次全价,此后几乎不再花钱——这正是下方实际示例从每月 $25.74 降到 $8.51 的原因。</p><p>该模型没有批量 API 折扣。DeepSeek 没有公布,因此 OpenAI、Anthropic 与 Google 提供的 50% 异步优惠在这里没有对应项。取而代之的是分时定价;只要你的任务能等一个非高峰窗口,它同样价值 50%。</p><h2>V4 Pro 还是 V4.1 Flash:价差买到了什么</h2><p>V4 Pro 输入比 V4.1 Flash 贵 4.4 倍、输出贵 3.3 倍。两个非价格差异决定取舍:V4 Pro 仅文本而 Flash 支持图像;V4 Pro 并发上限 500,而 Flash 是 2,500——当你扇出数百个并行请求时这一点很关键。</p><p>按任务形态路由,而不是按型号等级。抽取、分类、图像输入与短对话归 Flash;错误答案代价高昂的长周期推理才用 Pro。把每个请求都以 4.4 倍输入价发给 Pro,很少是正确的默认。</p><h2>隐藏成本:Search 与 Fetch 从 2026 年 11 月 1 日开始计费</h2><p>DeepSeek 的 Search 与 Fetch API 按请求计费,每 1,000 次成功调用 $0.75,且在北京时间 2026 年 11 月 1 日 00:00 之前免费。自该日起,检索成为独立条目,因此重度搜索的 agent 要付两次:一次 tokens,一次检索。</p><p>实际示例:每轮五次搜索调用、每天 20 轮,就是每月 3,000 次调用,即 $2.25。这约等于在上述 $8.51 token 账单之上再增加 26%。对检索密集的工作负载,搜索这一行可能超过推理本身,而且任何 token 计算器都不会显示它。</p>
+
+    <h2>常见问题</h2>
+    <details class="faq"><summary>DeepSeek V4 Pro 每 1M token 多少钱?</summary>
+      <div class="faq-body">非高峰费率下每 1M 输入 tokens $0.66、每 1M 输出 tokens $1.98。工作日高峰(UTC 01:00-04:00 与 06:00-10:00)两项翻倍,分别变为 $1.32 与 $3.96。缓存输入按 $0.022/1M 计费。</div></details>
+    <details class="faq"><summary>DeepSeek V4 Pro 晚上更便宜吗?</summary>
+      <div class="faq-body">是。非高峰费率为高峰费率的一半。高峰每日覆盖七个小时、仅限工作日,因此一周约 79% 的时间按较低费率计费;周末与中国法定节假日全天为非高峰。</div></details>
+    <details class="faq"><summary>DeepSeek V4 Pro 有批量 API 折扣吗?</summary>
+      <div class="faq-body">没有。DeepSeek 未公布该模型的批量折扣,因此 OpenAI、Anthropic 与 Google 提供的 50% 异步优惠在这里没有对应项。可用的是非高峰定价与缓存命中。</div></details>
+    <details class="faq"><summary>该用 V4 Pro 还是 V4.1 Flash?</summary>
+      <div class="faq-body">抽取、分类、图像输入与高并发扇出用 Flash:输入便宜 4.4 倍、输出便宜 3.3 倍,支持图像,且并发上限 2,500 对 500。当推理深度值得这份溢价时,再选择 V4 Pro。</div></details>
+    <details class="faq"><summary>DeepSeek 对 Search 与 Fetch 如何收费?</summary>
+      <div class="faq-body">每 1,000 次成功请求 $0.75,北京时间 2026 年 11 月 1 日 00:00 前免费。此后,检索与 tokens 分开计费,可能使重度搜索的 agent 账单增加约 26%。</div></details>
+    
+  </section>
+
+<div class="ad-slot">
+  <strong>广告位</strong>
+  Google AdSense 占位——网站通过审批并有稳定流量后启用。
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h4>常用工具</h4>
+        <ul>
+          <li><a href="/zh/tools/token-counter.html">LLM 分词与成本计算器</a></li>
+          <li><a href="/zh/tools/json-formatter.html">JSON 工具</a></li>
+          <li><a href="/zh/tools/regex-tester.html">正则测试</a></li>
+          <li><a href="/zh/tools/cron-explainer.html">Cron 解释</a></li>
+          <li><a href="/zh/tools/encode-decode.html">Base64 / URL / 哈希</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>模型价格</h4>
+        <ul>
+          <li><a href="/zh/models/index.html">全部模型</a></li>
+          <li><a href="/zh/models/gpt-6-astra.html">GPT-6 Astra 价格</a></li>
+          <li><a href="/zh/models/claude-fable-5-1.html">Claude Fable 5.1 价格</a></li>
+          <li><a href="/zh/models/gemini-3-8-flash.html">Gemini 3.8 Flash 价格</a></li>
+          <li><a href="/zh/models/deepseek-v4-1-flash.html">DeepSeek V4.1 Flash 价格</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>更多</h4>
+        <ul>
+          <li><a href="https://ezaiops.com/">ezaiops.com</a></li>
+          <li><a href="/zh/about.html">关于</a></li>
+          <li><a href="/zh/contact.html">联系</a></li>
+          <li><a href="/zh/privacy.html">隐私政策</a></li>
+          <li><a href="https://github.com/ezaiops">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">© <span data-year>2026</span> ezaiops · 输入内容不会离开你的浏览器</div>
+  </div>
+</footer>
+
+<script src="/assets/common.js?v=20261030a" defer></script>
+<script src="/assets/models.js?v=20261030a" defer></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var models = (window.EZ_MODELS || {}).models || [];
+  var me = null;
+  for (var i = 0; i < models.length; i++) if (models[i].id === "deepseek-v4-pro") me = models[i];
+  if (!me) return;
+  var inEl = document.getElementById("mc-in");
+  var outEl = document.getElementById("mc-out");
+  function fmt(n) {
+    if (n <= 0) return "$0";
+    if (n < 0.000001) return "<$0.000001";
+    var d = n < 0.01 ? 6 : n < 1 ? 4 : 2;
+    return "$" + n.toFixed(d);
+  }
+  function recalc() {
+    var ti = Math.max(0, parseFloat(inEl.value || "0") || 0);
+    var to = Math.max(0, parseFloat(outEl.value || "0") || 0);
+    document.getElementById("mc-cost").textContent = fmt(ti * me.input / 1e6 + to * me.output / 1e6);
+    document.getElementById("mc-1k").textContent = fmt((ti * me.input / 1e6 + to * me.output / 1e6) * 1000);
+  }
+  inEl.addEventListener("input", recalc);
+  outEl.addEventListener("input", recalc);
+  recalc();
+});
+</script>
+
+</body>
+</html>

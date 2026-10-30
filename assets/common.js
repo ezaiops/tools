@@ -65,7 +65,7 @@
   // boot the i18n engine on every page (safe no-op when dictionaries miss)
   (function () {
     var s = document.createElement("script");
-    s.src = "/assets/i18n.js?v=20261029a";
+    s.src = "/assets/i18n.js?v=20261030a";
     s.async = false;
     document.head.appendChild(s);
   })();

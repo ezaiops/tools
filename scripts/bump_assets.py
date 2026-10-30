@@ -28,6 +28,8 @@ def files():
     out = glob.glob(os.path.join(ROOT, "*.html"))
     out += glob.glob(os.path.join(ROOT, "tools", "*.html"))
     out += glob.glob(os.path.join(ROOT, "models", "*.html"))
+    out += glob.glob(os.path.join(ROOT, "zh", "*.html"))
+    out += glob.glob(os.path.join(ROOT, "zh", "**", "*.html"), recursive=True)
     out.append(os.path.join(ROOT, "scripts", "gen_common.py"))
     out.append(os.path.join(ROOT, "assets", "common.js"))
     out.append(os.path.join(ROOT, "assets", "i18n.js"))

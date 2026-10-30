@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-zh-static="1"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kimi K3.1 Pro API 价格(2026)——每 1M token 成本 | ezaiops tools</title>
+<meta name="description" content="Kimi K3.1 Pro 每 1M 输入 tokens $2、每 1M 输出 tokens $10。包含上下文窗口、缓存费率、快速成本计算器与邻近模型对比。">
+<link rel="canonical" href="https://tools.ezaiops.com/zh/models/kimi-k3-1-pro.html">
+<link rel="alternate" hreflang="zh-CN" href="https://tools.ezaiops.com/zh/models/kimi-k3-1-pro.html">
+<link rel="alternate" hreflang="en" href="https://tools.ezaiops.com/models/kimi-k3-1-pro.html">
+<link rel="alternate" hreflang="x-default" href="https://tools.ezaiops.com/models/kimi-k3-1-pro.html">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Kimi K3.1 Pro API 价格(2026)——每 1M token 成本 | ezaiops tools">
+<meta property="og:description" content="Kimi K3.1 Pro 每 1M 输入 tokens $2、每 1M 输出 tokens $10。包含上下文窗口、缓存费率、快速成本计算器与邻近模型对比。">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/style.css?v=20261030a">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How much does Kimi K3.1 Pro cost per 1M tokens?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "$2.00 per 1M input tokens and $10.00 per 1M output tokens, with cached input at $0.20 per 1M. Cache writes cost $2.00 per 1M for 5-minute retention and $4.00 for one hour."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does Kimi K3.1 Pro charge more for long context?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Moonshot bills a single flat rate across the full 1,048,576-token context window, with no long-context multiplier. That makes it cheaper than OpenAI and Google tiers for prompts above roughly 272K tokens, where those providers reprice the whole request."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Kimi K3.1 Pro or K3.1 Pro Highspeed?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Same weights, same 1M context, same $0.20 cache hits. Highspeed outputs 2-3x faster and costs $4.00/$20.00 with $4.00/$8.00 cache writes. Choose it when latency is user-visible; stay on standard for batch work."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is Kimi K3.1 Pro open weights?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, at 3T-class parameter scale — the largest open-weight model published so far, by Moonshot's account. Full weights are scheduled for release by 4 November 2026; the API is available now."
+      }
+    }
+  ]
+}
+</script>
+
+<script src="/assets/i18n.js?v=20261030a"></script><script src="/assets/i18n/common.js?v=20261030a"></script><meta property="og:locale" content="zh_CN"></head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/zh/"><span class="logo">ez</span>ezaiops <small>工具</small></a>
+    <nav class="site-nav">
+      <a href="/zh/">工具</a>
+      <a href="/zh/models/index.html">模型价格</a>
+      <a href="https://ezaiops.com/" title="ezaiops.com — AI Agent 可观测性与 LLMOps 实战笔记（中文）">博客</a>
+      <a href="https://github.com/ezaiops">GitHub</a>
+    <div class="lang-switch"><a href="/zh/models/kimi-k3-1-pro.html" hreflang="zh-CN" class="active" aria-current="page">中文</a><a href="/models/kimi-k3-1-pro.html?lang=en" hreflang="en">EN</a></div></nav>
+  </div>
+</header>
+
+<main class="wrap tool-page">
+  <nav class="crumbs"><a href="/zh/">首页</a> / <a href="/zh/models/index.html">模型价格</a> / Kimi K3.1 Pro<a class="main-site-link" href="https://ezaiops.com/">ezaiops.com ↗</a></nav>
+
+  <h1>Kimi K3.1 Pro API 价格:每 1M token 成本</h1>
+  <p class="lead">Kimi K3.1 Pro 通过 Moonshot API 的价格:每 1M 输入 tokens
+  <strong>$2</strong>、每 1M 输出 tokens
+  <strong>$10</strong>。2026-10-24 发布。两项费率均比 K3 便宜三分之一,3T 级开放权重将于 2026-11-04 前发布。缓存写入 $2/5 分钟、$4/小时;Highspeed 速度快 2-3 倍,价格为 $4/$20。
+  以下价格已于 2026-10-28 对照官方定价文档核实。</p>
+
+  <section class="panel">
+    <div class="stats-grid">
+      <div class="stat"><div class="k">输入 / 1M tokens</div><div class="v">$2</div></div>
+      <div class="stat"><div class="k">输出 / 1M tokens</div><div class="v">$10</div></div>
+      <div class="stat"><div class="k">输出倍率</div><div class="v">5.0×</div></div>
+      <div class="stat"><div class="k">上下文窗口</div><div class="v">1M</div></div>
+    </div>
+
+    <table class="data">
+      <thead><tr><th>档位</th><th class="num">输入 / 1M</th><th class="num">输出 / 1M</th></tr></thead>
+      <tbody>
+        <tr><td>标准价格</td><td class="num">$2</td><td class="num">$10</td></tr>
+        
+      </tbody>
+    </table>
+    <dl class="kv-list"><dt>缓存输入</dt><dd>$0.20</dd></dl>
+    <p class="note">在承诺预算之前,请务必到 Moonshot 官方价格页核实当前费率——厂商调价频繁,
+    长上下文或缓存折扣也可能不会体现在头条数字里。</p>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0;font-size:16px">Kimi K3.1 Pro 快速成本计算器</h2>
+    <div class="field-row">
+      <div class="field">
+        <label class="field-label" for="mc-in">输入 tokens</label>
+        <input type="number" id="mc-in" class="mono" value="1000000" min="0">
+      </div>
+      <div class="field">
+        <label class="field-label" for="mc-out">输出 tokens</label>
+        <input type="number" id="mc-out" class="mono" value="100000" min="0">
+      </div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat"><div class="k">单次请求(此用量)</div><div class="v" id="mc-cost">—</div></div>
+      <div class="stat"><div class="k">× 1,000 次此类请求</div><div class="v" id="mc-1k">—</div></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0;font-size:16px">Kimi K3.1 Pro 对比 Kimi K3</h2>
+    <table class="data">
+      <thead><tr><th></th><th>Kimi K3.1 Pro</th><th>Kimi K3</th></tr></thead>
+      <tbody><tr><td>输入 / 1M</td><td class="num">$2</td><td class="num">$3</td></tr><tr><td>输出 / 1M</td><td class="num">$10</td><td class="num">$15</td></tr><tr><td>缓存命中 / 1M</td><td class="num">$0.20</td><td class="num">$0.30</td></tr><tr><td>上下文窗口</td><td class="num">1M</td><td class="num">1M</td></tr><tr><td>最大输出</td><td class="num">1,048,576</td><td class="num">—</td></tr><tr><td>默认最大输出</td><td class="num">131,072</td><td class="num">—</td></tr><tr><td>开放权重</td><td class="num">是,2026-11-04 前发布</td><td class="num">是</td></tr><tr><td>推理强度</td><td class="num">low / high / max</td><td class="num">low / high / max</td></tr><tr><td>缓存写入(5 分钟)</td><td class="num">$2.00 / 1M</td><td class="num">$3.00 / 1M</td></tr><tr><td>缓存写入(1 小时)</td><td class="num">$4.00 / 1M</td><td class="num">$6.00 / 1M</td></tr></tbody>
+    </table>
+    <p class="note">完整对比:<a href="/zh/models/kimi-k3.html">Kimi K3 价格</a>。</p>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0;font-size:16px">Kimi K3.1 Pro 对比它所取代的模型</h2>
+    <table class="data">
+      <thead><tr><th>工作负载</th><th class="num">输入 tokens</th><th class="num">输出 tokens</th><th class="num">K3.1 Pro</th><th class="num">K3</th></tr></thead>
+      <tbody><tr><td>单次摘要调用</td><td class="num">1M</td><td class="num">100K</td><td class="num">$3.00</td><td class="num">$4.50</td></tr><tr><td>长文档一次性处理,无缓存复用</td><td class="num">1M</td><td class="num">20K</td><td class="num">$2.20</td><td class="num">$3.30</td></tr><tr><td>缓存 agent 循环,单轮</td><td class="num">50K（45K 缓存命中）</td><td class="num">5K</td><td class="num">$0.069</td><td class="num">$0.104</td></tr><tr><td>以上循环,每天 20 轮 × 30 天</td><td class="num">30M</td><td class="num">3M</td><td class="num">$41.40</td><td class="num">$62.10</td></tr></tbody>
+    </table>
+    <p class="note">按上述标准费率计算。同样的 30M/3M 循环在 GPT-6 Astra 上每月 $207。</p>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0;font-size:16px">Kimi K3.1 Pro 与邻近模型对比(按输入:输出 3:1 混合)</h2>
+    <table class="data">
+      <thead><tr><th>模型</th><th>提供商</th><th class="num">输入</th><th class="num">输出</th><th class="num">缓存输入</th><th>上下文</th></tr></thead>
+      <tbody><tr><td><a href="/zh/models/claude-sonnet-5.html">Claude Sonnet 5</a></td><td>Anthropic</td><td class="num">$2</td><td class="num">$10</td><td class="num">$0.20</td><td>1M</td></tr><tr><td><a href="/zh/models/gemini-4-argon.html">Gemini 4 Argon</a></td><td>Google</td><td class="num">$2</td><td class="num">$10</td><td class="num">$0.10</td><td>1.05M</td></tr><tr style="background:var(--accent-soft)"><td><strong>Kimi K3.1 Pro</strong></td><td>Moonshot</td><td class="num">$2</td><td class="num">$10</td><td class="num">$0.20</td><td>1M</td></tr><tr><td><a href="/zh/models/gpt-5-6-terra.html">GPT-5.6 Terra</a></td><td>OpenAI</td><td class="num">$2</td><td class="num">$12</td><td class="num">—</td><td>—</td></tr><tr><td><a href="/zh/models/gemini-3-1-pro.html">Gemini 3.1 Pro</a></td><td>Google</td><td class="num">$2</td><td class="num">$12</td><td class="num">—</td><td>1M</td></tr></tbody>
+    </table>
+    <p class="note">完整的 43 款模型对比见<a href="/zh/models/index.html">价格中心</a>,
+    而<a href="/zh/tools/token-counter.html">分词与成本计算器</a>可为你的真实 prompt 计价。</p>
+  </section>
+
+  <section class="prose">
+    <h2>Kimi K3.1 Pro 的费用,以及它便宜在哪儿</h2><p>每 1M 输入 tokens $2.00、每 1M 输出 tokens $10.00,缓存命中 $0.20。这比 Kimi K3 的 $3/$15 便宜三分之一,是 GPT-6 Astra 的 $10/$50 的五分之一——这正是月之暗面自己主打的那个对比。</p><p>费率表是平的:与 OpenAI、Google 和 xAI 不同,月之暗面不对长 prompt 重新计价,因此完整的 1,048,576-token 窗口与一个 1,000-token 请求按相同单 token 费率计费。这一条就足以让文档工作选择这里——本模型上一个 400K-token 的 prompt 输入只要 $0.80,而同样的 prompt 在 GPT-6.1 Terra 上,长上下文倍率之前是 $0.80,之后是 $1.60。</p><p>缓存写入按 TTL 计费且不退还:$2.00/1M 对应 5 分钟保留期,$4.00 对应一小时。短命前缀应保持在默认的 5 分钟 TTL。</p><h2>Highspeed:双倍价格下的同一个模型</h2><p>Kimi K3.1 Pro Highspeed 并不是另一个模型。它用相同权重提供 2-3 倍的输出速度,价格 $4/$20,缓存写入 $4/$8,因此决定只是延迟是否值得每 token 多付 100%。交互类产品通常说值;批量管道几乎从不。</p><p>两种变体都需要最低 $1 的充值才能解锁,并且都永久开启思考模式,推理强度限定为 low、high 或 max。没有关闭推理的开关——在为短答案的对话工作负载计价时要记住这一点:每个回复都带着按输出费率计费的隐藏思考 tokens。</p>
+
+    <h2>常见问题</h2>
+    <details class="faq"><summary>Kimi K3.1 Pro 每 1M token 多少钱?</summary>
+      <div class="faq-body">每 1M 输入 tokens $2.00、每 1M 输出 tokens $10.00,缓存输入 $0.20/1M。缓存写入在 5 分钟保留期下为 $2.00/1M,1 小时保留期为 $4.00。</div></details>
+    <details class="faq"><summary>Kimi K3.1 Pro 对长上下文会加收费用吗?</summary>
+      <div class="faq-body">不会。月之暗面对完整的 1,048,576-token 上下文窗口按单一统一费率计费,没有长上下文倍率。因此对于约 272K tokens 以上的 prompt,它比会整单重新计价的 OpenAI 与 Google 档位更便宜。</div></details>
+    <details class="faq"><summary>选 Kimi K3.1 Pro 还是 K3.1 Pro Highspeed?</summary>
+      <div class="faq-body">权重相同、1M 上下文相同、缓存命中同为 $0.20。Highspeed 输出快 2-3 倍,价格为 $4.00/$20.00,缓存写入 $4.00/$8.00。当延迟对用户可见时选它;批量工作保持标准版即可。</div></details>
+    <details class="faq"><summary>Kimi K3.1 Pro 是开放权重吗?</summary>
+      <div class="faq-body">是,参数量达到 3T 级——按月之暗面的说法,这是目前已发布的规模最大的开放权重模型。完整权重计划于 2026 年 11 月 4 日前发布;API 现已可用。</div></details>
+    
+  </section>
+
+<div class="ad-slot">
+  <strong>广告位</strong>
+  Google AdSense 占位——网站通过审批并有稳定流量后启用。
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h4>常用工具</h4>
+        <ul>
+          <li><a href="/zh/tools/token-counter.html">LLM 分词与成本计算器</a></li>
+          <li><a href="/zh/tools/json-formatter.html">JSON 工具</a></li>
+          <li><a href="/zh/tools/regex-tester.html">正则测试</a></li>
+          <li><a href="/zh/tools/cron-explainer.html">Cron 解释</a></li>
+          <li><a href="/zh/tools/encode-decode.html">Base64 / URL / 哈希</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>模型价格</h4>
+        <ul>
+          <li><a href="/zh/models/index.html">全部模型</a></li>
+          <li><a href="/zh/models/gpt-6-astra.html">GPT-6 Astra 价格</a></li>
+          <li><a href="/zh/models/claude-fable-5-1.html">Claude Fable 5.1 价格</a></li>
+          <li><a href="/zh/models/gemini-3-8-flash.html">Gemini 3.8 Flash 价格</a></li>
+          <li><a href="/zh/models/deepseek-v4-1-flash.html">DeepSeek V4.1 Flash 价格</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>更多</h4>
+        <ul>
+          <li><a href="https://ezaiops.com/">ezaiops.com</a></li>
+          <li><a href="/zh/about.html">关于</a></li>
+          <li><a href="/zh/contact.html">联系</a></li>
+          <li><a href="/zh/privacy.html">隐私政策</a></li>
+          <li><a href="https://github.com/ezaiops">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">© <span data-year>2026</span> ezaiops · 输入内容不会离开你的浏览器</div>
+  </div>
+</footer>
+
+<script src="/assets/common.js?v=20261030a" defer></script>
+<script src="/assets/models.js?v=20261030a" defer></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var models = (window.EZ_MODELS || {}).models || [];
+  var me = null;
+  for (var i = 0; i < models.length; i++) if (models[i].id === "kimi-k3-1-pro") me = models[i];
+  if (!me) return;
+  var inEl = document.getElementById("mc-in");
+  var outEl = document.getElementById("mc-out");
+  function fmt(n) {
+    if (n <= 0) return "$0";
+    if (n < 0.000001) return "<$0.000001";
+    var d = n < 0.01 ? 6 : n < 1 ? 4 : 2;
+    return "$" + n.toFixed(d);
+  }
+  function recalc() {
+    var ti = Math.max(0, parseFloat(inEl.value || "0") || 0);
+    var to = Math.max(0, parseFloat(outEl.value || "0") || 0);
+    document.getElementById("mc-cost").textContent = fmt(ti * me.input / 1e6 + to * me.output / 1e6);
+    document.getElementById("mc-1k").textContent = fmt((ti * me.input / 1e6 + to * me.output / 1e6) * 1000);
+  }
+  inEl.addEventListener("input", recalc);
+  outEl.addEventListener("input", recalc);
+  recalc();
+});
+</script>
+
+</body>
+</html>
