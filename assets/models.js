@@ -54,6 +54,22 @@ window.EZ_MODELS = {
             "q": "What is the difference between GPT-6.1 Sol and GPT-6.1 Terra?",
             "a": "Terra is exactly half the price of Sol on both input and output ($1.00/$5.00 against $2.00/$10.00) with the same 1.05M context window. Sol targets complex coding and long-horizon agent work; Terra targets high-volume computer use, visual reasoning and writing."
           }
+        ],
+        "sections": [
+          {
+            "h2": "Where Sol sits between Terra and Astra",
+            "paras": [
+              "The GPT-6.1 family prices three tiers a factor of five apart: Terra at $1/$5, Sol at $2/$10, Astra at $10/$50. Sol is the middle of that ladder, and its own description — high-demand coding and agent work — is the most useful guide to what it is for.",
+              "The practical rule is to route by failure cost, not by ambition. Classification, extraction, summarisation and routine edits run on Terra at half the price; most workloads never notice. Sol earns its premium on multi-step coding and agent loops where a wrong answer costs more than the tokens. Astra is for the small slice where reasoning depth decides the outcome — spending 5x on every request to cover that slice is how budgets disappear."
+            ]
+          },
+          {
+            "h2": "The 272K cliff, and why it is worse than it looks",
+            "paras": [
+              "Prompts above 272K tokens bill the entire request at $4/$15 instead of $2/$10 — double on input, 1.5x on output. The premium applies to the whole request, not just the tokens past the threshold, so cost jumps in a step rather than a slope.",
+              "A 300K-token prompt with 10K of output costs $1.35 rather than the $0.70 the base rate implies, an increase of 93% for a 10% longer prompt. Two consequences: keep requests just under the line where you can, and when a document genuinely exceeds it, compare the tiered price against splitting the work into two sub-272K calls or caching the shared prefix. On long-document pipelines the difference between 270K and 280K per request is usually the largest single line in the bill."
+            ]
+          }
         ]
       }
     },
@@ -668,6 +684,24 @@ window.EZ_MODELS = {
         "Reasoning effort": "low / high / max",
         "Cache write (5 min)": "$3.00 / 1M",
         "Cache write (1 h)": "$6.00 / 1M"
+      },
+      "detail": {
+        "sections": [
+          {
+            "h2": "K3 or K3.1 Pro: which one to actually deploy",
+            "paras": [
+              "K3.1 Pro launched on 24 October at $2/$10 per 1M, roughly a third cheaper than K3's $3/$15 on both sides, and scores higher. On price and capability alone there is no reason to start a new integration on K3.",
+              "What keeps K3 in service is the open weights. If you run the model yourself, or need a pinned checkpoint that will not be deprecated, K3 is the one with a downloadable release. K3.1 Pro's weights are announced for release before 4 November 2026, so that advantage has an expiry date. Teams already on K3 should migrate once their prompts have been re-tested against K3.1 Pro — the 33% saving is real, but a prompt tuned for one model does not always transfer."
+            ]
+          },
+          {
+            "h2": "The cache-write bill nobody budgets for",
+            "paras": [
+              "K3 charges cache writes separately: $3 per 1M for a 5-minute retention window, $6 per 1M for an hour. Reads then cost $0.30. The write price is identical to the base input rate, which means a cache write is not free — it is an ordinary input charge with a chance of paying off later.",
+              "Whether it pays off depends entirely on how often the cached prefix is read before it expires. A 1M system prompt reused by a thousand requests inside five minutes costs $3 once plus $0.30 a hit, about $303. The same prompt with more than five minutes between calls expires every time, so you pay $3 per request and the cache has bought nothing. Batch the traffic or raise the window to an hour ($6) when request intervals are measured in tens of minutes; leave caching off for one-shot jobs."
+            ]
+          }
+        ]
       }
     },
     {

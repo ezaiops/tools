@@ -54,6 +54,22 @@
             "q": "What is the difference between GPT-6.1 Sol and GPT-6.1 Terra?",
             "a": "Terra is exactly half the price of Sol on both input and output ($1.00/$5.00 against $2.00/$10.00) with the same 1.05M context window. Sol targets complex coding and long-horizon agent work; Terra targets high-volume computer use, visual reasoning and writing."
           }
+        ],
+        "sections": [
+          {
+            "h2": "Where Sol sits between Terra and Astra",
+            "paras": [
+              "The GPT-6.1 family prices three tiers a factor of five apart: Terra at $1/$5, Sol at $2/$10, Astra at $10/$50. Sol is the middle of that ladder, and its own description — high-demand coding and agent work — is the most useful guide to what it is for.",
+              "The practical rule is to route by failure cost, not by ambition. Classification, extraction, summarisation and routine edits run on Terra at half the price; most workloads never notice. Sol earns its premium on multi-step coding and agent loops where a wrong answer costs more than the tokens. Astra is for the small slice where reasoning depth decides the outcome — spending 5x on every request to cover that slice is how budgets disappear."
+            ]
+          },
+          {
+            "h2": "The 272K cliff, and why it is worse than it looks",
+            "paras": [
+              "Prompts above 272K tokens bill the entire request at $4/$15 instead of $2/$10 — double on input, 1.5x on output. The premium applies to the whole request, not just the tokens past the threshold, so cost jumps in a step rather than a slope.",
+              "A 300K-token prompt with 10K of output costs $1.35 rather than the $0.70 the base rate implies, an increase of 93% for a 10% longer prompt. Two consequences: keep requests just under the line where you can, and when a document genuinely exceeds it, compare the tiered price against splitting the work into two sub-272K calls or caching the shared prefix. On long-document pipelines the difference between 270K and 280K per request is usually the largest single line in the bill."
+            ]
+          }
         ]
       }
     },
@@ -82,12 +98,42 @@
         "tables": [
           {
             "title": "Same workload on GPT-6.1 Terra and GPT-6.1 Sol",
-            "head": ["Workload", "Input tokens", "Output tokens", "GPT-6.1 Terra", "GPT-6.1 Sol"],
+            "head": [
+              "Workload",
+              "Input tokens",
+              "Output tokens",
+              "GPT-6.1 Terra",
+              "GPT-6.1 Sol"
+            ],
             "rows": [
-              ["Single summarization call", "1M", "100K", "$1.50", "$3.00"],
-              ["Long document pass, no cache reuse", "1M", "20K", "$1.10", "$2.20"],
-              ["Cached agent loop, one turn", "50K (45K cache hit)", "5K", "$0.032", "$0.065"],
-              ["That loop, 20 turns/day for 30 days", "30M", "3M", "$19.35", "$38.70"]
+              [
+                "Single summarization call",
+                "1M",
+                "100K",
+                "$1.50",
+                "$3.00"
+              ],
+              [
+                "Long document pass, no cache reuse",
+                "1M",
+                "20K",
+                "$1.10",
+                "$2.20"
+              ],
+              [
+                "Cached agent loop, one turn",
+                "50K (45K cache hit)",
+                "5K",
+                "$0.032",
+                "$0.065"
+              ],
+              [
+                "That loop, 20 turns/day for 30 days",
+                "30M",
+                "3M",
+                "$19.35",
+                "$38.70"
+              ]
             ],
             "note": "Computed from the standard rates above. The same 30M/3M agent loop bills $207 a month on GPT-6 Astra."
           }
@@ -342,7 +388,11 @@
     },
     {
       "id": "deepseek-v4-1-flash",
-      "cny": {"input": 1, "output": 4, "cached_input": 0.02},
+      "cny": {
+        "input": 1,
+        "output": 4,
+        "cached_input": 0.02
+      },
       "rank": 6,
       "name": "DeepSeek V4.1 Flash",
       "provider": "DeepSeek",
@@ -378,12 +428,42 @@
         "tables": [
           {
             "title": "Cost per workload: off-peak vs weekday peak",
-            "head": ["Workload", "Input tokens", "Output tokens", "Off-peak", "Peak"],
+            "head": [
+              "Workload",
+              "Input tokens",
+              "Output tokens",
+              "Off-peak",
+              "Peak"
+            ],
             "rows": [
-              ["Single summarization call", "1M", "100K", "$0.21", "$0.42"],
-              ["Long document pass, no cache reuse", "1M", "20K", "$0.16", "$0.32"],
-              ["Cached agent loop, one turn", "50K (45K cache hit)", "5K", "$0.004", "$0.008"],
-              ["That loop, 20 turns/day for 30 days", "30M", "3M", "$2.33", "$4.66"]
+              [
+                "Single summarization call",
+                "1M",
+                "100K",
+                "$0.21",
+                "$0.42"
+              ],
+              [
+                "Long document pass, no cache reuse",
+                "1M",
+                "20K",
+                "$0.16",
+                "$0.32"
+              ],
+              [
+                "Cached agent loop, one turn",
+                "50K (45K cache hit)",
+                "5K",
+                "$0.004",
+                "$0.008"
+              ],
+              [
+                "That loop, 20 turns/day for 30 days",
+                "30M",
+                "3M",
+                "$2.33",
+                "$4.66"
+              ]
             ],
             "note": "Computed from the rates above. The same loop without caching bills $6.30 a month off-peak, and $8.51 on V4 Pro."
           }
@@ -431,7 +511,11 @@
     },
     {
       "id": "deepseek-v4-pro",
-      "cny": {"input": 4.5, "output": 13.5, "cached_input": 0.15},
+      "cny": {
+        "input": 4.5,
+        "output": 13.5,
+        "cached_input": 0.15
+      },
       "rank": 10,
       "name": "DeepSeek V4 Pro",
       "provider": "DeepSeek",
@@ -467,12 +551,42 @@
         "tables": [
           {
             "title": "Cost per workload: off-peak vs weekday peak",
-            "head": ["Workload", "Input tokens", "Output tokens", "Off-peak", "Peak"],
+            "head": [
+              "Workload",
+              "Input tokens",
+              "Output tokens",
+              "Off-peak",
+              "Peak"
+            ],
             "rows": [
-              ["Single summarization call", "1M", "100K", "$0.86", "$1.72"],
-              ["Long document pass, no cache reuse", "1M", "20K", "$0.70", "$1.40"],
-              ["Cached agent loop, one turn", "50K (45K cache hit)", "5K", "$0.014", "$0.028"],
-              ["That loop, 20 turns/day for 30 days", "30M", "3M", "$8.51", "$17.03"]
+              [
+                "Single summarization call",
+                "1M",
+                "100K",
+                "$0.86",
+                "$1.72"
+              ],
+              [
+                "Long document pass, no cache reuse",
+                "1M",
+                "20K",
+                "$0.70",
+                "$1.40"
+              ],
+              [
+                "Cached agent loop, one turn",
+                "50K (45K cache hit)",
+                "5K",
+                "$0.014",
+                "$0.028"
+              ],
+              [
+                "That loop, 20 turns/day for 30 days",
+                "30M",
+                "3M",
+                "$8.51",
+                "$17.03"
+              ]
             ],
             "note": "Computed from the rates above. The cached loop assumes 90% of input hits cache; the same loop without caching bills $25.74 a month off-peak."
           }
@@ -570,6 +684,24 @@
         "Reasoning effort": "low / high / max",
         "Cache write (5 min)": "$3.00 / 1M",
         "Cache write (1 h)": "$6.00 / 1M"
+      },
+      "detail": {
+        "sections": [
+          {
+            "h2": "K3 or K3.1 Pro: which one to actually deploy",
+            "paras": [
+              "K3.1 Pro launched on 24 October at $2/$10 per 1M, roughly a third cheaper than K3's $3/$15 on both sides, and scores higher. On price and capability alone there is no reason to start a new integration on K3.",
+              "What keeps K3 in service is the open weights. If you run the model yourself, or need a pinned checkpoint that will not be deprecated, K3 is the one with a downloadable release. K3.1 Pro's weights are announced for release before 4 November 2026, so that advantage has an expiry date. Teams already on K3 should migrate once their prompts have been re-tested against K3.1 Pro — the 33% saving is real, but a prompt tuned for one model does not always transfer."
+            ]
+          },
+          {
+            "h2": "The cache-write bill nobody budgets for",
+            "paras": [
+              "K3 charges cache writes separately: $3 per 1M for a 5-minute retention window, $6 per 1M for an hour. Reads then cost $0.30. The write price is identical to the base input rate, which means a cache write is not free — it is an ordinary input charge with a chance of paying off later.",
+              "Whether it pays off depends entirely on how often the cached prefix is read before it expires. A 1M system prompt reused by a thousand requests inside five minutes costs $3 once plus $0.30 a hit, about $303. The same prompt with more than five minutes between calls expires every time, so you pay $3 per request and the cache has bought nothing. Batch the traffic or raise the window to an hour ($6) when request intervals are measured in tens of minutes; leave caching off for one-shot jobs."
+            ]
+          }
+        ]
       }
     },
     {
@@ -584,7 +716,11 @@
     },
     {
       "id": "kimi-k3-1-pro",
-      "cny": {"input": 13, "output": 68, "cached_input": 1.3},
+      "cny": {
+        "input": 13,
+        "output": 68,
+        "cached_input": 1.3
+      },
       "rank": 13,
       "name": "Kimi K3.1 Pro",
       "provider": "Moonshot",
@@ -606,12 +742,42 @@
         "tables": [
           {
             "title": "Kimi K3.1 Pro against the model it replaces",
-            "head": ["Workload", "Input tokens", "Output tokens", "K3.1 Pro", "K3"],
+            "head": [
+              "Workload",
+              "Input tokens",
+              "Output tokens",
+              "K3.1 Pro",
+              "K3"
+            ],
             "rows": [
-              ["Single summarization call", "1M", "100K", "$3.00", "$4.50"],
-              ["Long document pass, no cache reuse", "1M", "20K", "$2.20", "$3.30"],
-              ["Cached agent loop, one turn", "50K (45K cache hit)", "5K", "$0.069", "$0.104"],
-              ["That loop, 20 turns/day for 30 days", "30M", "3M", "$41.40", "$62.10"]
+              [
+                "Single summarization call",
+                "1M",
+                "100K",
+                "$3.00",
+                "$4.50"
+              ],
+              [
+                "Long document pass, no cache reuse",
+                "1M",
+                "20K",
+                "$2.20",
+                "$3.30"
+              ],
+              [
+                "Cached agent loop, one turn",
+                "50K (45K cache hit)",
+                "5K",
+                "$0.069",
+                "$0.104"
+              ],
+              [
+                "That loop, 20 turns/day for 30 days",
+                "30M",
+                "3M",
+                "$41.40",
+                "$62.10"
+              ]
             ],
             "note": "Computed from the standard rates above. The same 30M/3M loop on GPT-6 Astra bills $207 a month."
           }
@@ -655,7 +821,11 @@
     },
     {
       "id": "minimax-m3-1-flash",
-      "cny": {"input": 1, "output": 4, "cached_input": 0.1},
+      "cny": {
+        "input": 1,
+        "output": 4,
+        "cached_input": 0.1
+      },
       "name": "MiniMax M3.1 Flash",
       "provider": "MiniMax",
       "input": 0.15,
@@ -722,7 +892,11 @@
     },
     {
       "id": "mimo-v2-6-pro",
-      "cny": {"input": 3, "output": 6, "cached_input": 0.025},
+      "cny": {
+        "input": 3,
+        "output": 6,
+        "cached_input": 0.025
+      },
       "name": "MiMo V2.6 Pro",
       "provider": "Xiaomi",
       "input": 0.435,
@@ -733,7 +907,11 @@
     },
     {
       "id": "mimo-v2-6-flash",
-      "cny": {"input": 1, "output": 2, "cached_input": 0.02},
+      "cny": {
+        "input": 1,
+        "output": 2,
+        "cached_input": 0.02
+      },
       "name": "MiMo V2.6 Flash",
       "provider": "Xiaomi",
       "input": 0.14,
@@ -784,7 +962,11 @@
     },
     {
       "id": "qwen3-8-max",
-      "cny": {"input": 12, "output": 36, "cached_input": 1.5},
+      "cny": {
+        "input": 12,
+        "output": 36,
+        "cached_input": 1.5
+      },
       "rank": 12,
       "name": "Qwen3.8 Max",
       "provider": "Alibaba",
@@ -806,23 +988,73 @@
         "tables": [
           {
             "title": "The same model at three different prices",
-            "head": ["Region", "Input / 1M", "Output / 1M", "Cached input / 1M"],
+            "head": [
+              "Region",
+              "Input / 1M",
+              "Output / 1M",
+              "Cached input / 1M"
+            ],
             "rows": [
-              ["Singapore (international default)", "$1.65", "$4.951", "$0.206"],
-              ["Germany, Japan, Hong Kong", "$1.65", "$4.951", "$0.206"],
-              ["US (Virginia)", "$2.00", "$6.00", "$0.25"],
-              ["China (Beijing)", "CNY 12", "CNY 36", "CNY 1.5"]
+              [
+                "Singapore (international default)",
+                "$1.65",
+                "$4.951",
+                "$0.206"
+              ],
+              [
+                "Germany, Japan, Hong Kong",
+                "$1.65",
+                "$4.951",
+                "$0.206"
+              ],
+              [
+                "US (Virginia)",
+                "$2.00",
+                "$6.00",
+                "$0.25"
+              ],
+              [
+                "China (Beijing)",
+                "CNY 12",
+                "CNY 36",
+                "CNY 1.5"
+              ]
             ],
             "note": "Model Studio regional rate cards, read on 2026-10-28. The US region costs 21% more than Singapore for identical weights."
           },
           {
             "title": "Cost per workload at the Singapore rate",
-            "head": ["Workload", "Input tokens", "Output tokens", "Cost"],
+            "head": [
+              "Workload",
+              "Input tokens",
+              "Output tokens",
+              "Cost"
+            ],
             "rows": [
-              ["Single summarization call", "1M", "100K", "$2.15"],
-              ["Long document pass, no cache reuse", "1M", "20K", "$1.75"],
-              ["Cached agent loop, one turn", "50K (45K cache hit)", "5K", "$0.042"],
-              ["That loop, 20 turns/day for 30 days", "30M (90% cache hit)", "3M", "$25.36"]
+              [
+                "Single summarization call",
+                "1M",
+                "100K",
+                "$2.15"
+              ],
+              [
+                "Long document pass, no cache reuse",
+                "1M",
+                "20K",
+                "$1.75"
+              ],
+              [
+                "Cached agent loop, one turn",
+                "50K (45K cache hit)",
+                "5K",
+                "$0.042"
+              ],
+              [
+                "That loop, 20 turns/day for 30 days",
+                "30M (90% cache hit)",
+                "3M",
+                "$25.36"
+              ]
             ],
             "note": "Computed from the rates above. The same loop bills $8.51 on DeepSeek V4 Pro and $19.35 on GPT-6.1 Terra."
           }
@@ -877,7 +1109,10 @@
     },
     {
       "id": "qwen3-8-flash",
-      "cny": {"input": 0.8, "output": 2.7},
+      "cny": {
+        "input": 0.8,
+        "output": 2.7
+      },
       "name": "Qwen3.8 Flash",
       "provider": "Alibaba",
       "input": 0.113,
@@ -897,13 +1132,43 @@
         "tables": [
           {
             "title": "Qwen3.8 Flash against the other sub-$0.50 output tiers",
-            "head": ["Model", "Input / 1M", "Output / 1M", "Context"],
+            "head": [
+              "Model",
+              "Input / 1M",
+              "Output / 1M",
+              "Context"
+            ],
             "rows": [
-              ["Qwen3.8 Flash (Singapore)", "$0.113", "$0.382", "1M"],
-              ["MiniMax M3.1 Flash", "$0.15", "$0.60", "1M"],
-              ["DeepSeek V4.1 Flash (off-peak)", "$0.15", "$0.60", "1M"],
-              ["GPT-6 Luna", "$0.10", "$0.50", "1.05M"],
-              ["Gemini 3.5 Flash-Lite", "$0.30", "$2.50", "1.05M"]
+              [
+                "Qwen3.8 Flash (Singapore)",
+                "$0.113",
+                "$0.382",
+                "1M"
+              ],
+              [
+                "MiniMax M3.1 Flash",
+                "$0.15",
+                "$0.60",
+                "1M"
+              ],
+              [
+                "DeepSeek V4.1 Flash (off-peak)",
+                "$0.15",
+                "$0.60",
+                "1M"
+              ],
+              [
+                "GPT-6 Luna",
+                "$0.10",
+                "$0.50",
+                "1.05M"
+              ],
+              [
+                "Gemini 3.5 Flash-Lite",
+                "$0.30",
+                "$2.50",
+                "1.05M"
+              ]
             ],
             "note": "Prices per 1M tokens from each provider's own rate card on 2026-10-28. DeepSeek's rate doubles during weekday peak windows."
           }
@@ -942,7 +1207,11 @@
     },
     {
       "id": "doubao-seed-2-1-turbo",
-      "cny": {"input": 6, "output": 30, "cached_input": 1.2},
+      "cny": {
+        "input": 6,
+        "output": 30,
+        "cached_input": 1.2
+      },
       "rank": 14,
       "name": "Doubao Seed 2.1 Turbo",
       "provider": "ByteDance",
@@ -960,12 +1229,42 @@
         "tables": [
           {
             "title": "Turbo against the Seed 2.0 tiers it sits between",
-            "head": ["Model", "Input / 1M", "Output / 1M", "Tier break", "Context"],
+            "head": [
+              "Model",
+              "Input / 1M",
+              "Output / 1M",
+              "Tier break",
+              "Context"
+            ],
             "rows": [
-              ["Doubao Seed 2.1 Turbo", "$0.50", "$2.50", "none", "256K"],
-              ["Doubao Seed 2.0 Pro", "$0.50", "$3.00", "128K", "256K"],
-              ["Doubao Seed 2.0 Lite", "$0.25", "$2.00", "128K", "256K"],
-              ["Doubao Seed 2.0 Mini", "$0.10", "$0.40", "128K", "256K"]
+              [
+                "Doubao Seed 2.1 Turbo",
+                "$0.50",
+                "$2.50",
+                "none",
+                "256K"
+              ],
+              [
+                "Doubao Seed 2.0 Pro",
+                "$0.50",
+                "$3.00",
+                "128K",
+                "256K"
+              ],
+              [
+                "Doubao Seed 2.0 Lite",
+                "$0.25",
+                "$2.00",
+                "128K",
+                "256K"
+              ],
+              [
+                "Doubao Seed 2.0 Mini",
+                "$0.10",
+                "$0.40",
+                "128K",
+                "256K"
+              ]
             ],
             "note": "BytePlus ModelArk standard-inference rates on 2026-10-28. Above the tier break, Seed 2.0 prices double for the whole request."
           }
@@ -1029,12 +1328,42 @@
         "tables": [
           {
             "title": "What crossing 128K costs on a 10K-output request",
-            "head": ["Input tokens", "Tier applied", "Input cost", "Output cost", "Total"],
+            "head": [
+              "Input tokens",
+              "Tier applied",
+              "Input cost",
+              "Output cost",
+              "Total"
+            ],
             "rows": [
-              ["100K", "base", "$0.050", "$0.030", "$0.080"],
-              ["128K", "base", "$0.064", "$0.030", "$0.094"],
-              ["130K", "long", "$0.130", "$0.060", "$0.190"],
-              ["200K", "long", "$0.200", "$0.060", "$0.260"]
+              [
+                "100K",
+                "base",
+                "$0.050",
+                "$0.030",
+                "$0.080"
+              ],
+              [
+                "128K",
+                "base",
+                "$0.064",
+                "$0.030",
+                "$0.094"
+              ],
+              [
+                "130K",
+                "long",
+                "$0.130",
+                "$0.060",
+                "$0.190"
+              ],
+              [
+                "200K",
+                "long",
+                "$0.200",
+                "$0.060",
+                "$0.260"
+              ]
             ],
             "note": "Two thousand extra tokens past the break doubles the bill. Trimming a prompt from 130K to 128K saves $0.096 on every call."
           }
@@ -1115,22 +1444,40 @@
   ],
   "comparisons": [
     {
-      "models": ["deepseek-v4-pro", "deepseek-v4-1-flash"]
+      "models": [
+        "deepseek-v4-pro",
+        "deepseek-v4-1-flash"
+      ]
     },
     {
-      "models": ["gpt-6-1-terra", "gpt-6-1-sol"]
+      "models": [
+        "gpt-6-1-terra",
+        "gpt-6-1-sol"
+      ]
     },
     {
-      "models": ["kimi-k3-1-pro", "kimi-k3"]
+      "models": [
+        "kimi-k3-1-pro",
+        "kimi-k3"
+      ]
     },
     {
-      "models": ["qwen3-8-max", "qwen3-8-flash"]
+      "models": [
+        "qwen3-8-max",
+        "qwen3-8-flash"
+      ]
     },
     {
-      "models": ["doubao-seed-2-1-turbo", "doubao-seed-2-0-pro"]
+      "models": [
+        "doubao-seed-2-1-turbo",
+        "doubao-seed-2-0-pro"
+      ]
     },
     {
-      "models": ["doubao-seed-2-0-pro", "doubao-seed-2-0-lite"]
+      "models": [
+        "doubao-seed-2-0-pro",
+        "doubao-seed-2-0-lite"
+      ]
     }
   ],
   "sources": [
