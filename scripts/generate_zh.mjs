@@ -152,19 +152,35 @@ function serialize(doc) {
   return "<!DOCTYPE html>\n" + doc.documentElement.outerHTML + "\n";
 }
 
-/** Insert hreflang into an English page without re-serialising it. Idempotent. */
+/** Insert hreflang into an English page without re-serialising it.
+ *
+ * Idempotent and self-healing: if the tags are already exactly right the file is
+ * left alone (so mtime, and therefore sitemap lastmod, stays put); if they are
+ * missing or wrong they get replaced. The earlier version only checked "is a
+ * zh-CN tag present", which left the home page permanently pointing at
+ * /index.html and /zh/index.html while both pages canonicalise to / and /zh/.
+ */
 function addHreflangToEnglish(rel) {
   const file = join(ROOT, rel);
   if (!existsSync(file)) return false;
+
+  // Home pages canonicalise to the directory URL, so hreflang must too.
+  const zhHref = rel === "index.html" ? `${CANON}/zh/` : `${CANON}/zh/${rel}`;
+  const enHref = rel === "index.html" ? `${CANON}/` : `${CANON}/${rel}`;
+  const want = [
+    `<link rel="alternate" hreflang="zh-CN" href="${zhHref}">`,
+    `<link rel="alternate" hreflang="en" href="${enHref}">`,
+    `<link rel="alternate" hreflang="x-default" href="${enHref}">`,
+  ];
+
   let html = readFileSync(file, "utf8");
-  if (html.includes('hreflang="zh-CN"')) return false;
-  const block =
-    `<link rel="alternate" hreflang="zh-CN" href="${CANON}/zh/${rel}">\n` +
-    `<link rel="alternate" hreflang="en" href="${CANON}/${rel}">\n` +
-    `<link rel="alternate" hreflang="x-default" href="${CANON}/${rel}">\n`;
+  const found = [...html.matchAll(/<link rel="alternate" hreflang="[^"]+" href="[^"]*">/g)].map((m) => m[0]);
+  if (found.length === 3 && found.every((tag, i) => tag === want[i])) return false;
+
+  html = html.replace(/[ \t]*<link rel="alternate" hreflang="[^"]+" href="[^"]*">\n?/g, "");
   const idx = html.indexOf("</head>");
   if (idx === -1) return false;
-  html = html.slice(0, idx) + block + html.slice(idx);
+  html = html.slice(0, idx) + want.join("\n") + "\n" + html.slice(idx);
   writeFileSync(file, html, "utf8");
   return true;
 }

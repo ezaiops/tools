@@ -46,10 +46,14 @@ node scripts/verify_live.mjs
 # 2. static checks (links, titles, h1, JSON-LD, sitemap)
 python scripts/check_site.py
 
-# 3. interactive tests (jsdom; needs jsdom in the managed node workspace)
-node scripts/test_interactive.mjs        # 277 checks
+# 3. cross-page audit: dead links, EN/ZH pairing, hreflang vs canonical, orphans,
+#    asset versions, page weight
+python scripts/audit.py
 
-# 4. regenerate model pages + calculator data + sitemap after editing models.json
+# 4. interactive tests (jsdom; needs jsdom in the managed node workspace)
+node scripts/test_interactive.mjs        # 354 checks
+
+# 5. regenerate model pages + calculator data + sitemap after editing models.json
 python scripts/generate_models.py
 ```
 
