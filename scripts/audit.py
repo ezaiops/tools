@@ -174,6 +174,33 @@ def check_assets(all_pages):
         problems.append("mixed asset versions: %s" % dict(versions))
 
 
+def check_chrome(all_pages):
+    """The footer must be identical across the hand-written tool pages.
+
+    Tool pages copy the footer into each file, and it has drifted once already:
+    seven pages kept recommending models that had been superseded everywhere
+    else. Anything that has to change in eighty places falls out of sync.
+
+    Only the tool pages are compared. Header markup carries the breadcrumb, so
+    it legitimately differs per page, and the root pages (about/contact/404)
+    use a shorter chrome on purpose.
+    """
+    import hashlib
+    for prefix, lang in (("tools/", "en"), ("zh/tools/", "zh")):
+        groups = defaultdict(list)
+        for pg in all_pages:
+            if not pg.startswith(prefix):
+                continue
+            m = re.search(r"<footer.*?</footer>", read(pg), re.S)
+            if m:
+                groups[hashlib.md5(m.group(0).encode()).hexdigest()[:8]].append(pg)
+        if len(groups) > 1:
+            biggest = max(groups.values(), key=len)
+            odd = [pg for g in groups.values() if g is not biggest for pg in g]
+            problems.append("footer (%s) has %d variants; outliers: %s"
+                            % (lang, len(groups), odd[:5]))
+
+
 def check_weight(all_pages):
     sizes = [(os.path.getsize(os.path.join(ROOT, p)), p) for p in all_pages]
     avg = sum(s for s, _ in sizes) / len(sizes)
@@ -191,6 +218,7 @@ def main():
     check_hreflang(all_pages)
     check_orphans(all_pages)
     check_assets(all_pages)
+    check_chrome(all_pages)
     avg = check_weight(all_pages)
 
     print("pages: %d (average %.1f KB)" % (len(all_pages), avg / 1024))
