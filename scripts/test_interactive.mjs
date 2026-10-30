@@ -232,8 +232,11 @@ console.log("\n== static Chinese edition (/zh/) ==");
     doc.querySelectorAll('link[rel="alternate"][hreflang]').length === 3);
   const zhChars = (doc.body.textContent.match(/[\u4e00-\u9fff]/g) || []).length;
   check("zh page ships Chinese markup (no JS needed)", zhChars > 100, String(zhChars) + " 汉字");
-  check("zh page keeps model links on the English tree",
-    doc.querySelector('.site-footer a[href^="/models/"]') !== null);
+  // The pricing tree gained its own Chinese edition, so Chinese pages must now
+  // route model links into /zh/models/ instead of the English table.
+  check("zh page routes model links to the Chinese pricing tree",
+    doc.querySelector('.site-footer a[href^="/zh/models/"]') !== null &&
+    doc.querySelector('.site-footer a[href^="/models/"]') === null);
   check("zh page links tools into /zh/",
     doc.querySelector('.site-footer a[href="/zh/tools/token-counter.html"]') !== null);
   check("zh page has no console errors", errors.length === 0, errors[0]);

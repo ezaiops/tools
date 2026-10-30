@@ -96,6 +96,7 @@ tools 站是"英文优先 + 完整中文版"的双语站点。工具页、首页
 - EN 模型页 head 含 hreflang → `/zh/models/`
 - 英语页切换器为链接:点「中文」跳到整页中文版
 - 语言选择跨页持久,默认英文(新访客)
+- `/zh/` 工具页与首页的模型链接已指向 `/zh/models/`(2026-10-30 修复)
 
 ---
 
@@ -130,7 +131,7 @@ tools 站是"英文优先 + 完整中文版"的双语站点。工具页、首页
 ## 7. 验证
 
 - 静态:`python scripts/check_site.py`(现 133 页全过,sitemap 132 条)
-- 交互:`node scripts/test_interactive.mjs`(**本开发机没有 jsdom,未跑过**;语法已用 `node --check` 通过;jsdom 在作者 Windows 机器 `C:/Users/june_/.workbuddy-ai/binaries/node/workspace/`,建议接手方先在本机跑一遍再上线)
+- 交互:`node scripts/test_interactive.mjs` —— **354 项全过**(2026-10-30 在作者 Windows 机器实跑;jsdom 位于 `C:/Users/june_/.workbuddy-ai/binaries/node/workspace/`)。跑之前必须先起本地服务 `python -m http.server 8901`,否则 jsdom 加载不到页面会直接抛 ECONNREFUSED。
 - 浏览器手动清单:
   - 英文页点工具/模型 → 全英文;点「中文」→ 整页中文;再点工具/模型 → 全中文
   - `/zh/models/index.html` 行内链接 → `/zh/models/*`,点「EN」→ 英文页
@@ -154,7 +155,7 @@ git push origin main
 
 ## 9. 遗留 / 已知项
 
-- `/zh/` 工具页与首页的页脚"模型价格"链接仍指向英文树(`/models/index.html`,非 `/zh/models/`)。不破坏功能(英文定价页现在提供「中文」链接),但若要求全站内部链接保持一致,可再对齐 `generate_zh.mjs` 的导出逻辑。
+- ~~`/zh/` 工具页与首页的模型链接指向英文树~~ —— **已修复(2026-10-30 状态同步时)**。`scripts/generate_zh.mjs` 的 `rewriteLinks()` 增加 `/models/` → `/zh/models/` 规则,22 个中文页的页脚「模型价格」和首页模型卡片现在全部指向中文定价树;对应交互断言也从「保持英文树」反转为「路由到中文树」。
 - 404 页仍是按钮式切换(无静态中文版,保持现状)。
 - `scripts/generate_zh.mjs` 依赖 jsdom,执行环境只有作者机器;接手方如要重生成 `/zh/` 工具页,需要自行准备 jsdom 环境或改写成能跑的路径。
 
@@ -165,4 +166,4 @@ git push origin main
 
 ---
 
-*记录时间:2026-10-30。当前 `main`:@ 8c4926a。*
+*记录时间:2026-10-30;同日状态同步(补记交互测试结果、关闭模型链接遗留项)。`main` 的最新提交以 `git log -1 -- HANDOVER.md` 为准 —— 写死 commit 号必然落后一个提交。*

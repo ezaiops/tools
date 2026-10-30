@@ -106,6 +106,13 @@ function rewriteLinks(doc, rel) {
     }
     if (href.startsWith("/") && ZH_PATHS.has(href)) {
       a.setAttribute("href", "/zh" + href);
+      return;
+    }
+    // The pricing tree has its own Chinese edition under /zh/models/, produced by
+    // generate_models.py rather than this script. Route those links there too, or
+    // a reader on a Chinese page lands on the English price table.
+    if (href.startsWith("/models/")) {
+      a.setAttribute("href", "/zh" + href);
     }
   });
 }
