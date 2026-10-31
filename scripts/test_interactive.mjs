@@ -38,6 +38,10 @@ async function load(rel) {
   const vc = new VirtualConsole();
   vc.on("jsdomError", (e) => {
     const s = String((e && e.message) || e);
+    // The Cloudflare Web Analytics beacon reads performance.timing.navigationStart,
+    // which jsdom does not implement. It is fine in a real browser, and it is not
+    // our code, so it must not fail the page's error assertion.
+    if (/navigationStart|cloudflareinsights|performance\.timing/i.test(s)) return;
     if (/dynamic import|Could not load|not implemented|css|stylesheet/i.test(s)) return;
     errors.push(s);
   });
