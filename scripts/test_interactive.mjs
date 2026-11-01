@@ -443,6 +443,56 @@ console.log("\n== subnet-calculator.html ==");
   click(win, $('[data-sn="203.0.113.42/30"]', doc));
   const t2 = $("#sn-results", doc).textContent;
   check("/30 point-to-point", /203\.0\.113\.40\/30/.test(t2) && /Usable hosts2/.test(t2), t2.slice(0, 100));
+
+  // --- full CIDR cheat sheet (/8 .. /32) ---
+  const cheat = $$(doc, "#sn-cheatsheet tr");
+  check("cheat sheet has 25 rows", cheat.length === 25, String(cheat.length));
+  const row24 = cheat[16].children;
+  check("cheat sheet /24 mask and hosts",
+    row24[0].textContent === "/24" && row24[1].textContent === "255.255.255.0" &&
+    row24[2].textContent === "0.0.0.255" && row24[4].textContent === "254",
+    [0, 1, 2, 3, 4].map((i) => row24[i].textContent).join(" | "));
+  const row30 = cheat[22].children;
+  check("cheat sheet /30 gives 2 usable",
+    row30[0].textContent === "/30" && row30[1].textContent === "255.255.255.252" && row30[4].textContent === "2",
+    [0, 1, 4].map((i) => row30[i].textContent).join(" | "));
+
+  // --- IP range -> minimal CIDR list ---
+  check("range default summary", /7/.test($("#sn-rc-summary", doc).textContent) && /91/.test($("#sn-rc-summary", doc).textContent), $("#sn-rc-summary", doc).textContent);
+  const rcOut = $("#sn-rc-out", doc).textContent;
+  check("range starts /31", /192\.168\.1\.10\/31/.test(rcOut), rcOut.slice(0, 80));
+  check("range ends /32", /192\.168\.1\.100\/32/.test(rcOut));
+  check("range has 7 lines", rcOut.trim().split("\n").length === 7, rcOut);
+  setInput(win, $("#sn-rs", doc), "192.168.1.100");
+  setInput(win, $("#sn-re", doc), "192.168.1.10");
+  click(win, $("#sn-rc", doc));
+  check("range reversed rejected", !$("#sn-rc-err", doc).classList.contains("hidden"), $("#sn-rc-err", doc).textContent);
+
+  // --- overlap checker ---
+  const ovOut = $("#sn-ov-out", doc).textContent;
+  check("overlap finds the nested /25", /10\.0\.0\.0\/24/.test(ovOut) && /10\.0\.0\.128\/25/.test(ovOut), ovOut.slice(0, 140));
+  check("overlap reports shared range", /10\.0\.0\.128 – 10\.0\.0\.255/.test(ovOut));
+  check("overlap counts 1 pair", /1/.test($("#sn-ov-summary", doc).textContent), $("#sn-ov-summary", doc).textContent);
+  setInput(win, $("#sn-ov-in", doc), "10.0.0.0/24\n10.0.1.0/24\n10.0.2.0/24");
+  click(win, $("#sn-ov-go", doc));
+  check("disjoint blocks report no overlap", /No overlaps/.test($("#sn-ov-out", doc).textContent), $("#sn-ov-out", doc).textContent);
+  setInput(win, $("#sn-ov-in", doc), "10.0.0.0/24\nnot-an-ip");
+  click(win, $("#sn-ov-go", doc));
+  check("overlap rejects bad line", !$("#sn-ov-err", doc).classList.contains("hidden"), $("#sn-ov-err", doc).textContent);
+
+  // --- equal split ---
+  const spRows = $$(doc, "#sn-sp-out tr");
+  check("split yields 4 subnets", spRows.length === 4, String(spRows.length));
+  check("split uses /26", /10\.0\.0\.0\/26/.test(spRows[0].textContent), spRows[0].textContent.replace(/\s+/g, " "));
+  check("split last subnet .192/26", /10\.0\.0\.192\/26/.test(spRows[3].textContent));
+  check("split 62 usable hosts", /62/.test(spRows[0].textContent));
+  setInput(win, $("#sn-sp-net", doc), "10.0.0.5/24");
+  click(win, $("#sn-sp-go", doc));
+  check("split rejects host address", !$("#sn-sp-err", doc).classList.contains("hidden") && /10\.0\.0\.0\/24/.test($("#sn-sp-err", doc).textContent), $("#sn-sp-err", doc).textContent);
+  setInput(win, $("#sn-sp-net", doc), "10.0.0.0/30");
+  $("#sn-sp-count", doc).value = "64";
+  click(win, $("#sn-sp-go", doc));
+  check("split rejects /30 into 64", !$("#sn-sp-err", doc).classList.contains("hidden"), $("#sn-sp-err", doc).textContent);
 }
 
 console.log("\n== self-host-vs-api.html ==");

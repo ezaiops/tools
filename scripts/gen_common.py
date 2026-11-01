@@ -99,7 +99,7 @@ HEAD = """<!doctype html>
 <meta property="og:title" content="@@TITLE@@">
 <meta property="og:description" content="@@DESC@@">
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
-<link rel="stylesheet" href="/assets/style.css?v=20261030b">
+<link rel="stylesheet" href="/assets/style.css?v=20261102a">
 <script type="application/ld+json">
 @@LD@@
 </script>
@@ -123,8 +123,8 @@ FOOT = """
 
 @@FOOTER@@
 
-<script src="/assets/common.js?v=20261030b" defer></script>
-<script src="/assets/models.js?v=20261030b" defer></script>
+<script src="/assets/common.js?v=20261102a" defer></script>
+<script src="/assets/models.js?v=20261102a" defer></script>
 </body>
 </html>
 """.replace("@@FOOTER@@", chrome("footer"))
@@ -149,12 +149,12 @@ ZH_HEAD = """<!DOCTYPE html>
 <meta property="og:title" content="@@TITLE@@">
 <meta property="og:description" content="@@DESC@@">
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
-<link rel="stylesheet" href="/assets/style.css?v=20261030b">
+<link rel="stylesheet" href="/assets/style.css?v=20261102a">
 <script type="application/ld+json">
 @@LD@@
 </script>
 
-<script src="/assets/i18n.js?v=20261030b"></script><script src="/assets/i18n/common.js?v=20261030b"></script><meta property="og:locale" content="zh_CN"></head>
+<script src="/assets/i18n.js?v=20261102a"></script><script src="/assets/i18n/common.js?v=20261102a"></script><meta property="og:locale" content="zh_CN"></head>
 <body>
 
 <header class="site-header">
@@ -184,8 +184,8 @@ ZH_FOOT = """
 
 @@FOOTER_ZH@@
 
-<script src="/assets/common.js?v=20261030b" defer></script>
-<script src="/assets/models.js?v=20261030b" defer></script>
+<script src="/assets/common.js?v=20261102a" defer></script>
+<script src="/assets/models.js?v=20261102a" defer></script>
 </body>
 </html>
 """.replace("@@FOOTER_ZH@@", chrome("footer.zh"))

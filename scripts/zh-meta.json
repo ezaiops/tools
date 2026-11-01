@@ -73,8 +73,8 @@
     "desc": "输入每月 token 用量，算出租 GPU 自建推理何时比调用 LLM API 更便宜，给出盈亏平衡点与月度成本对比。"
   },
   "tools/subnet-calculator.html": {
-    "title": "子网与 CIDR 计算器 — IPv4 网络计算",
-    "desc": "计算 IPv4 子网：网络地址、广播地址、可用主机范围、点分/十六进制/二进制掩码、通配符与主机数量。"
+    "title": "子网与 CIDR 计算器 — IP 范围转换、VLSM 与重叠检测",
+    "desc": "计算 IPv4 子网与 CIDR 块：网络地址、广播地址、可用主机范围、掩码与通配符，另附完整 CIDR 速查表、IP 范围转 CIDR、子网重叠检测与等分切分。"
   },
   "tools/timestamp-converter.html": {
     "title": "Unix 时间戳转换 — 纪元、ISO 8601、本地时间",

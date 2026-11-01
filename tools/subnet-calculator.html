@@ -3,14 +3,30 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Subnet &amp; CIDR Calculator — IPv4 Network Math | ezaiops tools</title>
-<meta name="description" content="Calculate IPv4 subnets: network and broadcast address, usable host range, mask in dotted/hex/binary, wildcard and host counts for any CIDR block.">
+<title>Subnet &amp; CIDR Calculator — IP Range, VLSM &amp; Overlap Check | ezaiops tools</title>
+<meta name="description" content="Calculate IPv4 subnets and CIDR blocks: network and broadcast address, usable host range, netmask and wildcard, plus a CIDR range calculator, an IP range to CIDR converter, a subnet overlap checker, a VLSM splitter and a full cheat sheet.">
 <link rel="canonical" href="https://tools.ezaiops.com/tools/subnet-calculator.html">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Subnet &amp; CIDR Calculator">
-<meta property="og:description" content="IPv4 network, broadcast, host range and mask math for any CIDR block.">
+<meta property="og:title" content="Subnet &amp; CIDR Calculator — IP Range, VLSM &amp; Overlap Check">
+<meta property="og:description" content="IPv4 network, broadcast, host range, netmask and wildcard math for any CIDR block — plus IP range to CIDR, overlap detection and subnet splitting.">
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
-<link rel="stylesheet" href="/assets/style.css?v=20261030b">
+<link rel="stylesheet" href="/assets/style.css?v=20261102a">
+<style>
+/* Mobile: keep wide tables readable. Squeezing them to 390px splits binary
+   octets and pushes Total/Usable off screen, which are the two columns people
+   actually come for. Let them scroll instead, and drop the two least useful
+   cheat-sheet columns so the rest fits without scrolling. */
+@media (max-width: 640px) {
+  .tool-page table.data th,
+  .tool-page table.data td { white-space: nowrap; }
+  #cheatsheet table.data th,
+  #cheatsheet table.data td { padding: 5px 6px; font-size: 12.5px; }
+  #cheatsheet table.data th:nth-child(3),
+  #cheatsheet table.data td:nth-child(3),
+  #cheatsheet table.data th:nth-child(6),
+  #cheatsheet table.data td:nth-child(6) { display: none; }
+}
+</style>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -20,6 +36,39 @@
   "applicationCategory": "DeveloperApplication",
   "operatingSystem": "Any",
   "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How many usable hosts does a /24 subnet have?",
+      "acceptedAnswer": { "@type": "Answer", "text": "254. A /24 contains 256 addresses; the network address and the broadcast address are reserved, leaving 256 − 2 = 254 assignable hosts." }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I convert an IP range to CIDR notation?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Use the IP range to CIDR converter above. It returns the smallest set of CIDR blocks that covers exactly the start and end addresses you enter, without covering anything outside them." }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I check whether two subnets overlap?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Two CIDR blocks overlap when the start of one falls inside the other's address range. Paste the blocks into the overlap checker and it reports every colliding pair with the shared address range." }
+    },
+    {
+      "@type": "Question",
+      "name": "Does this calculator support IPv6?",
+      "acceptedAnswer": { "@type": "Answer", "text": "No. IPv6 uses 128-bit addresses and a different prefix model, so the subnet math here is IPv4 only. See the IPv6 note on this page for what changes." }
+    },
+    {
+      "@type": "Question",
+      "name": "What is a wildcard mask used for?",
+      "acceptedAnswer": { "@type": "Answer", "text": "A wildcard mask is the bitwise inverse of a subnet mask. Cisco-style ACLs and OSPF use it to say which bits to ignore, so 255.255.255.0 inverts to 0.0.0.255." }
+    }
+  ]
 }
 </script>
 <link rel="alternate" hreflang="zh-CN" href="https://tools.ezaiops.com/zh/tools/subnet-calculator.html">
@@ -43,13 +92,21 @@
 <main class="wrap tool-page">
   <nav class="crumbs"><a href="/">Home</a> / Tools / <a href="/tools/subnet-calculator.html">Subnet calculator</a><a class="main-site-link" href="https://ezaiops.com/en/">ezaiops.com ↗</a></nav>
   <h1>Subnet &amp; CIDR calculator</h1>
-  <p class="lead">Enter any IPv4 address with a prefix length and get the network and broadcast addresses, the usable host range, the mask in every notation, and a binary breakdown — the network math you need when planning VLANs, firewall rules or cloud security groups.</p>
+  <p class="lead">Enter any IPv4 address with a prefix length and get the network and broadcast addresses, the usable host range, the mask in every notation, and a binary breakdown. Below that: a full CIDR cheat sheet, an IP range to CIDR converter, an overlap checker and a subnet splitter — the network math you need when planning VLANs, firewall rules or cloud security groups.</p>
 
-  <section class="panel">
+  <div class="btn-row" style="margin:14px 0 0">
+    <a class="btn small" href="#calculator">Calculate</a>
+    <a class="btn small" href="#cheatsheet">Cheat sheet</a>
+    <a class="btn small" href="#range">IP range → CIDR</a>
+    <a class="btn small" href="#overlap">Overlap</a>
+    <a class="btn small" href="#split">Split / VLSM</a>
+  </div>
+
+  <section class="panel" id="calculator" style="margin-top:14px">
     <div class="field-row">
       <div class="field">
         <label class="field-label" for="sn-input">IPv4 address / CIDR</label>
-        <input type="text" id="sn-input" class="mono" value="192.168.1.37/26" placeholder="192.168.1.37/26">
+        <input type="text" id="sn-input" class="mono" value="192.168.1.37/26" placeholder="192.168.1.37/26" inputmode="decimal" autocomplete="off" autocapitalize="off" spellcheck="false">
       </div>
       <div class="field">
         <label class="field-label" for="sn-prefix">Prefix</label>
@@ -71,16 +128,20 @@
     <dl class="kv-list" id="sn-results" style="margin-top:14px"></dl>
 
     <h3 style="font-size:14px;margin:18px 0 0">Binary breakdown</h3>
-    <table class="data">
-      <thead><tr><th></th><th class="mono">Octet 1</th><th class="mono">Octet 2</th><th class="mono">Octet 3</th><th class="mono">Octet 4</th></tr></thead>
-      <tbody id="sn-binary"></tbody>
-    </table>
+    <div style="overflow-x:auto">
+      <table class="data">
+        <thead><tr><th></th><th class="mono">Octet 1</th><th class="mono">Octet 2</th><th class="mono">Octet 3</th><th class="mono">Octet 4</th></tr></thead>
+        <tbody id="sn-binary"></tbody>
+      </table>
+    </div>
 
     <h3 style="font-size:14px;margin:18px 0 0">Common prefix lengths</h3>
-    <table class="data">
-      <thead><tr><th class="num">Prefix</th><th class="mono">Subnet mask</th><th class="num">Total addresses</th><th class="num">Usable hosts</th></tr></thead>
-      <tbody id="sn-table"></tbody>
-    </table>
+    <div style="overflow-x:auto">
+      <table class="data">
+        <thead><tr><th class="num">Prefix</th><th class="mono">Subnet mask</th><th class="num">Total addresses</th><th class="num">Usable hosts</th></tr></thead>
+        <tbody id="sn-table"></tbody>
+      </table>
+    </div>
   </section>
 
   <div class="ad-slot">
@@ -88,23 +149,131 @@
     Google AdSense placeholder — activated once the site is approved and has steady traffic.
   </div>
 
+  <section class="panel" id="cheatsheet">
+    <h2 style="font-size:17px;margin:0 0 4px">CIDR cheat sheet: every IPv4 prefix</h2>
+    <p style="font-size:13.5px;color:var(--muted);margin:0 0 4px">Prefix length, dotted netmask, wildcard mask, total addresses and usable hosts for /8 through /32. Bookmark this table or print it — it is the fastest way to answer "how many hosts in a /27" without doing the math again.</p>
+    <div style="overflow-x:auto">
+      <table class="data">
+        <thead><tr><th class="num">Prefix</th><th class="mono">Netmask</th><th class="mono">Wildcard</th><th class="num">Total</th><th class="num">Usable</th><th>Typical use</th></tr></thead>
+        <tbody id="sn-cheatsheet"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="panel" id="range">
+    <h2 style="font-size:17px;margin:0 0 4px">IP range to CIDR</h2>
+    <p style="font-size:13.5px;color:var(--muted);margin:0 0 10px">Given a first and last address, this returns the smallest list of CIDR blocks that covers exactly that range — nothing outside it. Useful when a firewall or an allowlist gives you an IP range but the platform only accepts CIDR notation.</p>
+    <div class="field-row">
+      <div class="field">
+        <label class="field-label" for="sn-rs">First address</label>
+        <input type="text" id="sn-rs" class="mono" value="192.168.1.10" placeholder="192.168.1.10" inputmode="decimal" autocomplete="off" spellcheck="false">
+      </div>
+      <div class="field">
+        <label class="field-label" for="sn-re">Last address</label>
+        <input type="text" id="sn-re" class="mono" value="192.168.1.100" placeholder="192.168.1.100" inputmode="decimal" autocomplete="off" spellcheck="false">
+      </div>
+      <div class="field">
+        <button class="btn primary" id="sn-rc" type="button" style="width:100%">Convert</button>
+      </div>
+    </div>
+    <pre class="code-out error hidden" id="sn-rc-err" style="margin-top:12px"></pre>
+    <p style="font-size:13.5px;margin:12px 0 0" id="sn-rc-summary"></p>
+    <pre class="code-out" id="sn-rc-out" style="margin-top:8px"></pre>
+  </section>
+
+  <section class="panel" id="overlap">
+    <h2 style="font-size:17px;margin:0 0 4px">Subnet overlap checker</h2>
+    <p style="font-size:13.5px;color:var(--muted);margin:0 0 10px">Paste one CIDR block per line. The checker compares every pair and reports each collision with the exact shared address range — the fastest way to catch an overlapping VPC, VLAN or VPN pool before it causes a routing problem.</p>
+    <label class="field-label" for="sn-ov-in">CIDR blocks, one per line</label>
+    <textarea id="sn-ov-in" class="mono" rows="6" spellcheck="false" style="width:100%;min-height:120px;font-size:13px" placeholder="10.0.0.0/24&#10;10.0.0.128/25&#10;10.0.1.0/24">10.0.0.0/24
+10.0.0.128/25
+10.0.1.0/24
+10.0.2.0/23</textarea>
+    <div class="btn-row" style="margin-top:10px">
+      <button class="btn primary" id="sn-ov-go" type="button">Check overlaps</button>
+    </div>
+    <pre class="code-out error hidden" id="sn-ov-err" style="margin-top:12px"></pre>
+    <p style="font-size:13.5px;margin:12px 0 0" id="sn-ov-summary"></p>
+    <pre class="code-out" id="sn-ov-out" style="margin-top:8px"></pre>
+  </section>
+
+  <section class="panel" id="split">
+    <h2 style="font-size:17px;margin:0 0 4px">Split a network into equal subnets</h2>
+    <p style="font-size:13.5px;color:var(--muted);margin:0 0 10px">Divide one CIDR block into equal-sized subnets and see every resulting network. Each split adds one bit to the prefix, so a /24 becomes two /25s, four /26s or eight /27s. For unequal sizing — the real VLSM case — size the largest segment first, then split the remainder.</p>
+    <div class="field-row">
+      <div class="field">
+        <label class="field-label" for="sn-sp-net">Network</label>
+        <input type="text" id="sn-sp-net" class="mono" value="10.0.0.0/24" placeholder="10.0.0.0/24" inputmode="decimal" autocomplete="off" spellcheck="false">
+      </div>
+      <div class="field">
+        <label class="field-label" for="sn-sp-count">Split into</label>
+        <select id="sn-sp-count" style="width:auto">
+          <option value="2">2 subnets</option>
+          <option value="4" selected>4 subnets</option>
+          <option value="8">8 subnets</option>
+          <option value="16">16 subnets</option>
+          <option value="32">32 subnets</option>
+          <option value="64">64 subnets</option>
+        </select>
+      </div>
+      <div class="field">
+        <button class="btn primary" id="sn-sp-go" type="button" style="width:100%">Split</button>
+      </div>
+    </div>
+    <pre class="code-out error hidden" id="sn-sp-err" style="margin-top:12px"></pre>
+    <p style="font-size:13.5px;margin:12px 0 0" id="sn-sp-summary"></p>
+    <div style="overflow-x:auto">
+      <table class="data">
+        <thead><tr><th class="mono">Network</th><th class="mono">Usable range</th><th class="mono">Broadcast</th><th class="num">Hosts</th></tr></thead>
+        <tbody id="sn-sp-out"></tbody>
+      </table>
+    </div>
+  </section>
+
   <section class="prose">
     <h2>How subnet math works</h2>
     <p>An IPv4 address is 32 bits, written as four octets. The prefix length — the number after the slash — says how many leading bits belong to the network. The <strong>network address</strong> keeps those bits and zeroes the rest; the <strong>broadcast address</strong> sets all host bits to 1. Hosts between them (minus the two reserved ends) are assignable, so a <code>/24</code> gives 254 usable addresses, a <code>/30</code> gives 2 — the classic point-to-point link.</p>
     <p>Two details trip people up: usable hosts is <code>2^(32-prefix) − 2</code>, except for <code>/31</code> (RFC 3021, both addresses usable on point-to-point links) and <code>/32</code> (a single host). And a host address like <code>192.168.1.37/26</code> is <em>inside</em> the network <code>192.168.1.0/26</code> — the calculator always shows the network the address belongs to.</p>
 
+    <h2>CIDR notation, netmask and wildcard mask</h2>
+    <p>Three ways of writing the same boundary. <strong>CIDR notation</strong> counts the network bits: <code>/26</code>. The <strong>dotted netmask</strong> writes those bits as an address: <code>255.255.255.192</code>. The <strong>wildcard mask</strong> inverts every bit: <code>0.0.0.63</code>. Converting between them is pure arithmetic — count the leading ones for the prefix, invert for the wildcard — which is why the calculator above shows all three at once instead of asking you to pick a format.</p>
+    <p>The wildcard is the one that causes real trouble. Cisco-style ACLs and OSPF <code>network</code> statements expect a wildcard, not a netmask, so pasting <code>255.255.255.0</code> where <code>0.0.0.255</code> belongs silently matches the wrong traffic. If a rule behaves in reverse of what you meant, check for that swap first.</p>
+
+    <h2>Planning subnets in AWS VPC and other clouds</h2>
+    <p>A VPC is defined by one IPv4 CIDR block, and every subnet inside it must be carved from that block. AWS accepts blocks between <code>/16</code> and <code>/28</code>, so the practical question is always "how many subnets of what size fit in my VPC" — which is exactly what the splitter above answers. A <code>/16</code> VPC has room for 256 <code>/24</code> subnets; a common layout uses one <code>/24</code> per availability zone per tier.</p>
+    <p>The failure that costs the most time is an overlapping block: two VPCs, or a VPC and an on-premises range, or a VPC and a VPN pool that share addresses. Peering and Transit Gateway both refuse to route between overlapping ranges, and the error surfaces far from the cause. Paste your planned blocks into the overlap checker before you create anything — it takes ten seconds and saves a rebuild.</p>
+
+    <h2>Splitting a network, and what VLSM actually means</h2>
+    <p>Equal splitting is the easy case: add one bit to the prefix and you double the subnet count, halve the host count. <code>/24</code> → two <code>/25</code> → four <code>/26</code>, and so on. The calculator above does that for any block up to 64 subnets.</p>
+    <p>VLSM (variable-length subnet masking) is the case where subnets are <em>not</em> equal — a <code>/26</code> for the servers, a <code>/28</code> for the load balancers, a <code>/30</code> for each point-to-point link. The rule that makes it work is simple: allocate the largest segment first, at the lowest aligned address, then continue with what remains. Do it in the other order and you fragment the space and waste addresses. If you only need equal splits, the splitter is enough; if you are designing a real address plan, size each tier's host count, round up to the next power of two, and work downward.</p>
+
+    <h2>Why this calculator is IPv4 only</h2>
+    <p>IPv6 uses 128-bit addresses and has no broadcast address, so the arithmetic here — network, broadcast, usable range, <code>2^(32−prefix) − 2</code> — does not carry over. A <code>/64</code> is the standard IPv6 subnet and holds 2^64 addresses, which makes "usable hosts" a meaningless number to compute. If you need IPv6 prefix math, treat the prefix as a plain bit boundary and skip the broadcast step entirely.</p>
+
     <h2>Frequently asked questions</h2>
+    <details class="faq">
+      <summary>How many usable hosts does a /24 have?</summary>
+      <div class="faq-body">254. A /24 holds 256 addresses; the network address and the broadcast address are reserved, so 256 − 2 = 254 are assignable. A /25 gives 126, a /26 gives 62, a /27 gives 30, a /28 gives 14, a /29 gives 6 and a /30 gives 2.</div>
+    </details>
+    <details class="faq">
+      <summary>How do I convert an IP range to CIDR?</summary>
+      <div class="faq-body">Enter the first and last address in the IP range to CIDR tool above. It returns the smallest set of blocks that covers exactly that range — for example 192.168.1.10–192.168.1.100 becomes a handful of /31, /30 and /29 blocks rather than one oversized /24. Anything the tool cannot express as a single block is split into the fewest blocks that fit.</div>
+    </details>
+    <details class="faq">
+      <summary>How do I check if two subnets overlap?</summary>
+      <div class="faq-body">Two blocks overlap when one starts inside the other's range: <code>A.network ≤ B.broadcast</code> and <code>B.network ≤ A.broadcast</code>. The overlap checker runs that comparison on every pair, including containment — a /25 inside a /24 counts as an overlap, because both cannot be routed independently.</div>
+    </details>
     <details class="faq">
       <summary>Why do /31 and /32 not subtract two hosts?</summary>
       <div class="faq-body">They are special cases: /31 is defined by RFC 3021 for point-to-point links where both addresses are usable, and /32 is a single-host route (a loopback or a host firewall entry). Everything in between follows 2^(32−prefix) − 2.</div>
     </details>
     <details class="faq">
-      <summary>Does this support IPv6?</summary>
-      <div class="faq-body">No — IPv6 uses 128-bit addresses and prefix math works differently. This calculator is IPv4 only.</div>
+      <summary>What is the smallest subnet I can use?</summary>
+      <div class="faq-body">On a normal broadcast network, /30 — two usable addresses. /31 is usable on point-to-point links under RFC 3021, and /32 identifies a single host. AWS VPC subnets stop at /28 (16 addresses, 11 usable after AWS reserves five).</div>
     </details>
     <details class="faq">
       <summary>Is my address sent anywhere?</summary>
-      <div class="faq-body">No. All math runs in your browser with JavaScript integer operations; nothing is transmitted.</div>
+      <div class="faq-body">No. All math runs in your browser with JavaScript integer operations; nothing is transmitted. The whole page works offline once loaded.</div>
     </details>
   </section>
 </main>
@@ -153,12 +322,21 @@
      max-age=600, so cached pages never got the script and the reports were
      undercounting by roughly two thirds. No cookies, no consent banner needed. -->
 
-<script src="/assets/common.js?v=20261030b" defer></script>
+<script src="/assets/common.js?v=20261102a" defer></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   "use strict";
   var $ = function (s) { return document.querySelector(s); };
   function ezT(k) { return window.ezI18N ? window.ezI18N.t(k) : k; }
+  // tf keeps word order sane in Chinese: placeholders are filled after translation.
+  function ezF(k) {
+    if (!window.ezI18N) {
+      var out = k;
+      for (var j = 1; j < arguments.length; j++) out = out.replace("%s", String(arguments[j]));
+      return out;
+    }
+    return window.ezI18N.tf.apply(window.ezI18N, arguments);
+  }
 
   var prefixSel = $("#sn-prefix");
   for (var p = 8; p <= 32; p++) {
@@ -168,8 +346,9 @@ document.addEventListener("DOMContentLoaded", function () {
     prefixSel.appendChild(o);
   }
 
+  /* ---------- core IPv4 math ---------- */
   function ipToInt(ip) {
-    var parts = ip.split(".");
+    var parts = String(ip).trim().split(".");
     if (parts.length !== 4) return null;
     var n = 0;
     for (var i = 0; i < 4; i++) {
@@ -180,6 +359,7 @@ document.addEventListener("DOMContentLoaded", function () {
     return n;
   }
   function intToIp(n) {
+    n = n >>> 0;
     return [(n >>> 24) & 255, (n >>> 16) & 255, (n >>> 8) & 255, n & 255].join(".");
   }
   function maskOf(prefix) {
@@ -210,7 +390,39 @@ document.addEventListener("DOMContentLoaded", function () {
     if (first === 169 && second === 254) return (zh ? "链路本地 — 169.254.0.0/16" : "Link-local — 169.254.0.0/16");
     return zh ? "否 — 公网地址" : "No — public";
   }
+  // "a.b.c.d/xx" or "a.b.c.d 255.255.255.0" -> {net, prefix} ; null when invalid
+  function parseBlock(raw) {
+    var s = String(raw).trim();
+    if (!s) return null;
+    var m = s.match(/^(\d{1,3}(?:\.\d{1,3}){3})\s*\/\s*(\d{1,2})$/);
+    if (m) {
+      var ip = ipToInt(m[1]);
+      var pre = parseInt(m[2], 10);
+      if (ip == null || isNaN(pre) || pre < 0 || pre > 32) return null;
+      return blockOf(ip, pre);
+    }
+    m = s.match(/^(\d{1,3}(?:\.\d{1,3}){3})\s+(\d{1,3}(?:\.\d{1,3}){3})$/);
+    if (m) {
+      var ip2 = ipToInt(m[1]);
+      var mk = ipToInt(m[2]);
+      if (ip2 == null || mk == null) return null;
+      var bits = 0, t = mk;
+      while (t & 0x80000000) { bits++; t = (t << 1) >>> 0; }
+      if ((maskOf(bits) >>> 0) !== (mk >>> 0)) return null; // non-contiguous mask
+      return blockOf(ip2, bits);
+    }
+    return null;
+  }
+  function blockOf(ip, prefix) {
+    var mask = maskOf(prefix);
+    var net = (ip & mask) >>> 0;
+    var bc = (net | (~mask >>> 0)) >>> 0;
+    var total = Math.pow(2, 32 - prefix);
+    var usable = prefix >= 31 ? (prefix === 32 ? 1 : 2) : total - 2;
+    return { ip: ip, prefix: prefix, net: net, bc: bc, mask: mask, total: total, usable: usable };
+  }
 
+  /* ---------- 1. main calculator ---------- */
   function calculate() {
     var raw = $("#sn-input").value.trim();
     var err = $("#sn-err");
@@ -229,12 +441,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     err.classList.add("hidden");
 
-    var mask = maskOf(prefix);
-    var network = (ip & mask) >>> 0;
-    var wildcard = (~mask) >>> 0;
-    var broadcast = (network | wildcard) >>> 0;
-    var total = Math.pow(2, 32 - prefix);
-    var usable = prefix >= 31 ? (prefix === 32 ? 1 : 2) : total - 2;
+    var b = blockOf(ip, prefix);
+    var network = b.net, broadcast = b.bc, mask = b.mask, total = b.total, usable = b.usable;
     var firstHost = prefix >= 31 ? network : (network + 1) >>> 0;
     var lastHost = prefix >= 31 ? broadcast : (broadcast - 1) >>> 0;
 
@@ -244,7 +452,7 @@ document.addEventListener("DOMContentLoaded", function () {
       ["Broadcast address", intToIp(broadcast)],
       ["Usable host range", intToIp(firstHost) + " – " + intToIp(lastHost)],
       ["Subnet mask", intToIp(mask) + "  (" + hex32(mask) + ")"],
-      ["Wildcard mask", intToIp(wildcard)],
+      ["Wildcard mask", intToIp((~mask) >>> 0)],
       ["Total addresses", total.toLocaleString()],
       ["Usable hosts", usable.toLocaleString()],
       ["Address class", classOf((ip >>> 24) & 255)],
@@ -277,6 +485,176 @@ document.addEventListener("DOMContentLoaded", function () {
     $("#sn-table").innerHTML = trows.join("");
   }
 
+  /* ---------- 2. full CIDR cheat sheet ---------- */
+  var CHEAT_NOTE = {
+    8: "Class A block",
+    16: "Class B block",
+    24: "Class C block — most common LAN",
+    25: "Two /25 halves",
+    26: "Typical server segment",
+    27: "Small team segment",
+    28: "AWS smallest subnet",
+    29: "Six-host segment",
+    30: "Point-to-point link",
+    31: "RFC 3021 P2P (2 usable)",
+    32: "Single host route"
+  };
+  function renderCheatSheet() {
+    var out = [];
+    for (var pp = 8; pp <= 32; pp++) {
+      var tot = Math.pow(2, 32 - pp);
+      var us = pp >= 31 ? (pp === 32 ? 1 : 2) : tot - 2;
+      var mk = maskOf(pp);
+      out.push("<tr><td class=\"num\">/" + pp + "</td><td class=\"mono\">" + intToIp(mk) +
+        "</td><td class=\"mono\">" + intToIp((~mk) >>> 0) +
+        "</td><td class=\"num\">" + tot.toLocaleString() +
+        "</td><td class=\"num\">" + us.toLocaleString() +
+        "</td><td style=\"color:var(--muted);font-size:12.5px\">" + (CHEAT_NOTE[pp] ? ezT(CHEAT_NOTE[pp]) : "") + "</td></tr>");
+    }
+    $("#sn-cheatsheet").innerHTML = out.join("");
+  }
+
+  /* ---------- 3. IP range -> minimal CIDR list ---------- */
+  function rangeToCidrs(start, end) {
+    var out = [];
+    var cur = start;
+    var guard = 0;
+    while (cur <= end && guard++ < 256) {
+      var alignPrefix = 32;
+      if (cur !== 0) {
+        var t = cur, p2 = 0;
+        while (t % 2 === 0 && p2 < 32) { t /= 2; p2++; }
+        alignPrefix = 32 - p2;
+      }
+      var remaining = end - cur + 1;
+      var sizePrefix = 32 - Math.floor(Math.log(remaining) / Math.LN2);
+      if (Math.pow(2, 32 - sizePrefix) > remaining) sizePrefix += 1;
+      var prefix = Math.max(alignPrefix, sizePrefix);
+      if (prefix > 32) prefix = 32;
+      out.push({ net: cur, prefix: prefix });
+      cur += Math.pow(2, 32 - prefix);
+    }
+    return out;
+  }
+  function convertRange() {
+    var err = $("#sn-rc-err");
+    var s = ipToInt($("#sn-rs").value);
+    var e = ipToInt($("#sn-re").value);
+    if (s == null || e == null) {
+      err.textContent = ezT("Both addresses must be valid IPv4 — four octets, each 0-255.");
+      err.classList.remove("hidden");
+      return;
+    }
+    if (s > e) {
+      err.textContent = ezT("The first address must be lower than the last address.");
+      err.classList.remove("hidden");
+      return;
+    }
+    err.classList.add("hidden");
+    var blocks = rangeToCidrs(s, e);
+    var lines = blocks.map(function (b) { return intToIp(b.net) + "/" + b.prefix; });
+    $("#sn-rc-out").textContent = lines.join("\n");
+    var totalAddrs = e - s + 1;
+    $("#sn-rc-summary").innerHTML = blocks.length === 1
+      ? ezF("%s CIDR block covers %s – %s (%s addresses). No address outside the range is included.",
+          "<strong>" + blocks.length + "</strong>", intToIp(s), intToIp(e), totalAddrs.toLocaleString())
+      : ezF("%s CIDR blocks cover %s – %s (%s addresses). No address outside the range is included.",
+          "<strong>" + blocks.length + "</strong>", intToIp(s), intToIp(e), totalAddrs.toLocaleString());
+  }
+
+  /* ---------- 4. overlap checker ---------- */
+  function checkOverlap() {
+    var err = $("#sn-ov-err");
+    var raw = $("#sn-ov-in").value.split(/[\n,;]+/);
+    var blocks = [];
+    for (var i = 0; i < raw.length; i++) {
+      var line = raw[i].trim();
+      if (!line) continue;
+      var b = parseBlock(line);
+      if (!b) {
+        err.textContent = ezF("Not a CIDR block: %s — use 10.0.0.0/24 or 10.0.0.0 255.255.255.0.", line);
+        err.classList.remove("hidden");
+        return;
+      }
+      b.label = intToIp(b.net) + "/" + b.prefix;
+      blocks.push(b);
+    }
+    if (blocks.length < 2) {
+      err.textContent = ezT("Enter at least two CIDR blocks to compare.");
+      err.classList.remove("hidden");
+      return;
+    }
+    err.classList.add("hidden");
+    var hits = [];
+    for (var a = 0; a < blocks.length; a++) {
+      for (var c = a + 1; c < blocks.length; c++) {
+        var A = blocks[a], B = blocks[c];
+        if (A.net <= B.bc && B.net <= A.bc) {
+          var lo = Math.max(A.net, B.net), hi = Math.min(A.bc, B.bc);
+          var kind = (A.net === B.net && A.prefix === B.prefix) ? "identical"
+            : (A.net <= B.net && A.bc >= B.bc) ? "contains"
+            : (B.net <= A.net && B.bc >= A.bc) ? "contained by" : "partially overlaps";
+          hits.push({ a: A.label, b: B.label, lo: lo, hi: hi, kind: kind });
+        }
+      }
+    }
+    if (!hits.length) {
+      $("#sn-ov-out").textContent = ezF("No overlaps — all %s blocks are disjoint.", blocks.length);
+      $("#sn-ov-summary").innerHTML = "";
+      return;
+    }
+    $("#sn-ov-out").textContent = hits.map(function (h) {
+      return h.a + "  " + ezT(h.kind) + "  " + h.b + "\n    " +
+        ezF("shared: %s – %s (%s addresses)", intToIp(h.lo), intToIp(h.hi), (h.hi - h.lo + 1).toLocaleString());
+    }).join("\n");
+    $("#sn-ov-summary").innerHTML = (hits.length === 1
+      ? ezF("%s overlapping pair out of %s blocks.", "<strong>" + hits.length + "</strong>", blocks.length)
+      : ezF("%s overlapping pairs out of %s blocks.", "<strong>" + hits.length + "</strong>", blocks.length))
+      + " " + ezT("Fix these before creating the networks — routing and peering will refuse to connect them.");
+  }
+
+  /* ---------- 5. equal split ---------- */
+  function doSplit() {
+    var err = $("#sn-sp-err");
+    var b = parseBlock($("#sn-sp-net").value);
+    if (!b) {
+      err.textContent = ezT("Enter a network in CIDR notation, like 10.0.0.0/24.");
+      err.classList.remove("hidden");
+      return;
+    }
+    if (b.net !== b.ip) {
+      err.textContent = ezF("Use the network address, not a host address. Did you mean %s/%s?", intToIp(b.net), b.prefix);
+      err.classList.remove("hidden");
+      return;
+    }
+    var n = parseInt($("#sn-sp-count").value, 10);
+    var addBits = Math.round(Math.log(n) / Math.LN2);
+    var newPrefix = b.prefix + addBits;
+    if (newPrefix > 32) {
+      err.textContent = ezF("A /%s block cannot be split into %s subnets — that needs a /%s.", b.prefix, n, newPrefix);
+      err.classList.remove("hidden");
+      return;
+    }
+    err.classList.add("hidden");
+    var size = Math.pow(2, 32 - newPrefix);
+    var rows = [];
+    for (var i = 0; i < n; i++) {
+      var net = b.net + i * size;
+      var bc = net + size - 1;
+      var fh = newPrefix >= 31 ? net : net + 1;
+      var lh = newPrefix >= 31 ? bc : bc - 1;
+      var us = newPrefix >= 31 ? (newPrefix === 32 ? 1 : 2) : size - 2;
+      rows.push("<tr><td class=\"mono\">" + intToIp(net) + "/" + newPrefix +
+        "</td><td class=\"mono\">" + intToIp(fh) + " – " + intToIp(lh) +
+        "</td><td class=\"mono\">" + intToIp(bc) +
+        "</td><td class=\"num\">" + us.toLocaleString() + "</td></tr>");
+    }
+    $("#sn-sp-out").innerHTML = rows.join("");
+    $("#sn-sp-summary").innerHTML = ezF("%s → %s × /%s subnets, %s usable hosts each.",
+      intToIp(b.net) + "/" + b.prefix, "<strong>" + n + "</strong>", newPrefix, (size - 2).toLocaleString());
+  }
+
+  /* ---------- wire up ---------- */
   $("#sn-calc").addEventListener("click", calculate);
   $("#sn-input").addEventListener("keydown", function (e) { if (e.key === "Enter") calculate(); });
   document.querySelectorAll("[data-sn]").forEach(function (b) {
@@ -285,9 +663,26 @@ document.addEventListener("DOMContentLoaded", function () {
       calculate();
     });
   });
+  $("#sn-rc").addEventListener("click", convertRange);
+  ["#sn-rs", "#sn-re"].forEach(function (sel) {
+    $(sel).addEventListener("keydown", function (e) { if (e.key === "Enter") convertRange(); });
+  });
+  $("#sn-ov-go").addEventListener("click", checkOverlap);
+  $("#sn-sp-go").addEventListener("click", doSplit);
+  $("#sn-sp-net").addEventListener("keydown", function (e) { if (e.key === "Enter") doSplit(); });
 
   calculate();
-  window.addEventListener("ez:i18n", calculate);
+  renderCheatSheet();
+  convertRange();
+  checkOverlap();
+  doSplit();
+  window.addEventListener("ez:i18n", function () {
+    calculate();
+    renderCheatSheet();
+    convertRange();
+    checkOverlap();
+    doSplit();
+  });
 });
 </script>
 </body>
