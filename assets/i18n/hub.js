@@ -56,6 +56,14 @@ window.I18N_DICTS.push({
   "43 models with per-1M-token input and output prices, context windows, cache rates and peak/off-peak windows — each page shows when it was last verified.": "43 个模型的每百万 token 输入/输出价格、上下文窗口、缓存费率与峰谷时段——每个页面都标注了最近核实日期。",
   "Browse pricing": "浏览价格",
 
+  "Latest from the blog": "博客最新文章",
+  "All articles →": "全部文章 →",
+  "The AI Stack in Six Layers: A 2026 Map from the Ops Side": "AI 技术栈的六层结构:一份 2026 年的运维视角地图",
+  "Tool Selection and E2E Architecture": "AI Agent 可观测性（六）：工具选型版图与端到端落地架构",
+  "Catching hallucinations, loops and cost runaways": "如何抓住幻觉、死循环和成本失控：静悄悄的失败怎么报警",
+  "Oct 2026": "2026 年 10 月",
+  "Jul 2026": "2026 年 7 月",
+
   "Why these tools exist": "这些工具为什么存在",
   "Most \"free\" online utilities upload your content to a server, wrap a simple operation in a paywall, or bury it under ads. These run entirely in your browser, so a JSON payload, a prompt draft or a password never leaves the page — and there is nothing to wait for but your own CPU. The pricing pages are re-checked against provider documentation and each one shows the date it was last verified.": "大多数“免费”在线工具会把你的内容上传到服务器、给简单操作套上付费墙，或者先糊一层广告。这些工具完全在你的浏览器里运行，JSON 报文、prompt 草稿或密码都不会离开页面——除了你自己的 CPU，没什么好等的。价格页会按厂商官方文档重新核对，每页都标注核实日期。",
   "el:Maintained by ezaiops, where we write about AI agent observability and production LLM operations. More about the site on the about page.": "由 <a href=\"https://ezaiops.com/en/\">ezaiops</a> 维护，我们在那里撰写 AI Agent 可观测性与生产级 LLM 运维的实战内容。更多介绍见<a href=\"/about.html\">关于页</a>。",

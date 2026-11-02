@@ -100,6 +100,13 @@ function rewriteLinks(doc, rel) {
   doc.querySelectorAll("a[href]").forEach((a) => {
     const href = a.getAttribute("href");
     if (!href) return;
+    // Cross-site blog links carry their Chinese twin so a reader on a Chinese
+    // page lands on the Chinese article instead of the English mirror.
+    const zhHref = a.getAttribute("data-zh-href");
+    if (zhHref) {
+      a.setAttribute("href", zhHref);
+      return;
+    }
     if (href === "/" || href === "/index.html") {
       a.setAttribute("href", "/zh/");
       return;
