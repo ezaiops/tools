@@ -189,7 +189,7 @@ img { max-width: 100%; }
 
 .blog-strip {
   border: 1px solid var(--border); border-radius: 12px; background: #fff;
-  padding: 18px 20px; margin: 0 0 30px;
+  padding: 18px 20px; margin: 32px 0 40px;
 }
 .blog-strip-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
 .blog-strip-head h2 { margin: 0; font-size: 16px; font-weight: 600; color: var(--primary); }
