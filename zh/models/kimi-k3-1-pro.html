@@ -122,7 +122,7 @@
     <h2 style="margin-top:0;font-size:16px">Kimi K3.1 Pro 对比 Kimi K3</h2>
     <table class="data">
       <thead><tr><th></th><th>Kimi K3.1 Pro</th><th>Kimi K3</th></tr></thead>
-      <tbody><tr><td>输入 / 1M</td><td class="num">$2</td><td class="num">$3</td></tr><tr><td>输出 / 1M</td><td class="num">$10</td><td class="num">$15</td></tr><tr><td>缓存命中 / 1M</td><td class="num">$0.20</td><td class="num">$0.30</td></tr><tr><td>上下文窗口</td><td class="num">1M</td><td class="num">1M</td></tr><tr><td>最大输出</td><td class="num">1,048,576</td><td class="num">—</td></tr><tr><td>默认最大输出</td><td class="num">131,072</td><td class="num">—</td></tr><tr><td>开放权重</td><td class="num">是,2026-11-04 前发布</td><td class="num">是</td></tr><tr><td>推理强度</td><td class="num">low / high / max</td><td class="num">low / high / max</td></tr><tr><td>缓存写入(5 分钟)</td><td class="num">$2.00 / 1M</td><td class="num">$3.00 / 1M</td></tr><tr><td>缓存写入(1 小时)</td><td class="num">$4.00 / 1M</td><td class="num">$6.00 / 1M</td></tr></tbody>
+      <tbody><tr><td>输入 / 1M</td><td class="num">¥13</td><td class="num">¥20</td></tr><tr><td>输出 / 1M</td><td class="num">¥68</td><td class="num">¥100</td></tr><tr><td>缓存命中 / 1M</td><td class="num">¥1.30</td><td class="num">¥2</td></tr><tr><td>上下文窗口</td><td class="num">1M</td><td class="num">1M</td></tr><tr><td>最大输出</td><td class="num">1,048,576</td><td class="num">—</td></tr><tr><td>默认最大输出</td><td class="num">131,072</td><td class="num">—</td></tr><tr><td>开放权重</td><td class="num">是,2026-11-04 前发布</td><td class="num">是</td></tr><tr><td>推理强度</td><td class="num">low / high / max</td><td class="num">low / high / max</td></tr><tr><td>缓存写入(5 分钟)</td><td class="num">$2.00 / 1M</td><td class="num">$3.00 / 1M</td></tr><tr><td>缓存写入(1 小时)</td><td class="num">$4.00 / 1M</td><td class="num">$6.00 / 1M</td></tr></tbody>
     </table>
     <p class="note">完整对比:<a href="/zh/models/kimi-k3.html">Kimi K3 价格</a>。</p>
   </section>
@@ -226,9 +226,25 @@ document.addEventListener("DOMContentLoaded", function () {
   var zhPage = document.documentElement.hasAttribute("data-zh-static") ||
                !!(window.ezI18N && window.ezI18N.lang === "zh");
   var c = zhPage && me.cny ? me.cny : null;
-  var inRate = c ? c.input : me.input;
-  var outRate = c ? c.output : me.output;
   var sym = c ? "¥" : "$";
+  // Price the request at the rate its input length actually lands in: mainland
+  // rate cards can break by length (32K / 128K / 256K) and international cards
+  // double past a single threshold. Both bill the whole request at that rate.
+  function ratesFor(tokens) {
+    if (c && c.tiers && c.tiers.length) {
+      for (var i = 0; i < c.tiers.length; i++) {
+        var t = c.tiers[i];
+        if (!t.max || tokens <= t.max) return { in: t.input, out: t.output };
+      }
+      var last = c.tiers[c.tiers.length - 1];
+      return { in: last.input, out: last.output };
+    }
+    var hiIn = c ? c.input_high : me.input_high;
+    var hiOut = c ? c.output_high : me.output_high;
+    if (me.tier_threshold && tokens > me.tier_threshold &&
+        hiIn != null && hiOut != null) return { in: hiIn, out: hiOut };
+    return { in: c ? c.input : me.input, out: c ? c.output : me.output };
+  }
   var inEl = document.getElementById("mc-in");
   var outEl = document.getElementById("mc-out");
   function fmt(n) {
@@ -240,8 +256,10 @@ document.addEventListener("DOMContentLoaded", function () {
   function recalc() {
     var ti = Math.max(0, parseFloat(inEl.value || "0") || 0);
     var to = Math.max(0, parseFloat(outEl.value || "0") || 0);
-    document.getElementById("mc-cost").textContent = fmt(ti * inRate / 1e6 + to * outRate / 1e6);
-    document.getElementById("mc-1k").textContent = fmt((ti * inRate / 1e6 + to * outRate / 1e6) * 1000);
+    var r = ratesFor(ti);
+    var cost = ti * r.in / 1e6 + to * r.out / 1e6;
+    document.getElementById("mc-cost").textContent = fmt(cost);
+    document.getElementById("mc-1k").textContent = fmt(cost * 1000);
   }
   inEl.addEventListener("input", recalc);
   outEl.addEventListener("input", recalc);

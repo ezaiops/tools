@@ -648,7 +648,12 @@ window.EZ_MODELS = {
       "output": 4.4,
       "cached_input": 0.26,
       "context": "1M",
-      "note": "Pay-as-you-go pricing now live"
+      "note": "Pay-as-you-go pricing now live",
+      "cny": {
+        "input": 8,
+        "output": 28,
+        "cached_input": 2
+      }
     },
     {
       "id": "glm-5-3-flash",
@@ -658,7 +663,12 @@ window.EZ_MODELS = {
       "output": 0.5,
       "cached_input": 0.03,
       "context": "1M",
-      "note": "Cheapest GLM-5.3 tier"
+      "note": "Cheapest GLM-5.3 tier",
+      "cny": {
+        "input": 0.8,
+        "output": 2.8,
+        "cached_input": 0.23
+      }
     },
     {
       "id": "glm-5-3-flashx",
@@ -668,7 +678,12 @@ window.EZ_MODELS = {
       "output": 1.25,
       "cached_input": 0.075,
       "context": "1M",
-      "note": "Faster GLM-5.3 tier"
+      "note": "Faster GLM-5.3 tier",
+      "cny": {
+        "input": 2,
+        "output": 7,
+        "cached_input": 0.57
+      }
     },
     {
       "id": "kimi-k3",
@@ -702,6 +717,11 @@ window.EZ_MODELS = {
             ]
           }
         ]
+      },
+      "cny": {
+        "input": 20,
+        "output": 100,
+        "cached_input": 2
       }
     },
     {
@@ -712,7 +732,12 @@ window.EZ_MODELS = {
       "output": 4.0,
       "cached_input": 0.19,
       "context": "262K",
-      "note": "Coding-focused tier. High-speed variant bills $1.90/$8.00"
+      "note": "Coding-focused tier. High-speed variant bills $1.90/$8.00",
+      "cny": {
+        "input": 6.5,
+        "output": 27,
+        "cached_input": 1.3
+      }
     },
     {
       "id": "kimi-k3-1-pro",
@@ -888,7 +913,14 @@ window.EZ_MODELS = {
       "tier_threshold": 512000,
       "input_high": 0.6,
       "output_high": 2.4,
-      "note": "Above 512K tokens per request the rate is $0.60/$2.40"
+      "note": "Above 512K tokens per request the rate is $0.60/$2.40",
+      "cny": {
+        "input": 2.1,
+        "output": 8.4,
+        "cached_input": 0.42,
+        "input_high": 4.2,
+        "output_high": 16.8
+      }
     },
     {
       "id": "mimo-v2-6-pro",
@@ -1208,9 +1240,9 @@ window.EZ_MODELS = {
     {
       "id": "doubao-seed-2-1-turbo",
       "cny": {
-        "input": 6,
-        "output": 30,
-        "cached_input": 1.2
+        "input": 3,
+        "output": 15,
+        "cached_input": 0.6
       },
       "rank": 14,
       "name": "Doubao Seed 2.1 Turbo",
@@ -1403,6 +1435,31 @@ window.EZ_MODELS = {
             "a": "Same $0.50 input price, but Turbo outputs at $2.50 against Pro's $3.00 and has no long-context tier at all — Turbo bills a flat rate to 256K. Above 128K tokens Turbo is half the price of Pro."
           }
         ]
+      },
+      "cny": {
+        "input": 3.2,
+        "output": 16,
+        "cached_input": 0.64,
+        "tiers": [
+          {
+            "max": 32000,
+            "input": 3.2,
+            "output": 16,
+            "cached_input": 0.64
+          },
+          {
+            "max": 128000,
+            "input": 4.8,
+            "output": 24,
+            "cached_input": 0.96
+          },
+          {
+            "max": 256000,
+            "input": 9.6,
+            "output": 48,
+            "cached_input": 1.92
+          }
+        ]
       }
     },
     {
@@ -1421,6 +1478,31 @@ window.EZ_MODELS = {
         "Model ID": "seed-2-0-lite-260428",
         "Tier break": "128K",
         "Audio input": "$3.75 / 1M"
+      },
+      "cny": {
+        "input": 0.6,
+        "output": 3.6,
+        "cached_input": 0.12,
+        "tiers": [
+          {
+            "max": 32000,
+            "input": 0.6,
+            "output": 3.6,
+            "cached_input": 0.12
+          },
+          {
+            "max": 128000,
+            "input": 0.9,
+            "output": 5.4,
+            "cached_input": 0.18
+          },
+          {
+            "max": 256000,
+            "input": 1.8,
+            "output": 10.8,
+            "cached_input": 0.36
+          }
+        ]
       }
     },
     {
@@ -1439,6 +1521,31 @@ window.EZ_MODELS = {
         "Model ID": "seed-2-0-mini-260428",
         "Tier break": "128K",
         "Audio input": "$1.50 / 1M"
+      },
+      "cny": {
+        "input": 0.2,
+        "output": 2.0,
+        "cached_input": 0.04,
+        "tiers": [
+          {
+            "max": 32000,
+            "input": 0.2,
+            "output": 2.0,
+            "cached_input": 0.04
+          },
+          {
+            "max": 128000,
+            "input": 0.4,
+            "output": 4.0,
+            "cached_input": 0.08
+          },
+          {
+            "max": 256000,
+            "input": 0.8,
+            "output": 8.0,
+            "cached_input": 0.16
+          }
+        ]
       }
     }
   ],

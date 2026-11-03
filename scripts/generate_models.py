@@ -6,7 +6,7 @@ import json
 import os
 import re
 from gen_common import (ROOT, BASE, TODAY, UPDATED, MODELS, SOURCES, BY_ID,
-                        COMPARISONS, money, zh_money, blended, esc, HEAD, CRUMBS, FOOT,
+                        COMPARISONS, money, money_amt, zh_money, blended, esc, HEAD, CRUMBS, FOOT,
                         ZH_HEAD, ZH_CRUMBS, ZH_FOOT)
 from zh_models import (NOTES, SPEC_KEYS, SPEC_VALUES, FAQ_ZH, SECTIONS_ZH,
                        TABLES_ZH)
@@ -75,9 +75,25 @@ document.addEventListener("DOMContentLoaded", function () {
   var zhPage = document.documentElement.hasAttribute("data-zh-static") ||
                !!(window.ezI18N && window.ezI18N.lang === "zh");
   var c = zhPage && me.cny ? me.cny : null;
-  var inRate = c ? c.input : me.input;
-  var outRate = c ? c.output : me.output;
   var sym = c ? "\u00a5" : "$";
+  // Price the request at the rate its input length actually lands in: mainland
+  // rate cards can break by length (32K / 128K / 256K) and international cards
+  // double past a single threshold. Both bill the whole request at that rate.
+  function ratesFor(tokens) {
+    if (c && c.tiers && c.tiers.length) {
+      for (var i = 0; i < c.tiers.length; i++) {
+        var t = c.tiers[i];
+        if (!t.max || tokens <= t.max) return { in: t.input, out: t.output };
+      }
+      var last = c.tiers[c.tiers.length - 1];
+      return { in: last.input, out: last.output };
+    }
+    var hiIn = c ? c.input_high : me.input_high;
+    var hiOut = c ? c.output_high : me.output_high;
+    if (me.tier_threshold && tokens > me.tier_threshold &&
+        hiIn != null && hiOut != null) return { in: hiIn, out: hiOut };
+    return { in: c ? c.input : me.input, out: c ? c.output : me.output };
+  }
   var inEl = document.getElementById("mc-in");
   var outEl = document.getElementById("mc-out");
   function fmt(n) {
@@ -89,8 +105,10 @@ document.addEventListener("DOMContentLoaded", function () {
   function recalc() {
     var ti = Math.max(0, parseFloat(inEl.value || "0") || 0);
     var to = Math.max(0, parseFloat(outEl.value || "0") || 0);
-    document.getElementById("mc-cost").textContent = fmt(ti * inRate / 1e6 + to * outRate / 1e6);
-    document.getElementById("mc-1k").textContent = fmt((ti * inRate / 1e6 + to * outRate / 1e6) * 1000);
+    var r = ratesFor(ti);
+    var cost = ti * r.in / 1e6 + to * r.out / 1e6;
+    document.getElementById("mc-cost").textContent = fmt(cost);
+    document.getElementById("mc-1k").textContent = fmt(cost * 1000);
   }
   inEl.addEventListener("input", recalc);
   outEl.addEventListener("input", recalc);
@@ -562,9 +580,15 @@ def model_page_zh(m):
     verified = detail.get("verified") or UPDATED
     canonical = "%s/zh/models/%s.html" % (BASE, slug)
     en_url = "%s/models/%s.html" % (BASE, slug)
+    cny_tiers = (m.get("cny") or {}).get("tiers") or []
     if m.get("cny"):
-        price_note = ('<p class="note">价格为<strong>中国大陆官方定价</strong>（人民币），'
-                      '取自厂商国内站。国际站美元价见 <a href="%s">英文页</a>。</p>' % en_url)
+        if cny_tiers:
+            price_note = ('<p class="note">价格为<strong>中国大陆官方定价</strong>（人民币），'
+                          '按单次请求的输入长度分档，见下表——档位划分与国际站不同，'
+                          '表中每行是该档的完整单价。国际站美元价见 <a href="%s">英文页</a>。</p>' % en_url)
+        else:
+            price_note = ('<p class="note">价格为<strong>中国大陆官方定价</strong>（人民币），'
+                          '取自厂商国内站。国际站美元价见 <a href="%s">英文页</a>。</p>' % en_url)
         # 正文的深度推演按国际站美元费率写成，改数字会引入计算错误，
         # 所以保留原值并在这里说清楚口径。
         prose_note = ('<p class="note">以下正文与成本表中的金额按<strong>国际站美元费率</strong>推演；'
@@ -573,6 +597,7 @@ def model_page_zh(m):
         price_note = ('<p class="note">该模型在中国大陆没有官方 API，此处显示的是'
                       '<strong>国际站美元定价</strong>，不是人民币换算。</p>')
         prose_note = ""
+    price_suffix = " 起" if cny_tiers else ""
     title = "%s API 价格(2026)——每 1M token 成本 | ezaiops tools" % name
     desc = ("%s 每 1M 输入 tokens %s、每 1M 输出 tokens %s。包含上下文窗口、"
             "缓存费率、快速成本计算器与邻近模型对比。"
@@ -594,7 +619,24 @@ def model_page_zh(m):
     }, ensure_ascii=False, indent=2)
 
     tier_row = ""
-    if m.get("tier_threshold"):
+    if cny_tiers:
+        # The mainland rate card breaks by input length (e.g. 32K / 128K / 256K),
+        # which the USD-tier fields cannot express, so each tier gets its own row.
+        rows = []
+        prev = 0
+        for t in cny_tiers:
+            hi = t.get("max")
+            if not hi:
+                label = "超过 %s tokens" % "{:,}".format(prev)
+            elif prev == 0:
+                label = "≤ %s tokens" % "{:,}".format(hi)
+            else:
+                label = "%s–%s tokens" % ("{:,}".format(prev + 1), "{:,}".format(hi))
+            rows.append('<tr><td>%s</td><td class="num">%s</td><td class="num">%s</td></tr>'
+                        % (label, money_amt(t["input"], "¥"), money_amt(t["output"], "¥")))
+            prev = hi or prev
+        tier_row = "".join(rows)
+    elif m.get("tier_threshold"):
         tier_row = ("<tr><td>单次请求超过 %s tokens</td><td class=\"num\">%s</td>"
                     "<td class=\"num\">%s</td></tr>" % (
                         "{:,}".format(m["tier_threshold"]),
@@ -603,7 +645,7 @@ def model_page_zh(m):
                  % zh_money(m, "cached_input")) if m.get("cached_input") else \
                 "<dt>缓存输入</dt><dd>不提供</dd>"
     base_row = ""
-    if not m.get("time_pricing"):
+    if not m.get("time_pricing") and not cny_tiers:
         base_row = ('<tr><td>标准价格</td><td class="num">%s</td>'
                     '<td class="num">%s</td></tr>' % (zh_money(m, "input"), zh_money(m, "output")))
 
@@ -637,14 +679,14 @@ def model_page_zh(m):
     html += f"""
   <h1>{esc(name)} API 价格:每 1M token 成本</h1>
   <p class="lead">{name} 通过 {esc(m['provider'])} API 的价格:每 1M 输入 tokens
-  <strong>{zh_money(m, 'input')}</strong>{price_mode}、每 1M 输出 tokens
-  <strong>{zh_money(m, 'output')}</strong>。{esc(note_zh)}。
+  <strong>{zh_money(m, 'input')}</strong>{price_suffix}{price_mode}、每 1M 输出 tokens
+  <strong>{zh_money(m, 'output')}</strong>{price_suffix}。{esc(note_zh)}。
   以下价格已于 {verified} 对照官方定价文档核实。</p>
 
   <section class="panel">
     <div class="stats-grid">
-      <div class="stat"><div class="k">输入 / 1M tokens</div><div class="v">{zh_money(m, 'input')}</div></div>
-      <div class="stat"><div class="k">输出 / 1M tokens</div><div class="v">{zh_money(m, 'output')}</div></div>
+      <div class="stat"><div class="k">输入 / 1M tokens</div><div class="v">{zh_money(m, 'input')}{price_suffix}</div></div>
+      <div class="stat"><div class="k">输出 / 1M tokens</div><div class="v">{zh_money(m, 'output')}{price_suffix}</div></div>
       <div class="stat"><div class="k">输出倍率</div><div class="v">{multiple:.1f}×</div></div>
       <div class="stat"><div class="k">上下文窗口</div><div class="v">{esc(m.get('context') or '—')}</div></div>
     </div>

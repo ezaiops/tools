@@ -213,9 +213,25 @@ document.addEventListener("DOMContentLoaded", function () {
   var zhPage = document.documentElement.hasAttribute("data-zh-static") ||
                !!(window.ezI18N && window.ezI18N.lang === "zh");
   var c = zhPage && me.cny ? me.cny : null;
-  var inRate = c ? c.input : me.input;
-  var outRate = c ? c.output : me.output;
   var sym = c ? "¥" : "$";
+  // Price the request at the rate its input length actually lands in: mainland
+  // rate cards can break by length (32K / 128K / 256K) and international cards
+  // double past a single threshold. Both bill the whole request at that rate.
+  function ratesFor(tokens) {
+    if (c && c.tiers && c.tiers.length) {
+      for (var i = 0; i < c.tiers.length; i++) {
+        var t = c.tiers[i];
+        if (!t.max || tokens <= t.max) return { in: t.input, out: t.output };
+      }
+      var last = c.tiers[c.tiers.length - 1];
+      return { in: last.input, out: last.output };
+    }
+    var hiIn = c ? c.input_high : me.input_high;
+    var hiOut = c ? c.output_high : me.output_high;
+    if (me.tier_threshold && tokens > me.tier_threshold &&
+        hiIn != null && hiOut != null) return { in: hiIn, out: hiOut };
+    return { in: c ? c.input : me.input, out: c ? c.output : me.output };
+  }
   var inEl = document.getElementById("mc-in");
   var outEl = document.getElementById("mc-out");
   function fmt(n) {
@@ -227,8 +243,10 @@ document.addEventListener("DOMContentLoaded", function () {
   function recalc() {
     var ti = Math.max(0, parseFloat(inEl.value || "0") || 0);
     var to = Math.max(0, parseFloat(outEl.value || "0") || 0);
-    document.getElementById("mc-cost").textContent = fmt(ti * inRate / 1e6 + to * outRate / 1e6);
-    document.getElementById("mc-1k").textContent = fmt((ti * inRate / 1e6 + to * outRate / 1e6) * 1000);
+    var r = ratesFor(ti);
+    var cost = ti * r.in / 1e6 + to * r.out / 1e6;
+    document.getElementById("mc-cost").textContent = fmt(cost);
+    document.getElementById("mc-1k").textContent = fmt(cost * 1000);
   }
   inEl.addEventListener("input", recalc);
   outEl.addEventListener("input", recalc);
