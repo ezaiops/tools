@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-28",
+  "updated": "2026-11-05",
   "models": [
     {
       "id": "gpt-6-astra",
@@ -310,7 +310,14 @@
       "output": 10.0,
       "cached_input": 0.1,
       "context": "1.05M",
-      "note": "Flagship reasoning model, released October 2026. Introductory $2/$10 through 2026-11-30, then $4/$20; cache reads are $0.10 now and $0.20 after. Implicit caching only, so there is no cache-write fee"
+      "note": "Flagship reasoning model, released October 2026. Introductory $2/$10 through 2026-11-30, then $4/$20; cache reads are $0.10 now and $0.20 after. Implicit caching only, so there is no cache-write fee",
+      "price_change": {
+        "end": "2026-11-30",
+        "effective": "2026-12-01",
+        "input": 4.0,
+        "output": 20.0,
+        "cached_input": 0.2
+      }
     },
     {
       "id": "gemini-3-1-pro",
@@ -334,7 +341,14 @@
       "output": 3.75,
       "cached_input": 0.075,
       "context": "1.05M",
-      "note": "Introductory price in effect through 2026-12-31"
+      "note": "Introductory price in effect through 2026-12-31",
+      "price_change": {
+        "end": "2026-12-31",
+        "effective": "2027-01-01",
+        "input": 1.5,
+        "output": 7.5,
+        "cached_input": 0.15
+      }
     },
     {
       "id": "gemini-3-5-flash-lite",
@@ -1547,6 +1561,29 @@
           }
         ]
       }
+    },
+    {
+      "id": "hunyuan-hy4",
+      "rank": 16,
+      "name": "Hunyuan Hy4",
+      "provider": "Tencent",
+      "input": 0.417,
+      "output": 1.2505,
+      "cached_input": 0.021,
+      "context": "1M",
+      "cny": {
+        "input": 6,
+        "output": 18,
+        "cached_input": 0.3
+      },
+      "note": "Released 2026-11-04 with vision and computer use on the open-weight 770B MoE. OpenRouter bills $0.417/$1.2505 per 1M; the mainland Tencent Cloud rate is CNY 6/18",
+      "specs": {
+        "Model ID": "tencent/hy4",
+        "Parameters": "770B total / 49B active"
+      },
+      "detail": {
+        "verified": "2026-11-05"
+      }
     }
   ],
   "comparisons": [
@@ -1599,6 +1636,8 @@
     "https://platform.xiaomimimo.com/docs/en-US/price/pay-as-you-go",
     "https://mistral.ai/pricing/api",
     "https://www.alibabacloud.com/help/en/model-studio/models",
-    "https://docs.byteplus.com/en/docs/modelark/model-pricing"
+    "https://docs.byteplus.com/en/docs/modelark/model-pricing",
+    "https://openrouter.ai/api/v1/models",
+    "https://hunyuan.tencent.com/research/hy4"
   ]
 }

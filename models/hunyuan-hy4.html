@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hunyuan Hy4 API pricing in 2026: cost per 1M tokens | ezaiops tools</title>
+<meta name="description" content="Hunyuan Hy4 costs $0.417 per 1M input tokens and $1.2505 per 1M output tokens. Context window, caching rates, a quick cost calculator and comparisons with nearby models.">
+<link rel="canonical" href="https://tools.ezaiops.com/models/hunyuan-hy4.html">
+<link rel="alternate" hreflang="zh-CN" href="https://tools.ezaiops.com/zh/models/hunyuan-hy4.html">
+<link rel="alternate" hreflang="en" href="https://tools.ezaiops.com/models/hunyuan-hy4.html">
+<link rel="alternate" hreflang="x-default" href="https://tools.ezaiops.com/models/hunyuan-hy4.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Hunyuan Hy4 API pricing in 2026: cost per 1M tokens | ezaiops tools">
+<meta property="og:description" content="Hunyuan Hy4 costs $0.417 per 1M input tokens and $1.2505 per 1M output tokens. Context window, caching rates, a quick cost calculator and comparisons with nearby models.">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/style.css?v=20261102a">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How much does Hunyuan Hy4 cost per 1M tokens?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "$0.417 per 1M input tokens, $1.2505 per 1M output tokens Cached input is billed at $0.021 per 1M tokens where caching is supported."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does the Hunyuan Hy4 context window cost extra?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The published context window is charged at a flat per-token rate. Released 2026-11-04 with vision and computer use on the open-weight 770B MoE. OpenRouter bills $0.417/$1.2505 per 1M; the mainland Tencent Cloud rate is CNY 6/18"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the cheapest way to run Hunyuan Hy4 at scale?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Keep a stable prompt prefix so it caches; cached input runs at $0.021 per 1M, cap output length, schedule asynchronous work into off-peak windows where the provider prices by time, and move the easy 80% of traffic to a lower tier."
+      }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/"><span class="logo">ez</span>ezaiops <small>tools</small></a>
+    <nav class="site-nav">
+      <a href="/">Tools</a>
+      <a href="/models/index.html">LLM pricing</a>
+      <a href="https://ezaiops.com/en/" title="ezaiops.com — AI agent observability &amp; LLMOps field notes (in English)">Blog</a>
+      <a href="https://github.com/ezaiops">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap tool-page">
+  <nav class="crumbs"><a href="/">Home</a> / <a href="/models/index.html">LLM pricing</a> / Hunyuan Hy4<a class="main-site-link" href="https://ezaiops.com/en/">ezaiops.com ↗</a></nav>
+
+  <h1>Hunyuan Hy4 API pricing: cost per 1M tokens</h1>
+  <p class="lead">Hunyuan Hy4 currently costs <strong>$0.417 per 1M input tokens</strong> and
+  <strong>$1.2505 per 1M output tokens</strong> through the Tencent API. Released 2026-11-04 with vision and computer use on the open-weight 770B MoE. OpenRouter bills $0.417/$1.2505 per 1M; the mainland Tencent Cloud rate is CNY 6/18.
+  Prices below were verified against official pricing documentation on 2026-11-05.</p>
+
+  <section class="panel">
+    <div class="stats-grid">
+      <div class="stat"><div class="k">Input / 1M tokens</div><div class="v">$0.417</div></div>
+      <div class="stat"><div class="k">Output / 1M tokens</div><div class="v">$1.2505</div></div>
+      <div class="stat"><div class="k">Output multiple</div><div class="v">3.0×</div></div>
+      <div class="stat"><div class="k">Context window</div><div class="v">1M</div></div>
+    </div>
+    
+
+    <table class="data">
+      <thead><tr><th>Tier</th><th class="num">Input / 1M</th><th class="num">Output / 1M</th></tr></thead>
+      <tbody>
+        <tr><td>Standard rate</td><td class="num">$0.417</td><td class="num">$1.2505</td></tr>
+        
+      </tbody>
+    </table>
+    <dl class="kv-list"><dt>Cached input</dt><dd>$0.021</dd></dl>
+    <p class="note">Verify current rates on the Tencent pricing page before committing budget —
+    providers adjust prices frequently, and long-context or caching discounts may not show up
+    in the headline numbers.</p>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0;font-size:16px">Quick cost calculator for Hunyuan Hy4</h2>
+    <div class="field-row">
+      <div class="field">
+        <label class="field-label" for="mc-in">Input tokens</label>
+        <input type="number" id="mc-in" class="mono" value="1000000" min="0">
+      </div>
+      <div class="field">
+        <label class="field-label" for="mc-out">Output tokens</label>
+        <input type="number" id="mc-out" class="mono" value="100000" min="0">
+      </div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat"><div class="k">One request (this volume)</div><div class="v" id="mc-cost">—</div></div>
+      <div class="stat"><div class="k">× 1,000 such requests</div><div class="v" id="mc-1k">—</div></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0;font-size:16px">Hunyuan Hy4 vs nearby models (blended at a 3:1 input:output ratio)</h2>
+    <table class="data">
+      <thead><tr><th>Model</th><th>Provider</th><th class="num">Input</th><th class="num">Output</th><th class="num">Cached in</th><th>Context</th></tr></thead>
+      <tbody><tr><td><a href="/models/mimo-v2-6-pro.html">MiMo V2.6 Pro</a></td><td>Xiaomi</td><td class="num">$0.435</td><td class="num">$0.87</td><td class="num">$0.0036</td><td>—</td></tr><tr><td><a href="/models/glm-5-3-flashx.html">GLM-5.3 FlashX</a></td><td>Z.AI</td><td class="num">$0.37</td><td class="num">$1.25</td><td class="num">$0.075</td><td>1M</td></tr><tr style="background:var(--accent-soft)"><td><strong>Hunyuan Hy4</strong></td><td>Tencent</td><td class="num">$0.417</td><td class="num">$1.2505</td><td class="num">$0.021</td><td>1M</td></tr><tr><td><a href="/models/doubao-seed-2-0-lite.html">Doubao Seed 2.0 Lite</a></td><td>ByteDance</td><td class="num">$0.25</td><td class="num">$2</td><td class="num">$0.05</td><td>256K</td></tr><tr><td><a href="/models/mistral-large-3.html">Mistral Large 3</a></td><td>Mistral</td><td class="num">$0.50</td><td class="num">$1.50</td><td class="num">—</td><td>—</td></tr></tbody>
+    </table>
+    <p class="note">The full 44-model comparison lives on the <a href="/models/index.html">pricing hub</a>,
+    and the <a href="/tools/token-counter.html">token &amp; cost calculator</a> will price your actual prompt.</p>
+  </section>
+
+  <section class="prose">
+    <h2>How to think about Hunyuan Hy4 pricing</h2><p>Output tokens bill at 3.0× the input rate, which is the number that decides whether a workload is affordable: summarization and classification are input-heavy, while agents, chain-of-thought reasoning and long-form drafting are output-heavy. Before comparing headline prices, measure the real token mix from your own logs, then apply the blended formula <code>(input share × input price) + (output share × output price)</code>.</p><p>Beyond the headline rate, three levers usually decide a real bill: batch discounts where the provider offers one, cache hits on a stable prompt prefix, and right-sizing — routing simple steps to a mini or flash-class model instead of the flagship. Not every provider offers all three, so confirm which apply rather than assuming them. A cache hit bills at $0.021 against $0.417 for a miss, so a reused prefix is the cheapest tokens you will ever buy.</p>
+
+    <h2>Frequently asked questions</h2>
+    <details class="faq"><summary>How much does Hunyuan Hy4 cost per 1M tokens?</summary>
+      <div class="faq-body">$0.417 per 1M input tokens, $1.2505 per 1M output tokens Cached input is billed at $0.021 per 1M tokens where caching is supported.</div></details>
+    <details class="faq"><summary>Does the Hunyuan Hy4 context window cost extra?</summary>
+      <div class="faq-body">The published context window is charged at a flat per-token rate. Released 2026-11-04 with vision and computer use on the open-weight 770B MoE. OpenRouter bills $0.417/$1.2505 per 1M; the mainland Tencent Cloud rate is CNY 6/18</div></details>
+    <details class="faq"><summary>What is the cheapest way to run Hunyuan Hy4 at scale?</summary>
+      <div class="faq-body">Keep a stable prompt prefix so it caches; cached input runs at $0.021 per 1M, cap output length, schedule asynchronous work into off-peak windows where the provider prices by time, and move the easy 80% of traffic to a lower tier.</div></details>
+    
+  </section>
+
+<div class="ad-slot">
+  <strong>Ad slot</strong>
+  Google AdSense placeholder — activated once the site is approved and has steady traffic.
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h4>Popular tools</h4>
+        <ul>
+          <li><a href="/tools/token-counter.html">LLM token &amp; cost calculator</a></li>
+          <li><a href="/tools/json-formatter.html">JSON formatter</a></li>
+          <li><a href="/tools/regex-tester.html">Regex tester</a></li>
+          <li><a href="/tools/cron-explainer.html">Cron explainer</a></li>
+          <li><a href="/tools/encode-decode.html">Base64 / URL / hash</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>LLM pricing</h4>
+        <ul>
+          <li><a href="/models/index.html">All models</a></li>
+          <li><a href="/models/gpt-6-astra.html">GPT-6 Astra pricing</a></li>
+          <li><a href="/models/claude-fable-5-1.html">Claude Fable 5.1 pricing</a></li>
+          <li><a href="/models/gemini-4-argon.html">Gemini 4 Argon pricing</a></li>
+          <li><a href="/models/deepseek-v4-1-flash.html">DeepSeek V4.1 Flash pricing</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>More</h4>
+        <ul>
+          <li><a href="https://ezaiops.com/en/">ezaiops.com</a></li>
+          <li><a href="/about.html">About</a></li>
+          <li><a href="/contact.html">Contact</a></li>
+          <li><a href="/privacy.html">Privacy policy</a></li>
+          <li><a href="https://github.com/ezaiops">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">&copy; <span data-year>2026</span> ezaiops &middot; your input never leaves your browser</div>
+  </div>
+</footer>
+
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "4bbeee48cff340fe9ae88884f763f334"}'></script>
+<!-- Cloudflare Web Analytics. Loaded explicitly rather than through the zone's
+     auto_install: that injects at the edge, and GitHub Pages sends HTML with
+     max-age=600, so cached pages never got the script and the reports were
+     undercounting by roughly two thirds. No cookies, no consent banner needed. -->
+
+<script src="/assets/common.js?v=20261102a" defer></script>
+<script src="/assets/models.js?v=20261102a" defer></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var models = (window.EZ_MODELS || {}).models || [];
+  var me = null;
+  for (var i = 0; i < models.length; i++) if (models[i].id === "hunyuan-hy4") me = models[i];
+  if (!me) return;
+  // Chinese pages bill in CNY where the provider publishes a mainland rate.
+  // data-zh-static is a server-rendered attribute, so it is readable before the
+  // i18n engine finishes loading; the language check is only a fallback.
+  var zhPage = document.documentElement.hasAttribute("data-zh-static") ||
+               !!(window.ezI18N && window.ezI18N.lang === "zh");
+  var c = zhPage && me.cny ? me.cny : null;
+  var sym = c ? "¥" : "$";
+  // Price the request at the rate its input length actually lands in: mainland
+  // rate cards can break by length (32K / 128K / 256K) and international cards
+  // double past a single threshold. Both bill the whole request at that rate.
+  function ratesFor(tokens) {
+    if (c && c.tiers && c.tiers.length) {
+      for (var i = 0; i < c.tiers.length; i++) {
+        var t = c.tiers[i];
+        if (!t.max || tokens <= t.max) return { in: t.input, out: t.output };
+      }
+      var last = c.tiers[c.tiers.length - 1];
+      return { in: last.input, out: last.output };
+    }
+    var hiIn = c ? c.input_high : me.input_high;
+    var hiOut = c ? c.output_high : me.output_high;
+    if (me.tier_threshold && tokens > me.tier_threshold &&
+        hiIn != null && hiOut != null) return { in: hiIn, out: hiOut };
+    return { in: c ? c.input : me.input, out: c ? c.output : me.output };
+  }
+  var inEl = document.getElementById("mc-in");
+  var outEl = document.getElementById("mc-out");
+  function fmt(n) {
+    if (n <= 0) return sym + "0";
+    if (n < 0.000001) return "<" + sym + "0.000001";
+    var d = n < 0.01 ? 6 : n < 1 ? 4 : 2;
+    return sym + n.toFixed(d);
+  }
+  function recalc() {
+    var ti = Math.max(0, parseFloat(inEl.value || "0") || 0);
+    var to = Math.max(0, parseFloat(outEl.value || "0") || 0);
+    var r = ratesFor(ti);
+    var cost = ti * r.in / 1e6 + to * r.out / 1e6;
+    document.getElementById("mc-cost").textContent = fmt(cost);
+    document.getElementById("mc-1k").textContent = fmt(cost * 1000);
+  }
+  inEl.addEventListener("input", recalc);
+  outEl.addEventListener("input", recalc);
+  recalc();
+});
+</script>
+
+</body>
+</html>

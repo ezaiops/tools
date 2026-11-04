@@ -338,6 +338,14 @@ textarea.mono, input.mono { font-family: var(--mono); font-size: 13px; }
 .code-out.error { background: var(--red-soft); border-color: #fecaca; color: var(--red); }
 
 .note { font-size: 13px; color: var(--muted); margin: 12px 0 0; }
+.note.price-alert {
+  border-left: 3px solid #b45309;
+  background: #fffbeb;
+  color: #78350f;
+  padding: 10px 14px;
+  border-radius: 6px;
+  margin: 14px 0 4px;
+}
 .hidden { display: none !important; }
 
 table.data { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 10px; background: #fff; }

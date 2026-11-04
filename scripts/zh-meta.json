@@ -82,7 +82,7 @@
   },
   "tools/token-counter.html": {
     "title": "LLM 分词与成本计算器 — 单次、每日、每月",
-    "desc": "统计 prompt 的 token 数，并按 43 个模型估算单次、每日、每月 API 成本，自动计入 Batch 五折与缓存折扣。"
+    "desc": "统计 prompt 的 token 数，并按 44 个模型估算单次、每日、每月 API 成本，自动计入 Batch 五折与缓存折扣。"
   },
   "tools/unit-converter.html": {
     "title": "单位换算 — 长度、重量、温度、数据量",

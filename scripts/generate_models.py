@@ -18,6 +18,30 @@ def md_bold(text):
     return re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", esc(text))
 
 
+def price_alert(m, zh=False):
+    """A dated price rise deserves a visible callout, not a clause buried in the
+    lead paragraph. `price_change` in models.json holds the published end date
+    and the rates that take over from the day after."""
+    pc = m.get("price_change")
+    if not pc:
+        return ""
+    old_in, old_out = money(m["input"]), money(m["output"])
+    new_in, new_out = money(pc["input"]), money(pc["output"])
+    old_cache = money(m.get("cached_input"))
+    new_cache = money(pc.get("cached_input"))
+    if zh:
+        text = ('注意：当前为限时促销价。%s/%s（缓存输入 %s）有效至 %s；自 %s 起调整为 '
+                '%s/%s（缓存输入 %s）。请按新价核算预算。'
+                % (old_in, old_out, old_cache, pc["end"], pc["effective"],
+                   new_in, new_out, new_cache))
+    else:
+        text = ('Heads up: this is introductory pricing. %s/%s (cached input %s) holds through '
+                '%s; from %s the rate becomes %s/%s (cached input %s). Budget against the new rate.'
+                % (old_in, old_out, old_cache, pc["end"], pc["effective"],
+                   new_in, new_out, new_cache))
+    return '<p class="note price-alert">%s</p>' % text
+
+
 def source_item(url):
     """One line of the bibliography.
 
@@ -515,6 +539,7 @@ def model_page(m):
       <div class="stat"><div class="k">Output multiple</div><div class="v">{multiple:.1f}×</div></div>
       <div class="stat"><div class="k">Context window</div><div class="v">{esc(m.get('context') or '—')}</div></div>
     </div>
+    {price_alert(m)}
 
     <table class="data">
       <thead><tr><th>Tier</th><th class="num">Input / 1M</th><th class="num">Output / 1M</th></tr></thead>
@@ -691,6 +716,7 @@ def model_page_zh(m):
       <div class="stat"><div class="k">上下文窗口</div><div class="v">{esc(m.get('context') or '—')}</div></div>
     </div>
     {price_note}
+    {price_alert(m, True)}
 
     <table class="data">
       <thead><tr><th>档位</th><th class="num">输入 / 1M</th><th class="num">输出 / 1M</th></tr></thead>
