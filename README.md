@@ -9,7 +9,7 @@ AI & DevOps micro-tools that run entirely in the browser. Pure static site — n
 | Path | What |
 |---|---|
 | `index.html` | Tool hub / landing page |
-| `tools/token-counter.html` | LLM token counter + cost calculator (44 models, official BPE tokenizer via CDN with heuristic fallback) |
+| `tools/token-counter.html` | LLM token counter + cost calculator (46 models, official BPE tokenizer via CDN with heuristic fallback) |
 | `tools/json-formatter.html` | Format / minify / validate JSON with error line+column |
 | `tools/regex-tester.html` | Live JS regex tester: highlighting, capture groups, replacement preview |
 | `tools/cron-explainer.html` | Cron → plain English + next 10 runs in local timezone |
@@ -27,7 +27,7 @@ AI & DevOps micro-tools that run entirely in the browser. Pure static site — n
 | `tools/unit-converter.html` | Six unit categories incl. GiB vs GB |
 | `tools/qr-generator.html` | QR as SVG/PNG, four ECC levels |
 | `tools/pdf-tools.html` | PDF merge/split/reorder via pdf-lib |
-| `models/*.html` | 44 per-model SEO pricing pages (generated) |
+| `models/*.html` | 46 per-model SEO pricing pages (generated) |
 | `models/index.html` | Full pricing comparison hub |
 | `zh/models/*.html` | The whole pricing tree in Chinese (generated) |
 | `privacy.html`, `about.html`, `contact.html` | Privacy policy, about and contact pages |

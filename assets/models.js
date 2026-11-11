@@ -1,5 +1,5 @@
 window.EZ_MODELS = {
-  "updated": "2026-11-05",
+  "updated": "2026-11-11",
   "models": [
     {
       "id": "gpt-6-astra",
@@ -234,7 +234,7 @@ window.EZ_MODELS = {
       "output": 50.0,
       "cached_input": 0.25,
       "context": "1M",
-      "note": "Highest-capability and most widely available Claude"
+      "note": "Superseded by Claude Fable 5.2 on 2026-11-10; still available under Anthropic's Additional models at the same $10/$50 rate"
     },
     {
       "id": "claude-opus-5-5",
@@ -1583,6 +1583,49 @@ window.EZ_MODELS = {
       },
       "detail": {
         "verified": "2026-11-05"
+      }
+    },
+    {
+      "id": "claude-fable-5-2",
+      "rank": 17,
+      "name": "Claude Fable 5.2",
+      "provider": "Anthropic",
+      "input": 8,
+      "output": 40,
+      "cached_input": 0.2,
+      "context": "1M",
+      "note": "Released 2026-11-10 as Anthropic's new flagship, 20% below Fable 5.1 at $8/$40. Flat rate across the full 1M context window; cache reads are $0.20 and Fast mode runs $16/$80",
+      "specs": {
+        "Model ID": "claude-fable-5-2",
+        "Fast mode": "$16 / $80 per 1M"
+      },
+      "detail": {
+        "verified": "2026-11-11"
+      }
+    },
+    {
+      "id": "gemini-4-carbon",
+      "rank": 18,
+      "name": "Gemini 4 Carbon",
+      "provider": "Google",
+      "input": 2.0,
+      "output": 10.0,
+      "cached_input": 0.1,
+      "context": "1.05M",
+      "price_change": {
+        "end": "2026-11-30",
+        "effective": "2026-12-01",
+        "input": 4.0,
+        "output": 20.0,
+        "cached_input": 0.2
+      },
+      "note": "Frontier reasoning model opened to all paid API developers on 2026-11-10. Priced identically to Gemini 4 Argon: $2/$10 introductory through 2026-11-30, then $4/$20. Implicit caching only; thinking tokens are billed",
+      "specs": {
+        "Model ID": "gemini-4-carbon",
+        "Context": "1,048,576 tokens"
+      },
+      "detail": {
+        "verified": "2026-11-11"
       }
     }
   ],
