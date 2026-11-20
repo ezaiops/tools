@@ -1,6 +1,57 @@
 {
-  "updated": "2026-11-14",
+  "updated": "2026-11-21",
   "models": [
+    {
+      "id": "gpt-6-2-astra",
+      "rank": 1,
+      "name": "GPT-6.2 Astra",
+      "provider": "OpenAI",
+      "input": 8.0,
+      "output": 40.0,
+      "cached_input": 0.4,
+      "context": "1.05M",
+      "tier_threshold": 272000,
+      "input_high": 16.0,
+      "output_high": 60.0,
+      "note": "Flagship, released 2026-11-18. $8/$40 per 1M with $0.40 cache reads — 20% below GPT-6 Astra's $10/$50, matching Claude Fable 5.2. Prompts above 272K tokens bill the whole request at $16/$60",
+      "detail": {
+        "verified": "2026-11-21",
+        "faq": [
+          {
+            "q": "How much does GPT-6.2 Astra cost per 1M tokens?",
+            "a": "$8.00 per 1M input tokens and $40.00 per 1M output tokens. Cached input bills at $0.40 per 1M, and cache writes cost $10.00 per 1M for a 30-minute retention window or $20.00 for 12 hours."
+          },
+          {
+            "q": "Does GPT-6.2 Astra charge more for long prompts?",
+            "a": "Yes, the same 272K cliff as GPT-6 Astra. Requests above 272K input tokens bill the entire request at double the input and cache rates and 1.5x the output rate: $16.00 in, $0.80 cached, $60.00 out."
+          },
+          {
+            "q": "How does GPT-6.2 Astra compare with Claude Fable 5.2?",
+            "a": "Both list at $8/$40 per 1M, but Astra's cache read is $0.40 against Fable 5.2's $0.20. On Artificial Analysis' index Astra scores 62 against Fable 5.2's 65, and one head-to-head pegged an Astra task at about $4 — roughly 5% of the equivalent Fable 5.2 task cost."
+          },
+          {
+            "q": "Is there a batch discount on GPT-6.2 Astra?",
+            "a": "Batch and Flex processing run at half-price ($4.00/$20.00), Fast mode doubles the standard rate, and Ultrafast bills at 3x. Eligible background requests are 30-40% below Standard depending on the completion window."
+          }
+        ],
+        "sections": [
+          {
+            "h2": "What GPT-6.2 Astra costs",
+            "paras": [
+              "$8 per 1M input tokens and $40 per 1M output tokens, with cache reads at $0.40. That is a 20% cut from GPT-6 Astra's $10/$50 and puts it exactly level with Claude Fable 5.2 on headline price — the first time OpenAI's flagship has matched Anthropic's on list price.",
+              "The 272K long-context cliff carries over unchanged: a request over 272K input tokens is re-billed for the whole request at $16/$60. OpenAI's own docs are explicit that this applies to the entire request, not just the excess, so long-document pipelines should be sized against the higher tier from the start."
+            ]
+          },
+          {
+            "h2": "Where Astra sits against Sol and Fable 5.2",
+            "paras": [
+              "GPT-6.2 pairs Astra with Sol at $2/$10. The five-to-one gap between them is the same ladder GPT-6.1 used, and the routing advice is unchanged: Sol for high-volume coding and agent loops, Astra for the slice where reasoning depth decides the outcome.",
+              "Against Fable 5.2 the gap is narrower — same list price, and Astra leads on some agent benchmarks (78.3% on Agents' Last Exam) while trailing on the aggregate index. Buyers comparing the two should decide on their own workload mix, not the headline score, because cache pricing and throughput shape the real bill."
+            ]
+          }
+        ]
+      }
+    },
     {
       "id": "gpt-6-astra",
       "rank": 1,
@@ -14,6 +65,98 @@
       "input_high": 20.0,
       "output_high": 75.0,
       "note": "Flagship. Prompts above 272K tokens bill at $20/$75"
+    },
+    {
+      "id": "gemini-4-neon",
+      "rank": 3,
+      "name": "Gemini 4 Neon",
+      "provider": "Google",
+      "input": 3.0,
+      "output": 15.0,
+      "cached_input": 0.15,
+      "context": "1.05M",
+      "note": "Released 2026-11-18 as the cost-efficient mid-tier of the Gemini 4 family. $3/$15 per 1M with $0.15 cache reads; per-task cost about 17% below Carbon and ~40% faster completion",
+      "detail": {
+        "verified": "2026-11-21",
+        "faq": [
+          {
+            "q": "How much does Gemini 4 Neon cost per 1M tokens?",
+            "a": "$3.00 per 1M input tokens and $15.00 per 1M output tokens, with cached input at $0.15 per 1M — 5% of the input rate. The free tier covers limited requests on both AI Studio and the Gemini API."
+          },
+          {
+            "q": "How does Neon compare with Gemini 4 Carbon?",
+            "a": "Carbon lists at $2/$10 (promo) and Neon at $3/$15 (standard). Independent tests measured Neon's per-task cost at roughly 17% below Carbon's with ~40% shorter completion time, which is the whole pitch: a mid-tier model that undercuts the flagship on delivered tasks."
+          },
+          {
+            "q": "Is Gemini 4 Neon a reasoning model?",
+            "a": "Neon targets complex, multi-step AI tasks and scores 61 on Artificial Analysis' intelligence index — third globally, ahead of its price tier. Google routes it for agents and long workflows rather than simple chat completions."
+          }
+        ],
+        "sections": [
+          {
+            "h2": "What Gemini 4 Neon costs",
+            "paras": [
+              "$3 per 1M input and $15 per 1M output, with cache reads at $0.15 — a 95% discount on the input rate for repeated prefixes. The 1.05M-token window bills at one flat rate with no long-context tier, unlike Gemini 3.1 Pro's 200K break.",
+              "Neon lands between the promotional Carbon ($2/$10, rising to $4/$20 on 2026-12-01) and Hydrogen ($1.50/$7.50). Priced on delivered task cost rather than headline tokens, it is the family's value pick for agent workloads."
+            ]
+          },
+          {
+            "h2": "Neon, Carbon or Hydrogen",
+            "paras": [
+              "Hydrogen is the cheap volume tier at $1.50/$7.50, Carbon the premium reasoning tier, and Neon the middle. Google positions Neon for complex AI tasks where you want flagship-adjacent judgement without flagship spend.",
+              "The practical rule: route simple classification and extraction to Hydrogen, agent and coding loops with a real failure cost to Neon, and reserve Carbon for the small slice where the depth of reasoning is the deciding factor."
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "gpt-6-2-sol",
+      "rank": 4,
+      "name": "GPT-6.2 Sol",
+      "provider": "OpenAI",
+      "input": 2.0,
+      "output": 10.0,
+      "cached_input": 0.1,
+      "context": "1.05M",
+      "note": "Everyday workhorse released 2026-11-18 alongside Astra. Holds GPT-6.1 Sol's $2/$10 pricing with $0.10 cache reads — and unlike Astra it has no long-context surcharge",
+      "specs": {
+        "Max output": "128K",
+        "Image input": "Supported"
+      },
+      "detail": {
+        "verified": "2026-11-21",
+        "faq": [
+          {
+            "q": "How much does GPT-6.2 Sol cost per 1M tokens?",
+            "a": "$2.00 per 1M input tokens and $10.00 per 1M output tokens, unchanged from GPT-6.1 Sol. Cached input bills at $0.10 per 1M, and cache writes cost $2.50 per 1M for a 30-minute window or $5.00 for 12 hours."
+          },
+          {
+            "q": "Does GPT-6.2 Sol have a long-context surcharge?",
+            "a": "No. OpenAI lists no 272K tier for Sol, unlike Astra — the $2/$10 rate holds across the whole 1.05M context window. For long-document work this makes Sol structurally cheaper per token than the flagships."
+          },
+          {
+            "q": "What changed from GPT-6.1 Sol?",
+            "a": "Pricing and context are identical. The 6.2 update is behavioural: improvements in agentic workflows, code generation and multi-step tasks, with fewer tokens spent per task, which lowers effective per-task cost."
+          }
+        ],
+        "sections": [
+          {
+            "h2": "What GPT-6.2 Sol costs",
+            "paras": [
+              "$2 per 1M input and $10 per 1M output, the same card as GPT-6.1 Sol, with a flat rate across the 1.05M context window — no 272K cliff. That flatness is the practical difference from Astra, and it makes Sol the default choice for any workload that regularly passes deep into long context.",
+              "Batch and Flex halve the rate to $1/$5; Fast mode doubles it; background completion windows take 30-40% off the standard price."
+            ]
+          },
+          {
+            "h2": "Sol vs Astra vs Terra",
+            "paras": [
+              "The 6.2 range is a five-to-one ladder from Terra at $1/$5 through Sol at $2/$10 to Astra at $8/$40. Sol takes the middle slot for exactly the work its name implies: everyday professional tasks, coding, and agent loops with a moderate failure cost.",
+              "When a prompt routinely crosses 272K tokens, the comparison shifts: Astra re-bills the whole request at $16/$60 while Sol stays at $2/$10. For long-context pipelines that is often the deciding line in the budget."
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "gpt-6-1-sol",
@@ -649,6 +792,66 @@
           {
             "q": "What does DeepSeek charge for Search and Fetch?",
             "a": "$0.75 per 1,000 successful requests, free until 00:00 Beijing time on 1 November 2026. After that, retrieval is billed separately from tokens and can add around 26% to a search-heavy agent's bill."
+          }
+        ]
+      }
+    },
+    {
+      "id": "qwen4-max",
+      "cny": {
+        "input": 10,
+        "output": 30,
+        "cached_input": 0.5
+      },
+      "rank": 12,
+      "name": "Qwen4 Max",
+      "provider": "Alibaba",
+      "input": 1.5,
+      "output": 4.5,
+      "cached_input": 0.075,
+      "context": "1M",
+      "note": "GA 2026-11-16. Qwen4 flagship: 2.4T-parameter MoE with 71B active, native vision, 1M context. Singapore $1.5/$4.5 per 1M (25% below Qwen3.8 Max); mainland CNY 10/30 with CNY 0.5 cache reads. Closed weights",
+      "specs": {
+        "Parameters": "2.4T total / 71B active (+328B N-gram)",
+        "Max output": "131K",
+        "Max input": "991,808",
+        "Image / video input": "Supported (native)",
+        "Reasoning effort": "low / high / xhigh"
+      },
+      "detail": {
+        "verified": "2026-11-21",
+        "faq": [
+          {
+            "q": "How much does Qwen4 Max cost per 1M tokens?",
+            "a": "Singapore region (international default) bills $1.50 per 1M input and $4.50 per 1M output — 25% under Qwen3.8 Max. Mainland China bills CNY 10/30 with cache hits at CNY 0.5."
+          },
+          {
+            "q": "What does Qwen4 Max cost per task, not per token?",
+            "a": "Alibaba's headline is a ~58% cut in average per-task cost versus the previous generation, because the model spends about half the tokens per task. Cache hits at CNY 0.5 per 1M are the second lever for agent loops."
+          },
+          {
+            "q": "Is Qwen4 Max open weights?",
+            "a": "No. The flagship is closed — a reversal of the community expectation. Alibaba says smaller Qwen4 series models will be open-sourced 'gradually' with no date or sizes announced."
+          },
+          {
+            "q": "How does Qwen4 Max compare with Qwen3.8 Max?",
+            "a": "Token price drops 25% ($1.5/$4.5 vs $1.65/$4.95 in Singapore) while active parameters fall from 95B to 71B. Independent indexes put it about 9 points above its predecessor, with Alibaba's own Work360 showing a 10-point gain."
+          }
+        ],
+        "sections": [
+          {
+            "h2": "What Qwen4 Max costs",
+            "paras": [
+              "$1.50 per 1M input and $4.50 per 1M output in Singapore, with mainland China at CNY 10/30 and cache hits at CNY 0.5. That is a 25% cut from Qwen3.8 Max on list price and a roughly 58% cut on Alibaba's own per-task measure, which counts the tokens the model actually spends per delivered task.",
+              "The preview (qwen4-max-preview) retires on 2026-11-25. Token Plan subscribers should move to the GA model before then; the new name is qwen4-max."
+            ]
+          },
+          {
+            "h2": "Where Qwen4 Max stands",
+            "paras": [
+              "2.4T total parameters with 71B active per token, native vision in the base model, and a 1M-token context. Alibaba claims a 25% jump on Terminal-Bench and an 18.8-point gain on Agents' Last Exam; independent indexes put it about 9 points above its predecessor but still behind the US flagships — a real step up, not a leap.",
+              "The practical reading: a genuine price-and-efficiency upgrade that is worth migrating to on cost grounds alone, with closed weights as the one structural trade-off to plan around."
+            ]
           }
         ]
       }
@@ -1563,6 +1766,61 @@
       }
     },
     {
+      "id": "hunyuan-hy4-flash",
+      "cny": {
+        "input": 0.5,
+        "output": 2,
+        "cached_input": 0.02
+      },
+      "rank": 16,
+      "name": "Hunyuan Hy4 Flash",
+      "provider": "Tencent",
+      "input": 0.07,
+      "output": 0.281,
+      "cached_input": 0.003,
+      "context": "1M",
+      "note": "Released 2026-11-16 as Tencent's cost-efficient Hy4 sibling: 224B total / 12B active parameters, multimodal, 1M context. Mainland rate CNY 0.5/2 per 1M with 0.02 cache reads; international about $0.07/$0.281. Roughly 1/20 of Hy4's per-task cost on internal benchmarks",
+      "specs": {
+        "Model ID": "tencent/hy4-flash",
+        "Parameters": "224B total (64B Engram) / 12B active",
+        "Context": "1,048,576 tokens",
+        "Image / video input": "Supported"
+      },
+      "detail": {
+        "verified": "2026-11-21",
+        "faq": [
+          {
+            "q": "How much does Hy4 Flash cost per 1M tokens?",
+            "a": "In mainland China, CNY 0.5 per 1M input and CNY 2 per 1M output, with cache-hit input at CNY 0.02. The international card is roughly $0.07/$0.281 with $0.003 cache reads — the cheapest Hy model yet."
+          },
+          {
+            "q": "How does Hy4 Flash compare with Hy4?",
+            "a": "Hy4 Flash is twelve times cheaper on input (CNY 0.5 vs 6) and eleven times on output (CNY 2 vs 18), holds 224B total / 12B active parameters against Hy4's 770B / 49B, and slightly outruns the larger Hy4 Preview on internal WorkIndex tasks at 1/13 the per-task cost."
+          },
+          {
+            "q": "What workloads is Hy4 Flash for?",
+            "a": "Tencent positions it for everyday work: deep research, document processing, slide generation, simple front-end rendering and computer use. Complex long-horizon software engineering stays on the full Hy4."
+          }
+        ],
+        "sections": [
+          {
+            "h2": "What Hy4 Flash costs",
+            "paras": [
+              "CNY 0.5 per 1M input and CNY 2 per 1M output in mainland China, with cache-hit input at CNY 0.02, against the international card of about $0.07/$0.281. Tencent's own WorkIndex benchmark put a typical task at 1/20 of Hy4's cost and 1/8 of DeepSeek V4.1 Flash's max-tier busy-hour cost.",
+              "This is the cheapest Hy model to date, and Tencent explicitly recommends it for most everyday tasks, steering only long-horizon engineering to Hy4."
+            ]
+          },
+          {
+            "h2": "Flash vs Hy4: what the parameter gap means",
+            "paras": [
+              "Flash drops to 12B active parameters (224B total, including 64B Engram) yet slightly outruns the 770B Hy4 Preview on internal and open benchmarks. The MoE keeps only the experts it needs awake, and RL training cut end-to-end output tokens by 50%.",
+              "For a product bill the trade-off is simple: if a task completes correctly on Flash, paying 1/20 of the Hy4 price for it is the right call. Blind evaluation with Tencent's own users rated satisfaction close to Claude Haiku 5.5 at the lowest per-task cost in the set."
+            ]
+          }
+        ]
+      }
+    },
+    {
       "id": "hunyuan-hy4",
       "rank": 16,
       "name": "Hunyuan Hy4",
@@ -1700,6 +1958,8 @@
     "https://www.alibabacloud.com/help/en/model-studio/models",
     "https://docs.byteplus.com/en/docs/modelark/model-pricing",
     "https://openrouter.ai/api/v1/models",
-    "https://hunyuan.tencent.com/research/hy4"
+    "https://hunyuan.tencent.com/research/hy4",
+    "https://hunyuan.tencent.com/research/hy4-flash",
+    "https://platform.qianwenai.com/docs/developer-guides/getting-started/latest-model"
   ]
 }

@@ -145,7 +145,7 @@ console.log("\n== token-counter.html ==");
   check("per-1k cost $", /^\$/.test($("#tc-cost-1k", doc).textContent));
   const rows = $$(doc, "#tc-compare-body tr");
   check("compare table has 8 rows", rows.length === 8, String(rows.length));
-  check("compare sorted asc", /GPT-6 Luna/.test(rows[0].textContent), rows[0].textContent.slice(0, 60));
+  check("compare sorted asc", /Hunyuan Hy4 Flash|GPT-6 Luna/.test(rows[0].textContent), rows[0].textContent.slice(0, 60));
   click(win, $("#tc-sample", doc));
   await sleep(400);
   check("sample loads tokens", Number($("#tc-tokens", doc).textContent.replace(/,/g, "")) > 50);
@@ -173,8 +173,8 @@ console.log("\n== token-counter monthly projection ==");
   check("monthly per request", $("#mc-cost-req", doc).textContent === "$0.008000", $("#mc-cost-req", doc).textContent);
   check("monthly total", $("#mc-cost-month", doc).textContent === "$2400.00", $("#mc-cost-month", doc).textContent);
   check("monthly rows = model count", $$(doc, "#mc-rows tr").length === modelN, String($$(doc, "#mc-rows tr").length));
-  check("cheapest row first", /DeepSeek V4-Flash|MiMo V2.6 Flash/.test($$(doc, "#mc-rows tr")[0].textContent) &&
-    /\$0\.000350/.test($$(doc, "#mc-rows tr")[0].textContent),
+  check("cheapest row first", /Hunyuan Hy4 Flash/.test($$(doc, "#mc-rows tr")[0].textContent) &&
+    /\$0\.000246/.test($$(doc, "#mc-rows tr")[0].textContent),
     $$(doc, "#mc-rows tr")[0].textContent.slice(0, 60));
 
   sel("deepseek-v4-1-flash");
@@ -500,7 +500,7 @@ console.log("\n== self-host-vs-api.html ==");
   const { win, doc } = await load("tools/self-host-vs-api.html");
   const opts = $$(doc, "#sh-model option");
   check("model selector populated", opts.length === modelN, String(opts.length));
-  check("api cost $30,000", $("#sh-api-cost", doc).textContent === "$30,000", $("#sh-api-cost", doc).textContent);
+  check("api cost $24,000", $("#sh-api-cost", doc).textContent === "$24,000", $("#sh-api-cost", doc).textContent);
   check("gpu fixed cost $252.00 (24x7 @ $0.35)", $("#sh-gpu-cost", doc).textContent === "$252.00", $("#sh-gpu-cost", doc).textContent);
   check("verdict self-host", /Self-hosting|自托管/.test($("#sh-verdict", doc).textContent), $("#sh-verdict", doc).textContent);
   check("breakeven any volume", /Any volume/.test($("#sh-breakeven", doc).textContent), $("#sh-breakeven", doc).textContent);

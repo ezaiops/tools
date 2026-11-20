@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gemini 4 Neon API pricing in 2026: cost per 1M tokens | ezaiops tools</title>
+<meta name="description" content="Gemini 4 Neon costs $3 per 1M input tokens and $15 per 1M output tokens. Context window, caching rates, a quick cost calculator and comparisons with nearby models.">
+<link rel="canonical" href="https://tools.ezaiops.com/models/gemini-4-neon.html">
+<link rel="alternate" hreflang="zh-CN" href="https://tools.ezaiops.com/zh/models/gemini-4-neon.html">
+<link rel="alternate" hreflang="en" href="https://tools.ezaiops.com/models/gemini-4-neon.html">
+<link rel="alternate" hreflang="x-default" href="https://tools.ezaiops.com/models/gemini-4-neon.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Gemini 4 Neon API pricing in 2026: cost per 1M tokens | ezaiops tools">
+<meta property="og:description" content="Gemini 4 Neon costs $3 per 1M input tokens and $15 per 1M output tokens. Context window, caching rates, a quick cost calculator and comparisons with nearby models.">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/style.css?v=20261102a">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How much does Gemini 4 Neon cost per 1M tokens?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "$3.00 per 1M input tokens and $15.00 per 1M output tokens, with cached input at $0.15 per 1M — 5% of the input rate. The free tier covers limited requests on both AI Studio and the Gemini API."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How does Neon compare with Gemini 4 Carbon?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Carbon lists at $2/$10 (promo) and Neon at $3/$15 (standard). Independent tests measured Neon's per-task cost at roughly 17% below Carbon's with ~40% shorter completion time, which is the whole pitch: a mid-tier model that undercuts the flagship on delivered tasks."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is Gemini 4 Neon a reasoning model?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Neon targets complex, multi-step AI tasks and scores 61 on Artificial Analysis' intelligence index — third globally, ahead of its price tier. Google routes it for agents and long workflows rather than simple chat completions."
+      }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/"><span class="logo">ez</span>ezaiops <small>tools</small></a>
+    <nav class="site-nav">
+      <a href="/">Tools</a>
+      <a href="/models/index.html">LLM pricing</a>
+      <a href="https://ezaiops.com/en/" title="ezaiops.com — AI agent observability &amp; LLMOps field notes (in English)">Blog</a>
+      <a href="https://github.com/ezaiops">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap tool-page">
+  <nav class="crumbs"><a href="/">Home</a> / <a href="/models/index.html">LLM pricing</a> / Gemini 4 Neon<a class="main-site-link" href="https://ezaiops.com/en/">ezaiops.com ↗</a></nav>
+
+  <h1>Gemini 4 Neon API pricing: cost per 1M tokens</h1>
+  <p class="lead">Gemini 4 Neon currently costs <strong>$3 per 1M input tokens</strong> and
+  <strong>$15 per 1M output tokens</strong> through the Google API. Released 2026-11-18 as the cost-efficient mid-tier of the Gemini 4 family. $3/$15 per 1M with $0.15 cache reads; per-task cost about 17% below Carbon and ~40% faster completion.
+  Prices below were verified against official pricing documentation on 2026-11-21.</p>
+
+  <section class="panel">
+    <div class="stats-grid">
+      <div class="stat"><div class="k">Input / 1M tokens</div><div class="v">$3</div></div>
+      <div class="stat"><div class="k">Output / 1M tokens</div><div class="v">$15</div></div>
+      <div class="stat"><div class="k">Output multiple</div><div class="v">5.0×</div></div>
+      <div class="stat"><div class="k">Context window</div><div class="v">1.05M</div></div>
+    </div>
+    
+
+    <table class="data">
+      <thead><tr><th>Tier</th><th class="num">Input / 1M</th><th class="num">Output / 1M</th></tr></thead>
+      <tbody>
+        <tr><td>Standard rate</td><td class="num">$3</td><td class="num">$15</td></tr>
+        
+      </tbody>
+    </table>
+    <dl class="kv-list"><dt>Cached input</dt><dd>$0.15</dd></dl>
+    <p class="note">Verify current rates on the Google pricing page before committing budget —
+    providers adjust prices frequently, and long-context or caching discounts may not show up
+    in the headline numbers.</p>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0;font-size:16px">Quick cost calculator for Gemini 4 Neon</h2>
+    <div class="field-row">
+      <div class="field">
+        <label class="field-label" for="mc-in">Input tokens</label>
+        <input type="number" id="mc-in" class="mono" value="1000000" min="0">
+      </div>
+      <div class="field">
+        <label class="field-label" for="mc-out">Output tokens</label>
+        <input type="number" id="mc-out" class="mono" value="100000" min="0">
+      </div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat"><div class="k">One request (this volume)</div><div class="v" id="mc-cost">—</div></div>
+      <div class="stat"><div class="k">× 1,000 such requests</div><div class="v" id="mc-1k">—</div></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0;font-size:16px">Gemini 4 Neon vs nearby models (blended at a 3:1 input:output ratio)</h2>
+    <table class="data">
+      <thead><tr><th>Model</th><th>Provider</th><th class="num">Input</th><th class="num">Output</th><th class="num">Cached in</th><th>Context</th></tr></thead>
+      <tbody><tr><td><a href="/models/gpt-5-6-terra.html">GPT-5.6 Terra</a></td><td>OpenAI</td><td class="num">$2</td><td class="num">$12</td><td class="num">—</td><td>—</td></tr><tr><td><a href="/models/gemini-3-1-pro.html">Gemini 3.1 Pro</a></td><td>Google</td><td class="num">$2</td><td class="num">$12</td><td class="num">—</td><td>1M</td></tr><tr style="background:var(--accent-soft)"><td><strong>Gemini 4 Neon</strong></td><td>Google</td><td class="num">$3</td><td class="num">$15</td><td class="num">$0.15</td><td>1.05M</td></tr><tr><td><a href="/models/kimi-k3.html">Kimi K3</a></td><td>Moonshot</td><td class="num">$3</td><td class="num">$15</td><td class="num">$0.30</td><td>1M</td></tr><tr><td><a href="/models/gpt-5-6-sol.html">GPT-5.6 Sol</a></td><td>OpenAI</td><td class="num">$4</td><td class="num">$20</td><td class="num">—</td><td>—</td></tr></tbody>
+    </table>
+    <p class="note">The full 52-model comparison lives on the <a href="/models/index.html">pricing hub</a>,
+    and the <a href="/tools/token-counter.html">token &amp; cost calculator</a> will price your actual prompt.</p>
+  </section>
+
+  <section class="prose">
+    <h2>What Gemini 4 Neon costs</h2><p>$3 per 1M input and $15 per 1M output, with cache reads at $0.15 — a 95% discount on the input rate for repeated prefixes. The 1.05M-token window bills at one flat rate with no long-context tier, unlike Gemini 3.1 Pro's 200K break.</p><p>Neon lands between the promotional Carbon ($2/$10, rising to $4/$20 on 2026-12-01) and Hydrogen ($1.50/$7.50). Priced on delivered task cost rather than headline tokens, it is the family's value pick for agent workloads.</p><h2>Neon, Carbon or Hydrogen</h2><p>Hydrogen is the cheap volume tier at $1.50/$7.50, Carbon the premium reasoning tier, and Neon the middle. Google positions Neon for complex AI tasks where you want flagship-adjacent judgement without flagship spend.</p><p>The practical rule: route simple classification and extraction to Hydrogen, agent and coding loops with a real failure cost to Neon, and reserve Carbon for the small slice where the depth of reasoning is the deciding factor.</p>
+
+    <h2>Frequently asked questions</h2>
+    <details class="faq"><summary>How much does Gemini 4 Neon cost per 1M tokens?</summary>
+      <div class="faq-body">$3.00 per 1M input tokens and $15.00 per 1M output tokens, with cached input at $0.15 per 1M — 5% of the input rate. The free tier covers limited requests on both AI Studio and the Gemini API.</div></details>
+    <details class="faq"><summary>How does Neon compare with Gemini 4 Carbon?</summary>
+      <div class="faq-body">Carbon lists at $2/$10 (promo) and Neon at $3/$15 (standard). Independent tests measured Neon's per-task cost at roughly 17% below Carbon's with ~40% shorter completion time, which is the whole pitch: a mid-tier model that undercuts the flagship on delivered tasks.</div></details>
+    <details class="faq"><summary>Is Gemini 4 Neon a reasoning model?</summary>
+      <div class="faq-body">Neon targets complex, multi-step AI tasks and scores 61 on Artificial Analysis' intelligence index — third globally, ahead of its price tier. Google routes it for agents and long workflows rather than simple chat completions.</div></details>
+    
+  </section>
+
+<div class="ad-slot">
+  <strong>Ad slot</strong>
+  Google AdSense placeholder — activated once the site is approved and has steady traffic.
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h4>Popular tools</h4>
+        <ul>
+          <li><a href="/tools/token-counter.html">LLM token &amp; cost calculator</a></li>
+          <li><a href="/tools/json-formatter.html">JSON formatter</a></li>
+          <li><a href="/tools/regex-tester.html">Regex tester</a></li>
+          <li><a href="/tools/cron-explainer.html">Cron explainer</a></li>
+          <li><a href="/tools/encode-decode.html">Base64 / URL / hash</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>LLM pricing</h4>
+        <ul>
+          <li><a href="/models/index.html">All models</a></li>
+          <li><a href="/models/gpt-6-astra.html">GPT-6 Astra pricing</a></li>
+          <li><a href="/models/claude-fable-5-1.html">Claude Fable 5.1 pricing</a></li>
+          <li><a href="/models/gemini-4-argon.html">Gemini 4 Argon pricing</a></li>
+          <li><a href="/models/deepseek-v4-1-flash.html">DeepSeek V4.1 Flash pricing</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>More</h4>
+        <ul>
+          <li><a href="https://ezaiops.com/en/">ezaiops.com</a></li>
+          <li><a href="/about.html">About</a></li>
+          <li><a href="/contact.html">Contact</a></li>
+          <li><a href="/privacy.html">Privacy policy</a></li>
+          <li><a href="https://github.com/ezaiops">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">&copy; <span data-year>2026</span> ezaiops &middot; your input never leaves your browser</div>
+  </div>
+</footer>
+
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "4bbeee48cff340fe9ae88884f763f334"}'></script>
+<!-- Cloudflare Web Analytics. Loaded explicitly rather than through the zone's
+     auto_install: that injects at the edge, and GitHub Pages sends HTML with
+     max-age=600, so cached pages never got the script and the reports were
+     undercounting by roughly two thirds. No cookies, no consent banner needed. -->
+
+<script src="/assets/common.js?v=20261102a" defer></script>
+<script src="/assets/models.js?v=20261102a" defer></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var models = (window.EZ_MODELS || {}).models || [];
+  var me = null;
+  for (var i = 0; i < models.length; i++) if (models[i].id === "gemini-4-neon") me = models[i];
+  if (!me) return;
+  // Chinese pages bill in CNY where the provider publishes a mainland rate.
+  // data-zh-static is a server-rendered attribute, so it is readable before the
+  // i18n engine finishes loading; the language check is only a fallback.
+  var zhPage = document.documentElement.hasAttribute("data-zh-static") ||
+               !!(window.ezI18N && window.ezI18N.lang === "zh");
+  var c = zhPage && me.cny ? me.cny : null;
+  var sym = c ? "¥" : "$";
+  // Price the request at the rate its input length actually lands in: mainland
+  // rate cards can break by length (32K / 128K / 256K) and international cards
+  // double past a single threshold. Both bill the whole request at that rate.
+  function ratesFor(tokens) {
+    if (c && c.tiers && c.tiers.length) {
+      for (var i = 0; i < c.tiers.length; i++) {
+        var t = c.tiers[i];
+        if (!t.max || tokens <= t.max) return { in: t.input, out: t.output };
+      }
+      var last = c.tiers[c.tiers.length - 1];
+      return { in: last.input, out: last.output };
+    }
+    var hiIn = c ? c.input_high : me.input_high;
+    var hiOut = c ? c.output_high : me.output_high;
+    if (me.tier_threshold && tokens > me.tier_threshold &&
+        hiIn != null && hiOut != null) return { in: hiIn, out: hiOut };
+    return { in: c ? c.input : me.input, out: c ? c.output : me.output };
+  }
+  var inEl = document.getElementById("mc-in");
+  var outEl = document.getElementById("mc-out");
+  function fmt(n) {
+    if (n <= 0) return sym + "0";
+    if (n < 0.000001) return "<" + sym + "0.000001";
+    var d = n < 0.01 ? 6 : n < 1 ? 4 : 2;
+    return sym + n.toFixed(d);
+  }
+  function recalc() {
+    var ti = Math.max(0, parseFloat(inEl.value || "0") || 0);
+    var to = Math.max(0, parseFloat(outEl.value || "0") || 0);
+    var r = ratesFor(ti);
+    var cost = ti * r.in / 1e6 + to * r.out / 1e6;
+    document.getElementById("mc-cost").textContent = fmt(cost);
+    document.getElementById("mc-1k").textContent = fmt(cost * 1000);
+  }
+  inEl.addEventListener("input", recalc);
+  outEl.addEventListener("input", recalc);
+  recalc();
+});
+</script>
+
+</body>
+</html>
