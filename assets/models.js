@@ -1,5 +1,5 @@
 window.EZ_MODELS = {
-  "updated": "2026-11-21",
+  "updated": "2026-11-26",
   "models": [
     {
       "id": "gpt-6-2-astra",
@@ -15,7 +15,7 @@ window.EZ_MODELS = {
       "output_high": 60.0,
       "note": "Flagship, released 2026-11-18. $8/$40 per 1M with $0.40 cache reads — 20% below GPT-6 Astra's $10/$50, matching Claude Fable 5.2. Prompts above 272K tokens bill the whole request at $16/$60",
       "detail": {
-        "verified": "2026-11-21",
+        "verified": "2026-11-26",
         "faq": [
           {
             "q": "How much does GPT-6.2 Astra cost per 1M tokens?",
@@ -77,7 +77,7 @@ window.EZ_MODELS = {
       "context": "1.05M",
       "note": "Released 2026-11-18 as the cost-efficient mid-tier of the Gemini 4 family. $3/$15 per 1M with $0.15 cache reads; per-task cost about 17% below Carbon and ~40% faster completion",
       "detail": {
-        "verified": "2026-11-21",
+        "verified": "2026-11-26",
         "faq": [
           {
             "q": "How much does Gemini 4 Neon cost per 1M tokens?",
@@ -125,7 +125,7 @@ window.EZ_MODELS = {
         "Image input": "Supported"
       },
       "detail": {
-        "verified": "2026-11-21",
+        "verified": "2026-11-26",
         "faq": [
           {
             "q": "How much does GPT-6.2 Sol cost per 1M tokens?",
@@ -344,9 +344,16 @@ window.EZ_MODELS = {
       "provider": "OpenAI",
       "input": 4.0,
       "output": 20.0,
-      "cached_input": null,
+      "cached_input": 0.4,
       "context": null,
-      "note": "Previous-generation flagship. Promotional $4/$20 runs through 2026-11-30 (list $5/$30); long-context requests bill $8/$30"
+      "note": "Previous-generation flagship, superseded by GPT-6.2 Sol. Long-context requests above 272K tokens bill $8/$30 during the promotional period",
+      "price_change": {
+        "end": "2026-11-30",
+        "effective": "2026-12-01",
+        "input": 5.0,
+        "output": 30.0,
+        "cached_input": 0.5
+      }
     },
     {
       "id": "gpt-5-6-terra",
@@ -819,7 +826,7 @@ window.EZ_MODELS = {
         "Reasoning effort": "low / high / xhigh"
       },
       "detail": {
-        "verified": "2026-11-21",
+        "verified": "2026-11-26",
         "faq": [
           {
             "q": "How much does Qwen4 Max cost per 1M tokens?",
@@ -949,7 +956,7 @@ window.EZ_MODELS = {
       "output": 4.0,
       "cached_input": 0.19,
       "context": "262K",
-      "note": "Coding-focused tier. High-speed variant bills $1.90/$8.00",
+      "note": "Coding-focused tier. High-speed variant bills $1.90/$8.00. Moonshot retires the entire K2 series by the end of December 2026; new sign-ups lost access on 2026-10-31",
       "cny": {
         "input": 6.5,
         "output": 27,
@@ -1779,7 +1786,7 @@ window.EZ_MODELS = {
       "output": 0.281,
       "cached_input": 0.003,
       "context": "1M",
-      "note": "Released 2026-11-16 as Tencent's cost-efficient Hy4 sibling: 224B total / 12B active parameters, multimodal, 1M context. Mainland rate CNY 0.5/2 per 1M with 0.02 cache reads; international about $0.07/$0.281. Roughly 1/20 of Hy4's per-task cost on internal benchmarks",
+      "note": "Released 2026-11-16 as Tencent's cost-efficient Hy4 sibling: 224B total / 12B active parameters, multimodal, 1M context. Mainland rate CNY 0.5/2 per 1M with CNY 0.02 cache reads. International list is $0.07/$0.281, but OpenRouter and Tencent Cloud TokenHub run a limited-time 50% rate through 2026-11-30 ($0.035/$0.1405). About 1/20 of Hy4's per-task cost",
       "specs": {
         "Model ID": "tencent/hy4-flash",
         "Parameters": "224B total (64B Engram) / 12B active",
@@ -1787,11 +1794,11 @@ window.EZ_MODELS = {
         "Image / video input": "Supported"
       },
       "detail": {
-        "verified": "2026-11-21",
+        "verified": "2026-11-26",
         "faq": [
           {
             "q": "How much does Hy4 Flash cost per 1M tokens?",
-            "a": "In mainland China, CNY 0.5 per 1M input and CNY 2 per 1M output, with cache-hit input at CNY 0.02. The international card is roughly $0.07/$0.281 with $0.003 cache reads — the cheapest Hy model yet."
+            "a": "In mainland China, CNY 0.5 per 1M input and CNY 2 per 1M output, with cache-hit input at CNY 0.02. The international list card is $0.07/$0.281 with $0.003 cache reads; OpenRouter and Tencent Cloud TokenHub are running a limited-time 50% rate ($0.035/$0.1405) through 2026-11-30."
           },
           {
             "q": "How does Hy4 Flash compare with Hy4?",
