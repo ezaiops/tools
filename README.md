@@ -51,7 +51,7 @@ python scripts/check_site.py
 python scripts/audit.py
 
 # 4. interactive tests (jsdom; needs jsdom in the managed node workspace)
-node scripts/test_interactive.mjs        # 354 checks
+node scripts/test_interactive.mjs        # 383 checks
 
 # 5. regenerate model pages + calculator data + sitemap after editing models.json
 python scripts/generate_models.py
@@ -154,6 +154,23 @@ same 中文/EN pattern as ezaiops.com:
 
 To fix or extend a translation, edit the matching file in `assets/i18n/` — the
 English text is the key, so a missing key simply stays English.
+
+## Search Console triage
+
+When GSC reports indexing problems, the zipped Coverage export contains only
+counts, not URLs. Open the report, click the reason (e.g. "Crawled – currently
+not indexed"), use Export → Download CSV, then classify that list against the
+local site:
+
+    python scripts/gsc_triage.py exported-urls.csv
+
+Each URL is labelled `ok`, `language-variant` (the `?lang=zh` view whose
+canonical is rewritten to `/zh/` at runtime — expected, no action), `missing`,
+`redirect`, `canonical-differs` or `external`. Fix the `missing` / `redirect` /
+`canonical-differs` rows; leave the language variants alone. `python
+scripts/gsc_triage.py --site` prints the full local URL → canonical map for
+comparison. Remember that "Alternate page with proper canonical tag" is a normal
+excluded status, not an error — do not bulk-edit canonicals to chase it.
 
 ## Design notes
 
