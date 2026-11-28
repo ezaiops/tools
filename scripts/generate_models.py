@@ -5,6 +5,7 @@ import glob
 import json
 import os
 import re
+import sys
 from gen_common import (ROOT, BASE, TODAY, UPDATED, MODELS, SOURCES, BY_ID,
                         COMPARISONS, money, money_amt, zh_money, blended, esc, HEAD, CRUMBS, FOOT,
                         ZH_HEAD, ZH_CRUMBS, ZH_FOOT)
@@ -1073,6 +1074,12 @@ def main():
 
     with open(os.path.join(ROOT, "sitemap.xml"), "w", encoding="utf-8") as fh:
         fh.write(sitemap(allurls))
+
+    # llms.txt is the GEO surface: AI answer engines read it to decide what to
+    # cite. It lists the same model count and verification date as the pages, so
+    # generate it here too — otherwise adding a model silently leaves it stale.
+    import subprocess
+    subprocess.check_call([sys.executable, os.path.join(ROOT, "scripts", "generate_llms.py")])
 
     print("models.js written (%d models)" % len(MODELS))
     print("model pages written: %d" % len(MODELS))
